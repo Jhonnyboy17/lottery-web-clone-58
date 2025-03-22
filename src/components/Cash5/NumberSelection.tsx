@@ -28,9 +28,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   return (
     <div className="relative mb-6 mt-8">
       <div className="flex justify-center items-center h-[220px] relative">
-        {/* Decorative circle in the middle */}
-        <div className="absolute w-[120px] h-[120px] rounded-full border-2 border-blue-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
-        
         {/* Numbers displayed in a grid layout */}
         <div className="grid grid-cols-5 gap-4 z-10">
           {[...Array(10).keys()].map((number) => (
