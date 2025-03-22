@@ -43,6 +43,9 @@ const GameHeader: React.FC<GameHeaderProps> = ({
           )}
         </div>
       </div>
+      
+      {/* Orange wavy line/stripe */}
+      <div className="w-full bg-orange-400 h-2 mb-4"></div>
     </div>
   );
 };
