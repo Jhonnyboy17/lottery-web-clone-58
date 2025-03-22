@@ -5,7 +5,7 @@ import GameHeader from "../Cash5/GameHeader";
 import CurrentLineSelection from "../Cash5/CurrentLineSelection";
 import SavedLinesSection from "../Cash5/SavedLinesSection";
 import TotalSummary from "../Cash5/TotalSummary";
-import { useTicketState } from "../Cash5/hooks/useTicketState";
+import { useTicketState } from "./hooks/useTicketState"; // Updated import path
 
 interface FastPlayPageProps {
   logoSrc: string;
@@ -83,7 +83,7 @@ export const FastPlayPage = ({
             onPlayTypeChange={handlePlayTypeChange}
             onBetAmountChange={handleBetAmountChange}
             onDigitSelect={handleDigitSelect}
-            isLineComplete={isLineComplete} // Fix: Pass the function itself, not its result
+            isLineComplete={isLineComplete} // Pass the function, not its result
             onClearSelections={clearSelections}
             onAddLine={handleAddLine}
             colorValue={colorValue}

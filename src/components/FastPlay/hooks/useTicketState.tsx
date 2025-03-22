@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../../Cash5/types";
 
 export const useTicketState = () => {
   const [currentLine, setCurrentLine] = useState<NumberSelectionType>({
-    digits: [null, null, null], // Changed to 3 digits
+    digits: [null, null, null], // 3 digits for FastPlay
     playType: "Straight", 
     betAmount: "R$8"
   });
@@ -76,7 +77,7 @@ export const useTicketState = () => {
       ...currentLine,
       digits: [null, null, null]
     });
-    setActiveDigitIndex(null);
+    setActiveDigitIndex(0);
   };
 
   const handleAddLine = () => {
@@ -91,7 +92,7 @@ export const useTicketState = () => {
       betAmount: currentLine.betAmount
     });
     
-    setActiveDigitIndex(null);
+    setActiveDigitIndex(0);
   };
 
   const handleRemoveLine = (lineIndex: number) => {
