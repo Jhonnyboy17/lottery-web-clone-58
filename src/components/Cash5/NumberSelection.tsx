@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
 
@@ -20,6 +20,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   isLineComplete,
   onClearSelections
 }) => {
+  // Estado para controlar qual número foi clicado recentemente
+  const [clickedNumber, setClickedNumber] = useState<number | null>(null);
+
   // Efeito para selecionar automaticamente o primeiro círculo ao carregar
   useEffect(() => {
     if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
@@ -29,6 +32,17 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       }
     }
   }, [activeDigitIndex, currentLine.digits, setActiveDigitIndex]);
+
+  // Função para lidar com o clique no número
+  const handleNumberClick = (digit: number) => {
+    setClickedNumber(digit);
+    onDigitSelect(digit);
+    
+    // Timer para remover a classe de destaque após 2 segundos
+    setTimeout(() => {
+      setClickedNumber(null);
+    }, 2000);
+  };
 
   const getDigitDisplay = (index: number) => {
     const digit = currentLine.digits[index];
@@ -48,17 +62,18 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           {[...Array(10).keys()].map((number) => (
             <button
               key={number}
-              onClick={() => onDigitSelect(number)}
-              className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-medium"
+              onClick={() => handleNumberClick(number)}
+              className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-medium transition-colors duration-300`}
               style={{
-                backgroundColor:
-                  activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number
-                    ? '#0EA5E9'
-                    : '#dbeafe',
-                color:
-                  activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number
-                    ? 'white'
-                    : '#1e40af'
+                backgroundColor: clickedNumber === number 
+                  ? '#0EA5E9' // Azul brilhante quando clicado recentemente
+                  : activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number
+                    ? '#0EA5E9' // Azul quando selecionado
+                    : '#dbeafe', // Azul claro padrão
+                color: clickedNumber === number || 
+                      (activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number)
+                  ? 'white'
+                  : '#1e40af'
               }}
             >
               {number}
