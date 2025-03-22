@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -102,30 +101,27 @@ const PlayPage = ({
     return price.toFixed(2);
   };
 
-  // Convert primaryColor to actual CSS color value
   const getColorValue = () => {
     switch (primaryColor) {
       case "blue-600":
-        return "#2563eb"; // Dark blue for Mega Millions
+        return "#2563eb";
       case "red-600":
-        return "#dc2626"; // Red for Powerball
+        return "#dc2626";
       case "green-600":
-        return "#16a34a"; // Green for Lucky Day
+        return "#16a34a";
       case "cyan-600":
-        return "#0891b2"; // Cyan for Pick 4
+        return "#0891b2";
       case "amber-500":
-        return "#f59e0b"; // Amber for Cash 5 and Fast Play
+        return "#f59e0b";
       default:
-        return "#000000"; // Default to black
+        return "#000000";
     }
   };
 
   const colorValue = getColorValue();
 
-  // Calculate progress percentage for regular numbers
   const regularNumbersProgress = (selectedNumbers.length / maxRegularNumbers) * 100;
   
-  // Calculate progress percentage for powerball
   const powerballProgress = selectedPowerball ? 100 : 0;
 
   const isLineComplete = () => {
@@ -138,7 +134,7 @@ const PlayPage = ({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-md pt-4 px-3">
+      <div className="mx-auto max-w-xl pt-4 px-3">
         <div className="flex items-center justify-between mb-4">
           <img 
             src={logoSrc} 
@@ -157,7 +153,7 @@ const PlayPage = ({
               <h3 className="text-lg font-semibold">Select Numbers</h3>
               <Button 
                 onClick={handleQuickPick}
-                className="text-xs h-8 bg-white border hover:bg-opacity-10"
+                className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6"
                 style={{ color: colorValue, borderColor: colorValue }}
               >
                 QUICK PICK
@@ -244,7 +240,7 @@ const PlayPage = ({
             <Button 
               onClick={handleAddLine} 
               disabled={!isLineComplete()}
-              className="w-full hover:bg-opacity-90 mt-2"
+              className="w-full hover:bg-opacity-90 mt-2 px-10"
               style={{ backgroundColor: colorValue }}
             >
               ADD LINE
@@ -322,7 +318,7 @@ const PlayPage = ({
             <p className="text-xl font-bold">R$ {getTicketPrice()}</p>
           </div>
           <Button 
-            className="hover:bg-opacity-90"
+            className="hover:bg-opacity-90 px-6"
             style={{ backgroundColor: colorValue }}
             disabled={savedLines.length === 0}
           >

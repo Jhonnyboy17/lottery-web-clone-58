@@ -32,7 +32,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
           <p className="text-xl font-bold">R$ {ticketPrice}</p>
         </div>
         <Button 
-          className="hover:bg-opacity-90"
+          className="hover:bg-opacity-90 px-6"
           style={{ backgroundColor: colorValue }}
           disabled={!hasLines}
         >

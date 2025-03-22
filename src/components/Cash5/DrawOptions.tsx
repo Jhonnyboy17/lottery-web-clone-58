@@ -30,7 +30,7 @@ const DrawOptions: React.FC<DrawOptionsProps> = ({
         <div className="flex flex-wrap md:flex-nowrap gap-3">
           <Button
             variant={selectedDrawTime === "both" ? "default" : "outline"}
-            className={`flex-1 px-6 ${selectedDrawTime === "both" ? "bg-blue-500" : ""}`}
+            className={`flex-1 px-10 ${selectedDrawTime === "both" ? "bg-blue-500" : ""}`}
             onClick={() => onDrawTimeChange("both")}
           >
             <SunMoon className="mr-2 h-4 w-4" />
@@ -38,7 +38,7 @@ const DrawOptions: React.FC<DrawOptionsProps> = ({
           </Button>
           <Button
             variant={selectedDrawTime === "midday" ? "default" : "outline"}
-            className={`flex-1 px-6 ${selectedDrawTime === "midday" ? "bg-blue-500" : ""}`}
+            className={`flex-1 px-10 ${selectedDrawTime === "midday" ? "bg-blue-500" : ""}`}
             onClick={() => onDrawTimeChange("midday")}
           >
             <Sun className="mr-2 h-4 w-4" />
@@ -46,7 +46,7 @@ const DrawOptions: React.FC<DrawOptionsProps> = ({
           </Button>
           <Button
             variant={selectedDrawTime === "evening" ? "default" : "outline"}
-            className={`flex-1 px-6 ${selectedDrawTime === "evening" ? "bg-blue-500" : ""}`}
+            className={`flex-1 px-10 ${selectedDrawTime === "evening" ? "bg-blue-500" : ""}`}
             onClick={() => onDrawTimeChange("evening")}
           >
             <Moon className="mr-2 h-4 w-4" />
