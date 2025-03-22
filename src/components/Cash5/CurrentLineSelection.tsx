@@ -65,7 +65,7 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         className="w-full hover:bg-opacity-90 mt-2"
         style={{ backgroundColor: colorValue }}
       >
-        ADD LINE
+        ADD LINHA
       </Button>
     </div>
   );

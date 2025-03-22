@@ -24,7 +24,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
         style={{ backgroundColor: colorValue }}
         disabled={!hasLines}
       >
-        ADD TO CART
+        ADICIONAR AO CARRINHO
       </Button>
     </div>
   );

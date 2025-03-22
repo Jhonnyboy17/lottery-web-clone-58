@@ -21,7 +21,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
 }) => {
   return (
     <div className="bg-gray-50 p-4">
-      <h3 className="font-semibold mb-3">My Lines</h3>
+      <h3 className="font-semibold mb-3">Minhas Linhas</h3>
       
       <SavedLines 
         savedLines={savedLines} 

@@ -93,7 +93,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           variant="link" 
           className="text-xs text-gray-500"
         >
-          Clear selections
+          Limpar seleções
         </Button>
       </div>
     </div>

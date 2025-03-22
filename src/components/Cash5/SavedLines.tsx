@@ -10,7 +10,7 @@ interface SavedLinesProps {
 
 const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine }) => {
   if (savedLines.length === 0) {
-    return <p className="text-sm text-gray-500 mb-3">No lines added yet</p>;
+    return <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>;
   }
 
   return (

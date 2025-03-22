@@ -24,9 +24,9 @@ const FireballOption: React.FC<FireballOptionProps> = ({
       </div>
       
       <div className="mb-3">
-        <p className="text-sm font-medium mb-2">Add plus {extraPlayName} for more ways to win!</p>
+        <p className="text-sm font-medium mb-2">Adicione plus {extraPlayName} para mais chances de ganhar!</p>
         <p className="text-xs text-gray-600">
-          If you want to plus up your wager, try plus {extraPlayName}! The {extraPlayName.replace("™", "")} number gives players another chance to win on their same numbers.
+          Se quiser aumentar sua aposta, experimente plus {extraPlayName}! O número {extraPlayName.replace("™", "")} dá aos jogadores mais uma chance de ganhar com os mesmos números.
         </p>
       </div>
       
