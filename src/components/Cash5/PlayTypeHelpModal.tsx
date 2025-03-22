@@ -33,7 +33,7 @@ const PlayTypeHelpModal: React.FC<PlayTypeHelpModalProps> = ({
         <div className="p-4 max-h-[400px] overflow-y-auto">
           <div className="space-y-6">
             <div className="space-y-1">
-              <h3 className="font-bold">Direto</h3>
+              <h3 className="font-bold">Straight</h3>
               <p className="text-gray-600 text-sm">Acerte todos os números na ordem exata.</p>
             </div>
             
@@ -48,8 +48,18 @@ const PlayTypeHelpModal: React.FC<PlayTypeHelpModalProps> = ({
             </div>
             
             <div className="space-y-1">
-              <h3 className="font-bold">Direto/Box</h3>
+              <h3 className="font-bold">Straight/Box</h3>
               <p className="text-gray-600 text-sm">Acerte todos os números na ordem exata ou em qualquer ordem.</p>
+            </div>
+            
+            <div className="space-y-1">
+              <h3 className="font-bold">Front Pair</h3>
+              <p className="text-gray-600 text-sm">Acerte os 2 primeiros números na ordem exata.</p>
+            </div>
+            
+            <div className="space-y-1">
+              <h3 className="font-bold">Back Pair</h3>
+              <p className="text-gray-600 text-sm">Acerte os 2 últimos números na ordem exata.</p>
             </div>
           </div>
         </div>
