@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
@@ -45,27 +44,22 @@ const Hero = () => {
   const [isAutoPlay, setIsAutoPlay] = useState(true);
 
   const startAutoSlide = () => {
-    // Only start auto-slide if autoplay is enabled
     if (!isAutoPlay) return;
     
-    // Clear any existing timer first
     if (timerRef.current) {
       clearInterval(timerRef.current);
     }
     
-    // Set up a new timer
     timerRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, 5000);
   };
 
   useEffect(() => {
-    // Start the auto-slide when component mounts, but only if autoplay is enabled
     if (isAutoPlay) {
       startAutoSlide();
     }
 
-    // Clean up the timer when component unmounts
     return () => {
       if (timerRef.current) {
         clearInterval(timerRef.current);
@@ -74,10 +68,8 @@ const Hero = () => {
   }, [isAutoPlay]);
 
   const handleManualNavigation = () => {
-    // Stop autoplay when user manually navigates
     setIsAutoPlay(false);
     
-    // Clear the existing timer
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -100,17 +92,25 @@ const Hero = () => {
   };
 
   const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      // Add offset to account for fixed header and improve scroll experience
-      const offset = 80; // Adjust this value as needed for your layout
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-      
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
+    const menuButton = document.querySelector('[aria-label="toggle menu"]');
+    if (menuButton && window.innerWidth < 768) {
+      menuButton.dispatchEvent(new Event('click'));
+    }
+    
+    if (window.location.pathname === '/') {
+      const element = document.getElementById(id);
+      if (element) {
+        const offset = 80;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
+    } else {
+      window.location.href = `/#${id}`;
     }
   };
 
@@ -145,7 +145,6 @@ const Hero = () => {
         </div>
       ))}
 
-      {/* Navigation Arrows */}
       <button 
         onClick={goToPreviousSlide}
         className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white rounded-full p-2 transition-all duration-200 z-10"

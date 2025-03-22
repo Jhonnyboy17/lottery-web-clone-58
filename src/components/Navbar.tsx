@@ -46,7 +46,8 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          <NavLink to="/" className="flex items-center">
+          {/* Changed from NavLink to clickable div that triggers scrollToGames */}
+          <div onClick={scrollToGames} className="flex items-center cursor-pointer">
             <div className="flex items-center space-x-2">
               <img
                 src="/lovable-uploads/40dbea4f-78a1-4de8-938d-6cc82fc77eae.png"
@@ -54,7 +55,7 @@ const Navbar = () => {
                 className="h-16 w-auto"
               />
             </div>
-          </NavLink>
+          </div>
 
           <div className="hidden md:flex items-center gap-6">
             <div className="bg-lottery-pink/90 backdrop-blur-sm rounded-full p-2 flex items-center gap-6 px-6">
@@ -97,6 +98,7 @@ const Navbar = () => {
           <button
             className="md:hidden text-white p-2"
             onClick={() => setIsOpen(!isOpen)}
+            aria-label="toggle menu"
           >
             {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
