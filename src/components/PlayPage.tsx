@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -90,6 +91,26 @@ const PlayPage = ({
     return price.toFixed(2);
   };
 
+  // Convert primaryColor to actual CSS color value
+  const getColorValue = () => {
+    switch (primaryColor) {
+      case "blue-600":
+        return "#2563eb"; // Dark blue for Mega Millions
+      case "red-600":
+        return "#dc2626"; // Red for Powerball
+      case "green-600":
+        return "#16a34a"; // Green for Lucky Day
+      case "cyan-600":
+        return "#0891b2"; // Cyan for Pick 4
+      case "amber-500":
+        return "#f59e0b"; // Amber for Cash 5 and Fast Play
+      default:
+        return "#000000"; // Default to black
+    }
+  };
+
+  const colorValue = getColorValue();
+
   return (
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-md pt-4 px-3">
@@ -101,7 +122,7 @@ const PlayPage = ({
           />
           <div className="text-right">
             <p className="text-sm font-semibold">JACKPOT</p>
-            <h2 className="text-2xl font-bold" style={{ color: primaryColor }}>R$ {jackpotAmount}</h2>
+            <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
           </div>
         </div>
 
@@ -112,7 +133,7 @@ const PlayPage = ({
               <Button 
                 onClick={handleQuickPick}
                 className="text-xs h-8 bg-white border hover:bg-opacity-10"
-                style={{ color: primaryColor, borderColor: primaryColor }}
+                style={{ color: colorValue, borderColor: colorValue }}
               >
                 QUICK PICK
               </Button>
@@ -126,8 +147,9 @@ const PlayPage = ({
                   onClick={() => handleNumberSelect(number)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
                     ${selectedNumbers.includes(number) 
-                      ? "bg-black text-white" 
+                      ? "text-white" 
                       : "bg-gray-100 text-black hover:bg-gray-200"}`}
+                  style={selectedNumbers.includes(number) ? { backgroundColor: colorValue } : {}}
                 >
                   {number}
                 </button>
@@ -154,7 +176,7 @@ const PlayPage = ({
               onClick={handleAddLine} 
               disabled={!(selectedNumbers.length === 5 && selectedPowerball !== null)}
               className="w-full hover:bg-opacity-90 mt-2"
-              style={{ backgroundColor: primaryColor }}
+              style={{ backgroundColor: colorValue }}
             >
               ADD LINE
             </Button>
@@ -172,7 +194,8 @@ const PlayPage = ({
                     {line.numbers.map((num, i) => (
                       <span 
                         key={i} 
-                        className="bg-black text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mx-0.5"
+                        className="text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mx-0.5"
+                        style={{ backgroundColor: colorValue }}
                       >
                         {num}
                       </span>
@@ -229,7 +252,7 @@ const PlayPage = ({
           </div>
           <Button 
             className="hover:bg-opacity-90"
-            style={{ backgroundColor: primaryColor }}
+            style={{ backgroundColor: colorValue }}
             disabled={savedLines.length === 0}
           >
             ADD TO CART
