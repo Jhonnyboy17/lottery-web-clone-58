@@ -18,7 +18,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   const [selectedDrawCount, setSelectedDrawCount] = React.useState("1");
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden w-full">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-full">
       <DrawOptions 
         selectedDrawTime={selectedDrawTime}
         selectedDrawCount={selectedDrawCount}

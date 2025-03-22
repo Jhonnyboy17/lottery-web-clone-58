@@ -27,30 +27,30 @@ const DrawOptions: React.FC<DrawOptionsProps> = ({
     <div className="space-y-4 mb-4">
       <div className="border border-gray-200 rounded-md p-4">
         <p className="font-medium text-sm mb-3">Selecione o horário do sorteio:</p>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap md:flex-nowrap gap-2">
           <Button
             variant={selectedDrawTime === "both" ? "default" : "outline"}
-            className={`flex-1 text-xs sm:text-sm ${selectedDrawTime === "both" ? "bg-blue-500" : ""}`}
+            className={`flex-1 ${selectedDrawTime === "both" ? "bg-blue-500" : ""}`}
             onClick={() => onDrawTimeChange("both")}
           >
-            <SunMoon className="mr-1 h-4 w-4" />
-            Ambos sorteios
+            <SunMoon className="mr-2 h-4 w-4" />
+            <span className="whitespace-nowrap">Ambos sorteios</span>
           </Button>
           <Button
             variant={selectedDrawTime === "midday" ? "default" : "outline"}
-            className={`flex-1 text-xs sm:text-sm ${selectedDrawTime === "midday" ? "bg-blue-500" : ""}`}
+            className={`flex-1 ${selectedDrawTime === "midday" ? "bg-blue-500" : ""}`}
             onClick={() => onDrawTimeChange("midday")}
           >
-            <Sun className="mr-1 h-4 w-4" />
-            Sorteio diurno
+            <Sun className="mr-2 h-4 w-4" />
+            <span className="whitespace-nowrap">Sorteio diurno</span>
           </Button>
           <Button
             variant={selectedDrawTime === "evening" ? "default" : "outline"}
-            className={`flex-1 text-xs sm:text-sm ${selectedDrawTime === "evening" ? "bg-blue-500" : ""}`}
+            className={`flex-1 ${selectedDrawTime === "evening" ? "bg-blue-500" : ""}`}
             onClick={() => onDrawTimeChange("evening")}
           >
-            <Moon className="mr-1 h-4 w-4" />
-            Sorteio noturno
+            <Moon className="mr-2 h-4 w-4" />
+            <span className="whitespace-nowrap">Sorteio noturno</span>
           </Button>
         </div>
       </div>
