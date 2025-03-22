@@ -35,8 +35,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     const buttonSize = 10; // Width of buttons in rem
     const radius = (buttonSize / 2) / Math.sin(Math.PI / totalNumbers);
     
-    const x = Math.cos(angle) * 100;
-    const y = Math.sin(angle) * 100;
+    const x = Math.cos(angle) * 40;
+    const y = Math.sin(angle) * 40;
     
     return {
       top: `${50 + y}%`,
