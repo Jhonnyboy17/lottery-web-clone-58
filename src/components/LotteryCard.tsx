@@ -57,7 +57,7 @@ const LotteryCard = ({
       </div>
       
       {showPlayButton ? (
-        <div className="px-6 pb-6">
+        <div className="px-6 pb-6 mt-auto">
           <div className="text-center mb-4 text-black">
             <p className="font-bold">{nextDrawing}</p>
           </div>
