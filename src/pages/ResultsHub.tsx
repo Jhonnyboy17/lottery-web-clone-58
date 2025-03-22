@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -208,7 +209,7 @@ const ResultsHub = () => {
                             <span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md text-xs font-bold">
                               Multiplier: {game.multiplier}
                             </span>
-                          ))}
+                          )}
                         </div>
                       </TableCell>
                       <TableCell>
