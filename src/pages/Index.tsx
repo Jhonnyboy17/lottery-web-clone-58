@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -18,7 +19,7 @@ const lotteryGames = [
   },
   {
     id: 2,
-    logoSrc: "/lovable-uploads/db3b3cf5-b9ec-4197-8c8c-cfd38f91a79c.png",
+    logoSrc: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
     amount: "444,000,000",
     unit: "",
     cashOption: "207.2 MILLION",
