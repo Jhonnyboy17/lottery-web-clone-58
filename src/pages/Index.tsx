@@ -39,7 +39,7 @@ const lotteryGames = [
     unit: "",
     cashOption: "320 THOUSAND",
     nextDrawing: "SEGUNDA, MAR 24, 9:59 PM",
-    backgroundColor: "bg-green-500",
+    backgroundColor: "bg-[#8CD444]",
     showPlayButton: true,
     route: "/play-lucky-day",
     price: 15,

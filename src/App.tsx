@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -68,7 +67,7 @@ const App = () => (
                 logoSrc="/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png"
                 jackpotAmount="570.000" 
                 basePrice={15}
-                primaryColor="green-600"
+                primaryColor="[#8CD444]"
                 gameName="Lucky Day Lotto"
                 extraPlayName="Lucky Boost"
                 maxRegularNumbers={6}
