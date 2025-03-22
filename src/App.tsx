@@ -86,10 +86,10 @@ const App = () => (
                 primaryColor="cyan-600"
                 gameName="Pick 4"
                 extraPlayName="Pick Bonus"
-                maxRegularNumbers={4}
-                totalRegularNumbers={10}
-                maxPowerballNumbers={1}
-                totalPowerballNumbers={10}
+                maxRegularNumbers={5}
+                totalRegularNumbers={45}
+                maxPowerballNumbers={0}
+                totalPowerballNumbers={0}
               />
             } 
           />
