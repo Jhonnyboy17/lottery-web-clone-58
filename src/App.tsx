@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
-import PowerballPlay from "./pages/PowerballPlay";
+import PlayPage from "./components/PlayPage";
 
 const queryClient = new QueryClient();
 
@@ -18,7 +18,96 @@ const App = () => (
         <Sonner />
         <Routes>
           <Route path="/" element={<Index />} />
-          <Route path="/play-powerball" element={<PowerballPlay />} />
+          
+          {/* Mega Millions - R$15 */}
+          <Route 
+            path="/play-mega-millions" 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/b1358bc7-258b-46ca-a17a-592e52d47cc1.png"
+                jackpotAmount="344.000.000"
+                basePrice={15}
+                primaryColor="blue-600"
+                gameName="Mega Millions"
+                extraPlayName="Megaplier®"
+              />
+            } 
+          />
+          
+          {/* Powerball - R$15 */}
+          <Route 
+            path="/play-powerball" 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png"
+                jackpotAmount="444.000.000" 
+                basePrice={15}
+                primaryColor="red-600"
+                gameName="Powerball"
+              />
+            } 
+          />
+          
+          {/* Lucky Day - R$15 */}
+          <Route 
+            path="/play-lucky-day" 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/fdb7bf25-46c7-48d3-afb1-00c12bd21033.png"
+                jackpotAmount="570.000" 
+                basePrice={15}
+                primaryColor="green-600"
+                gameName="Lucky Day Lotto"
+                extraPlayName="Lucky Boost"
+              />
+            } 
+          />
+          
+          {/* Pick 4 - R$10 */}
+          <Route 
+            path="/play-pick4" 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png"
+                jackpotAmount="100.000" 
+                basePrice={10}
+                primaryColor="cyan-600"
+                gameName="Pick 4"
+                extraPlayName="Pick Bonus"
+              />
+            } 
+          />
+          
+          {/* Cash 5 - R$8 */}
+          <Route 
+            path="/play-cash5" 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png"
+                jackpotAmount="5.000" 
+                basePrice={8}
+                primaryColor="amber-500"
+                gameName="Cash 5"
+                extraPlayName="Cash Boost"
+              />
+            } 
+          />
+          
+          {/* Fast Play - R$8 */}
+          <Route 
+            path="/play-fast-play" 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/9afb21d9-67e8-49f3-80f1-a35f5f1121be.png"
+                jackpotAmount="500" 
+                basePrice={8}
+                primaryColor="amber-500"
+                gameName="Fast Play"
+                extraPlayName="Fast Boost"
+              />
+            } 
+          />
+          
           <Route path="/responsible-play" element={<NotFound />} />
           <Route path="/casinos-gaming" element={<NotFound />} />
           <Route path="/retailer-corner" element={<NotFound />} />

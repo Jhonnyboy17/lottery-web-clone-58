@@ -5,10 +5,28 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-const PowerballPlay = () => {
+interface PlayPageProps {
+  logoSrc: string;
+  jackpotAmount: string;
+  basePrice: number;
+  primaryColor: string;
+  gameName: string;
+  extraPlayName?: string;
+  extraPlayPrice?: number;
+}
+
+const PlayPage = ({
+  logoSrc,
+  jackpotAmount,
+  basePrice,
+  primaryColor,
+  gameName,
+  extraPlayName = "Power Play®",
+  extraPlayPrice = 1.00,
+}: PlayPageProps) => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [selectedPowerball, setSelectedPowerball] = useState<number | null>(null);
-  const [includePowerPlay, setIncludePowerPlay] = useState(false);
+  const [includeExtraPlay, setIncludeExtraPlay] = useState(false);
   const [numberOfDraws, setNumberOfDraws] = useState("1");
   const [savedLines, setSavedLines] = useState<{numbers: number[], powerball: number | null}[]>([]);
 
@@ -69,13 +87,19 @@ const PowerballPlay = () => {
   };
 
   const getTicketPrice = () => {
-    let basePrice = savedLines.length * 2.00; // $2 per line
-    if (includePowerPlay) {
-      basePrice += savedLines.length * 1.00; // $1 extra for PowerPlay
+    let price = savedLines.length * basePrice; // Base price per line
+    if (includeExtraPlay) {
+      price += savedLines.length * extraPlayPrice; // Extra for PowerPlay/etc
     }
-    basePrice = basePrice * parseInt(numberOfDraws); // Multiply by number of draws
-    return basePrice.toFixed(2);
+    price = price * parseInt(numberOfDraws); // Multiply by number of draws
+    return price.toFixed(2);
   };
+
+  // Dynamically generate CSS classes based on primaryColor
+  const buttonStyle = `text-${primaryColor} border-${primaryColor}`;
+  const bgStyle = `bg-${primaryColor}`;
+  const hoverStyle = `hover:bg-${primaryColor.replace("600", "700")}`;
+  const hoverBgLight = `hover:bg-${primaryColor.replace("600", "50")}`;
 
   return (
     <div className="min-h-screen bg-white">
@@ -83,13 +107,13 @@ const PowerballPlay = () => {
         {/* Header with logo and jackpot */}
         <div className="flex items-center justify-between mb-4">
           <img 
-            src="/lovable-uploads/40f615be-7eee-405f-87cf-7df290c5da34.png" 
-            alt="Powerball" 
+            src={logoSrc} 
+            alt={gameName} 
             className="h-12 w-auto"
           />
           <div className="text-right">
             <p className="text-sm font-semibold">JACKPOT</p>
-            <h2 className="text-2xl font-bold text-red-600">R$ 444.000.000</h2>
+            <h2 className={`text-2xl font-bold text-${primaryColor}`}>R$ {jackpotAmount}</h2>
           </div>
         </div>
 
@@ -100,7 +124,7 @@ const PowerballPlay = () => {
               <h3 className="text-lg font-semibold">Select Numbers</h3>
               <Button 
                 onClick={handleQuickPick}
-                className="text-xs h-8 bg-white text-red-600 border border-red-600 hover:bg-red-50"
+                className={`text-xs h-8 bg-white ${buttonStyle} ${hoverBgLight}`}
               >
                 QUICK PICK
               </Button>
@@ -115,7 +139,7 @@ const PowerballPlay = () => {
                   onClick={() => handleNumberSelect(number)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
                     ${selectedNumbers.includes(number) 
-                      ? "bg-red-600 text-white" 
+                      ? `${bgStyle} text-white` 
                       : "bg-gray-100 text-black hover:bg-gray-200"}`}
                 >
                   {number}
@@ -132,7 +156,7 @@ const PowerballPlay = () => {
                   onClick={() => handlePowerballSelect(number)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
                     ${selectedPowerball === number 
-                      ? "bg-red-600 text-white" 
+                      ? `${bgStyle} text-white` 
                       : "bg-gray-100 text-black hover:bg-gray-200"}`}
                 >
                   {number}
@@ -143,7 +167,7 @@ const PowerballPlay = () => {
             <Button 
               onClick={handleAddLine} 
               disabled={!(selectedNumbers.length === 5 && selectedPowerball !== null)}
-              className="w-full bg-red-600 hover:bg-red-700 mt-2"
+              className={`w-full ${bgStyle} ${hoverStyle} mt-2`}
             >
               ADD LINE
             </Button>
@@ -164,7 +188,7 @@ const PowerballPlay = () => {
                         {num}
                       </span>
                     ))}
-                    <span className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs ml-1">
+                    <span className={`${bgStyle} text-white rounded-full w-6 h-6 flex items-center justify-center text-xs ml-1`}>
                       {line.powerball}
                     </span>
                   </div>
@@ -182,12 +206,12 @@ const PowerballPlay = () => {
             <div className="flex items-center justify-between mt-4 mb-3">
               <div className="flex items-center gap-2">
                 <Checkbox 
-                  id="powerplay" 
-                  checked={includePowerPlay}
-                  onCheckedChange={(checked) => setIncludePowerPlay(checked as boolean)} 
+                  id="extraplay" 
+                  checked={includeExtraPlay}
+                  onCheckedChange={(checked) => setIncludeExtraPlay(checked as boolean)} 
                 />
-                <label htmlFor="powerplay" className="text-sm font-medium">
-                  Add Power Play® (+$1.00 per line)
+                <label htmlFor="extraplay" className="text-sm font-medium">
+                  Add {extraPlayName} (+R${extraPlayPrice.toFixed(2)} per line)
                 </label>
               </div>
             </div>
@@ -218,7 +242,7 @@ const PowerballPlay = () => {
             <p className="text-xl font-bold">R$ {getTicketPrice()}</p>
           </div>
           <Button 
-            className="bg-red-600 hover:bg-red-700"
+            className={`${bgStyle} ${hoverStyle}`}
             disabled={savedLines.length === 0}
           >
             ADD TO CART
@@ -229,4 +253,4 @@ const PowerballPlay = () => {
   );
 };
 
-export default PowerballPlay;
+export default PlayPage;

@@ -16,6 +16,8 @@ const lotteryGames = [
     nextDrawing: "SEXTA, MAR 25, 9:59 PM",
     backgroundColor: "bg-blue-500",
     showPlayButton: true,
+    route: "/play-mega-millions",
+    price: 15,
   },
   {
     id: 2,
@@ -26,6 +28,8 @@ const lotteryGames = [
     nextDrawing: "SÁBADO, MAR 22, 9:59 PM",
     backgroundColor: "bg-[#ff5247]",
     showPlayButton: true,
+    route: "/play-powerball",
+    price: 15,
   },
   {
     id: 3,
@@ -36,6 +40,8 @@ const lotteryGames = [
     nextDrawing: "SEGUNDA, MAR 24, 9:59 PM",
     backgroundColor: "bg-green-500",
     showPlayButton: true,
+    route: "/play-lucky-day",
+    price: 15,
   },
   {
     id: 4,
@@ -46,6 +52,8 @@ const lotteryGames = [
     nextDrawing: "SÁBADO, MAR 22, 12:40 PM",
     backgroundColor: "bg-[#00ccc6]",
     showPlayButton: true,
+    route: "/play-pick4",
+    price: 10,
   },
   {
     id: 5,
@@ -56,6 +64,8 @@ const lotteryGames = [
     nextDrawing: "TODOS OS DIAS 12:40 PM & 9:22 PM",
     backgroundColor: "bg-[#ffa039]",
     showPlayButton: true,
+    route: "/play-cash5",
+    price: 8,
   },
   {
     id: 6,
@@ -66,6 +76,8 @@ const lotteryGames = [
     nextDrawing: "TODOS OS DIAS 12:40 PM & 9:22 PM",
     backgroundColor: "bg-[#ffa039]",
     showPlayButton: true,
+    route: "/play-fast-play",
+    price: 8,
   },
 ];
 
@@ -114,6 +126,7 @@ const Index = () => {
                 nextDrawing={game.nextDrawing}
                 backgroundColor={game.backgroundColor}
                 showPlayButton={game.showPlayButton}
+                route={game.route}
               />
             ))}
           </div>
