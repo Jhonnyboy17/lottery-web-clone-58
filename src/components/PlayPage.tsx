@@ -146,8 +146,8 @@ const PlayPage = ({
             </div>
 
             <p className="text-sm font-medium mb-2">Choose {maxRegularNumbers} Numbers</p>
-            <div className="grid grid-cols-8 gap-1 mb-4">
-              {regularNumbers.slice(0, 40).map((number) => (
+            <div className="grid grid-cols-9 gap-1 mb-4">
+              {regularNumbers.map((number) => (
                 <button
                   key={`regular-${number}`}
                   onClick={() => handleNumberSelect(number)}
@@ -163,8 +163,8 @@ const PlayPage = ({
             </div>
 
             <p className="text-sm font-medium mb-2">Choose {maxPowerballNumbers} Powerball</p>
-            <div className="grid grid-cols-8 gap-1 mb-4">
-              {powerballNumbers.slice(0, 16).map((number) => (
+            <div className="grid grid-cols-9 gap-1 mb-4">
+              {powerballNumbers.map((number) => (
                 <button
                   key={`powerball-${number}`}
                   onClick={() => handlePowerballSelect(number)}
