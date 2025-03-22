@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Progress } from "@/components/ui/progress";
 
 interface PlayPageProps {
   logoSrc: string;
@@ -117,6 +118,12 @@ const PlayPage = ({
 
   const colorValue = getColorValue();
 
+  // Calculate progress percentage for regular numbers
+  const regularNumbersProgress = (selectedNumbers.length / maxRegularNumbers) * 100;
+  
+  // Calculate progress percentage for powerball
+  const powerballProgress = selectedPowerball ? 100 : 0;
+
   return (
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-md pt-4 px-3">
@@ -145,7 +152,27 @@ const PlayPage = ({
               </Button>
             </div>
 
-            <p className="text-sm font-medium mb-2">Choose {maxRegularNumbers} Numbers</p>
+            <div className="flex justify-between items-center mb-2">
+              <p className="text-sm font-medium">Escolha {maxRegularNumbers} Números</p>
+              <span className="text-xs font-medium">{selectedNumbers.length} de {maxRegularNumbers}</span>
+            </div>
+            <div className="mb-3">
+              <Progress 
+                value={regularNumbersProgress} 
+                className="h-2"
+                style={{ 
+                  backgroundColor: "#e5e7eb", 
+                }}
+              >
+                <div 
+                  className="h-full transition-all" 
+                  style={{ 
+                    width: `${regularNumbersProgress}%`,
+                    backgroundColor: colorValue
+                  }}
+                />
+              </Progress>
+            </div>
             <div className="grid grid-cols-9 gap-1 mb-4">
               {regularNumbers.map((number) => (
                 <button
@@ -162,7 +189,27 @@ const PlayPage = ({
               ))}
             </div>
 
-            <p className="text-sm font-medium mb-2">Choose {maxPowerballNumbers} Powerball</p>
+            <div className="flex justify-between items-center mb-2">
+              <p className="text-sm font-medium">Escolha {maxPowerballNumbers} Powerball</p>
+              <span className="text-xs font-medium">{selectedPowerball ? 1 : 0} de {maxPowerballNumbers}</span>
+            </div>
+            <div className="mb-3">
+              <Progress 
+                value={powerballProgress} 
+                className="h-2"
+                style={{ 
+                  backgroundColor: "#e5e7eb", 
+                }}
+              >
+                <div 
+                  className="h-full transition-all" 
+                  style={{ 
+                    width: `${powerballProgress}%`,
+                    backgroundColor: "#f59e0b" 
+                  }}
+                />
+              </Progress>
+            </div>
             <div className="grid grid-cols-9 gap-1 mb-4">
               {powerballNumbers.map((number) => (
                 <button
