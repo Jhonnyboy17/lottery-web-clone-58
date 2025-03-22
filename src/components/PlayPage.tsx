@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -32,9 +31,7 @@ const PlayPage = ({
 
   const maxRegularNumbers = 5;
 
-  // Generate numbers 1-69 for regular selection
   const regularNumbers = Array.from({ length: 69 }, (_, i) => i + 1);
-  // Generate numbers 1-26 for Powerball selection
   const powerballNumbers = Array.from({ length: 26 }, (_, i) => i + 1);
 
   const handleNumberSelect = (number: number) => {
@@ -54,7 +51,6 @@ const PlayPage = ({
   };
 
   const handleQuickPick = () => {
-    // Generate 5 unique random numbers between 1-69
     const newNumbers: number[] = [];
     while (newNumbers.length < maxRegularNumbers) {
       const randomNumber = Math.floor(Math.random() * 69) + 1;
@@ -63,7 +59,6 @@ const PlayPage = ({
       }
     }
     
-    // Generate 1 random Powerball number between 1-26
     const randomPowerball = Math.floor(Math.random() * 26) + 1;
     
     setSelectedNumbers(newNumbers);
@@ -87,18 +82,17 @@ const PlayPage = ({
   };
 
   const getTicketPrice = () => {
-    let price = savedLines.length * basePrice; // Base price per line
+    let price = savedLines.length * basePrice;
     if (includeExtraPlay) {
-      price += savedLines.length * extraPlayPrice; // Extra for PowerPlay/etc
+      price += savedLines.length * extraPlayPrice;
     }
-    price = price * parseInt(numberOfDraws); // Multiply by number of draws
+    price = price * parseInt(numberOfDraws);
     return price.toFixed(2);
   };
 
   return (
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-md pt-4 px-3">
-        {/* Header with logo and jackpot */}
         <div className="flex items-center justify-between mb-4">
           <img 
             src={logoSrc} 
@@ -111,7 +105,6 @@ const PlayPage = ({
           </div>
         </div>
 
-        {/* Main content area */}
         <Card className="border-0 shadow-md overflow-hidden mb-4">
           <div className="p-4">
             <div className="flex justify-between items-center mb-3">
@@ -125,7 +118,6 @@ const PlayPage = ({
               </Button>
             </div>
 
-            {/* Regular numbers selection */}
             <p className="text-sm font-medium mb-2">Choose 5 Numbers</p>
             <div className="grid grid-cols-8 gap-1 mb-4">
               {regularNumbers.slice(0, 40).map((number) => (
@@ -134,16 +126,14 @@ const PlayPage = ({
                   onClick={() => handleNumberSelect(number)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
                     ${selectedNumbers.includes(number) 
-                      ? "text-white" 
+                      ? "bg-black text-white" 
                       : "bg-gray-100 text-black hover:bg-gray-200"}`}
-                  style={selectedNumbers.includes(number) ? { backgroundColor: primaryColor } : {}}
                 >
                   {number}
                 </button>
               ))}
             </div>
 
-            {/* Powerball selection - always use amber-500 */}
             <p className="text-sm font-medium mb-2">Choose 1 Powerball</p>
             <div className="grid grid-cols-8 gap-1 mb-4">
               {powerballNumbers.slice(0, 16).map((number) => (
@@ -170,7 +160,6 @@ const PlayPage = ({
             </Button>
           </div>
 
-          {/* Selected lines */}
           <div className="bg-gray-50 p-4">
             <h3 className="font-semibold mb-3">My Lines</h3>
             
@@ -183,8 +172,7 @@ const PlayPage = ({
                     {line.numbers.map((num, i) => (
                       <span 
                         key={i} 
-                        className="text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mx-0.5"
-                        style={{ backgroundColor: primaryColor }}
+                        className="bg-black text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mx-0.5"
                       >
                         {num}
                       </span>
@@ -203,7 +191,6 @@ const PlayPage = ({
               ))
             )}
 
-            {/* PowerPlay option */}
             <div className="flex items-center justify-between mt-4 mb-3">
               <div className="flex items-center gap-2">
                 <Checkbox 
@@ -217,7 +204,6 @@ const PlayPage = ({
               </div>
             </div>
 
-            {/* Number of draws */}
             <div className="mb-3">
               <label className="text-sm font-medium block mb-1">Number of Draws</label>
               <Select value={numberOfDraws} onValueChange={setNumberOfDraws}>
@@ -236,7 +222,6 @@ const PlayPage = ({
           </div>
         </Card>
 
-        {/* Bottom total and add to cart */}
         <div className="flex justify-between items-center bg-white p-3 rounded-lg shadow-md">
           <div>
             <p className="text-sm font-medium">Total</p>
