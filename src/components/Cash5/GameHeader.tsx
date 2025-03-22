@@ -44,8 +44,8 @@ const GameHeader: React.FC<GameHeaderProps> = ({
         </div>
       </div>
       
-      {/* Orange wavy line/stripe */}
-      <div className="w-full bg-orange-400 h-2 mb-4"></div>
+      {/* Thick wavy orange stripe - using a custom class from tailwind config */}
+      <div className="w-full h-6 bg-wave-orange -mb-1"></div>
     </div>
   );
 };

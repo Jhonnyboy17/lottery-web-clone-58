@@ -81,6 +81,9 @@ export default {
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
 			},
+			backgroundImage: {
+				'wave-orange': 'url("data:image/svg+xml,%3Csvg width=\'100%25\' height=\'100%25\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cdefs%3E%3Cpattern id=\'wave\' x=\'0\' y=\'0\' width=\'100%25\' height=\'100%25\' patternUnits=\'userSpaceOnUse\'%3E%3Crect x=\'0\' y=\'0\' width=\'100%25\' height=\'100%25\' fill=\'%23fcd34d\'/%3E%3Cpath d=\'M0 15 Q 20 5, 40 15 T 80 15 T 120 15 T 160 15 T 200 15 T 240 15 T 280 15 T 320 15 T 360 15 T 400 15 T 440 15 T 480 15 T 520 15 T 560 15 T 600 15 T 640 15 T 680 15 T 720 15 T 760 15 T 800 15 T 840 15 T 880 15 T 920 15 T 960 15 T 1000 15 T 1040 15 T 1080 15 T 1120 15 T 1160 15 T 1200 15 T 1240 15 T 1280 15 T 1320 15 T 1360 15 T 1400 15 T 1440 15 T 1480 15 T 1520 15 T 1560 15 T 1600 15 T 1640 15 T 1680 15 T 1720 15 T 1760 15 T 1800 15 T 1840 15 T 1880 15 T 1920 15 T 1960 15 T 2000 15 V 50 H 0 V 15\' fill=\'%23fbb034\'/%3E%3C/pattern%3E%3C/defs%3E%3Crect fill=\'url(%23wave)\' height=\'100%25\' width=\'100%25\'/%3E%3C/svg%3E")',
+			},
 			keyframes: {
 				'accordion-down': {
 					from: {
