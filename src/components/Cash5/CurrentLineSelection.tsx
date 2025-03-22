@@ -39,7 +39,7 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
   colorValue
 }) => {
   return (
-    <div className="p-4">
+    <div className="p-3">
       <TicketOptions 
         lineCount={lineCount} 
         currentLine={currentLine}
