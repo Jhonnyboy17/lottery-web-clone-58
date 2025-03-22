@@ -34,7 +34,7 @@ const lotteryGames = [
   },
   {
     id: 3,
-    logoSrc: "/lovable-uploads/fdb7bf25-46c7-48d3-afb1-00c12bd21033.png",
+    logoSrc: "/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png",
     amount: "570,000",
     unit: "",
     cashOption: "320 THOUSAND",

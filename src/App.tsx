@@ -65,7 +65,7 @@ const App = () => (
             path="/play-lucky-day" 
             element={
               <PlayPage 
-                logoSrc="/lovable-uploads/fdb7bf25-46c7-48d3-afb1-00c12bd21033.png"
+                logoSrc="/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png"
                 jackpotAmount="570.000" 
                 basePrice={15}
                 primaryColor="green-600"
