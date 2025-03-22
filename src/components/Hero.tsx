@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -41,21 +41,42 @@ const slides: Slide[] = [
 
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
+  const startAutoSlide = () => {
+    // Clear any existing timer first
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    
+    // Set up a new timer
+    timerRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     }, 5000);
+  };
 
-    return () => clearInterval(timer);
+  useEffect(() => {
+    // Start the auto-slide when component mounts
+    startAutoSlide();
+
+    // Clean up the timer when component unmounts
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
   }, []);
 
   const goToPreviousSlide = () => {
     setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+    // Restart the auto-slide timer after manual navigation
+    startAutoSlide();
   };
 
   const goToNextSlide = () => {
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    // Restart the auto-slide timer after manual navigation
+    startAutoSlide();
   };
 
   const scrollToSection = (id: string) => {
@@ -126,7 +147,11 @@ const Hero = () => {
           <div
             key={index}
             className={`slide-dot ${index === currentSlide ? "active" : ""}`}
-            onClick={() => setCurrentSlide(index)}
+            onClick={() => {
+              setCurrentSlide(index);
+              // Restart the auto-slide timer after clicking a dot
+              startAutoSlide();
+            }}
           />
         ))}
       </div>
