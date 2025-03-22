@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -42,8 +41,11 @@ const Navbar = () => {
   const navigateToDuvidas = () => {
     // Close mobile menu if open
     if (isOpen) setIsOpen(false);
-    // Navigate to the Duvidas page
+    
+    // Navigate to the Duvidas page and scroll to top
     navigate('/duvidas');
+    // Force scroll to top
+    window.scrollTo(0, 0);
   };
 
   return (
