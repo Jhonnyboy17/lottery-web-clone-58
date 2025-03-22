@@ -19,11 +19,11 @@ const lotteryGames = [
   },
   {
     id: 2,
-    logoSrc: "https://via.placeholder.com/160x80/FF0000/FFFFFF?text=POWERBALL",
-    amount: "444",
-    unit: "MILLION",
+    logoSrc: "/lovable-uploads/8dde0f4f-6cea-4cb1-b77a-880079fe58b5.png",
+    amount: "444,000,000",
+    unit: "",
     cashOption: "207.2 MILLION",
-    nextDrawing: "03/22",
+    nextDrawing: "SABADO, 22 MAR, 9:59PM",
     backgroundColor: "bg-red-500", // Red background for Powerball
   },
   {
