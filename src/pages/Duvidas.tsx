@@ -1,15 +1,11 @@
-
 import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
 const Duvidas = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
-
-  return (
-    <div className="min-h-screen bg-gray-50">
+  return <div className="min-h-screen bg-gray-50">
       <Navbar />
 
       <main className="pt-28 pb-12">
@@ -21,7 +17,7 @@ const Duvidas = () => {
 
           {/* Introduction text */}
           <div className="max-w-4xl mx-auto mb-10 text-base text-gray-700 leading-relaxed">
-            <p>
+            <p className="text-base font-normal text-left">
               Jogar na loteria é divertido. Você pode decidir <a href="#" className="text-blue-600 hover:underline">comprar bilhetes de loteria</a> porque deseja ganhar o jackpot ou porque fica 
               entusiasmado com a emoção que surge ao ficar na espera dos resultados dos sorteios. Seja qual for o motivo para jogar na
               loteria, esperamos que goste da nossa seleção de artigos e guias sobre o fascinante mundo lotérico. Inspire-se com as histórias
@@ -34,11 +30,7 @@ const Duvidas = () => {
           <div className="max-w-4xl mx-auto bg-red-500 rounded-md overflow-hidden mb-16">
             <div className="flex items-center p-4">
               <div className="flex-shrink-0 bg-white rounded-full p-2 mr-4">
-                <img 
-                  src="/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png" 
-                  alt="Powerball" 
-                  className="h-10 w-10 object-contain"
-                />
+                <img src="/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png" alt="Powerball" className="h-10 w-10 object-contain" />
               </div>
               <div className="flex-grow text-white">
                 <span className="mr-2">US$</span>
@@ -68,11 +60,7 @@ const Duvidas = () => {
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
                 <div className="bg-red-100 p-8 flex justify-center">
                   <div className="bg-white rounded-full p-3 w-28 h-28 flex items-center justify-center">
-                    <img 
-                      src="/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png" 
-                      alt="Powerball" 
-                      className="h-20 w-20 object-contain"
-                    />
+                    <img src="/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png" alt="Powerball" className="h-20 w-20 object-contain" />
                   </div>
                 </div>
                 <div className="p-6">
@@ -89,11 +77,7 @@ const Duvidas = () => {
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
                 <div className="bg-blue-100 p-8 flex justify-center">
                   <div className="bg-white rounded-full p-3 w-28 h-28 flex items-center justify-center">
-                    <img 
-                      src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" 
-                      alt="Mega Millions" 
-                      className="h-20 w-20 object-contain"
-                    />
+                    <img src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" alt="Mega Millions" className="h-20 w-20 object-contain" />
                   </div>
                 </div>
                 <div className="p-6">
@@ -110,11 +94,7 @@ const Duvidas = () => {
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
                 <div className="bg-yellow-100 p-8 flex justify-center">
                   <div className="bg-white rounded-full p-3 w-28 h-28 flex items-center justify-center">
-                    <img 
-                      src="/lovable-uploads/7e458cb6-6e89-4bc1-a022-660e40901ceb.png" 
-                      alt="EuroMilhões" 
-                      className="h-20 w-20 object-contain"
-                    />
+                    <img src="/lovable-uploads/7e458cb6-6e89-4bc1-a022-660e40901ceb.png" alt="EuroMilhões" className="h-20 w-20 object-contain" />
                   </div>
                 </div>
                 <div className="p-6">
@@ -134,11 +114,7 @@ const Duvidas = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Guide 4 - Loterias Americanas */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" 
-                  alt="Loterias Americanas" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" alt="Loterias Americanas" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     O guia informativo sobre as loterias americanas
@@ -151,11 +127,7 @@ const Duvidas = () => {
 
               {/* Guide 5 - Loterias do Japão */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" 
-                  alt="Loterias do Japão" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" alt="Loterias do Japão" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Guia com todos os detalhes sobre as loterias do Japão
@@ -168,11 +140,7 @@ const Duvidas = () => {
 
               {/* Guide 6 - EuroMilhões Jackpot */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" 
-                  alt="EuroMilhões Jackpot" 
-                  className="w-full h-48 object-cover object-center"
-                />
+                <img src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" alt="EuroMilhões Jackpot" className="w-full h-48 object-cover object-center" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Tudo sobre o jackpot limite da loteria EuroMilhões
@@ -190,11 +158,7 @@ const Duvidas = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Guide 7 - Loterias Espanholas */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" 
-                  alt="Loterias Espanholas" 
-                  className="w-full h-48 object-cover object-center"
-                />
+                <img src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" alt="Loterias Espanholas" className="w-full h-48 object-cover object-center" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     O Guia Completo para Jogar Loterias Espanholas Online!
@@ -207,11 +171,7 @@ const Duvidas = () => {
 
               {/* Guide 8 - Loterias Diárias */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" 
-                  alt="Loterias Diárias" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" alt="Loterias Diárias" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Tudo sobre as loterias diárias na TheLotter
@@ -224,11 +184,7 @@ const Duvidas = () => {
 
               {/* Guide 9 - Loteria Australiana */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" 
-                  alt="Loteria Australiana" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" alt="Loteria Australiana" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Manual da loteria australiana - tudo o que você precisa saber
@@ -253,11 +209,7 @@ const Duvidas = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Story 1 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" 
-                  alt="TheLotter é Segura" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" alt="TheLotter é Segura" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Golpes lotéricos: a TheLotter é segura
@@ -270,11 +222,7 @@ const Duvidas = () => {
 
               {/* Story 2 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" 
-                  alt="Histórias Lotéricas" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" alt="Histórias Lotéricas" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     6 histórias lotéricas: pessoas que foram da pobreza à riqueza
@@ -287,11 +235,7 @@ const Duvidas = () => {
 
               {/* Story 3 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" 
-                  alt="Ganhadores de Bolão" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" alt="Ganhadores de Bolão" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Os maiores ganhadores de Bolão de Loteria que se deram supeer bem
@@ -309,11 +253,7 @@ const Duvidas = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Guide 10 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" 
-                  alt="Dicas Powerball" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" alt="Dicas Powerball" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Como ganhar na Powerball: dicas para melhorar as chances
@@ -326,11 +266,7 @@ const Duvidas = () => {
 
               {/* Guide 11 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" 
-                  alt="Custo Powerball" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" alt="Custo Powerball" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Quanto custa realmente um bilhete da Powerball?
@@ -343,11 +279,7 @@ const Duvidas = () => {
 
               {/* Guide 12 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" 
-                  alt="Pagamento Jackpot" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" alt="Pagamento Jackpot" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Pagamento fixo ou anuidades do jackpot Powerball – qual é a melhor?
@@ -365,11 +297,7 @@ const Duvidas = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {/* Guide 13 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" 
-                  alt="Preço Mega Millions" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/72beb89b-1a10-4018-a46a-0840357912a6.png" alt="Preço Mega Millions" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Mega Millions – qual o preço do bilhete?
@@ -382,11 +310,7 @@ const Duvidas = () => {
 
               {/* Guide 14 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" 
-                  alt="Pagamento Mega Millions" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/c1d30e34-79bc-4e99-aa69-b49e51afd87a.png" alt="Pagamento Mega Millions" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Coletar o jackpot da Mega Millions: pagamento único ou anuidades?
@@ -399,11 +323,7 @@ const Duvidas = () => {
 
               {/* Guide 15 */}
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
-                <img 
-                  src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" 
-                  alt="Megaplier" 
-                  className="w-full h-48 object-cover"
-                />
+                <img src="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png" alt="Megaplier" className="w-full h-48 object-cover" />
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     O que é o Megaplier da Mega Millions?
@@ -418,8 +338,6 @@ const Duvidas = () => {
         </div>
       </main>
       <Footer />
-    </div>
-  );
+    </div>;
 };
-
 export default Duvidas;
