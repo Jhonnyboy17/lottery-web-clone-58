@@ -6,7 +6,7 @@ export const useTicketState = () => {
   const [currentLine, setCurrentLine] = useState<NumberSelectionType>({
     digits: [null, null, null, null],
     playType: "Straight",
-    betAmount: "$1.00"
+    betAmount: "R$8"
   });
   
   const [savedLines, setSavedLines] = useState<NumberSelectionType[]>([]);
@@ -103,7 +103,8 @@ export const useTicketState = () => {
 
   const getTicketPrice = () => {
     const calculateLinePrice = (line: NumberSelectionType) => {
-      const amount = parseFloat(line.betAmount.replace('$', ''));
+      // Extract the numeric value from the bet amount string and parse it
+      const amount = parseFloat(line.betAmount.replace('R$', ''));
       return amount;
     };
 

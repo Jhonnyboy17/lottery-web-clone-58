@@ -24,7 +24,7 @@ export const Cash5Page = ({
   extraPlayName = "FIREBALL™",
 }: Cash5PageProps) => {
   const playTypes = ["Box", "Combo", "Straight", "Straight/Box"];
-  const betAmounts = ["$0.50", "$1.00", "$2.00", "$3.00", "$4.00", "$5.00"];
+  const betAmounts = ["R$8", "R$15", "R$21", "R$28", "R$35"];
   
   const {
     currentLine,
