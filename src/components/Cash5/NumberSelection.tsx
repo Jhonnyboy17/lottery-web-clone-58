@@ -23,13 +23,27 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
 
   useEffect(() => {
-    if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
+    if (currentLine.playType === "Back Pair") {
+      // For Back Pair, focus on second digit if it's null
+      if (currentLine.digits[1] === null) {
+        setActiveDigitIndex(1);
+      } else if (currentLine.digits[2] === null) {
+        setActiveDigitIndex(2);
+      }
+    } else if (currentLine.playType === "Front Pair") {
+      // For Front Pair, focus on first digit if it's null
+      if (currentLine.digits[0] === null) {
+        setActiveDigitIndex(0);
+      } else if (currentLine.digits[1] === null) {
+        setActiveDigitIndex(1);
+      }
+    } else if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
       const firstEmptyIndex = currentLine.digits.findIndex(digit => digit === null);
       if (firstEmptyIndex !== -1) {
         setActiveDigitIndex(firstEmptyIndex);
       }
     }
-  }, [activeDigitIndex, currentLine.digits, setActiveDigitIndex]);
+  }, [activeDigitIndex, currentLine.digits, currentLine.playType, setActiveDigitIndex]);
 
   const handleNumberClick = (digit: number) => {
     setClickedNumber(digit);
@@ -42,13 +56,32 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 
   const getDigitDisplay = (index: number) => {
     const digit = currentLine.digits[index];
+    
+    // Special case for "X" representation
+    if (digit === -1) {
+      return "X";
+    }
+    
     return digit !== null ? digit.toString() : "?";
+  };
+
+  const isDigitDisabled = (index: number) => {
+    return (currentLine.playType === "Back Pair" && index === 0) || 
+           (currentLine.playType === "Front Pair" && index === 2);
+  };
+  
+  // Get appropriate heading text based on play type
+  const getHeadingText = () => {
+    if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
+      return "Escolha 2 Números";
+    }
+    return "Escolha 3 Números";
   };
 
   return (
     <div className="relative mb-6 mt-8">
       <h2 className="text-center text-xl font-semibold mb-4 text-blue-800">
-        Escolha 3 Números
+        {getHeadingText()}
       </h2>
       
       <div className="flex justify-center items-center h-[220px] relative">
@@ -77,21 +110,26 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       </div>
       
       <div className="flex gap-2 justify-center mt-4 mb-4">
-        {currentLine.digits.map((digit, idx) => (
-          <div 
-            key={idx} 
-            className={`w-8 h-8 rounded-full flex items-center justify-center text-lg font-medium border cursor-pointer ${
-              activeDigitIndex === idx 
-                ? 'bg-blue-500 text-white border-blue-600' 
-                : digit === null 
-                  ? 'bg-gray-100 text-gray-400' 
-                  : 'bg-blue-100 text-blue-800'
-            }`}
-            onClick={() => setActiveDigitIndex(idx)}
-          >
-            {getDigitDisplay(idx)}
-          </div>
-        ))}
+        {currentLine.digits.map((digit, idx) => {
+          const isDisabled = isDigitDisabled(idx);
+          const isActive = activeDigitIndex === idx && !isDisabled;
+          const isX = digit === -1;
+          
+          // Determine the appropriate style based on state
+          let bgColor = isActive ? 'bg-blue-500' : isX ? 'bg-gray-200' : digit === null ? 'bg-gray-100' : 'bg-blue-100';
+          let textColor = isActive ? 'text-white' : isX ? 'text-gray-700' : digit === null ? 'text-gray-400' : 'text-blue-800';
+          let borderColor = isActive ? 'border-blue-600' : isX ? 'border-gray-300' : 'border-gray-200';
+          
+          return (
+            <div 
+              key={idx} 
+              className={`w-8 h-8 rounded-full flex items-center justify-center text-lg font-medium border cursor-pointer ${bgColor} ${textColor} ${borderColor} ${isDisabled ? 'cursor-not-allowed' : ''}`}
+              onClick={() => !isDisabled && setActiveDigitIndex(idx)}
+            >
+              {getDigitDisplay(idx)}
+            </div>
+          );
+        })}
       </div>
       
       <div className="flex justify-end mt-2">

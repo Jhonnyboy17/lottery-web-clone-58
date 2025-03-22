@@ -24,7 +24,7 @@ export const FastPlayPage = ({
   gameName,
   extraPlayName = "Fast Boost",
 }: FastPlayPageProps) => {
-  const playTypes = ["Box", "Combo", "Straight", "Straight/Box"];
+  const playTypes = ["Back Pair", "Box", "Combo", "Front Pair", "Straight", "Straight/Box"];
   const betAmounts = ["R$8", "R$15", "R$21", "R$28", "R$35"];
   
   const {
