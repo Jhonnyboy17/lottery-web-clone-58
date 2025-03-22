@@ -20,27 +20,20 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   isLineComplete,
   onClearSelections
 }) => {
-  // Function to get digit display
   const getDigitDisplay = (index: number) => {
     const digit = currentLine.digits[index];
     return digit !== null ? digit.toString() : "?";
   };
 
-  // Calculate positions for numbers in a wheel
   const getNumberPosition = (index: number, totalNumbers: number) => {
-    // Arrange numbers in ascending order clockwise
-    const angleOffset = -90; // Start from top (negative 90 degrees)
-    const angleStep = 360 / totalNumbers;
-    const angle = (index * angleStep + angleOffset) * (Math.PI / 180);
+    const angleStep = (2 * Math.PI) / totalNumbers;
+    const angle = index * angleStep - Math.PI / 2;
     
-    // Radius - reduced to bring numbers closer to center
-    const radius = 40; // Reduced from 70 to 40 to bring numbers much closer
+    const radius = 40;
     
-    // Calculate x and y positions
     const x = Math.cos(angle) * radius;
     const y = Math.sin(angle) * radius;
     
-    // Convert to percentage for styling
     return {
       top: `${50 + y}%`,
       left: `${50 + x}%`,
@@ -50,10 +43,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 
   return (
     <div className="relative mb-6 mt-8">
-      {/* Display current selection at the bottom */}
       <div className="flex justify-center items-center h-48 relative">
-        {/* Numbers in a wheel from 0 to 9 */}
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => {
+        {[...Array(10).keys()].map((number) => {
           const position = getNumberPosition(number, 10);
           return (
             <button
@@ -62,12 +53,14 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
               className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-medium absolute"
               style={{
                 ...position,
-                backgroundColor: activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number 
-                  ? '#0EA5E9' 
-                  : '#dbeafe',
-                color: activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number 
-                  ? 'white' 
-                  : '#1e40af'
+                backgroundColor:
+                  activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number
+                    ? '#0EA5E9'
+                    : '#dbeafe',
+                color:
+                  activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number
+                    ? 'white'
+                    : '#1e40af'
               }}
             >
               {number}
@@ -75,8 +68,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           );
         })}
       </div>
-      
-      {/* Display selection circles at bottom */}
       <div className="flex gap-2 justify-center mt-4 mb-4">
         {currentLine.digits.map((digit, idx) => (
           <div 
@@ -94,7 +85,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           </div>
         ))}
       </div>
-      
       <div className="flex justify-end mt-2">
         <Button 
           onClick={onClearSelections}
