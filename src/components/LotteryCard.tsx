@@ -51,9 +51,6 @@ const LotteryCard = ({
                 {prefix}
               </p>
             )}
-            <p className="text-3xl font-bold text-black mb-1">
-              JACKPOT ESTA VALIDO
-            </p>
             <h2 className="text-5xl font-bold text-lottery-navy">
               ${amount}
             </h2>
