@@ -2,10 +2,10 @@
 import React from "react";
 import { Card } from "@/components/ui/card";
 import GameHeader from "../Cash5/GameHeader";
-import CurrentLineSelection from "./CurrentLineSelection";
-import SavedLinesSection from "./SavedLinesSection";
+import CurrentLineSelection from "../Cash5/CurrentLineSelection";
+import SavedLinesSection from "../Cash5/SavedLinesSection";
 import TotalSummary from "../Cash5/TotalSummary";
-import { useTicketState } from "./hooks/useTicketState";
+import { useTicketState } from "../Cash5/hooks/useTicketState";
 
 interface FastPlayPageProps {
   logoSrc: string;
@@ -24,7 +24,7 @@ export const FastPlayPage = ({
   gameName,
   extraPlayName = "Fast Boost",
 }: FastPlayPageProps) => {
-  const playTypes = ["Straight", "Box", "Straight/Box", "Combo", "Front Pair", "Back Pair"];
+  const playTypes = ["Box", "Combo", "Straight", "Straight/Box"];
   const betAmounts = ["R$8", "R$15", "R$21", "R$28", "R$35"];
   
   const {
