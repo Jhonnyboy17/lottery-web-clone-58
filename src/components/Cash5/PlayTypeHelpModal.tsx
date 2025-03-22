@@ -1,7 +1,6 @@
 
 import React from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import { X } from "lucide-react";
 
 interface PlayTypeHelpModalProps {
   isOpen: boolean;
@@ -20,10 +19,13 @@ const PlayTypeHelpModal: React.FC<PlayTypeHelpModalProps> = ({
             <DialogTitle className="text-md font-bold">TYPE OF PLAY</DialogTitle>
             <button 
               onClick={onClose} 
-              className="rounded-full w-6 h-6 hover:bg-gray-100 transition-colors"
+              className="rounded-full w-6 h-6 hover:bg-gray-100 transition-colors flex items-center justify-center"
               aria-label="Close"
             >
-              <X size={18} />
+              <div className="relative w-4 h-4">
+                <span className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-600 -translate-y-1/2 rotate-45"></span>
+                <span className="absolute top-1/2 left-0 w-full h-0.5 bg-gray-600 -translate-y-1/2 -rotate-45"></span>
+              </div>
             </button>
           </div>
         </div>
