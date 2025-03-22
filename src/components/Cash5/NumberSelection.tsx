@@ -50,26 +50,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 
   return (
     <div className="relative mb-6 mt-8">
+      {/* Display current selection at the bottom */}
       <div className="flex justify-center items-center h-48 relative">
-        {/* Display current selection */}
-        <div className="flex gap-2 absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-8">
-          {currentLine.digits.map((digit, idx) => (
-            <div 
-              key={idx} 
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-lg font-medium border cursor-pointer ${
-                activeDigitIndex === idx 
-                  ? 'bg-blue-500 text-white' 
-                  : digit === null 
-                    ? 'bg-gray-100 text-gray-400' 
-                    : 'bg-blue-100 text-blue-800'
-              }`}
-              onClick={() => setActiveDigitIndex(idx)}
-            >
-              {getDigitDisplay(idx)}
-            </div>
-          ))}
-        </div>
-        
         {/* Numbers in a wheel from 0 to 9 */}
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => {
           const position = getNumberPosition(number, 10);
@@ -92,20 +74,25 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
             </button>
           );
         })}
-        
-        <div className="text-center">
-          {activeDigitIndex !== null ? (
-            <div className="text-3xl font-bold">?</div>
-          ) : isLineComplete() ? (
-            <div className="text-3xl font-bold">✓</div>
-          ) : (
-            <>
-              <div className="text-sm font-medium">Select your first</div>
-              <div className="text-sm font-medium">number</div>
-              <div className="text-sm font-medium text-amber-500">to get started!</div>
-            </>
-          )}
-        </div>
+      </div>
+      
+      {/* Display selection circles at bottom */}
+      <div className="flex gap-2 justify-center mt-4 mb-4">
+        {currentLine.digits.map((digit, idx) => (
+          <div 
+            key={idx} 
+            className={`w-8 h-8 rounded-full flex items-center justify-center text-lg font-medium border cursor-pointer ${
+              activeDigitIndex === idx 
+                ? 'bg-blue-500 text-white border-blue-600' 
+                : digit === null 
+                  ? 'bg-gray-100 text-gray-400' 
+                  : 'bg-blue-100 text-blue-800'
+            }`}
+            onClick={() => setActiveDigitIndex(idx)}
+          >
+            {getDigitDisplay(idx)}
+          </div>
+        ))}
       </div>
       
       <div className="flex justify-end mt-2">
