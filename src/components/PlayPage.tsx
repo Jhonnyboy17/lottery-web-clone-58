@@ -13,6 +13,10 @@ interface PlayPageProps {
   gameName: string;
   extraPlayName?: string;
   extraPlayPrice?: number;
+  maxRegularNumbers?: number;
+  totalRegularNumbers?: number;
+  maxPowerballNumbers?: number;
+  totalPowerballNumbers?: number;
 }
 
 const PlayPage = ({
@@ -23,6 +27,10 @@ const PlayPage = ({
   gameName,
   extraPlayName = "Power Play®",
   extraPlayPrice = 1.00,
+  maxRegularNumbers = 5,
+  totalRegularNumbers = 69,
+  maxPowerballNumbers = 1,
+  totalPowerballNumbers = 26,
 }: PlayPageProps) => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [selectedPowerball, setSelectedPowerball] = useState<number | null>(null);
@@ -30,10 +38,8 @@ const PlayPage = ({
   const [numberOfDraws, setNumberOfDraws] = useState("1");
   const [savedLines, setSavedLines] = useState<{numbers: number[], powerball: number | null}[]>([]);
 
-  const maxRegularNumbers = 5;
-
-  const regularNumbers = Array.from({ length: 69 }, (_, i) => i + 1);
-  const powerballNumbers = Array.from({ length: 26 }, (_, i) => i + 1);
+  const regularNumbers = Array.from({ length: totalRegularNumbers }, (_, i) => i + 1);
+  const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
 
   const handleNumberSelect = (number: number) => {
     if (selectedNumbers.includes(number)) {
@@ -54,13 +60,13 @@ const PlayPage = ({
   const handleQuickPick = () => {
     const newNumbers: number[] = [];
     while (newNumbers.length < maxRegularNumbers) {
-      const randomNumber = Math.floor(Math.random() * 69) + 1;
+      const randomNumber = Math.floor(Math.random() * totalRegularNumbers) + 1;
       if (!newNumbers.includes(randomNumber)) {
         newNumbers.push(randomNumber);
       }
     }
     
-    const randomPowerball = Math.floor(Math.random() * 26) + 1;
+    const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
     
     setSelectedNumbers(newNumbers);
     setSelectedPowerball(randomPowerball);
@@ -139,7 +145,7 @@ const PlayPage = ({
               </Button>
             </div>
 
-            <p className="text-sm font-medium mb-2">Choose 5 Numbers</p>
+            <p className="text-sm font-medium mb-2">Choose {maxRegularNumbers} Numbers</p>
             <div className="grid grid-cols-8 gap-1 mb-4">
               {regularNumbers.slice(0, 40).map((number) => (
                 <button
@@ -156,7 +162,7 @@ const PlayPage = ({
               ))}
             </div>
 
-            <p className="text-sm font-medium mb-2">Choose 1 Powerball</p>
+            <p className="text-sm font-medium mb-2">Choose {maxPowerballNumbers} Powerball</p>
             <div className="grid grid-cols-8 gap-1 mb-4">
               {powerballNumbers.slice(0, 16).map((number) => (
                 <button
@@ -174,7 +180,7 @@ const PlayPage = ({
 
             <Button 
               onClick={handleAddLine} 
-              disabled={!(selectedNumbers.length === 5 && selectedPowerball !== null)}
+              disabled={!(selectedNumbers.length === maxRegularNumbers && selectedPowerball !== null)}
               className="w-full hover:bg-opacity-90 mt-2"
               style={{ backgroundColor: colorValue }}
             >

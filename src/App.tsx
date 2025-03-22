@@ -30,6 +30,10 @@ const App = () => (
                 primaryColor="blue-600"
                 gameName="Mega Millions"
                 extraPlayName="Megaplier®"
+                maxRegularNumbers={5}
+                totalRegularNumbers={70}
+                maxPowerballNumbers={1}
+                totalPowerballNumbers={25}
               />
             } 
           />
@@ -44,6 +48,10 @@ const App = () => (
                 basePrice={15}
                 primaryColor="red-600"
                 gameName="Powerball"
+                maxRegularNumbers={5}
+                totalRegularNumbers={69}
+                maxPowerballNumbers={1}
+                totalPowerballNumbers={26}
               />
             } 
           />
@@ -59,6 +67,10 @@ const App = () => (
                 primaryColor="green-600"
                 gameName="Lucky Day Lotto"
                 extraPlayName="Lucky Boost"
+                maxRegularNumbers={5}
+                totalRegularNumbers={45}
+                maxPowerballNumbers={1}
+                totalPowerballNumbers={20}
               />
             } 
           />
@@ -74,6 +86,10 @@ const App = () => (
                 primaryColor="cyan-600"
                 gameName="Pick 4"
                 extraPlayName="Pick Bonus"
+                maxRegularNumbers={4}
+                totalRegularNumbers={10}
+                maxPowerballNumbers={1}
+                totalPowerballNumbers={10}
               />
             } 
           />
@@ -89,6 +105,10 @@ const App = () => (
                 primaryColor="amber-500"
                 gameName="Cash 5"
                 extraPlayName="Cash Boost"
+                maxRegularNumbers={5}
+                totalRegularNumbers={35}
+                maxPowerballNumbers={1}
+                totalPowerballNumbers={15}
               />
             } 
           />
@@ -104,6 +124,10 @@ const App = () => (
                 primaryColor="amber-500"
                 gameName="Fast Play"
                 extraPlayName="Fast Boost"
+                maxRegularNumbers={5}
+                totalRegularNumbers={30}
+                maxPowerballNumbers={1}
+                totalPowerballNumbers={10}
               />
             } 
           />
