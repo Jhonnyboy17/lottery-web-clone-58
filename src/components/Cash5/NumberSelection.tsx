@@ -20,10 +20,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   isLineComplete,
   onClearSelections
 }) => {
-  // Estado para controlar qual número foi clicado recentemente
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
 
-  // Efeito para selecionar automaticamente o primeiro círculo ao carregar
   useEffect(() => {
     if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
       const firstEmptyIndex = currentLine.digits.findIndex(digit => digit === null);
@@ -33,12 +31,10 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   }, [activeDigitIndex, currentLine.digits, setActiveDigitIndex]);
 
-  // Função para lidar com o clique no número
   const handleNumberClick = (digit: number) => {
     setClickedNumber(digit);
     onDigitSelect(digit);
     
-    // Timer para remover a classe de destaque após 2 segundos
     setTimeout(() => {
       setClickedNumber(null);
     }, 2000);
@@ -51,13 +47,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 
   return (
     <div className="relative mb-6 mt-8">
-      {/* Título acima dos números */}
       <h2 className="text-center text-xl font-semibold mb-4 text-blue-800">
-        Escolha 4 Números
+        Escolha 3 Números
       </h2>
       
       <div className="flex justify-center items-center h-[220px] relative">
-        {/* Numbers displayed in a grid layout */}
         <div className="grid grid-cols-5 gap-4 z-10">
           {[...Array(10).keys()].map((number) => (
             <button
@@ -66,10 +60,10 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
               className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-medium transition-colors duration-300`}
               style={{
                 backgroundColor: clickedNumber === number 
-                  ? '#0EA5E9' // Azul brilhante quando clicado recentemente
+                  ? '#0EA5E9'
                   : activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number
-                    ? '#0EA5E9' // Azul quando selecionado
-                    : '#dbeafe', // Azul claro padrão
+                    ? '#0EA5E9'
+                    : '#dbeafe',
                 color: clickedNumber === number || 
                       (activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number)
                   ? 'white'
@@ -82,7 +76,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
         </div>
       </div>
       
-      {/* Current selected digits display */}
       <div className="flex gap-2 justify-center mt-4 mb-4">
         {currentLine.digits.map((digit, idx) => (
           <div 
@@ -101,7 +94,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
         ))}
       </div>
       
-      {/* Clear button */}
       <div className="flex justify-end mt-2">
         <Button 
           onClick={onClearSelections}
