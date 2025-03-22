@@ -19,8 +19,8 @@ const GameHeader: React.FC<GameHeaderProps> = ({
   
   return (
     <div className="relative">
-      {/* Orange banner at the top */}
-      <div className="absolute top-0 left-0 right-0 -mx-3 -mt-4 bg-orange-500 h-24 z-0"></div>
+      {/* Light orange banner at the top - full width */}
+      <div className="fixed top-0 left-0 right-0 bg-orange-300 h-24 -z-10"></div>
       
       {/* Content with the same layout */}
       <div className="relative z-10 flex items-center justify-between mb-4">
