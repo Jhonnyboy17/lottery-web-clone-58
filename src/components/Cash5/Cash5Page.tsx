@@ -34,6 +34,8 @@ export const Cash5Page = ({
     lineCount,
     includeFireball,
     activeDigitIndex,
+    selectedDrawTime,
+    selectedDrawCount,
     setActiveDigitIndex,
     handleDigitSelect,
     handlePlayTypeChange,
@@ -43,6 +45,8 @@ export const Cash5Page = ({
     handleAddLine,
     handleRemoveLine,
     setIncludeFireball,
+    setSelectedDrawTime,
+    setSelectedDrawCount,
     isLineComplete,
     getTicketPrice
   } = useTicketState();
