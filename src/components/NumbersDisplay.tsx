@@ -2,6 +2,7 @@
 import { ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 interface NumbersGame {
   id: number;
@@ -195,11 +196,13 @@ const NumbersDisplay = () => {
       </div>
       
       <div className="mt-8 text-center">
-        <Button 
-          className="bg-white hover:bg-gray-100 text-lottery-navy border border-gray-300 rounded-full py-2 px-6 transition-colors duration-300"
-        >
-          VIEW ALL RESULTS
-        </Button>
+        <Link to="/results-hub">
+          <Button 
+            className="bg-white hover:bg-gray-100 text-lottery-navy border border-gray-300 rounded-full py-2 px-6 transition-colors duration-300"
+          >
+            VIEW ALL RESULTS
+          </Button>
+        </Link>
       </div>
     </div>
   );

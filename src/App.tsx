@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import PlayPage from "./components/PlayPage";
 import Cash5Page from "./components/Cash5";
 import FastPlayPage from "./components/FastPlay";
+import ResultsHub from "./pages/ResultsHub";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +23,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/duvidas" element={<Duvidas />} />
+          <Route path="/results-hub" element={<ResultsHub />} />
           
           {/* Mega Millions - R$15 */}
           <Route 
