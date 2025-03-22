@@ -41,6 +41,7 @@ const PlayPage = ({
 
   const regularNumbers = Array.from({ length: totalRegularNumbers }, (_, i) => i + 1);
   const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
+  const hasPowerball = maxPowerballNumbers > 0;
 
   const handleNumberSelect = (number: number) => {
     if (selectedNumbers.includes(number)) {
@@ -67,14 +68,17 @@ const PlayPage = ({
       }
     }
     
-    const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
+    let randomPowerball = null;
+    if (hasPowerball) {
+      randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
+    }
     
     setSelectedNumbers(newNumbers);
     setSelectedPowerball(randomPowerball);
   };
 
   const handleAddLine = () => {
-    if (selectedNumbers.length === maxRegularNumbers && selectedPowerball !== null) {
+    if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
       setSavedLines([...savedLines, {
         numbers: [...selectedNumbers],
         powerball: selectedPowerball
@@ -123,6 +127,14 @@ const PlayPage = ({
   
   // Calculate progress percentage for powerball
   const powerballProgress = selectedPowerball ? 100 : 0;
+
+  const isLineComplete = () => {
+    if (hasPowerball) {
+      return selectedNumbers.length === maxRegularNumbers && selectedPowerball !== null;
+    } else {
+      return selectedNumbers.length === maxRegularNumbers;
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -189,45 +201,49 @@ const PlayPage = ({
               ))}
             </div>
 
-            <div className="flex justify-between items-center mb-2">
-              <p className="text-sm font-medium">Escolha {maxPowerballNumbers} Powerball</p>
-              <span className="text-xs font-medium">{selectedPowerball ? 1 : 0} de {maxPowerballNumbers}</span>
-            </div>
-            <div className="mb-3">
-              <Progress 
-                value={powerballProgress} 
-                className="h-2"
-                style={{ 
-                  backgroundColor: "#e5e7eb", 
-                }}
-              >
-                <div 
-                  className="h-full transition-all" 
-                  style={{ 
-                    width: `${powerballProgress}%`,
-                    backgroundColor: "#f59e0b" 
-                  }}
-                />
-              </Progress>
-            </div>
-            <div className="grid grid-cols-9 gap-1 mb-4">
-              {powerballNumbers.map((number) => (
-                <button
-                  key={`powerball-${number}`}
-                  onClick={() => handlePowerballSelect(number)}
-                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
-                    ${selectedPowerball === number 
-                      ? "bg-amber-500 text-white" 
-                      : "bg-gray-100 text-black hover:bg-gray-200"}`}
-                >
-                  {number}
-                </button>
-              ))}
-            </div>
+            {hasPowerball && (
+              <>
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-sm font-medium">Escolha {maxPowerballNumbers} Powerball</p>
+                  <span className="text-xs font-medium">{selectedPowerball ? 1 : 0} de {maxPowerballNumbers}</span>
+                </div>
+                <div className="mb-3">
+                  <Progress 
+                    value={powerballProgress} 
+                    className="h-2"
+                    style={{ 
+                      backgroundColor: "#e5e7eb", 
+                    }}
+                  >
+                    <div 
+                      className="h-full transition-all" 
+                      style={{ 
+                        width: `${powerballProgress}%`,
+                        backgroundColor: "#f59e0b" 
+                      }}
+                    />
+                  </Progress>
+                </div>
+                <div className="grid grid-cols-9 gap-1 mb-4">
+                  {powerballNumbers.map((number) => (
+                    <button
+                      key={`powerball-${number}`}
+                      onClick={() => handlePowerballSelect(number)}
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
+                        ${selectedPowerball === number 
+                          ? "bg-amber-500 text-white" 
+                          : "bg-gray-100 text-black hover:bg-gray-200"}`}
+                    >
+                      {number}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
 
             <Button 
               onClick={handleAddLine} 
-              disabled={!(selectedNumbers.length === maxRegularNumbers && selectedPowerball !== null)}
+              disabled={!isLineComplete()}
               className="w-full hover:bg-opacity-90 mt-2"
               style={{ backgroundColor: colorValue }}
             >
@@ -253,9 +269,11 @@ const PlayPage = ({
                         {num}
                       </span>
                     ))}
-                    <span className="bg-amber-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs ml-1">
-                      {line.powerball}
-                    </span>
+                    {hasPowerball && line.powerball && (
+                      <span className="bg-amber-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs ml-1">
+                        {line.powerball}
+                      </span>
+                    )}
                   </div>
                   <button 
                     onClick={() => handleRemoveLine(index)}

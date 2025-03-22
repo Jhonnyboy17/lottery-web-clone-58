@@ -67,10 +67,10 @@ const App = () => (
                 primaryColor="green-600"
                 gameName="Lucky Day Lotto"
                 extraPlayName="Lucky Boost"
-                maxRegularNumbers={5}
-                totalRegularNumbers={45}
-                maxPowerballNumbers={1}
-                totalPowerballNumbers={20}
+                maxRegularNumbers={6}
+                totalRegularNumbers={50}
+                maxPowerballNumbers={0}
+                totalPowerballNumbers={0}
               />
             } 
           />
