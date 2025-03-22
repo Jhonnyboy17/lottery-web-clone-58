@@ -14,15 +14,14 @@ const GameHeader: React.FC<GameHeaderProps> = ({
   jackpotAmount, 
   colorValue 
 }) => {
-  // Check if we should display the draw times instead of jackpot amount
   const shouldShowDrawTimes = jackpotAmount === "500";
   
   return (
     <div className="relative">
-      {/* Large orange banner that spans the full width */}
-      <div className="fixed top-0 left-0 right-0 bg-orange-200 h-32 -z-10"></div>
+      {/* Faixa laranja no topo */}
+      <div className="absolute top-0 left-0 w-full h-16 bg-orange-500"></div>
       
-      {/* Content with logo centered on the banner */}
+      {/* Conteúdo */}
       <div className="relative z-10 flex items-center justify-between px-4 pt-6 pb-4">
         <div className="flex-1">
           <img 
