@@ -95,12 +95,6 @@ const PlayPage = ({
     return price.toFixed(2);
   };
 
-  // Dynamically generate CSS classes based on primaryColor
-  const buttonStyle = `text-${primaryColor} border-${primaryColor}`;
-  const bgStyle = `bg-${primaryColor}`;
-  const hoverStyle = `hover:bg-${primaryColor.replace("600", "700")}`;
-  const hoverBgLight = `hover:bg-${primaryColor.replace("600", "50")}`;
-
   return (
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-md pt-4 px-3">
@@ -124,7 +118,7 @@ const PlayPage = ({
               <h3 className="text-lg font-semibold">Select Numbers</h3>
               <Button 
                 onClick={handleQuickPick}
-                className={`text-xs h-8 bg-white ${buttonStyle} ${hoverBgLight}`}
+                className={`text-xs h-8 bg-white text-${primaryColor} border-${primaryColor} hover:bg-${primaryColor}/10`}
               >
                 QUICK PICK
               </Button>
@@ -139,7 +133,7 @@ const PlayPage = ({
                   onClick={() => handleNumberSelect(number)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
                     ${selectedNumbers.includes(number) 
-                      ? `${bgStyle} text-white` 
+                      ? `bg-${primaryColor} text-white` 
                       : "bg-gray-100 text-black hover:bg-gray-200"}`}
                 >
                   {number}
@@ -156,7 +150,7 @@ const PlayPage = ({
                   onClick={() => handlePowerballSelect(number)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
                     ${selectedPowerball === number 
-                      ? `${bgStyle} text-white` 
+                      ? `bg-${primaryColor} text-white` 
                       : "bg-gray-100 text-black hover:bg-gray-200"}`}
                 >
                   {number}
@@ -167,7 +161,7 @@ const PlayPage = ({
             <Button 
               onClick={handleAddLine} 
               disabled={!(selectedNumbers.length === 5 && selectedPowerball !== null)}
-              className={`w-full ${bgStyle} ${hoverStyle} mt-2`}
+              className={`w-full bg-${primaryColor} hover:bg-${primaryColor}/90 mt-2`}
             >
               ADD LINE
             </Button>
@@ -184,11 +178,11 @@ const PlayPage = ({
                 <div key={index} className="bg-white rounded p-2 mb-2 flex items-center justify-between">
                   <div className="flex items-center">
                     {line.numbers.map((num, i) => (
-                      <span key={i} className="bg-gray-100 rounded-full w-6 h-6 flex items-center justify-center text-xs mx-0.5">
+                      <span key={i} className={`bg-${primaryColor} text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mx-0.5`}>
                         {num}
                       </span>
                     ))}
-                    <span className={`${bgStyle} text-white rounded-full w-6 h-6 flex items-center justify-center text-xs ml-1`}>
+                    <span className={`bg-${primaryColor} text-white rounded-full w-6 h-6 flex items-center justify-center text-xs ml-1`}>
                       {line.powerball}
                     </span>
                   </div>
@@ -242,7 +236,7 @@ const PlayPage = ({
             <p className="text-xl font-bold">R$ {getTicketPrice()}</p>
           </div>
           <Button 
-            className={`${bgStyle} ${hoverStyle}`}
+            className={`bg-${primaryColor} hover:bg-${primaryColor}/90`}
             disabled={savedLines.length === 0}
           >
             ADD TO CART
