@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PlayPage from "./components/PlayPage";
-import Cash5Page from "./components/Cash5Page";
+import Cash5Page from "./components/Cash5";
 
 const queryClient = new QueryClient();
 
@@ -133,7 +132,6 @@ const App = () => (
           <Route path="/casinos-gaming" element={<NotFound />} />
           <Route path="/retailer-corner" element={<NotFound />} />
           <Route path="/contact-us" element={<NotFound />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
