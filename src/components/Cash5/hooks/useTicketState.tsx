@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../types";
 
@@ -12,9 +11,8 @@ export const useTicketState = () => {
   const [savedLines, setSavedLines] = useState<NumberSelectionType[]>([]);
   const [lineCount, setLineCount] = useState(1);
   const [includeFireball, setIncludeFireball] = useState(false);
-  const [activeDigitIndex, setActiveDigitIndex] = useState<number | null>(null);
+  const [activeDigitIndex, setActiveDigitIndex] = useState<number | null>(0);
 
-  // Garantir que o primeiro índice vazio seja selecionado quando necessário
   useEffect(() => {
     if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
       const firstEmptyIndex = currentLine.digits.findIndex(digit => digit === null);
@@ -75,7 +73,7 @@ export const useTicketState = () => {
       ...currentLine,
       digits: [null, null, null, null]
     });
-    setActiveDigitIndex(null);
+    setActiveDigitIndex(0);
   };
 
   const handleAddLine = () => {
@@ -95,7 +93,6 @@ export const useTicketState = () => {
 
   const handleRemoveLine = (lineIndex: number) => {
     setSavedLines(savedLines.filter((_, index) => index !== lineIndex));
-    // Decrease the line count when a line is removed
     if (lineCount > 1) {
       setLineCount(lineCount - 1);
     }
@@ -107,7 +104,6 @@ export const useTicketState = () => {
 
   const getTicketPrice = () => {
     const calculateLinePrice = (line: NumberSelectionType) => {
-      // Extract the numeric value from the bet amount string and parse it
       const amount = parseFloat(line.betAmount.replace('R$', ''));
       return amount;
     };
