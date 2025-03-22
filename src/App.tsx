@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
+import Duvidas from "./pages/Duvidas";
 import NotFound from "./pages/NotFound";
 import PlayPage from "./components/PlayPage";
 import Cash5Page from "./components/Cash5";
@@ -20,13 +21,14 @@ const App = () => (
         <Sonner />
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/duvidas" element={<Duvidas />} />
           
           {/* Mega Millions - R$15 */}
           <Route 
             path="/play-mega-millions" 
             element={
               <PlayPage 
-                logoSrc="/lovable-uploads/bc3feaa6-86f8-46cb-b245-5467ab0e5fb4.png"
+                logoSrc="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png"
                 jackpotAmount="344.000.000"
                 basePrice={15}
                 primaryColor="blue-600"

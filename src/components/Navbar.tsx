@@ -59,12 +59,14 @@ const Navbar = () => {
               >
                 Ganhadores
               </Button>
-              <Button
-                variant="ghost"
-                className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
-              >
-                Duvidas
-              </Button>
+              <NavLink to="/duvidas">
+                <Button
+                  variant="ghost"
+                  className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
+                >
+                  Duvidas
+                </Button>
+              </NavLink>
               <Button
                 variant="ghost"
                 className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
@@ -105,12 +107,14 @@ const Navbar = () => {
             >
               Ganhadores
             </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
-            >
-              Duvidas
-            </Button>
+            <NavLink to="/duvidas">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              >
+                Duvidas
+              </Button>
+            </NavLink>
             <Button
               variant="ghost"
               className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
