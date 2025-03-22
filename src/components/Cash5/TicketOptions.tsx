@@ -36,7 +36,7 @@ const TicketOptions: React.FC<TicketOptionsProps> = ({
   return (
     <>
       <div className="flex justify-between items-center mb-3">
-        <h3 className="text-lg font-semibold">Line {String(lineCount).padStart(2, '0')}</h3>
+        <h3 className="text-lg font-semibold">Linha {String(lineCount).padStart(2, '0')}</h3>
         <Button 
           onClick={onQuickPick}
           className="text-xs h-8 bg-white border hover:bg-opacity-10 rounded-full"
@@ -48,10 +48,10 @@ const TicketOptions: React.FC<TicketOptionsProps> = ({
 
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
-          <span className="text-gray-500">Play</span>
+          <span className="text-gray-500">Jogar</span>
           <Select value={currentLine.playType} onValueChange={onPlayTypeChange}>
             <SelectTrigger className="w-32 border-b border-t-0 border-l-0 border-r-0 rounded-none h-8 focus:ring-0">
-              <SelectValue placeholder="Select type" />
+              <SelectValue placeholder="Selecione o tipo" />
             </SelectTrigger>
             <SelectContent>
               {playTypes.map((type) => (
@@ -68,10 +68,10 @@ const TicketOptions: React.FC<TicketOptionsProps> = ({
         </div>
         
         <div className="flex items-center gap-2">
-          <span className="text-gray-500">For</span>
+          <span className="text-gray-500">Por</span>
           <Select value={currentLine.betAmount} onValueChange={onBetAmountChange}>
             <SelectTrigger className="w-24 border-b border-t-0 border-l-0 border-r-0 rounded-none h-8 focus:ring-0">
-              <SelectValue placeholder="Amount" />
+              <SelectValue placeholder="Valor" />
             </SelectTrigger>
             <SelectContent>
               {betAmounts.map((amount) => (
