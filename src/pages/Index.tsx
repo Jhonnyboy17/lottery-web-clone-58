@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -10,12 +9,12 @@ import { ChevronRight } from "lucide-react";
 const lotteryGames = [
   {
     id: 1,
-    logoSrc: "https://via.placeholder.com/160x80/FFD100/0000AA?text=MEGA+MILLIONS",
+    logoSrc: "/lovable-uploads/b1358bc7-258b-46ca-a17a-592e52d47cc1.png",
     amount: "344,000,000",
     unit: "",
     cashOption: "161.5 MILLION",
     nextDrawing: "FRIDAY, MAR 25, 9:59 PM",
-    backgroundColor: "bg-blue-500", // Blue background for Mega Millions
+    backgroundColor: "bg-blue-500",
     showPlayButton: true,
   },
   {
@@ -25,47 +24,47 @@ const lotteryGames = [
     unit: "",
     cashOption: "207.2 MILLION",
     nextDrawing: "SABADO, MAR 22, 9:59 PM",
-    backgroundColor: "bg-[#ff5247]", // Exact red color from the image
+    backgroundColor: "bg-[#ff5247]",
     showPlayButton: true,
   },
   {
     id: 3,
-    logoSrc: "https://via.placeholder.com/160x80/FF9900/000000?text=MULTI-MATCH",
+    logoSrc: "/lovable-uploads/fdb7bf25-46c7-48d3-afb1-00c12bd21033.png",
     amount: "570,000",
     unit: "",
     cashOption: "320 THOUSAND",
     nextDrawing: "MONDAY, MAR 24, 9:59 PM",
-    backgroundColor: "bg-green-500", // Green background for Multi-Match
+    backgroundColor: "bg-green-500",
     showPlayButton: true,
   },
   {
     id: 4,
-    logoSrc: "/lovable-uploads/7311ad07-fd9e-403d-af7e-6f9c37bc6c33.png",
+    logoSrc: "/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png",
     amount: "100,000",
     unit: "",
     prefix: "",
     nextDrawing: "SATURDAY, MAR 22, 12:40 PM",
-    backgroundColor: "bg-[#00ccc6]", // Turquoise color from the image
+    backgroundColor: "bg-[#00ccc6]",
     showPlayButton: true,
   },
   {
     id: 5,
-    logoSrc: "https://via.placeholder.com/160x80/FF9900/000000?text=PICK+4",
+    logoSrc: "/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png",
     amount: "5,000",
     unit: "",
     prefix: "WIN UP TO",
     nextDrawing: "EVERY DAY 12:40 PM & 9:22 PM",
-    backgroundColor: "bg-[#ffa039]", // Orange color from the image
+    backgroundColor: "bg-[#ffa039]",
     showPlayButton: true,
   },
   {
     id: 6,
-    logoSrc: "https://via.placeholder.com/160x80/FF9900/000000?text=PICK+3",
+    logoSrc: "/lovable-uploads/9afb21d9-67e8-49f3-80f1-a35f5f1121be.png",
     amount: "500",
     unit: "",
     prefix: "WIN UP TO",
     nextDrawing: "EVERY DAY 12:40 PM & 9:22 PM",
-    backgroundColor: "bg-[#ffa039]", // Orange color from the image
+    backgroundColor: "bg-[#ffa039]",
     showPlayButton: true,
   },
 ];
