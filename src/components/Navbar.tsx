@@ -32,9 +32,9 @@ const Navbar = () => {
           <NavLink to="/" className="flex items-center">
             <div className="flex items-center space-x-2">
               <img
-                src="/lovable-uploads/465446bc-e8de-4e99-8b80-cad0bf55e056.png"
-                alt="Maryland Lottery Logo"
-                className="h-12 w-auto animate-float"
+                src="/lovable-uploads/40dbea4f-78a1-4de8-938d-6cc82fc77eae.png"
+                alt="LottoFácil Logo"
+                className="h-16 w-auto"
               />
             </div>
           </NavLink>
