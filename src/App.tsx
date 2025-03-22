@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PlayPage from "./components/PlayPage";
+import Cash5Page from "./components/Cash5Page";
 
 const queryClient = new QueryClient();
 
@@ -98,17 +99,13 @@ const App = () => (
           <Route 
             path="/play-cash5" 
             element={
-              <PlayPage 
+              <Cash5Page
                 logoSrc="/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png"
                 jackpotAmount="5.000" 
-                basePrice={8}
+                basePrice={1}
                 primaryColor="amber-500"
                 gameName="Cash 5"
-                extraPlayName="Cash Boost"
-                maxRegularNumbers={5}
-                totalRegularNumbers={35}
-                maxPowerballNumbers={1}
-                totalPowerballNumbers={15}
+                extraPlayName="FIREBALL™"
               />
             } 
           />
