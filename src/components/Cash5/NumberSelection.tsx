@@ -29,14 +29,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     const angleStep = (2 * Math.PI) / totalNumbers;
     const angle = index * angleStep - Math.PI / 2;
     
-    // Calculate radius based on button size to make them touch
-    // For 10 buttons of width 10, we need a radius that creates a perfect circle
-    // where buttons touch each other
-    const buttonSize = 10; // Width of buttons in rem
-    const radius = (buttonSize / 2) / Math.sin(Math.PI / totalNumbers);
+    // Increased radius to 100
+    const radius = 100;
     
-    const x = Math.cos(angle) * 40;
-    const y = Math.sin(angle) * 40;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
     
     return {
       top: `${50 + y}%`,
@@ -47,8 +44,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 
   return (
     <div className="relative mb-6 mt-8">
-      <div className="flex justify-center items-center h-48 relative">
-        <div className="absolute w-20 h-20 rounded-full border-2 border-blue-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+      <div className="flex justify-center items-center h-[280px] relative">
+        <div className="absolute w-[220px] h-[220px] rounded-full border-2 border-blue-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
         {[...Array(10).keys()].map((number) => {
           const position = getNumberPosition(number, 10);
           return (
