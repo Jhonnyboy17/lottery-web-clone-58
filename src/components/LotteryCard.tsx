@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface LotteryCardProps {
   logoSrc: string;
@@ -11,6 +12,7 @@ interface LotteryCardProps {
   nextDrawing: string;
   backgroundColor?: string;
   showPlayButton?: boolean;
+  route?: string;
 }
 
 const LotteryCard = ({
@@ -22,6 +24,7 @@ const LotteryCard = ({
   nextDrawing,
   backgroundColor = "bg-white",
   showPlayButton = false,
+  route = "/play-powerball",
 }: LotteryCardProps) => {
   // Calculate the approximate value in Brazilian Real (BRL)
   // Using an approximate exchange rate of 1 USD = 5.5 BRL
@@ -76,12 +79,14 @@ const LotteryCard = ({
           <div className="text-center mb-4 text-black">
             <p className="font-bold">{nextDrawing}</p>
           </div>
-          <Button 
-            className="w-full rounded-full bg-transparent hover:bg-black/10 text-black border-2 border-black"
-            variant="outline"
-          >
-            JOGAR
-          </Button>
+          <Link to={route}>
+            <Button 
+              className="w-full rounded-full bg-transparent hover:bg-black/10 text-black border-2 border-black"
+              variant="outline"
+            >
+              JOGAR
+            </Button>
+          </Link>
         </div>
       ) : (
         <div className="bg-black/10 p-4 flex justify-between items-center">
