@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PlayPage from "./components/PlayPage";
 import Cash5Page from "./components/Cash5";
+import FastPlayPage from "./components/FastPlay";
 
 const queryClient = new QueryClient();
 
@@ -113,17 +115,13 @@ const App = () => (
           <Route 
             path="/play-fast-play" 
             element={
-              <PlayPage 
+              <FastPlayPage
                 logoSrc="/lovable-uploads/9afb21d9-67e8-49f3-80f1-a35f5f1121be.png"
                 jackpotAmount="500" 
                 basePrice={8}
                 primaryColor="amber-500"
                 gameName="Fast Play"
                 extraPlayName="Fast Boost"
-                maxRegularNumbers={5}
-                totalRegularNumbers={30}
-                maxPowerballNumbers={1}
-                totalPowerballNumbers={10}
               />
             } 
           />
