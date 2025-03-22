@@ -116,7 +116,7 @@ const App = () => (
             path="/play-fast-play" 
             element={
               <FastPlayPage
-                logoSrc="/lovable-uploads/9afb21d9-67e8-49f3-80f1-a35f5f1121be.png"
+                logoSrc="/lovable-uploads/a02651ec-8efc-429a-8231-5ae52f5c4af5.png"
                 jackpotAmount="500" 
                 basePrice={8}
                 primaryColor="amber-500"
