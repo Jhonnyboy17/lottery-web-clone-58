@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -11,11 +10,12 @@ const lotteryGames = [
   {
     id: 1,
     logoSrc: "https://via.placeholder.com/160x80/FFD100/0000AA?text=MEGA+MILLIONS",
-    amount: "344",
-    unit: "MILLION",
+    amount: "344,000,000",
+    unit: "",
     cashOption: "161.5 MILLION",
-    nextDrawing: "03/25",
+    nextDrawing: "FRIDAY, MAR 25, 9:59 PM",
     backgroundColor: "bg-blue-500", // Blue background for Mega Millions
+    showPlayButton: true,
   },
   {
     id: 2,
@@ -23,18 +23,19 @@ const lotteryGames = [
     amount: "444,000,000",
     unit: "",
     cashOption: "207.2 MILLION",
-    nextDrawing: "SATURDAY, MAR 22, 9:59 PM",
+    nextDrawing: "SABADO, MAR 22, 9:59 PM",
     backgroundColor: "bg-[#ff5247]", // Exact red color from the image
     showPlayButton: true,
   },
   {
     id: 3,
     logoSrc: "https://via.placeholder.com/160x80/FF9900/000000?text=MULTI-MATCH",
-    amount: "570",
-    unit: "THOUSAND",
+    amount: "570,000",
+    unit: "",
     cashOption: "320 THOUSAND",
-    nextDrawing: "03/24",
+    nextDrawing: "MONDAY, MAR 24, 9:59 PM",
     backgroundColor: "bg-green-500", // Green background for Multi-Match
+    showPlayButton: true,
   },
 ];
 
