@@ -107,7 +107,7 @@ const PlayPage = ({
           />
           <div className="text-right">
             <p className="text-sm font-semibold">JACKPOT</p>
-            <h2 className="text-2xl font-bold" style={{ color: primaryColor }}>R$ {jackpotAmount}</h2>
+            <h2 className={`text-2xl font-bold text-${primaryColor}`}>R$ {jackpotAmount}</h2>
           </div>
         </div>
 
@@ -118,8 +118,7 @@ const PlayPage = ({
               <h3 className="text-lg font-semibold">Select Numbers</h3>
               <Button 
                 onClick={handleQuickPick}
-                className="text-xs h-8 bg-white border hover:bg-opacity-10"
-                style={{ color: primaryColor, borderColor: primaryColor }}
+                className={`text-xs h-8 bg-white text-${primaryColor} border-${primaryColor} hover:bg-${primaryColor}/10`}
               >
                 QUICK PICK
               </Button>
@@ -134,9 +133,8 @@ const PlayPage = ({
                   onClick={() => handleNumberSelect(number)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
                     ${selectedNumbers.includes(number) 
-                      ? "text-white" 
+                      ? `bg-${primaryColor} text-white` 
                       : "bg-gray-100 text-black hover:bg-gray-200"}`}
-                  style={selectedNumbers.includes(number) ? { backgroundColor: primaryColor } : {}}
                 >
                   {number}
                 </button>
@@ -163,8 +161,7 @@ const PlayPage = ({
             <Button 
               onClick={handleAddLine} 
               disabled={!(selectedNumbers.length === 5 && selectedPowerball !== null)}
-              className="w-full hover:bg-opacity-90 mt-2"
-              style={{ backgroundColor: primaryColor }}
+              className={`w-full bg-${primaryColor} hover:bg-${primaryColor}/90 mt-2`}
             >
               ADD LINE
             </Button>
@@ -181,11 +178,7 @@ const PlayPage = ({
                 <div key={index} className="bg-white rounded p-2 mb-2 flex items-center justify-between">
                   <div className="flex items-center">
                     {line.numbers.map((num, i) => (
-                      <span 
-                        key={i} 
-                        className="text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mx-0.5"
-                        style={{ backgroundColor: primaryColor }}
-                      >
+                      <span key={i} className={`bg-${primaryColor} text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mx-0.5`}>
                         {num}
                       </span>
                     ))}
@@ -243,8 +236,7 @@ const PlayPage = ({
             <p className="text-xl font-bold">R$ {getTicketPrice()}</p>
           </div>
           <Button 
-            className="hover:bg-opacity-90"
-            style={{ backgroundColor: primaryColor }}
+            className={`bg-${primaryColor} hover:bg-${primaryColor}/90`}
             disabled={savedLines.length === 0}
           >
             ADD TO CART
