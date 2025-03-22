@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface Slide {
   id: number;
@@ -50,6 +50,14 @@ const Hero = () => {
     return () => clearInterval(timer);
   }, []);
 
+  const goToPreviousSlide = () => {
+    setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
+
+  const goToNextSlide = () => {
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+  };
+
   return (
     <div className="hero-slider w-full overflow-hidden mt-20 relative">
       {slides.map((slide, index) => (
@@ -74,6 +82,23 @@ const Hero = () => {
           </div>
         </div>
       ))}
+
+      {/* Navigation Arrows */}
+      <button 
+        onClick={goToPreviousSlide}
+        className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white rounded-full p-2 transition-all duration-200 z-10"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="w-6 h-6" />
+      </button>
+      
+      <button 
+        onClick={goToNextSlide}
+        className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/30 hover:bg-white/50 text-white rounded-full p-2 transition-all duration-200 z-10"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="w-6 h-6" />
+      </button>
 
       <div className="slide-dots">
         {slides.map((_, index) => (
