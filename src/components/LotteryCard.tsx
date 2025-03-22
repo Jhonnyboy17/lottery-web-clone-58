@@ -24,8 +24,8 @@ const LotteryCard = ({
   showPlayButton = false,
 }: LotteryCardProps) => {
   return (
-    <div className={`lottery-card ${backgroundColor} rounded-xl shadow-md overflow-hidden transition-all duration-300`}>
-      <div className="p-6">
+    <div className={`lottery-card ${backgroundColor} rounded-xl shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full`}>
+      <div className="p-6 flex-grow">
         <img
           src={logoSrc}
           alt="Lottery Game Logo"
