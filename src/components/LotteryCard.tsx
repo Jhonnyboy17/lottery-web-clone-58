@@ -65,7 +65,7 @@ const LotteryCard = ({
             className="w-full rounded-full bg-transparent hover:bg-black/10 text-black border-2 border-black"
             variant="outline"
           >
-            PLAY
+            JOGAR
           </Button>
         </div>
       ) : (
