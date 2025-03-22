@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
 
@@ -20,6 +20,16 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   isLineComplete,
   onClearSelections
 }) => {
+  // Efeito para selecionar automaticamente o primeiro círculo ao carregar
+  useEffect(() => {
+    if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
+      const firstEmptyIndex = currentLine.digits.findIndex(digit => digit === null);
+      if (firstEmptyIndex !== -1) {
+        setActiveDigitIndex(firstEmptyIndex);
+      }
+    }
+  }, [activeDigitIndex, currentLine.digits, setActiveDigitIndex]);
+
   const getDigitDisplay = (index: number) => {
     const digit = currentLine.digits[index];
     return digit !== null ? digit.toString() : "?";
@@ -27,6 +37,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 
   return (
     <div className="relative mb-6 mt-8">
+      {/* Título acima dos números */}
+      <h2 className="text-center text-xl font-semibold mb-4 text-blue-800">
+        Escolha 4 Números
+      </h2>
+      
       <div className="flex justify-center items-center h-[220px] relative">
         {/* Numbers displayed in a grid layout */}
         <div className="grid grid-cols-5 gap-4 z-10">
@@ -34,7 +49,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
             <button
               key={number}
               onClick={() => onDigitSelect(number)}
-              className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-medium"
+              className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-medium"
               style={{
                 backgroundColor:
                   activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number
