@@ -15,9 +15,9 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    title: "PLAY Responsibly",
-    subtitle: "Maryland Lottery supports Problem Gambling Awareness Month.",
-    buttonText: "Learn more",
+    title: "JOGUE EM REAL E GANHE EM DOLAR",
+    subtitle: "Participe de loterias americanas com facilidade e privacidade.",
+    buttonText: "JOGUE AGORA",
     buttonLink: "#",
     bgColor: "bg-gradient-to-r from-lottery-red to-lottery-pink",
   },
