@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -142,17 +143,17 @@ const PlayPage = ({
               alt={gameName} 
               className="h-12 w-auto mb-2"
             />
+          </div>
+          <div className="text-right">
+            <p className="text-sm font-semibold">JACKPOT</p>
+            <h2 className="text-2xl font-bold" style={{ color: colorValue }}>$ {jackpotAmount}</h2>
             <Button 
               onClick={handleQuickPick}
-              className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6"
+              className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6 mt-2"
               style={{ color: colorValue, borderColor: colorValue }}
             >
               JOGADA ALEATÓRIA
             </Button>
-          </div>
-          <div className="text-right">
-            <p className="text-sm font-semibold">JACKPOT</p>
-            <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
           </div>
         </div>
 
@@ -290,7 +291,7 @@ const PlayPage = ({
                   onCheckedChange={(checked) => setIncludeExtraPlay(checked as boolean)} 
                 />
                 <label htmlFor="extraplay" className="text-sm font-medium">
-                  Adicionar {extraPlayName} (+R${extraPlayPrice.toFixed(2)} por linha)
+                  Adicionar {extraPlayName} (+${extraPlayPrice.toFixed(2)} por linha)
                 </label>
               </div>
             </div>
@@ -316,7 +317,7 @@ const PlayPage = ({
         <div className="flex justify-between items-center bg-white p-3 rounded-lg shadow-md">
           <div>
             <p className="text-sm font-medium">Total</p>
-            <p className="text-xl font-bold">R$ {getTicketPrice()}</p>
+            <p className="text-xl font-bold">$ {getTicketPrice()}</p>
           </div>
           <Button 
             className="hover:bg-opacity-90 px-6"
