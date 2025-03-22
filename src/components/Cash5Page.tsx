@@ -323,23 +323,6 @@ const Cash5Page = ({
                 </div>
               </div>
               
-              <div className="flex justify-center gap-3 mt-6">
-                {currentLine.digits.map((digit, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveDigitIndex(index)}
-                    className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold 
-                      ${activeDigitIndex === index 
-                        ? 'bg-amber-500 text-white ring-2 ring-amber-600' 
-                        : digit !== null 
-                          ? 'bg-blue-500 text-white' 
-                          : 'bg-blue-100 text-gray-700'}`}
-                  >
-                    {getDigitDisplay(index)}
-                  </button>
-                ))}
-              </div>
-              
               <div className="flex justify-end mt-2">
                 <Button 
                   onClick={clearSelections}
