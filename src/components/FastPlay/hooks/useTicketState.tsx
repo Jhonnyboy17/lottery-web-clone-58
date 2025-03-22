@@ -20,10 +20,14 @@ export const useTicketState = () => {
   useEffect(() => {
     if (currentLine.playType === "Back Pair") {
       // For Back Pair, first digit is disabled, so start with second digit
-      setActiveDigitIndex(1);
+      if (activeDigitIndex === 0 || activeDigitIndex === null) {
+        setActiveDigitIndex(1);
+      }
     } else if (currentLine.playType === "Front Pair") {
       // For Front Pair, last digit is disabled, so start with first digit
-      setActiveDigitIndex(0);
+      if (activeDigitIndex === 2 || activeDigitIndex === null) {
+        setActiveDigitIndex(0);
+      }
     } else if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
       // For other play types, find the first empty digit
       const firstEmptyIndex = currentLine.digits.findIndex(digit => digit === null);
@@ -77,6 +81,7 @@ export const useTicketState = () => {
     if (nextEmptyIndex !== -1) {
       setActiveDigitIndex(nextEmptyIndex);
     } else {
+      // If we're done entering digits, set to null
       setActiveDigitIndex(null);
     }
   };
@@ -97,16 +102,12 @@ export const useTicketState = () => {
     // Set the first digit to "X" (represented as -1) for Back Pair
     if (newPlayType === "Back Pair") {
       newDigits[0] = -1; // Using -1 to represent "X"
-      if (activeDigitIndex === 0) {
-        setActiveDigitIndex(1);
-      }
+      setActiveDigitIndex(1);
     } 
     // Set the last digit to "X" for Front Pair
     else if (newPlayType === "Front Pair") {
       newDigits[2] = -1; // Using -1 to represent "X"
-      if (activeDigitIndex === 2) {
-        setActiveDigitIndex(0);
-      }
+      setActiveDigitIndex(0);
     } 
     // Reset all digits to null when switching from a pair type to a non-pair type
     else if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {

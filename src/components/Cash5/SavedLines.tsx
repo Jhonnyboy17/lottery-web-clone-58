@@ -27,7 +27,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine }) => 
                   key={i} 
                   className="text-white rounded-full w-8 h-8 flex items-center justify-center text-sm mx-0.5 bg-blue-500"
                 >
-                  {digit}
+                  {digit === -1 ? "X" : digit}
                 </span>
               ))}
             </div>
