@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -16,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
-import { QuestionMarkCircle, Trash2 } from "lucide-react";
+import { HelpCircle, Trash2 } from "lucide-react";
 
 interface Cash5PageProps {
   logoSrc: string;
@@ -52,13 +51,10 @@ const Cash5Page = ({
   const [includeFireball, setIncludeFireball] = useState(false);
   const [activeDigitIndex, setActiveDigitIndex] = useState<number | null>(null);
 
-  // Play type options
   const playTypes = ["Back Pair", "Box", "Combo", "Front Pair", "Straight", "Straight/Box"];
   
-  // Bet amount options
   const betAmounts = ["$0.50", "$1.00", "$2.00", "$3.00", "$4.00", "$5.00"];
 
-  // Get color value from primary color string
   const getColorValue = () => {
     switch (primaryColor) {
       case "amber-500":
@@ -70,7 +66,6 @@ const Cash5Page = ({
   
   const colorValue = getColorValue();
 
-  // Handle digit selection
   const handleDigitSelect = (digit: number) => {
     if (activeDigitIndex === null) return;
     
@@ -82,7 +77,6 @@ const Cash5Page = ({
       digits: newDigits
     });
     
-    // Move to next empty digit automatically
     const nextEmptyIndex = newDigits.findIndex((d, i) => d === null && i > activeDigitIndex);
     if (nextEmptyIndex !== -1) {
       setActiveDigitIndex(nextEmptyIndex);
@@ -91,7 +85,6 @@ const Cash5Page = ({
     }
   };
 
-  // Handle play type selection
   const handlePlayTypeChange = (value: string) => {
     setCurrentLine({
       ...currentLine,
@@ -99,7 +92,6 @@ const Cash5Page = ({
     });
   };
 
-  // Handle bet amount selection
   const handleBetAmountChange = (value: string) => {
     setCurrentLine({
       ...currentLine,
@@ -107,7 +99,6 @@ const Cash5Page = ({
     });
   };
 
-  // Quick pick - generate random numbers
   const handleQuickPick = () => {
     const randomDigits = Array(4).fill(0).map(() => 
       Math.floor(Math.random() * 10)
@@ -121,7 +112,6 @@ const Cash5Page = ({
     setActiveDigitIndex(null);
   };
 
-  // Clear selections
   const clearSelections = () => {
     setCurrentLine({
       ...currentLine,
@@ -130,15 +120,12 @@ const Cash5Page = ({
     setActiveDigitIndex(null);
   };
 
-  // Add line to saved lines
   const handleAddLine = () => {
-    // Check if all digits are selected
     if (currentLine.digits.some(digit => digit === null)) return;
     
     setSavedLines([...savedLines, {...currentLine}]);
     setLineCount(lineCount + 1);
     
-    // Reset current line
     setCurrentLine({
       digits: [null, null, null, null],
       playType: currentLine.playType,
@@ -148,14 +135,11 @@ const Cash5Page = ({
     setActiveDigitIndex(null);
   };
 
-  // Remove saved line
   const handleRemoveLine = (lineIndex: number) => {
     setSavedLines(savedLines.filter((_, index) => index !== lineIndex));
   };
 
-  // Calculate total price
   const getTicketPrice = () => {
-    // Extract numeric value from bet amount strings like "$1.00"
     const calculateLinePrice = (line: NumberSelection) => {
       const amount = parseFloat(line.betAmount.replace('$', ''));
       return amount;
@@ -163,18 +147,15 @@ const Cash5Page = ({
 
     const totalBasePrice = savedLines.reduce((sum, line) => sum + calculateLinePrice(line), 0);
     
-    // Add Fireball price if selected
     const fireballPrice = includeFireball ? savedLines.length * 1 : 0;
     
     return (totalBasePrice + fireballPrice).toFixed(2);
   };
 
-  // Determine if all digits are selected
   const isLineComplete = () => {
     return !currentLine.digits.some(digit => digit === null);
   };
 
-  // Get digit display - either number or question mark
   const getDigitDisplay = (index: number) => {
     const digit = currentLine.digits[index];
     
@@ -226,7 +207,7 @@ const Cash5Page = ({
                     ))}
                   </SelectContent>
                 </Select>
-                <QuestionMarkCircle className="h-4 w-4 text-gray-400" />
+                <HelpCircle className="h-4 w-4 text-gray-400" />
               </div>
               
               <div className="flex items-center gap-2">
@@ -244,10 +225,8 @@ const Cash5Page = ({
               </div>
             </div>
 
-            {/* Circular number display */}
             <div className="relative mb-6 mt-8">
               <div className="flex justify-center items-center h-48 relative">
-                {/* Digits 0-9 in circular arrangement */}
                 <div className="absolute" style={{ top: '0%', left: '50%', transform: 'translateX(-50%)' }}>
                   <button
                     onClick={() => handleDigitSelect(0)}
@@ -329,7 +308,6 @@ const Cash5Page = ({
                   </button>
                 </div>
                 
-                {/* Center message */}
                 <div className="text-center">
                   {activeDigitIndex !== null ? (
                     <div className="text-3xl font-bold">?</div>
@@ -345,7 +323,6 @@ const Cash5Page = ({
                 </div>
               </div>
               
-              {/* Selected digits display */}
               <div className="flex justify-center gap-3 mt-6">
                 {currentLine.digits.map((digit, index) => (
                   <button
