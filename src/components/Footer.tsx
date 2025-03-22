@@ -1,6 +1,6 @@
 
 import { Facebook, Instagram, Youtube, Twitter } from "lucide-react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -37,18 +37,18 @@ const Footer = () => {
               </a>
             </div>
             <div className="space-y-2">
-              <Link to="/responsible-play" className="block bg-white text-lottery-pink py-2 px-4 rounded-full text-center font-medium hover:bg-white/90 transition-colors duration-300">
+              <NavLink to="/responsible-play" className="block bg-white text-lottery-pink py-2 px-4 rounded-full text-center font-medium hover:bg-white/90 transition-colors duration-300">
                 Responsible Play
-              </Link>
-              <Link to="/casinos-gaming" className="block bg-white text-lottery-pink py-2 px-4 rounded-full text-center font-medium hover:bg-white/90 transition-colors duration-300">
+              </NavLink>
+              <NavLink to="/casinos-gaming" className="block bg-white text-lottery-pink py-2 px-4 rounded-full text-center font-medium hover:bg-white/90 transition-colors duration-300">
                 Casinos & Gaming
-              </Link>
-              <Link to="/retailer-corner" className="block bg-white text-lottery-pink py-2 px-4 rounded-full text-center font-medium hover:bg-white/90 transition-colors duration-300">
+              </NavLink>
+              <NavLink to="/retailer-corner" className="block bg-white text-lottery-pink py-2 px-4 rounded-full text-center font-medium hover:bg-white/90 transition-colors duration-300">
                 Retailer Corner
-              </Link>
-              <Link to="/contact-us" className="block bg-white text-lottery-pink py-2 px-4 rounded-full text-center font-medium hover:bg-white/90 transition-colors duration-300">
+              </NavLink>
+              <NavLink to="/contact-us" className="block bg-white text-lottery-pink py-2 px-4 rounded-full text-center font-medium hover:bg-white/90 transition-colors duration-300">
                 Contact Us
-              </Link>
+              </NavLink>
             </div>
           </div>
 

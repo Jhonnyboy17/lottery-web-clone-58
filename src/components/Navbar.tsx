@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -29,7 +29,7 @@ const Navbar = () => {
     >
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          <Link to="/" className="flex items-center">
+          <NavLink to="/" className="flex items-center">
             <div className="flex items-center space-x-2">
               <img
                 src="/lovable-uploads/465446bc-e8de-4e99-8b80-cad0bf55e056.png"
@@ -37,7 +37,7 @@ const Navbar = () => {
                 className="h-12 w-auto animate-float"
               />
             </div>
-          </Link>
+          </NavLink>
 
           <div className="hidden md:flex items-center gap-1">
             <div className="bg-lottery-pink/90 backdrop-blur-sm rounded-full p-2 flex items-center gap-1">
