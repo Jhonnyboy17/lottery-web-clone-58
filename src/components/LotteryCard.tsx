@@ -23,6 +23,16 @@ const LotteryCard = ({
   backgroundColor = "bg-white",
   showPlayButton = false,
 }: LotteryCardProps) => {
+  // Calculate the approximate value in Brazilian Real (BRL)
+  // Using an approximate exchange rate of 1 USD = 5.5 BRL
+  const getAmountInBRL = (amountStr: string) => {
+    const numericAmount = parseFloat(amountStr.replace(/,/g, ''));
+    const brlAmount = (numericAmount * 5.5).toLocaleString('pt-BR');
+    return brlAmount;
+  };
+
+  const brlValue = getAmountInBRL(amount);
+
   return (
     <div className={`lottery-card ${backgroundColor} rounded-xl shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full`}>
       <div className="p-6 flex-grow">
@@ -41,6 +51,9 @@ const LotteryCard = ({
             <h2 className="text-5xl font-bold text-lottery-navy">
               ${amount}
             </h2>
+            <p className="text-sm font-medium text-gray-700 mt-1">
+              (R$ {brlValue})
+            </p>
             {unit && (
               <p className="text-2xl font-semibold text-lottery-navy uppercase tracking-wide mb-2">
                 {unit}
