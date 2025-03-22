@@ -42,8 +42,12 @@ const slides: Slide[] = [
 const Hero = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
 
   const startAutoSlide = () => {
+    // Only start auto-slide if autoplay is enabled
+    if (!isAutoPlay) return;
+    
     // Clear any existing timer first
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -56,8 +60,10 @@ const Hero = () => {
   };
 
   useEffect(() => {
-    // Start the auto-slide when component mounts
-    startAutoSlide();
+    // Start the auto-slide when component mounts, but only if autoplay is enabled
+    if (isAutoPlay) {
+      startAutoSlide();
+    }
 
     // Clean up the timer when component unmounts
     return () => {
@@ -65,18 +71,32 @@ const Hero = () => {
         clearInterval(timerRef.current);
       }
     };
-  }, []);
+  }, [isAutoPlay]);
+
+  const handleManualNavigation = () => {
+    // Stop autoplay when user manually navigates
+    setIsAutoPlay(false);
+    
+    // Clear the existing timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
 
   const goToPreviousSlide = () => {
+    handleManualNavigation();
     setCurrentSlide((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
-    // Restart the auto-slide timer after manual navigation
-    startAutoSlide();
   };
 
   const goToNextSlide = () => {
+    handleManualNavigation();
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-    // Restart the auto-slide timer after manual navigation
-    startAutoSlide();
+  };
+
+  const goToSlide = (index: number) => {
+    handleManualNavigation();
+    setCurrentSlide(index);
   };
 
   const scrollToSection = (id: string) => {
@@ -147,11 +167,7 @@ const Hero = () => {
           <div
             key={index}
             className={`slide-dot ${index === currentSlide ? "active" : ""}`}
-            onClick={() => {
-              setCurrentSlide(index);
-              // Restart the auto-slide timer after clicking a dot
-              startAutoSlide();
-            }}
+            onClick={() => goToSlide(index)}
           />
         ))}
       </div>
