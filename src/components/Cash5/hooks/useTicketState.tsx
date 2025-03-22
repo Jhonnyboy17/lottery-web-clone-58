@@ -95,6 +95,10 @@ export const useTicketState = () => {
 
   const handleRemoveLine = (lineIndex: number) => {
     setSavedLines(savedLines.filter((_, index) => index !== lineIndex));
+    // Decrease the line count when a line is removed
+    if (lineCount > 1) {
+      setLineCount(lineCount - 1);
+    }
   };
 
   const isLineComplete = () => {
