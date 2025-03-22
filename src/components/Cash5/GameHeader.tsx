@@ -19,10 +19,10 @@ const GameHeader: React.FC<GameHeaderProps> = ({
   
   return (
     <div className="relative">
-      {/* Large orange banner that spans the full width */}
-      <div className="fixed top-0 left-0 right-0 bg-orange-200 h-32 -z-10"></div>
+      {/* Simple horizontal line that spans the full width */}
+      <div className="fixed top-0 left-0 right-0 h-1 bg-orange-500 w-screen -z-10"></div>
       
-      {/* Content with logo centered on the banner */}
+      {/* Content with logo */}
       <div className="relative z-10 flex items-center justify-between px-4 pt-6 pb-4">
         <div className="flex-1">
           <img 
@@ -46,8 +46,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({
         </div>
       </div>
       
-      {/* Thick wavy orange stripe - using a custom class from tailwind config */}
-      <div className="w-full h-6 bg-wave-orange -mb-1"></div>
+      {/* Removed the wavy orange stripe */}
     </div>
   );
 };
