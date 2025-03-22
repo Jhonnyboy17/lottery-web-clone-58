@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -27,7 +26,7 @@ const PlayPage = ({
   primaryColor,
   gameName,
   extraPlayName = "Power Play®",
-  extraPlayPrice = 1.00,
+  extraPlayPrice = 10.00,
   maxRegularNumbers = 5,
   totalRegularNumbers = 69,
   maxPowerballNumbers = 1,
@@ -137,11 +136,20 @@ const PlayPage = ({
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-xl pt-4 px-3">
         <div className="flex items-center justify-between mb-4">
-          <img 
-            src={logoSrc} 
-            alt={gameName} 
-            className="h-12 w-auto"
-          />
+          <div>
+            <img 
+              src={logoSrc} 
+              alt={gameName} 
+              className="h-12 w-auto mb-2"
+            />
+            <Button 
+              onClick={handleQuickPick}
+              className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6"
+              style={{ color: colorValue, borderColor: colorValue }}
+            >
+              JOGADA ALEATÓRIA
+            </Button>
+          </div>
           <div className="text-right">
             <p className="text-sm font-semibold">JACKPOT</p>
             <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
@@ -151,14 +159,6 @@ const PlayPage = ({
         <Card className="border-0 shadow-md overflow-hidden mb-4">
           <div className="p-4">
             <div className="flex justify-between items-center mb-3">
-              {/* Removed "Select Numbers" text */}
-              <Button 
-                onClick={handleQuickPick}
-                className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6"
-                style={{ color: colorValue, borderColor: colorValue }}
-              >
-                JOGADA ALEATÓRIA
-              </Button>
             </div>
 
             <div className="flex justify-between items-center mb-2">
