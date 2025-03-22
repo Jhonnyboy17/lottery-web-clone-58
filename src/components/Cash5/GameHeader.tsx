@@ -14,6 +14,9 @@ const GameHeader: React.FC<GameHeaderProps> = ({
   jackpotAmount, 
   colorValue 
 }) => {
+  // Check if we should display the draw times instead of jackpot amount
+  const shouldShowDrawTimes = jackpotAmount === "500";
+  
   return (
     <div className="flex items-center justify-between mb-4">
       <img 
@@ -22,8 +25,17 @@ const GameHeader: React.FC<GameHeaderProps> = ({
         className="h-12 w-auto"
       />
       <div className="text-right">
-        <p className="text-sm font-semibold">JACKPOT</p>
-        <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
+        {shouldShowDrawTimes ? (
+          <>
+            <p className="text-xl font-bold" style={{ color: colorValue }}>2 sorteios Diários</p>
+            <p className="text-xs font-medium text-gray-700">Sorteio FECHA: 12:35 & 21:15</p>
+          </>
+        ) : (
+          <>
+            <p className="text-sm font-semibold">JACKPOT</p>
+            <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
+          </>
+        )}
       </div>
     </div>
   );
