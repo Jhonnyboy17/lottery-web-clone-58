@@ -1,4 +1,5 @@
 
+import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
 interface LotteryCardProps {
@@ -8,6 +9,7 @@ interface LotteryCardProps {
   cashOption: string;
   nextDrawing: string;
   backgroundColor?: string;
+  showPlayButton?: boolean;
 }
 
 const LotteryCard = ({
@@ -17,6 +19,7 @@ const LotteryCard = ({
   cashOption,
   nextDrawing,
   backgroundColor = "bg-white",
+  showPlayButton = false,
 }: LotteryCardProps) => {
   return (
     <div className={`lottery-card ${backgroundColor} rounded-xl shadow-md overflow-hidden transition-all duration-300`}>
@@ -35,18 +38,37 @@ const LotteryCard = ({
               {unit}
             </p>
           )}
-          <p className="text-sm text-gray-600 mb-1">
-            Cash Option: ${cashOption}
-          </p>
-          <p className="text-xs text-gray-500 italic">Estimated Jackpot</p>
+          {!showPlayButton && (
+            <>
+              <p className="text-sm text-gray-600 mb-1">
+                Cash Option: ${cashOption}
+              </p>
+              <p className="text-xs text-gray-500 italic">Estimated Jackpot</p>
+            </>
+          )}
         </div>
       </div>
-      <div className="bg-black/10 p-4 flex justify-between items-center">
-        <p className="text-sm text-gray-700">Next Drawing: {nextDrawing}</p>
-        <button className="text-lottery-pink hover:text-lottery-red transition-colors duration-300">
-          <ArrowRight size={18} />
-        </button>
-      </div>
+      
+      {showPlayButton ? (
+        <div className="px-6 pb-6">
+          <div className="text-center mb-4 text-black">
+            <p className="font-bold">{nextDrawing}</p>
+          </div>
+          <Button 
+            className="w-full rounded-full bg-transparent hover:bg-black/10 text-black border-2 border-black"
+            variant="outline"
+          >
+            PLAY
+          </Button>
+        </div>
+      ) : (
+        <div className="bg-black/10 p-4 flex justify-between items-center">
+          <p className="text-sm text-gray-700">Next Drawing: {nextDrawing}</p>
+          <button className="text-lottery-pink hover:text-lottery-red transition-colors duration-300">
+            <ArrowRight size={18} />
+          </button>
+        </div>
+      )}
     </div>
   );
 };

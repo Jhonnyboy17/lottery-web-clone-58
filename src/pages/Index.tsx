@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -19,12 +18,13 @@ const lotteryGames = [
   },
   {
     id: 2,
-    logoSrc: "/lovable-uploads/8dde0f4f-6cea-4cb1-b77a-880079fe58b5.png",
+    logoSrc: "/lovable-uploads/db3b3cf5-b9ec-4197-8c8c-cfd38f91a79c.png",
     amount: "444,000,000",
     unit: "",
     cashOption: "207.2 MILLION",
-    nextDrawing: "SABADO, 22 MAR, 9:59PM",
-    backgroundColor: "bg-red-500", // Red background for Powerball
+    nextDrawing: "SATURDAY, MAR 22, 9:59 PM",
+    backgroundColor: "bg-[#ff5247]", // Exact red color from the image
+    showPlayButton: true,
   },
   {
     id: 3,
@@ -80,6 +80,7 @@ const Index = () => {
                 cashOption={game.cashOption}
                 nextDrawing={game.nextDrawing}
                 backgroundColor={game.backgroundColor}
+                showPlayButton={game.showPlayButton}
               />
             ))}
           </div>
