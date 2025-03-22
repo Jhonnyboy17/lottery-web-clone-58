@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -20,6 +20,23 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const scrollToGames = () => {
+    // Close mobile menu if open
+    if (isOpen) setIsOpen(false);
+    
+    // If we're already on the homepage, scroll to the games section
+    if (window.location.pathname === '/') {
+      const gamesSection = document.getElementById('lottery-games');
+      if (gamesSection) {
+        gamesSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // If we're on another page, navigate to homepage and then scroll to games
+      // We'll use a URL hash to trigger the scroll after navigation
+      window.location.href = '/#lottery-games';
+    }
+  };
 
   return (
     <header
@@ -44,6 +61,7 @@ const Navbar = () => {
               <Button
                 variant="ghost"
                 className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
+                onClick={scrollToGames}
               >
                 Loterias
               </Button>
@@ -92,6 +110,7 @@ const Navbar = () => {
             <Button
               variant="ghost"
               className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              onClick={scrollToGames}
             >
               Loterias
             </Button>

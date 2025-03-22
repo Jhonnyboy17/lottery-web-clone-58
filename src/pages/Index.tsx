@@ -98,6 +98,19 @@ const Index = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Handle hash navigation when page loads
+  useEffect(() => {
+    if (window.location.hash === '#lottery-games') {
+      const gamesSection = document.getElementById('lottery-games');
+      if (gamesSection) {
+        // Small delay to ensure the page is fully loaded
+        setTimeout(() => {
+          gamesSection.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -115,6 +128,7 @@ const Index = () => {
         </section>
 
         <section id="lottery-games" className="container mx-auto px-4 py-12">
+          <h2 className="text-3xl font-bold text-center text-lottery-navy mb-8">Loterias</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {lotteryGames.map((game) => (
               <LotteryCard
