@@ -1,12 +1,13 @@
 
 import { useState, useEffect } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +37,13 @@ const Navbar = () => {
       // We'll use a URL hash to trigger the scroll after navigation
       window.location.href = '/#lottery-games';
     }
+  };
+
+  const navigateToDuvidas = () => {
+    // Close mobile menu if open
+    if (isOpen) setIsOpen(false);
+    // Navigate to the Duvidas page
+    navigate('/duvidas');
   };
 
   return (
@@ -78,14 +86,13 @@ const Navbar = () => {
               >
                 Ganhadores
               </Button>
-              <NavLink to="/duvidas">
-                <Button
-                  variant="ghost"
-                  className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
-                >
-                  Duvidas
-                </Button>
-              </NavLink>
+              <Button
+                variant="ghost"
+                className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
+                onClick={navigateToDuvidas}
+              >
+                Duvidas
+              </Button>
               <Button
                 variant="ghost"
                 className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
@@ -128,14 +135,13 @@ const Navbar = () => {
             >
               Ganhadores
             </Button>
-            <NavLink to="/duvidas">
-              <Button
-                variant="ghost"
-                className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
-              >
-                Duvidas
-              </Button>
-            </NavLink>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              onClick={navigateToDuvidas}
+            >
+              Duvidas
+            </Button>
             <Button
               variant="ghost"
               className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
