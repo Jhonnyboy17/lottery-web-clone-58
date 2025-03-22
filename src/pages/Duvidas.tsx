@@ -18,11 +18,7 @@ const Duvidas = () => {
           {/* Introduction text */}
           <div className="max-w-4xl mx-auto mb-10 text-base text-gray-700 leading-relaxed">
             <p className="text-base font-normal text-left">
-              Jogar na loteria é divertido. Você pode decidir <a href="#" className="text-blue-600 hover:underline">comprar bilhetes de loteria</a> porque deseja ganhar o jackpot ou porque fica 
-              entusiasmado com a emoção que surge ao ficar na espera dos resultados dos sorteios. Seja qual for o motivo para jogar na
-              loteria, esperamos que goste da nossa seleção de artigos e guias sobre o fascinante mundo lotérico. Inspire-se com as histórias
-              dos nossos vencedores e descubra dicas e anedotas sobre como jogar na loteria. Quem sabe, você um dia se torna um vencedor
-              do jackpot e terá sua própria história emocionante para contar!
+              Participar da loteria é uma experiência empolgante! Alguns jogam sonhando com o prêmio máximo, enquanto outros se divertem com a adrenalina de aguardar os sorteios. Seja qual for sua motivação, temos uma coleção de artigos e guias repletos de informações sobre esse universo fascinante. Conheça histórias inspiradoras de ganhadores e descubra dicas e curiosidades sobre como jogar. Quem sabe, um dia a sorte bate à sua porta e você tem uma grande história para contar!
             </p>
           </div>
 
