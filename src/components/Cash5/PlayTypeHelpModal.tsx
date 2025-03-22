@@ -20,9 +20,10 @@ const PlayTypeHelpModal: React.FC<PlayTypeHelpModalProps> = ({
             <DialogTitle className="text-md font-bold">TYPE OF PLAY</DialogTitle>
             <button 
               onClick={onClose} 
-              className="rounded-full p-1 hover:bg-gray-100 transition-colors"
+              className="rounded-full hover:bg-gray-100 transition-colors flex items-center justify-center"
+              aria-label="Close"
             >
-              <X className="h-4 w-4" />
+              <X className="h-5 w-5" strokeWidth={2} />
             </button>
           </div>
         </div>
