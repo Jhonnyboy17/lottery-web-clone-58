@@ -17,7 +17,7 @@ const slides: Slide[] = [
     id: 1,
     title: "JOGUE EM REAL E GANHE EM DOLAR",
     subtitle: "Participe de loterias americanas com facilidade e privacidade.",
-    buttonText: "JOGUE AGORA",
+    buttonText: "Jogue Agora",
     buttonLink: "#lottery-games",
     bgColor: "bg-gradient-to-r from-lottery-red to-lottery-pink",
   },
@@ -61,7 +61,15 @@ const Hero = () => {
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+      // Add offset to account for fixed header and improve scroll experience
+      const offset = 80; // Adjust this value as needed for your layout
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - offset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth'
+      });
     }
   };
 
