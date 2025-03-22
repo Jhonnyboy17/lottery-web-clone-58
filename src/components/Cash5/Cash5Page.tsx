@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "@/components/ui/card";
 import GameHeader from "./GameHeader";
@@ -82,7 +83,7 @@ export const Cash5Page = ({
             onPlayTypeChange={handlePlayTypeChange}
             onBetAmountChange={handleBetAmountChange}
             onDigitSelect={handleDigitSelect}
-            isLineComplete={isLineComplete}
+            isLineComplete={isLineComplete} // Fix: Pass the function itself, not its result
             onClearSelections={clearSelections}
             onAddLine={handleAddLine}
             colorValue={colorValue}
