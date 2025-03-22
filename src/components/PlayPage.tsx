@@ -143,7 +143,7 @@ const PlayPage = ({
               ))}
             </div>
 
-            {/* Powerball selection - changed to always use amber-500 */}
+            {/* Powerball selection - always use amber-500 */}
             <p className="text-sm font-medium mb-2">Choose 1 Powerball</p>
             <div className="grid grid-cols-8 gap-1 mb-4">
               {powerballNumbers.slice(0, 16).map((number) => (
