@@ -141,7 +141,7 @@ const PlayPage = ({
               ))}
             </div>
 
-            {/* Powerball selection */}
+            {/* Powerball selection - changed to always use amber-500 */}
             <p className="text-sm font-medium mb-2">Choose 1 Powerball</p>
             <div className="grid grid-cols-8 gap-1 mb-4">
               {powerballNumbers.slice(0, 16).map((number) => (
@@ -150,7 +150,7 @@ const PlayPage = ({
                   onClick={() => handlePowerballSelect(number)}
                   className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
                     ${selectedPowerball === number 
-                      ? `bg-${primaryColor} text-white` 
+                      ? "bg-amber-500 text-white" 
                       : "bg-gray-100 text-black hover:bg-gray-200"}`}
                 >
                   {number}
@@ -182,7 +182,7 @@ const PlayPage = ({
                         {num}
                       </span>
                     ))}
-                    <span className={`bg-${primaryColor} text-white rounded-full w-6 h-6 flex items-center justify-center text-xs ml-1`}>
+                    <span className="bg-amber-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs ml-1">
                       {line.powerball}
                     </span>
                   </div>
