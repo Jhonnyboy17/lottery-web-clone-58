@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { 
   Select, 
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/select";
 import { HelpCircle } from "lucide-react";
 import { NumberSelectionType } from "./types";
+import PlayTypeHelpModal from "./PlayTypeHelpModal";
 
 interface TicketOptionsProps {
   lineCount: number;
@@ -30,6 +31,8 @@ const TicketOptions: React.FC<TicketOptionsProps> = ({
   onPlayTypeChange,
   onBetAmountChange
 }) => {
+  const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
+
   return (
     <>
       <div className="flex justify-between items-center mb-3">
@@ -56,7 +59,12 @@ const TicketOptions: React.FC<TicketOptionsProps> = ({
               ))}
             </SelectContent>
           </Select>
-          <HelpCircle className="h-4 w-4 text-gray-400" />
+          <button 
+            onClick={() => setIsHelpModalOpen(true)} 
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+          >
+            <HelpCircle className="h-4 w-4" />
+          </button>
         </div>
         
         <div className="flex items-center gap-2">
@@ -73,6 +81,11 @@ const TicketOptions: React.FC<TicketOptionsProps> = ({
           </Select>
         </div>
       </div>
+
+      <PlayTypeHelpModal 
+        isOpen={isHelpModalOpen} 
+        onClose={() => setIsHelpModalOpen(false)} 
+      />
     </>
   );
 };
