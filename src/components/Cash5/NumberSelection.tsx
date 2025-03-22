@@ -34,7 +34,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     const angle = (index * angleStep + angleOffset) * (Math.PI / 180);
     
     // Radius - reduced to bring numbers closer to center
-    const radius = 70; // Reduced from 100 to bring numbers closer
+    const radius = 40; // Reduced from 70 to 40 to bring numbers much closer
     
     // Calculate x and y positions
     const x = Math.cos(angle) * radius;
