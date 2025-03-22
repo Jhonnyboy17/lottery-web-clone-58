@@ -15,6 +15,7 @@ const lotteryGames = [
     unit: "MILLION",
     cashOption: "161.5 MILLION",
     nextDrawing: "03/25",
+    backgroundColor: "bg-blue-500", // Blue background for Mega Millions
   },
   {
     id: 2,
@@ -23,6 +24,7 @@ const lotteryGames = [
     unit: "MILLION",
     cashOption: "207.2 MILLION",
     nextDrawing: "03/22",
+    backgroundColor: "bg-red-500", // Red background for Powerball
   },
   {
     id: 3,
@@ -31,6 +33,7 @@ const lotteryGames = [
     unit: "THOUSAND",
     cashOption: "320 THOUSAND",
     nextDrawing: "03/24",
+    backgroundColor: "bg-green-500", // Green background for Multi-Match
   },
 ];
 
@@ -76,6 +79,7 @@ const Index = () => {
                 unit={game.unit}
                 cashOption={game.cashOption}
                 nextDrawing={game.nextDrawing}
+                backgroundColor={game.backgroundColor}
               />
             ))}
           </div>

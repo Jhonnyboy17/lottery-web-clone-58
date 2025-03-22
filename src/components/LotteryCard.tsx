@@ -7,6 +7,7 @@ interface LotteryCardProps {
   unit: string;
   cashOption: string;
   nextDrawing: string;
+  backgroundColor?: string; // Add background color property
 }
 
 const LotteryCard = ({
@@ -15,9 +16,10 @@ const LotteryCard = ({
   unit,
   cashOption,
   nextDrawing,
+  backgroundColor = "bg-white", // Default background color
 }: LotteryCardProps) => {
   return (
-    <div className="lottery-card bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300">
+    <div className={`lottery-card ${backgroundColor} rounded-xl shadow-md overflow-hidden transition-all duration-300`}>
       <div className="p-6">
         <img
           src={logoSrc}
@@ -37,7 +39,7 @@ const LotteryCard = ({
           <p className="text-xs text-gray-500 italic">Estimated Jackpot</p>
         </div>
       </div>
-      <div className="bg-gray-100 p-4 flex justify-between items-center">
+      <div className="bg-black/10 p-4 flex justify-between items-center">
         <p className="text-sm text-gray-700">Next Drawing: {nextDrawing}</p>
         <button className="text-lottery-pink hover:text-lottery-red transition-colors duration-300">
           <ArrowRight size={18} />
