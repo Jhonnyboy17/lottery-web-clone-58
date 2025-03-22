@@ -26,10 +26,12 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
 
   const getNumberPosition = (index: number, totalNumbers: number) => {
+    // Arrange numbers in ascending order (0-9)
+    // Start at the top (-Math.PI/2) and go clockwise
     const angleStep = (2 * Math.PI) / totalNumbers;
     const angle = index * angleStep - Math.PI / 2;
     
-    // Increased radius to 100
+    // Use radius of 100px to match the decorative circle
     const radius = 100;
     
     const x = Math.cos(angle) * radius;
@@ -45,7 +47,10 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   return (
     <div className="relative mb-6 mt-8">
       <div className="flex justify-center items-center h-[280px] relative">
+        {/* Decorative circle in the middle */}
         <div className="absolute w-[220px] h-[220px] rounded-full border-2 border-blue-100 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"></div>
+        
+        {/* Number buttons arranged around the circle */}
         {[...Array(10).keys()].map((number) => {
           const position = getNumberPosition(number, 10);
           return (
@@ -70,6 +75,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           );
         })}
       </div>
+      
+      {/* Current selected digits display */}
       <div className="flex gap-2 justify-center mt-4 mb-4">
         {currentLine.digits.map((digit, idx) => (
           <div 
@@ -87,6 +94,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           </div>
         ))}
       </div>
+      
+      {/* Clear button */}
       <div className="flex justify-end mt-2">
         <Button 
           onClick={onClearSelections}
