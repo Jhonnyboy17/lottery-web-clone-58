@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -166,6 +167,28 @@ const Cash5Page = ({
     return "?";
   };
 
+  // Calculate positions for numbers in a wheel
+  const getNumberPosition = (index: number, totalNumbers: number) => {
+    // Adjust the starting angle to place 0 at the top
+    const angleOffset = -90; // Start from top (negative 90 degrees)
+    const angleStep = 360 / totalNumbers;
+    const angle = (index * angleStep + angleOffset) * (Math.PI / 180);
+    
+    // Radius - controls how far from center
+    const radius = 100;
+    
+    // Calculate x and y positions
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    
+    // Convert to percentage for styling
+    return {
+      top: `${50 + y}%`,
+      left: `${50 + x}%`,
+      transform: 'translate(-50%, -50%)'
+    };
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <div className="mx-auto max-w-md pt-4 px-3">
@@ -227,86 +250,28 @@ const Cash5Page = ({
 
             <div className="relative mb-6 mt-8">
               <div className="flex justify-center items-center h-48 relative">
-                <div className="absolute" style={{ top: '0%', left: '50%', transform: 'translateX(-50%)' }}>
-                  <button
-                    onClick={() => handleDigitSelect(0)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    0
-                  </button>
-                </div>
-                <div className="absolute" style={{ top: '12%', right: '25%' }}>
-                  <button
-                    onClick={() => handleDigitSelect(1)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    1
-                  </button>
-                </div>
-                <div className="absolute" style={{ top: '35%', right: '10%' }}>
-                  <button
-                    onClick={() => handleDigitSelect(2)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    2
-                  </button>
-                </div>
-                <div className="absolute" style={{ top: '65%', right: '10%' }}>
-                  <button
-                    onClick={() => handleDigitSelect(3)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    3
-                  </button>
-                </div>
-                <div className="absolute" style={{ top: '88%', right: '25%' }}>
-                  <button
-                    onClick={() => handleDigitSelect(4)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    4
-                  </button>
-                </div>
-                <div className="absolute" style={{ top: '100%', left: '50%', transform: 'translateX(-50%)' }}>
-                  <button
-                    onClick={() => handleDigitSelect(5)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    5
-                  </button>
-                </div>
-                <div className="absolute" style={{ top: '88%', left: '25%' }}>
-                  <button
-                    onClick={() => handleDigitSelect(6)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    6
-                  </button>
-                </div>
-                <div className="absolute" style={{ top: '65%', left: '10%' }}>
-                  <button
-                    onClick={() => handleDigitSelect(7)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    7
-                  </button>
-                </div>
-                <div className="absolute" style={{ top: '35%', left: '10%' }}>
-                  <button
-                    onClick={() => handleDigitSelect(8)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    8
-                  </button>
-                </div>
-                <div className="absolute" style={{ top: '12%', left: '25%' }}>
-                  <button
-                    onClick={() => handleDigitSelect(9)}
-                    className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200"
-                  >
-                    9
-                  </button>
-                </div>
+                {/* Numbers in a wheel from 0 to 9 */}
+                {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((number) => {
+                  const position = getNumberPosition(number, 10);
+                  return (
+                    <button
+                      key={number}
+                      onClick={() => handleDigitSelect(number)}
+                      className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-lg font-medium hover:bg-blue-200 absolute"
+                      style={{
+                        ...position,
+                        backgroundColor: activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number 
+                          ? '#0EA5E9' 
+                          : '#dbeafe',
+                        color: activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number 
+                          ? 'white' 
+                          : '#1e40af'
+                      }}
+                    >
+                      {number}
+                    </button>
+                  );
+                })}
                 
                 <div className="text-center">
                   {activeDigitIndex !== null ? (
