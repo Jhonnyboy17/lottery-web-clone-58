@@ -15,7 +15,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({
   colorValue 
 }) => {
   // Check if we should display the draw times instead of jackpot amount
-  const shouldShowDrawTimes = jackpotAmount === "500";
+  const shouldShowDrawTimes = jackpotAmount === "500" || jackpotAmount === "5.000";
   
   return (
     <div className="relative">
@@ -40,7 +40,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({
           ) : (
             <>
               <p className="text-sm font-semibold">JACKPOT</p>
-              <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
+              <h2 className="text-2xl font-bold" style={{ color: colorValue }}>$ {jackpotAmount}</h2>
             </>
           )}
         </div>
