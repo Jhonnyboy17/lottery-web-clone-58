@@ -31,7 +31,7 @@ const LotteryCard = ({
           alt="Lottery Game Logo"
           className="h-16 w-auto object-contain mx-auto mb-4"
         />
-        <div className="text-center">
+        <div className="text-center flex flex-col justify-between h-28">
           {prefix && (
             <p className="text-lg font-semibold text-black mb-1">
               {prefix}
