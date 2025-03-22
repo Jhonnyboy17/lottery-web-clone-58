@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card } from "@/components/ui/card";
 import GameHeader from "./GameHeader";
@@ -24,7 +23,7 @@ export const Cash5Page = ({
   gameName,
   extraPlayName = "FIREBALL™",
 }: Cash5PageProps) => {
-  const playTypes = ["Back Pair", "Box", "Combo", "Front Pair", "Straight", "Straight/Box"];
+  const playTypes = ["Box", "Combo", "Straight", "Straight/Box"];
   const betAmounts = ["$0.50", "$1.00", "$2.00", "$3.00", "$4.00", "$5.00"];
   
   const {
