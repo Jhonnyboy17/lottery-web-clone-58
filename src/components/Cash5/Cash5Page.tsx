@@ -24,7 +24,8 @@ export const Cash5Page = ({
   gameName,
   extraPlayName = "FIREBALL™",
 }: Cash5PageProps) => {
-  const playTypes = ["Box", "Combo", "Direto", "Direto/Box"];
+  // Updated play types to match the image (Box, Combo, Straight, Straight/Box)
+  const playTypes = ["Box", "Combo", "Straight", "Straight/Box"];
   const betAmounts = ["R$8", "R$15", "R$21", "R$28", "R$35"];
   
   const {

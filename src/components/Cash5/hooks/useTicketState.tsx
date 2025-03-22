@@ -5,7 +5,7 @@ import { NumberSelectionType } from "../types";
 export const useTicketState = () => {
   const [currentLine, setCurrentLine] = useState<NumberSelectionType>({
     digits: [null, null, null, null],
-    playType: "Straight",
+    playType: "Straight", // Changed from "Straight" to ensure it's the default
     betAmount: "R$8"
   });
   
