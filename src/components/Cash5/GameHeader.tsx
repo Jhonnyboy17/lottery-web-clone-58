@@ -19,22 +19,24 @@ const GameHeader: React.FC<GameHeaderProps> = ({
   
   return (
     <div className="relative">
-      {/* Light orange banner at the top - full width */}
-      <div className="fixed top-0 left-0 right-0 bg-orange-300 h-24 -z-10"></div>
+      {/* Large orange banner that spans the full width */}
+      <div className="fixed top-0 left-0 right-0 bg-orange-200 h-32 -z-10"></div>
       
-      {/* Content with the same layout */}
-      <div className="relative z-10 flex items-center justify-between mb-4">
-        <img 
-          src={logoSrc} 
-          alt={gameName} 
-          className="h-12 w-auto"
-        />
+      {/* Content with logo centered on the banner */}
+      <div className="relative z-10 flex items-center justify-between px-4 pt-6 pb-4">
+        <div className="flex-1">
+          <img 
+            src={logoSrc} 
+            alt={gameName} 
+            className="h-16 w-auto mx-auto mb-2"
+          />
+        </div>
         <div className="text-right">
           {shouldShowDrawTimes ? (
-            <>
-              <p className="text-xl font-bold" style={{ color: colorValue }}>2 sorteios Diários</p>
-              <p className="text-xs font-medium text-gray-700">Sorteio FECHA: 12:35 & 21:15</p>
-            </>
+            <div className="text-right">
+              <p className="text-2xl font-bold" style={{ color: colorValue }}>2 sorteios Diários</p>
+              <p className="text-sm font-medium text-gray-700">Sorteio FECHA: 12:35 & 21:15</p>
+            </div>
           ) : (
             <>
               <p className="text-sm font-semibold">JACKPOT</p>
