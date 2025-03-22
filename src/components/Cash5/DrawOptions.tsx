@@ -24,13 +24,13 @@ const DrawOptions: React.FC<DrawOptionsProps> = ({
   onDrawCountChange,
 }) => {
   return (
-    <div className="space-y-4 mb-4">
+    <div className="space-y-4 mb-4 w-full">
       <div className="border border-gray-200 rounded-md p-4">
         <p className="font-medium text-sm mb-3">Selecione o horário do sorteio:</p>
-        <div className="flex flex-wrap md:flex-nowrap gap-2">
+        <div className="flex flex-wrap md:flex-nowrap gap-3">
           <Button
             variant={selectedDrawTime === "both" ? "default" : "outline"}
-            className={`flex-1 ${selectedDrawTime === "both" ? "bg-blue-500" : ""}`}
+            className={`flex-1 px-6 ${selectedDrawTime === "both" ? "bg-blue-500" : ""}`}
             onClick={() => onDrawTimeChange("both")}
           >
             <SunMoon className="mr-2 h-4 w-4" />
@@ -38,7 +38,7 @@ const DrawOptions: React.FC<DrawOptionsProps> = ({
           </Button>
           <Button
             variant={selectedDrawTime === "midday" ? "default" : "outline"}
-            className={`flex-1 ${selectedDrawTime === "midday" ? "bg-blue-500" : ""}`}
+            className={`flex-1 px-6 ${selectedDrawTime === "midday" ? "bg-blue-500" : ""}`}
             onClick={() => onDrawTimeChange("midday")}
           >
             <Sun className="mr-2 h-4 w-4" />
@@ -46,7 +46,7 @@ const DrawOptions: React.FC<DrawOptionsProps> = ({
           </Button>
           <Button
             variant={selectedDrawTime === "evening" ? "default" : "outline"}
-            className={`flex-1 ${selectedDrawTime === "evening" ? "bg-blue-500" : ""}`}
+            className={`flex-1 px-6 ${selectedDrawTime === "evening" ? "bg-blue-500" : ""}`}
             onClick={() => onDrawTimeChange("evening")}
           >
             <Moon className="mr-2 h-4 w-4" />

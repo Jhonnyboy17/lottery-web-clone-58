@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card } from "@/components/ui/card";
 import GameHeader from "./GameHeader";
@@ -24,7 +23,6 @@ export const Cash5Page = ({
   gameName,
   extraPlayName = "FIREBALL™",
 }: Cash5PageProps) => {
-  // Updated play types to match the image (Box, Combo, Straight, Straight/Box)
   const playTypes = ["Box", "Combo", "Straight", "Straight/Box"];
   const betAmounts = ["R$8", "R$15", "R$21", "R$28", "R$35"];
   
@@ -64,7 +62,7 @@ export const Cash5Page = ({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-md pt-4 px-3">
+      <div className="mx-auto max-w-xl pt-4 px-3">
         <GameHeader 
           logoSrc={logoSrc} 
           gameName={gameName} 
