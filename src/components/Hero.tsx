@@ -18,7 +18,7 @@ const slides: Slide[] = [
     title: "JOGUE EM REAL E GANHE EM DOLAR",
     subtitle: "Participe de loterias americanas com facilidade e privacidade.",
     buttonText: "JOGUE AGORA",
-    buttonLink: "#",
+    buttonLink: "#lottery-games",
     bgColor: "bg-gradient-to-r from-lottery-red to-lottery-pink",
   },
   {
@@ -58,6 +58,13 @@ const Hero = () => {
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
   };
 
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="hero-slider w-full overflow-hidden mt-20 relative">
       {slides.map((slide, index) => (
@@ -75,7 +82,13 @@ const Hero = () => {
               <p className="text-white text-lg md:text-xl mb-8">
                 {slide.subtitle}
               </p>
-              <Button className="lottery-button bg-lottery-yellow text-lottery-navy hover:bg-lottery-yellow/90 font-semibold px-8 py-6 text-md rounded-full">
+              <Button 
+                className="lottery-button bg-lottery-yellow text-lottery-navy hover:bg-lottery-yellow/90 font-semibold px-8 py-6 text-md rounded-full"
+                onClick={() => {
+                  const targetId = slide.buttonLink.replace('#', '');
+                  scrollToSection(targetId);
+                }}
+              >
                 {slide.buttonText} <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </div>
