@@ -15,7 +15,7 @@ interface Slide {
 const slides: Slide[] = [
   {
     id: 1,
-    title: "JOGUE EM REAL E GANHE EM DOLAR",
+    title: "JOGUE REAL E GANHE EM DOLAR!",
     subtitle: "Participe de loterias americanas com facilidade e privacidade.",
     buttonText: "Jogue Agora",
     buttonLink: "#lottery-games",
