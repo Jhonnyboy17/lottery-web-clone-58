@@ -31,27 +31,29 @@ const LotteryCard = ({
           alt="Lottery Game Logo"
           className="h-16 w-auto object-contain mx-auto mb-4"
         />
-        <div className="text-center flex flex-col justify-between h-28">
-          {prefix && (
-            <p className="text-lg font-semibold text-black mb-1">
-              {prefix}
-            </p>
-          )}
-          <h2 className="text-5xl font-bold text-lottery-navy">
-            ${amount}
-          </h2>
-          {unit && (
-            <p className="text-2xl font-semibold text-lottery-navy uppercase tracking-wide mb-2">
-              {unit}
-            </p>
-          )}
+        <div className="text-center flex flex-col h-28">
+          <div className="flex-grow flex flex-col justify-center">
+            {prefix && (
+              <p className="text-lg font-semibold text-black mb-1">
+                {prefix}
+              </p>
+            )}
+            <h2 className="text-5xl font-bold text-lottery-navy">
+              ${amount}
+            </h2>
+            {unit && (
+              <p className="text-2xl font-semibold text-lottery-navy uppercase tracking-wide mb-2">
+                {unit}
+              </p>
+            )}
+          </div>
           {cashOption && !showPlayButton && (
-            <>
+            <div className="mt-auto">
               <p className="text-sm text-gray-600 mb-1">
                 Cash Option: ${cashOption}
               </p>
               <p className="text-xs text-gray-500 italic">Estimated Jackpot</p>
-            </>
+            </div>
           )}
         </div>
       </div>
