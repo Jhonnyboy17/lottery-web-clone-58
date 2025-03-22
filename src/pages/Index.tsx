@@ -120,7 +120,9 @@ const Index = () => {
         </section>
 
         <section className="container mx-auto px-4 py-12 bg-gray-50">
-          <NumbersDisplay />
+          <div className="bg-white rounded-xl shadow-md p-8">
+            <NumbersDisplay />
+          </div>
         </section>
 
         <section className="container mx-auto px-4 py-12">
