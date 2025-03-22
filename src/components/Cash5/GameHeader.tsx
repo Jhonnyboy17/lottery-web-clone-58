@@ -39,14 +39,12 @@ const GameHeader: React.FC<GameHeaderProps> = ({
             </div>
           ) : (
             <>
-              <p className="text-2xl font-bold" style={{ color: colorValue }}>JACKPOT ESTA VALIDO</p>
+              <p className="text-2xl font-bold text-black">JACKPOT ESTA VALIDO</p>
               <h2 className="text-2xl font-bold" style={{ color: colorValue }}>$ {jackpotAmount}</h2>
             </>
           )}
         </div>
       </div>
-      
-      {/* Removed the wavy orange stripe */}
     </div>
   );
 };
