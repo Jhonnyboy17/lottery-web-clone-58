@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -35,6 +36,36 @@ const lotteryGames = [
     cashOption: "320 THOUSAND",
     nextDrawing: "MONDAY, MAR 24, 9:59 PM",
     backgroundColor: "bg-green-500", // Green background for Multi-Match
+    showPlayButton: true,
+  },
+  {
+    id: 4,
+    logoSrc: "/lovable-uploads/7311ad07-fd9e-403d-af7e-6f9c37bc6c33.png",
+    amount: "100,000",
+    unit: "",
+    prefix: "",
+    nextDrawing: "SATURDAY, MAR 22, 12:40 PM",
+    backgroundColor: "bg-[#00ccc6]", // Turquoise color from the image
+    showPlayButton: true,
+  },
+  {
+    id: 5,
+    logoSrc: "https://via.placeholder.com/160x80/FF9900/000000?text=PICK+4",
+    amount: "5,000",
+    unit: "",
+    prefix: "WIN UP TO",
+    nextDrawing: "EVERY DAY 12:40 PM & 9:22 PM",
+    backgroundColor: "bg-[#ffa039]", // Orange color from the image
+    showPlayButton: true,
+  },
+  {
+    id: 6,
+    logoSrc: "https://via.placeholder.com/160x80/FF9900/000000?text=PICK+3",
+    amount: "500",
+    unit: "",
+    prefix: "WIN UP TO",
+    nextDrawing: "EVERY DAY 12:40 PM & 9:22 PM",
+    backgroundColor: "bg-[#ffa039]", // Orange color from the image
     showPlayButton: true,
   },
 ];
@@ -78,8 +109,9 @@ const Index = () => {
                 key={game.id}
                 logoSrc={game.logoSrc}
                 amount={game.amount}
-                unit={game.unit}
-                cashOption={game.cashOption}
+                unit={game.unit || ""}
+                prefix={game.prefix || ""}
+                cashOption={game.cashOption || ""}
                 nextDrawing={game.nextDrawing}
                 backgroundColor={game.backgroundColor}
                 showPlayButton={game.showPlayButton}

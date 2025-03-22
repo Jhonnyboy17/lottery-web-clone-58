@@ -6,7 +6,8 @@ interface LotteryCardProps {
   logoSrc: string;
   amount: string;
   unit: string;
-  cashOption: string;
+  prefix?: string;
+  cashOption?: string;
   nextDrawing: string;
   backgroundColor?: string;
   showPlayButton?: boolean;
@@ -16,7 +17,8 @@ const LotteryCard = ({
   logoSrc,
   amount,
   unit,
-  cashOption,
+  prefix = "",
+  cashOption = "",
   nextDrawing,
   backgroundColor = "bg-white",
   showPlayButton = false,
@@ -30,6 +32,11 @@ const LotteryCard = ({
           className="h-16 w-auto object-contain mx-auto mb-4"
         />
         <div className="text-center">
+          {prefix && (
+            <p className="text-lg font-semibold text-black mb-1">
+              {prefix}
+            </p>
+          )}
           <h2 className="text-5xl font-bold text-lottery-navy">
             ${amount}
           </h2>
@@ -38,7 +45,7 @@ const LotteryCard = ({
               {unit}
             </p>
           )}
-          {!showPlayButton && (
+          {cashOption && !showPlayButton && (
             <>
               <p className="text-sm text-gray-600 mb-1">
                 Cash Option: ${cashOption}
