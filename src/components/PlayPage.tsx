@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -150,13 +151,13 @@ const PlayPage = ({
         <Card className="border-0 shadow-md overflow-hidden mb-4">
           <div className="p-4">
             <div className="flex justify-between items-center mb-3">
-              <h3 className="text-lg font-semibold">Select Numbers</h3>
+              {/* Removed "Select Numbers" text */}
               <Button 
                 onClick={handleQuickPick}
                 className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6"
                 style={{ color: colorValue, borderColor: colorValue }}
               >
-                QUICK PICK
+                JOGADA ALEATÓRIA
               </Button>
             </div>
 
@@ -243,15 +244,15 @@ const PlayPage = ({
               className="w-full hover:bg-opacity-90 mt-2 px-10"
               style={{ backgroundColor: colorValue }}
             >
-              ADD LINE
+              ADD LINHA
             </Button>
           </div>
 
           <div className="bg-gray-50 p-4">
-            <h3 className="font-semibold mb-3">My Lines</h3>
+            <h3 className="font-semibold mb-3">Minhas Linhas</h3>
             
             {savedLines.length === 0 ? (
-              <p className="text-sm text-gray-500 mb-3">No lines added yet</p>
+              <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
             ) : (
               savedLines.map((line, index) => (
                 <div key={index} className="bg-white rounded p-2 mb-2 flex items-center justify-between">
@@ -289,23 +290,23 @@ const PlayPage = ({
                   onCheckedChange={(checked) => setIncludeExtraPlay(checked as boolean)} 
                 />
                 <label htmlFor="extraplay" className="text-sm font-medium">
-                  Add {extraPlayName} (+R${extraPlayPrice.toFixed(2)} per line)
+                  Adicionar {extraPlayName} (+R${extraPlayPrice.toFixed(2)} por linha)
                 </label>
               </div>
             </div>
 
             <div className="mb-3">
-              <label className="text-sm font-medium block mb-1">Number of Draws</label>
+              <label className="text-sm font-medium block mb-1">Número de Sorteios</label>
               <Select value={numberOfDraws} onValueChange={setNumberOfDraws}>
                 <SelectTrigger className="w-full h-9 text-sm">
-                  <SelectValue placeholder="Select number of draws" />
+                  <SelectValue placeholder="Selecionar número de sorteios" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">1 draw</SelectItem>
-                  <SelectItem value="2">2 draws</SelectItem>
-                  <SelectItem value="3">3 draws</SelectItem>
-                  <SelectItem value="4">4 draws</SelectItem>
-                  <SelectItem value="5">5 draws</SelectItem>
+                  <SelectItem value="1">1 sorteio</SelectItem>
+                  <SelectItem value="2">2 sorteios</SelectItem>
+                  <SelectItem value="3">3 sorteios</SelectItem>
+                  <SelectItem value="4">4 sorteios</SelectItem>
+                  <SelectItem value="5">5 sorteios</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -322,7 +323,7 @@ const PlayPage = ({
             style={{ backgroundColor: colorValue }}
             disabled={savedLines.length === 0}
           >
-            ADD TO CART
+            ADICIONAR AO CARRINHO
           </Button>
         </div>
       </div>
