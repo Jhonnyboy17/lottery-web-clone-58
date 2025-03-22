@@ -4,20 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import { Trash2, RefreshCcw, Clock, Heart } from "lucide-react";
 
 const PowerballPlay = () => {
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [selectedPowerball, setSelectedPowerball] = useState<number | null>(null);
   const [includePowerPlay, setIncludePowerPlay] = useState(false);
   const [numberOfDraws, setNumberOfDraws] = useState("1");
-  const [isSubscribed, setIsSubscribed] = useState(false);
-  const [currentLine, setCurrentLine] = useState(1);
-  const [savedLines, setSavedLines] = useState<{lineNumber: number, numbers: number[], powerball: number | null}[]>([]);
+  const [savedLines, setSavedLines] = useState<{numbers: number[], powerball: number | null}[]>([]);
 
   const maxRegularNumbers = 5;
-  const maxPowerballNumber = 1;
 
   // Generate numbers 1-69 for regular selection
   const regularNumbers = Array.from({ length: 69 }, (_, i) => i + 1);
@@ -57,23 +52,15 @@ const PowerballPlay = () => {
     setSelectedPowerball(randomPowerball);
   };
 
-  const handleClearSelections = () => {
-    setSelectedNumbers([]);
-    setSelectedPowerball(null);
-  };
-
   const handleAddLine = () => {
     if (selectedNumbers.length === maxRegularNumbers && selectedPowerball !== null) {
       setSavedLines([...savedLines, {
-        lineNumber: currentLine,
         numbers: [...selectedNumbers],
         powerball: selectedPowerball
       }]);
       
-      // Clear selections for next line
       setSelectedNumbers([]);
       setSelectedPowerball(null);
-      setCurrentLine(currentLine + 1);
     }
   };
 
@@ -91,164 +78,125 @@ const PowerballPlay = () => {
   };
 
   return (
-    <div className="min-h-screen bg-red-500">
-      <div className="max-w-screen-xl mx-auto pt-8 px-4">
-        {/* Powerball logo and jackpot section */}
-        <div className="flex justify-between items-start mb-4">
-          <div className="flex-1"></div>
-          <div className="flex-2 flex justify-center">
-            <div className="relative">
-              <img 
-                src="/lovable-uploads/40f615be-7eee-405f-87cf-7df290c5da34.png" 
-                alt="Powerball" 
-                className="h-20 w-auto"
-              />
-            </div>
+    <div className="min-h-screen bg-white">
+      <div className="mx-auto max-w-md pt-4 px-3">
+        {/* Header with logo and jackpot */}
+        <div className="flex items-center justify-between mb-4">
+          <img 
+            src="/lovable-uploads/40f615be-7eee-405f-87cf-7df290c5da34.png" 
+            alt="Powerball" 
+            className="h-12 w-auto"
+          />
+          <div className="text-right">
+            <p className="text-sm font-semibold">JACKPOT</p>
+            <h2 className="text-2xl font-bold text-red-500">R$ 444.000.000</h2>
           </div>
-          <div className="flex-1 text-right">
-            <div className="bg-black text-white px-3 py-1 inline-block rounded mb-1">
-              <p className="text-xs font-bold">JACKPOT IS CURRENTLY</p>
-            </div>
-            <h2 className="text-4xl font-bold text-black">$444,000,000</h2>
-            <div className="bg-black text-white px-2 py-1 inline-block rounded mt-1">
-              <p className="text-xs">DRAW CLOSE: MAR 23, 9:59 PM</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation tabs */}
-        <div className="flex justify-center space-x-4 mb-4 text-black">
-          <Button variant="link" className="text-black font-semibold text-lg">Play Powerball®</Button>
-          <Button variant="link" className="text-black font-semibold text-lg">Results</Button>
-          <Button variant="link" className="text-black font-semibold text-lg">Number Checker</Button>
-          <Button variant="link" className="text-black font-semibold text-lg">How to Play</Button>
         </div>
 
         {/* Main content area */}
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="p-6">
-            <div className="flex justify-between mb-6">
-              <h3 className="text-xl font-bold">Line {currentLine}</h3>
+        <Card className="border-0 shadow-md overflow-hidden mb-4">
+          <div className="p-4">
+            <div className="flex justify-between items-center mb-3">
+              <h3 className="text-lg font-semibold">Select Numbers</h3>
               <Button 
                 onClick={handleQuickPick}
-                className="bg-white text-red-500 border border-red-500 hover:bg-red-50 rounded-full"
+                className="text-xs h-8 bg-white text-red-500 border border-red-500 hover:bg-red-50"
               >
                 QUICK PICK
               </Button>
             </div>
 
             {/* Regular numbers selection */}
-            <div className="mb-6">
-              <div className="flex justify-between mb-2">
-                <p className="font-medium">Numbers</p>
-                <p className="text-sm text-gray-500">{selectedNumbers.length} of 5</p>
-              </div>
-              <div className="grid grid-cols-9 gap-2">
-                {regularNumbers.map((number) => (
-                  <button
-                    key={`regular-${number}`}
-                    onClick={() => handleNumberSelect(number)}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                      ${selectedNumbers.includes(number) 
-                        ? "bg-red-500 text-white" 
-                        : "bg-gray-100 text-black hover:bg-gray-200"}`}
-                  >
-                    {number}
-                  </button>
-                ))}
-              </div>
+            <p className="text-sm font-medium mb-2">Choose 5 Numbers</p>
+            <div className="grid grid-cols-8 gap-1 mb-4">
+              {regularNumbers.slice(0, 40).map((number) => (
+                <button
+                  key={`regular-${number}`}
+                  onClick={() => handleNumberSelect(number)}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
+                    ${selectedNumbers.includes(number) 
+                      ? "bg-red-500 text-white" 
+                      : "bg-gray-100 text-black hover:bg-gray-200"}`}
+                >
+                  {number}
+                </button>
+              ))}
             </div>
 
             {/* Powerball selection */}
-            <div className="mb-6">
-              <div className="flex justify-between mb-2">
-                <p className="font-medium">Powerball</p>
-                <p className="text-sm text-gray-500">{selectedPowerball ? "1" : "0"} of 1</p>
-              </div>
-              <div className="grid grid-cols-9 gap-2">
-                {powerballNumbers.map((number) => (
-                  <button
-                    key={`powerball-${number}`}
-                    onClick={() => handlePowerballSelect(number)}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                      ${selectedPowerball === number 
-                        ? "bg-red-500 text-white" 
-                        : "bg-gray-100 text-black hover:bg-gray-200"}`}
-                  >
-                    {number}
-                  </button>
-                ))}
-              </div>
+            <p className="text-sm font-medium mb-2">Choose 1 Powerball</p>
+            <div className="grid grid-cols-8 gap-1 mb-4">
+              {powerballNumbers.slice(0, 16).map((number) => (
+                <button
+                  key={`powerball-${number}`}
+                  onClick={() => handlePowerballSelect(number)}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium
+                    ${selectedPowerball === number 
+                      ? "bg-red-500 text-white" 
+                      : "bg-gray-100 text-black hover:bg-gray-200"}`}
+                >
+                  {number}
+                </button>
+              ))}
             </div>
 
-            {/* Cost and Clear selection */}
-            <div className="flex justify-between items-center mt-4 pb-4">
-              <div className="text-sm font-medium">
-                Line cost: $2.00
-              </div>
-              <Button 
-                variant="ghost" 
-                onClick={handleClearSelections}
-                className="text-blue-600 hover:text-blue-800"
-              >
-                Clear selections
-              </Button>
-            </div>
+            <Button 
+              onClick={handleAddLine} 
+              disabled={!(selectedNumbers.length === 5 && selectedPowerball !== null)}
+              className="w-full bg-red-500 hover:bg-red-600 mt-2"
+            >
+              ADD LINE
+            </Button>
           </div>
 
-          {/* Saved lines / My Lines */}
-          <div className="bg-gray-50 p-6">
-            <h3 className="text-xl font-bold mb-4">My Lines</h3>
+          {/* Selected lines */}
+          <div className="bg-gray-50 p-4">
+            <h3 className="font-semibold mb-3">My Lines</h3>
             
-            {savedLines.map((line, index) => (
-              <div key={index} className="bg-blue-50 rounded-lg p-4 mb-2 flex items-center justify-between">
-                <div className="flex items-center">
-                  <span className="bg-blue-100 rounded-full w-8 h-8 flex items-center justify-center mr-2">
-                    {line.lineNumber}
-                  </span>
-                  {line.numbers.map((num, i) => (
-                    <span key={i} className="bg-white rounded-full w-8 h-8 flex items-center justify-center mx-1">
-                      {num}
+            {savedLines.length === 0 ? (
+              <p className="text-sm text-gray-500 mb-3">No lines added yet</p>
+            ) : (
+              savedLines.map((line, index) => (
+                <div key={index} className="bg-white rounded p-2 mb-2 flex items-center justify-between">
+                  <div className="flex items-center">
+                    {line.numbers.map((num, i) => (
+                      <span key={i} className="bg-gray-100 rounded-full w-6 h-6 flex items-center justify-center text-xs mx-0.5">
+                        {num}
+                      </span>
+                    ))}
+                    <span className="bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs ml-1">
+                      {line.powerball}
                     </span>
-                  ))}
-                  <span className="bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center ml-1">
-                    {line.powerball}
-                  </span>
+                  </div>
+                  <button 
+                    onClick={() => handleRemoveLine(index)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    ✕
+                  </button>
                 </div>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  onClick={() => handleRemoveLine(index)}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  <Trash2 className="h-5 w-5" />
-                </Button>
-              </div>
-            ))}
+              ))
+            )}
 
             {/* PowerPlay option */}
-            <Card className="border border-red-500 mt-8 p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-bold text-lg mb-2">Add Power Play® to your ticket!</h4>
-                  <p className="text-sm text-gray-600">
-                    For an additional $1.00 per line, you can multiply your non-jackpot winnings.
-                  </p>
-                </div>
+            <div className="flex items-center justify-between mt-4 mb-3">
+              <div className="flex items-center gap-2">
                 <Checkbox 
                   id="powerplay" 
                   checked={includePowerPlay}
                   onCheckedChange={(checked) => setIncludePowerPlay(checked as boolean)} 
-                  className="h-5 w-5"
                 />
+                <label htmlFor="powerplay" className="text-sm font-medium">
+                  Add Power Play® (+$1.00 per line)
+                </label>
               </div>
-            </Card>
+            </div>
 
             {/* Number of draws */}
-            <div className="mt-6">
-              <h4 className="font-semibold mb-2">For how many draws?</h4>
+            <div className="mb-3">
+              <label className="text-sm font-medium block mb-1">Number of Draws</label>
               <Select value={numberOfDraws} onValueChange={setNumberOfDraws}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full h-9 text-sm">
                   <SelectValue placeholder="Select number of draws" />
                 </SelectTrigger>
                 <SelectContent>
@@ -257,41 +205,24 @@ const PowerballPlay = () => {
                   <SelectItem value="3">3 draws</SelectItem>
                   <SelectItem value="4">4 draws</SelectItem>
                   <SelectItem value="5">5 draws</SelectItem>
-                  <SelectItem value="10">10 draws</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-
-            {/* Subscribe option */}
-            <div className="mt-6 bg-blue-50 p-4 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h4 className="font-semibold">Subscribe</h4>
-                  <p className="text-sm text-gray-600">
-                    Automatically purchase tickets for each draw. Cancel whenever you like.
-                  </p>
-                </div>
-                <Switch
-                  checked={isSubscribed}
-                  onCheckedChange={setIsSubscribed}
-                />
-              </div>
-            </div>
           </div>
-        </div>
+        </Card>
 
-        {/* Bottom section */}
-        <div className="mt-4 flex justify-between items-center bg-white p-4 rounded-lg">
-          <p className="text-gray-700">Please select 5 Numbers & 1 Powerball!</p>
-          <div className="flex items-center space-x-4">
-            <p className="font-bold text-xl">${getTicketPrice()}</p>
-            <Button 
-              className="bg-gray-300 hover:bg-gray-400 text-gray-800"
-              disabled={savedLines.length === 0}
-            >
-              ADD TO CART
-            </Button>
+        {/* Bottom total and add to cart */}
+        <div className="flex justify-between items-center bg-white p-3 rounded-lg shadow-md">
+          <div>
+            <p className="text-sm font-medium">Total</p>
+            <p className="text-xl font-bold">R$ {getTicketPrice()}</p>
           </div>
+          <Button 
+            className="bg-red-500 hover:bg-red-600"
+            disabled={savedLines.length === 0}
+          >
+            ADD TO CART
+          </Button>
         </div>
       </div>
     </div>
