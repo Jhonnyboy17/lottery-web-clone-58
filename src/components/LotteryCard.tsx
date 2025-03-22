@@ -49,10 +49,10 @@ const LotteryCard = ({
               </p>
             )}
             <h2 className="text-5xl font-bold text-lottery-navy">
-              ${amount}
+              R$ {brlValue}
             </h2>
             <p className="text-sm font-medium text-gray-700 mt-1">
-              (R$ {brlValue})
+              (${amount})
             </p>
             {unit && (
               <p className="text-2xl font-semibold text-lottery-navy uppercase tracking-wide mb-2">
