@@ -1,7 +1,7 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
+import { Progress } from "@/components/ui/progress";
 
 interface NumberSelectionProps {
   activeDigitIndex: number | null;
@@ -10,6 +10,7 @@ interface NumberSelectionProps {
   onDigitSelect: (digit: number) => void;
   isLineComplete: () => boolean;
   onClearSelections: () => void;
+  onAddLine?: () => void;
 }
 
 const NumberSelection: React.FC<NumberSelectionProps> = ({
@@ -18,10 +19,42 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   currentLine,
   onDigitSelect,
   isLineComplete,
-  onClearSelections
+  onClearSelections,
+  onAddLine
 }) => {
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
+  const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
 
+  // Auto-add line when complete
+  useEffect(() => {
+    if (isLineComplete() && onAddLine) {
+      const timer = setTimeout(() => {
+        onAddLine();
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [currentLine.digits, isLineComplete, onAddLine]);
+
+  // Handle animation effect for progress bar
+  useEffect(() => {
+    if (animatedProgress !== null) {
+      const interval = setInterval(() => {
+        setAnimatedProgress(prev => {
+          const targetProgress = getSelectionProgress();
+          if (prev !== null && prev < targetProgress) {
+            return prev + 5;
+          } else {
+            clearInterval(interval);
+            return targetProgress;
+          }
+        });
+      }, 20);
+      
+      return () => clearInterval(interval);
+    }
+  }, [animatedProgress]);
+  
   useEffect(() => {
     if (currentLine.playType === "Back Pair") {
       // For Back Pair, focus on second digit if it's null
@@ -78,11 +111,89 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     return "Escolha 3 Números";
   };
 
+  // Calculate selection progress
+  const getSelectionProgress = () => {
+    // For Back Pair and Front Pair, we only need to fill 2 digits
+    if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
+      const countFilled = currentLine.digits.filter(digit => digit !== null && digit !== -1).length;
+      return (countFilled / 2) * 100;
+    } else {
+      // For other play types, we need to fill all 3 digits
+      const countFilled = currentLine.digits.filter(digit => digit !== null).length;
+      return (countFilled / 3) * 100;
+    }
+  };
+
+  const handleRandomPick = () => {
+    // Start animation from current progress
+    setAnimatedProgress(getSelectionProgress());
+    
+    let newDigits = [...currentLine.digits];
+    
+    if (currentLine.playType === "Back Pair") {
+      // Keep first digit as X, randomize positions 1 and 2 if they're null
+      if (newDigits[1] === null) {
+        newDigits[1] = Math.floor(Math.random() * 10);
+      }
+      if (newDigits[2] === null) {
+        newDigits[2] = Math.floor(Math.random() * 10);
+      }
+    } else if (currentLine.playType === "Front Pair") {
+      // Keep last digit as X, randomize positions 0 and 1 if they're null
+      if (newDigits[0] === null) {
+        newDigits[0] = Math.floor(Math.random() * 10);
+      }
+      if (newDigits[1] === null) {
+        newDigits[1] = Math.floor(Math.random() * 10);
+      }
+    } else {
+      // For other play types, randomize all positions that are null
+      for (let i = 0; i < newDigits.length; i++) {
+        if (newDigits[i] === null) {
+          newDigits[i] = Math.floor(Math.random() * 10);
+        }
+      }
+    }
+    
+    // Trigger each digit selection separately with a slight delay
+    for (let i = 0; i < newDigits.length; i++) {
+      if (currentLine.digits[i] === null && newDigits[i] !== null && newDigits[i] !== -1) {
+        setTimeout(() => {
+          onDigitSelect(newDigits[i] as number);
+        }, i * 100);
+      }
+    }
+  };
+
+  const selectionProgress = getSelectionProgress();
+  const displayProgress = animatedProgress !== null ? animatedProgress : selectionProgress;
+
   return (
     <div className="relative mb-6 mt-8">
       <h2 className="text-center text-xl font-semibold mb-4 text-blue-800">
         {getHeadingText()}
       </h2>
+      
+      <div className="flex justify-between items-center mb-2">
+        <p className="text-sm font-medium">Progresso da seleção</p>
+        <span className="text-xs font-medium">{Math.round(selectionProgress)}%</span>
+      </div>
+      
+      <div className="mb-3">
+        <Progress 
+          value={displayProgress} 
+          className="h-2"
+          style={{ backgroundColor: "#e5e7eb" }}
+        >
+          <div 
+            className="h-full transition-all" 
+            style={{ 
+              width: `${displayProgress}%`,
+              backgroundColor: "#0EA5E9" 
+            }}
+          />
+        </Progress>
+      </div>
       
       <div className="flex justify-center items-center h-[220px] relative">
         <div className="grid grid-cols-5 gap-4 z-10">
@@ -132,7 +243,15 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
         })}
       </div>
       
-      <div className="flex justify-end mt-2">
+      <div className="flex justify-between mt-2">
+        <Button 
+          onClick={handleRandomPick}
+          variant="outline" 
+          className="text-xs text-blue-500 border-blue-500"
+        >
+          Jogada Aleatória
+        </Button>
+        
         <Button 
           onClick={onClearSelections}
           variant="link" 

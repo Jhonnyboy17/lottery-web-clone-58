@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../../Cash5/types";
 
@@ -16,6 +15,18 @@ export const useTicketState = () => {
   const [activeDigitIndex, setActiveDigitIndex] = useState<number | null>(0); // Start with first digit selected
   const [isEditing, setIsEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
+
+  // Effect to auto-add line when complete
+  useEffect(() => {
+    if (isLineComplete() && !isEditing) {
+      const timer = setTimeout(() => {
+        handleAddLine();
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [currentLine.digits]);
 
   // Handle changing active digit index when playType changes
   useEffect(() => {
@@ -37,6 +48,36 @@ export const useTicketState = () => {
       }
     }
   }, [currentLine.playType, currentLine.digits, activeDigitIndex]);
+
+  // Handle animation effect for progress bar
+  useEffect(() => {
+    if (animatedProgress !== null) {
+      const interval = setInterval(() => {
+        setAnimatedProgress(prev => {
+          if (prev !== null && prev < getProgressPercentage()) {
+            return prev + 5;
+          } else {
+            clearInterval(interval);
+            return getProgressPercentage();
+          }
+        });
+      }, 20);
+      
+      return () => clearInterval(interval);
+    }
+  }, [animatedProgress]);
+
+  const getProgressPercentage = () => {
+    if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
+      // For pair types, we need 2 digits (excluding the 'X' digit)
+      const filledCount = currentLine.digits.filter(d => d !== null && d !== -1).length;
+      return (filledCount / 2) * 100;
+    } else {
+      // For other types, we need all 3 digits
+      const filledCount = currentLine.digits.filter(d => d !== null).length;
+      return (filledCount / 3) * 100;
+    }
+  };
 
   const handleDigitSelect = (digit: number) => {
     if (activeDigitIndex === null) return;
@@ -131,17 +172,49 @@ export const useTicketState = () => {
   };
 
   const handleQuickPick = () => {
+    // Start animation from current progress
+    setAnimatedProgress(getProgressPercentage());
+    
     let randomDigits = [null, null, null];
     
     if (currentLine.playType === "Back Pair") {
-      // For Back Pair, generate random digits for positions 1 and 2 only
-      randomDigits = [-1, Math.floor(Math.random() * 10), Math.floor(Math.random() * 10)];
+      // For Back Pair, keep any existing digit selections
+      randomDigits = [...currentLine.digits];
+      
+      // Fill in any missing digits in positions 1 and 2
+      if (randomDigits[1] === null) {
+        randomDigits[1] = Math.floor(Math.random() * 10);
+      }
+      if (randomDigits[2] === null) {
+        randomDigits[2] = Math.floor(Math.random() * 10);
+      }
+      
+      // Ensure position 0 is set to -1 (X)
+      randomDigits[0] = -1;
     } else if (currentLine.playType === "Front Pair") {
-      // For Front Pair, generate random digits for positions 0 and 1 only
-      randomDigits = [Math.floor(Math.random() * 10), Math.floor(Math.random() * 10), -1];
+      // For Front Pair, keep any existing digit selections
+      randomDigits = [...currentLine.digits];
+      
+      // Fill in any missing digits in positions 0 and 1
+      if (randomDigits[0] === null) {
+        randomDigits[0] = Math.floor(Math.random() * 10);
+      }
+      if (randomDigits[1] === null) {
+        randomDigits[1] = Math.floor(Math.random() * 10);
+      }
+      
+      // Ensure position 2 is set to -1 (X)
+      randomDigits[2] = -1;
     } else {
-      // For other play types, generate random digits for all positions
-      randomDigits = Array(3).fill(0).map(() => Math.floor(Math.random() * 10));
+      // For other play types, keep any existing digit selections
+      randomDigits = [...currentLine.digits];
+      
+      // Fill in any missing digits
+      for (let i = 0; i < randomDigits.length; i++) {
+        if (randomDigits[i] === null) {
+          randomDigits[i] = Math.floor(Math.random() * 10);
+        }
+      }
     }
     
     setCurrentLine({
@@ -170,6 +243,9 @@ export const useTicketState = () => {
       ...currentLine,
       digits: newDigits
     });
+    
+    // Reset animation
+    setAnimatedProgress(0);
   };
 
   const handleAddLine = () => {
@@ -211,6 +287,9 @@ export const useTicketState = () => {
       includeFireball: false,
       drawCount: "1"
     });
+    
+    // Reset animation
+    setAnimatedProgress(0);
   };
 
   const handleRemoveLine = (lineIndex: number) => {
@@ -272,7 +351,13 @@ export const useTicketState = () => {
     // Calculate total price for all lines
     const totalPrice = savedLines.reduce((sum, line) => sum + calculateLinePrice(line), 0);
     
-    return totalPrice.toFixed(2);
+    // Format as BRL
+    return totalPrice.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).replace('R$', 'R$ ');
   };
 
   return {
@@ -282,6 +367,7 @@ export const useTicketState = () => {
     activeDigitIndex,
     isEditing,
     editingIndex,
+    animatedProgress,
     setActiveDigitIndex,
     handleDigitSelect,
     handlePlayTypeChange,
@@ -292,6 +378,7 @@ export const useTicketState = () => {
     handleRemoveLine,
     handleEditLine,
     isLineComplete,
-    getTicketPrice
+    getTicketPrice,
+    getProgressPercentage
   };
 };

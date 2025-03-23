@@ -12,4 +12,6 @@ export interface SavedLineType {
   powerball: number | null;
   includeExtraPlay?: boolean;
   drawCount?: string;
+  playType?: string;
+  betAmount?: string;
 }

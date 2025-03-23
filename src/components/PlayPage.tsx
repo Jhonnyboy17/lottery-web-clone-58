@@ -1,11 +1,11 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import Navbar from "@/components/Navbar";
+import { SavedLineType } from "./Cash5/types";
 
 interface PlayPageProps {
   logoSrc: string;
@@ -21,13 +21,6 @@ interface PlayPageProps {
   totalPowerballNumbers?: number;
 }
 
-interface SavedLine {
-  numbers: number[];
-  powerball: number | null;
-  includeExtraPlay: boolean;
-  drawCount: string;
-}
-
 const PlayPage = ({
   logoSrc,
   jackpotAmount,
@@ -41,22 +34,55 @@ const PlayPage = ({
   maxPowerballNumbers = 1,
   totalPowerballNumbers = 26,
 }: PlayPageProps) => {
+  
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [selectedPowerball, setSelectedPowerball] = useState<number | null>(null);
   const [includeExtraPlay, setIncludeExtraPlay] = useState(false);
   const [numberOfDraws, setNumberOfDraws] = useState("1");
-  const [savedLines, setSavedLines] = useState<SavedLine[]>([]);
+  const [savedLines, setSavedLines] = useState<SavedLineType[]>([]);
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null);
+  const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
 
   const regularNumbers = Array.from({ length: totalRegularNumbers }, (_, i) => i + 1);
   const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
   const hasPowerball = maxPowerballNumbers > 0;
 
+  // Effect to auto-add line when complete
+  useEffect(() => {
+    if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
+      // Wait a bit before automatically adding the line
+      const timer = setTimeout(() => {
+        handleAddLine();
+      }, 300);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [selectedNumbers, selectedPowerball]);
+
+  // Effect for animated progress bar
+  useEffect(() => {
+    if (animatedProgress !== null) {
+      const interval = setInterval(() => {
+        setAnimatedProgress(prev => {
+          if (prev !== null && prev < regularNumbersProgress) {
+            return prev + 5;
+          } else {
+            clearInterval(interval);
+            return regularNumbersProgress;
+          }
+        });
+      }, 20);
+      
+      return () => clearInterval(interval);
+    }
+  }, [animatedProgress]);
+
   const handleNumberSelect = (number: number) => {
     if (selectedNumbers.includes(number)) {
       setSelectedNumbers(selectedNumbers.filter(n => n !== number));
     } else if (selectedNumbers.length < maxRegularNumbers) {
-      setSelectedNumbers([...selectedNumbers, number]);
+      const newNumbers = [...selectedNumbers, number];
+      setSelectedNumbers(newNumbers);
     }
   };
 
@@ -69,7 +95,13 @@ const PlayPage = ({
   };
 
   const handleQuickPick = () => {
-    const newNumbers: number[] = [];
+    // Start animation
+    setAnimatedProgress(selectedNumbers.length * (100 / maxRegularNumbers));
+    
+    // Keep already selected numbers
+    let newNumbers = [...selectedNumbers];
+    
+    // Add random numbers until we reach the max
     while (newNumbers.length < maxRegularNumbers) {
       const randomNumber = Math.floor(Math.random() * totalRegularNumbers) + 1;
       if (!newNumbers.includes(randomNumber)) {
@@ -77,8 +109,8 @@ const PlayPage = ({
       }
     }
     
-    let randomPowerball = null;
-    if (hasPowerball) {
+    let randomPowerball = selectedPowerball;
+    if (hasPowerball && randomPowerball === null) {
       randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
     }
     
@@ -110,10 +142,12 @@ const PlayPage = ({
         }]);
       }
       
+      // Reset for next line
       setSelectedNumbers([]);
       setSelectedPowerball(null);
       setIncludeExtraPlay(false);
       setNumberOfDraws("1");
+      setAnimatedProgress(0);
     }
   };
 
@@ -157,14 +191,16 @@ const PlayPage = ({
       if (line.includeExtraPlay) {
         linePrice += extraPlayPrice;
       }
-      price += linePrice * parseInt(line.drawCount);
+      price += linePrice * parseInt(line.drawCount || "1");
     });
     
     // Convert to BRL format
     return price.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
       minimumFractionDigits: 2,
       maximumFractionDigits: 2
-    });
+    }).replace('R$', 'R$ ');
   };
 
   const getColorValue = () => {
@@ -189,6 +225,7 @@ const PlayPage = ({
   const colorValue = getColorValue();
 
   const regularNumbersProgress = (selectedNumbers.length / maxRegularNumbers) * 100;
+  const displayProgress = animatedProgress !== null ? animatedProgress : regularNumbersProgress;
   
   const powerballProgress = selectedPowerball ? 100 : 0;
 
@@ -241,7 +278,7 @@ const PlayPage = ({
             </div>
             <div className="mb-3">
               <Progress 
-                value={regularNumbersProgress} 
+                value={displayProgress} 
                 className="h-2"
                 style={{ 
                   backgroundColor: "#e5e7eb", 
@@ -250,7 +287,7 @@ const PlayPage = ({
                 <div 
                   className="h-full transition-all" 
                   style={{ 
-                    width: `${regularNumbersProgress}%`,
+                    width: `${displayProgress}%`,
                     backgroundColor: colorValue
                   }}
                 />
@@ -261,7 +298,7 @@ const PlayPage = ({
                 <button
                   key={`regular-${number}`}
                   onClick={() => handleNumberSelect(number)}
-                  className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
                     ${selectedNumbers.includes(number) 
                       ? "text-white" 
                       : "bg-gray-100 text-black hover:bg-gray-200"}`}
@@ -300,7 +337,7 @@ const PlayPage = ({
                     <button
                       key={`powerball-${number}`}
                       onClick={() => handlePowerballSelect(number)}
-                      className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-medium
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
                         ${selectedPowerball === number 
                           ? "bg-amber-500 text-white" 
                           : "bg-gray-100 text-black hover:bg-gray-200"}`}
@@ -367,17 +404,17 @@ const PlayPage = ({
                       {line.numbers.map((num, i) => (
                         <span 
                           key={i} 
-                          className="text-white rounded-full w-9 h-9 flex items-center justify-center text-sm mx-0.5"
+                          className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                           style={{ backgroundColor: colorValue }}
                         >
                           {num}
                         </span>
                       ))}
                       {hasPowerball && line.powerball && (
-                        <span className="bg-amber-500 text-white rounded-full w-9 h-9 flex items-center justify-center text-sm ml-1">
+                        <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
                           {line.powerball}
                         </span>
-                      )}
+                      ))}
                     </div>
                     <button 
                       onClick={(e) => {
@@ -430,7 +467,7 @@ const PlayPage = ({
         <div className="flex justify-between items-center bg-white p-3 rounded-lg shadow-md mt-4">
           <div>
             <p className="text-sm font-medium">Total</p>
-            <p className="text-xl font-bold">R$ {getTicketPrice()}</p>
+            <p className="text-xl font-bold">{getTicketPrice()}</p>
           </div>
           <Button 
             className="hover:bg-opacity-90 px-6"
