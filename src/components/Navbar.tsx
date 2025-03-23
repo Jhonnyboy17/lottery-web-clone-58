@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -36,6 +37,16 @@ const Navbar = () => {
       // We'll use a URL hash to trigger the scroll after navigation
       window.location.href = '/#lottery-games';
     }
+  };
+
+  const navigateToResultsHub = () => {
+    // Close mobile menu if open
+    if (isOpen) setIsOpen(false);
+    
+    // Navigate to the Results Hub page and scroll to top
+    navigate('/results-hub');
+    // Force scroll to top
+    window.scrollTo(0, 0);
   };
 
   const navigateToDuvidas = () => {
@@ -79,6 +90,7 @@ const Navbar = () => {
               <Button
                 variant="ghost"
                 className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
+                onClick={navigateToResultsHub}
               >
                 Resultados
               </Button>
@@ -128,6 +140,7 @@ const Navbar = () => {
             <Button
               variant="ghost"
               className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              onClick={navigateToResultsHub}
             >
               Resultados
             </Button>

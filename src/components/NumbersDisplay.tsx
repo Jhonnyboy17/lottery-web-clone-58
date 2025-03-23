@@ -1,8 +1,7 @@
-
 import { ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface NumbersGame {
   id: number;
@@ -180,6 +179,15 @@ const LotteryGameResult = ({ game }: { game: NumbersGame }) => {
 };
 
 const NumbersDisplay = () => {
+  const navigate = useNavigate();
+
+  const navigateToResultsHub = () => {
+    // Navigate to the Results Hub page
+    navigate('/results-hub');
+    // Force scroll to top
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="relative">
       <h2 className="text-2xl md:text-3xl font-bold text-lottery-pink text-center mb-2">
@@ -196,13 +204,12 @@ const NumbersDisplay = () => {
       </div>
       
       <div className="mt-8 text-center">
-        <Link to="/results-hub">
-          <Button 
-            className="bg-white hover:bg-gray-100 text-lottery-navy border border-gray-300 rounded-full py-2 px-6 transition-colors duration-300"
-          >
-            VIEW ALL RESULTS
-          </Button>
-        </Link>
+        <Button 
+          onClick={navigateToResultsHub}
+          className="bg-white hover:bg-gray-100 text-lottery-navy border border-gray-300 rounded-full py-2 px-6 transition-colors duration-300"
+        >
+          VER TODOS OS RESULTADOS
+        </Button>
       </div>
     </div>
   );
