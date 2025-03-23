@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -414,7 +415,7 @@ const PlayPage = ({
                         <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
                           {line.powerball}
                         </span>
-                      ))}
+                      )}
                     </div>
                     <button 
                       onClick={(e) => {
