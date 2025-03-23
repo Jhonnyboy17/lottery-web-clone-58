@@ -5,7 +5,8 @@ import GameHeader from "../Cash5/GameHeader";
 import CurrentLineSelection from "../Cash5/CurrentLineSelection";
 import SavedLinesSection from "../Cash5/SavedLinesSection";
 import TotalSummary from "../Cash5/TotalSummary";
-import { useTicketState } from "./hooks/useTicketState"; // Updated import path
+import { useTicketState } from "./hooks/useTicketState";
+import Navbar from "@/components/Navbar";
 
 interface FastPlayPageProps {
   logoSrc: string;
@@ -31,10 +32,7 @@ export const FastPlayPage = ({
     currentLine,
     savedLines,
     lineCount,
-    includeFireball,
     activeDigitIndex,
-    selectedDrawTime,
-    selectedDrawCount,
     setActiveDigitIndex,
     handleDigitSelect,
     handlePlayTypeChange,
@@ -43,9 +41,7 @@ export const FastPlayPage = ({
     clearSelections,
     handleAddLine,
     handleRemoveLine,
-    setIncludeFireball,
-    setSelectedDrawTime,
-    setSelectedDrawCount,
+    handleEditLine,
     isLineComplete,
     getTicketPrice
   } = useTicketState();
@@ -63,7 +59,8 @@ export const FastPlayPage = ({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-xl pt-4 px-3">
+      <Navbar />
+      <div className="mx-auto max-w-xl pt-24 px-3 pb-6">
         <GameHeader 
           logoSrc={logoSrc} 
           gameName={gameName} 
@@ -83,7 +80,7 @@ export const FastPlayPage = ({
             onPlayTypeChange={handlePlayTypeChange}
             onBetAmountChange={handleBetAmountChange}
             onDigitSelect={handleDigitSelect}
-            isLineComplete={isLineComplete} // Pass the function, not its result
+            isLineComplete={isLineComplete}
             onClearSelections={clearSelections}
             onAddLine={handleAddLine}
             colorValue={colorValue}
@@ -92,9 +89,8 @@ export const FastPlayPage = ({
           <SavedLinesSection
             savedLines={savedLines}
             onRemoveLine={handleRemoveLine}
+            onEditLine={handleEditLine}
             extraPlayName={extraPlayName}
-            includeFireball={includeFireball}
-            setIncludeFireball={setIncludeFireball}
           />
         </Card>
 

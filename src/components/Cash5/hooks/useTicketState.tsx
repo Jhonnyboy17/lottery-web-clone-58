@@ -6,15 +6,16 @@ export const useTicketState = () => {
   const [currentLine, setCurrentLine] = useState<NumberSelectionType>({
     digits: [null, null, null, null],
     playType: "Straight", // Default is Straight
-    betAmount: "R$8"
+    betAmount: "R$8",
+    includeFireball: false,
+    drawCount: "1"
   });
   
   const [savedLines, setSavedLines] = useState<NumberSelectionType[]>([]);
   const [lineCount, setLineCount] = useState(1);
-  const [includeFireball, setIncludeFireball] = useState(false);
   const [activeDigitIndex, setActiveDigitIndex] = useState<number | null>(0); // Start with first digit selected
-  const [selectedDrawTime, setSelectedDrawTime] = useState("both");
-  const [selectedDrawCount, setSelectedDrawCount] = useState("1");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
   // Ensure that the first empty index is selected when needed
   useEffect(() => {
@@ -77,22 +78,37 @@ export const useTicketState = () => {
       ...currentLine,
       digits: [null, null, null, null]
     });
-    setActiveDigitIndex(null);
+    setActiveDigitIndex(0);
   };
 
   const handleAddLine = () => {
     if (currentLine.digits.some(digit => digit === null)) return;
     
-    setSavedLines([...savedLines, {...currentLine}]);
-    setLineCount(lineCount + 1);
+    if (isEditing && editingIndex !== null) {
+      // Update existing line
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {...currentLine};
+      setSavedLines(updatedLines);
+      
+      // Reset editing state
+      setIsEditing(false);
+      setEditingIndex(null);
+    } else {
+      // Add new line
+      setSavedLines([...savedLines, {...currentLine}]);
+      setLineCount(lineCount + 1);
+    }
     
+    // Reset current line
     setCurrentLine({
       digits: [null, null, null, null],
       playType: currentLine.playType,
-      betAmount: currentLine.betAmount
+      betAmount: currentLine.betAmount,
+      includeFireball: false,
+      drawCount: "1"
     });
     
-    setActiveDigitIndex(null);
+    setActiveDigitIndex(0);
   };
 
   const handleRemoveLine = (lineIndex: number) => {
@@ -101,6 +117,26 @@ export const useTicketState = () => {
     if (lineCount > 1) {
       setLineCount(lineCount - 1);
     }
+    
+    // If removing the line we're currently editing, cancel editing
+    if (isEditing && editingIndex === lineIndex) {
+      setIsEditing(false);
+      setEditingIndex(null);
+      clearSelections();
+    }
+  };
+
+  const handleEditLine = (lineIndex: number) => {
+    // If lineIndex is -1, it's just a trigger to re-render
+    if (lineIndex === -1) return;
+    
+    const lineToEdit = savedLines[lineIndex];
+    if (!lineToEdit) return;
+    
+    setCurrentLine({...lineToEdit});
+    setIsEditing(true);
+    setEditingIndex(lineIndex);
+    setActiveDigitIndex(null); // Don't focus any digit initially when editing
   };
 
   const isLineComplete = () => {
@@ -108,19 +144,14 @@ export const useTicketState = () => {
   };
 
   const getTicketPrice = () => {
-    const calculateLinePrice = (line: NumberSelectionType) => {
-      // Extract the numeric value from the bet amount string and parse it
-      const amount = parseFloat(line.betAmount.replace('R$', ''));
-      return amount;
-    };
-
-    // Calculate base price
-    const totalBasePrice = savedLines.reduce((sum, line) => sum + calculateLinePrice(line), 0);
-    const fireballPrice = includeFireball ? savedLines.length * 1 : 0;
-    
-    // Multiply by the number of draws
-    const numberOfDraws = parseInt(selectedDrawCount);
-    const totalPrice = (totalBasePrice + fireballPrice) * numberOfDraws;
+    // Calculate the total price based on each line's individual settings
+    const totalPrice = savedLines.reduce((sum, line) => {
+      const baseAmount = parseFloat(line.betAmount.replace('R$', ''));
+      const fireballAmount = line.includeFireball ? 1 : 0;
+      const drawCount = parseInt(line.drawCount || "1");
+      
+      return sum + ((baseAmount + fireballAmount) * drawCount);
+    }, 0);
     
     return totalPrice.toFixed(2);
   };
@@ -129,10 +160,9 @@ export const useTicketState = () => {
     currentLine,
     savedLines,
     lineCount,
-    includeFireball,
     activeDigitIndex,
-    selectedDrawTime,
-    selectedDrawCount,
+    isEditing,
+    editingIndex,
     setActiveDigitIndex,
     handleDigitSelect,
     handlePlayTypeChange,
@@ -141,9 +171,7 @@ export const useTicketState = () => {
     clearSelections,
     handleAddLine,
     handleRemoveLine,
-    setIncludeFireball,
-    setSelectedDrawTime,
-    setSelectedDrawCount,
+    handleEditLine,
     isLineComplete,
     getTicketPrice
   };

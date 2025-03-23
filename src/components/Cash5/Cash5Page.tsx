@@ -6,6 +6,7 @@ import CurrentLineSelection from "./CurrentLineSelection";
 import SavedLinesSection from "./SavedLinesSection";
 import TotalSummary from "./TotalSummary";
 import { useTicketState } from "./hooks/useTicketState";
+import Navbar from "@/components/Navbar";
 
 interface Cash5PageProps {
   logoSrc: string;
@@ -31,10 +32,7 @@ export const Cash5Page = ({
     currentLine,
     savedLines,
     lineCount,
-    includeFireball,
     activeDigitIndex,
-    selectedDrawTime,
-    selectedDrawCount,
     setActiveDigitIndex,
     handleDigitSelect,
     handlePlayTypeChange,
@@ -43,9 +41,7 @@ export const Cash5Page = ({
     clearSelections,
     handleAddLine,
     handleRemoveLine,
-    setIncludeFireball,
-    setSelectedDrawTime,
-    setSelectedDrawCount,
+    handleEditLine,
     isLineComplete,
     getTicketPrice
   } = useTicketState();
@@ -63,7 +59,8 @@ export const Cash5Page = ({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-xl pt-4 px-3">
+      <Navbar />
+      <div className="mx-auto max-w-xl pt-24 px-3 pb-6">
         <GameHeader 
           logoSrc={logoSrc} 
           gameName={gameName} 
@@ -83,7 +80,7 @@ export const Cash5Page = ({
             onPlayTypeChange={handlePlayTypeChange}
             onBetAmountChange={handleBetAmountChange}
             onDigitSelect={handleDigitSelect}
-            isLineComplete={isLineComplete} // Fix: Pass the function itself, not its result
+            isLineComplete={isLineComplete}
             onClearSelections={clearSelections}
             onAddLine={handleAddLine}
             colorValue={colorValue}
@@ -92,9 +89,8 @@ export const Cash5Page = ({
           <SavedLinesSection
             savedLines={savedLines}
             onRemoveLine={handleRemoveLine}
+            onEditLine={handleEditLine}
             extraPlayName={extraPlayName}
-            includeFireball={includeFireball}
-            setIncludeFireball={setIncludeFireball}
           />
         </Card>
 
