@@ -60,62 +60,51 @@ const Navbar = () => {
   };
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? "bg-lottery-pink shadow-md py-2" : "bg-lottery-pink py-4"
-      }`}
-    >
+    <header className="fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-4">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          {/* Changed from NavLink to clickable div that triggers scrollToGames */}
-          <div onClick={scrollToGames} className="flex items-center cursor-pointer">
-            <div className="flex items-center space-x-2">
-              <img
-                src="/lovable-uploads/40dbea4f-78a1-4de8-938d-6cc82fc77eae.png"
-                alt="LottoFácil Logo"
-                className="h-16 w-auto"
-              />
-            </div>
+          {/* Logo on the left */}
+          <Link to="/" className="flex items-center">
+            <img
+              src="/lovable-uploads/40dbea4f-78a1-4de8-938d-6cc82fc77eae.png"
+              alt="LottoFácil Logo"
+              className="h-12 w-auto"
+            />
+          </Link>
+
+          {/* Desktop menu items right-aligned */}
+          <div className="hidden md:flex items-center space-x-8">
+            <button 
+              onClick={scrollToGames}
+              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
+            >
+              Loterias
+            </button>
+            <button 
+              onClick={navigateToResultsHub}
+              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
+            >
+              Resultados
+            </button>
+            <button 
+              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
+            >
+              Ganhadores
+            </button>
+            <button 
+              onClick={navigateToDuvidas}
+              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
+            >
+              Duvidas
+            </button>
+            <button 
+              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
+            >
+              Assistência
+            </button>
           </div>
 
-          <div className="hidden md:flex items-center gap-6">
-            <div className="bg-lottery-pink/90 backdrop-blur-sm rounded-full p-2 flex items-center gap-6 px-6">
-              <Button
-                variant="ghost"
-                className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
-                onClick={scrollToGames}
-              >
-                Loterias
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
-                onClick={navigateToResultsHub}
-              >
-                Resultados
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
-              >
-                Ganhadores
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
-                onClick={navigateToDuvidas}
-              >
-                Duvidas
-              </Button>
-              <Button
-                variant="ghost"
-                className="text-white hover:text-white/80 transition-colors duration-300 font-medium text-sm rounded-full"
-              >
-                Assistência
-              </Button>
-            </div>
-          </div>
-
+          {/* Mobile menu button */}
           <button
             className="md:hidden text-white p-2"
             onClick={() => setIsOpen(!isOpen)}
