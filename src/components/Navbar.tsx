@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,10 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Check if we're on a play page
+  const isPlayPage = location.pathname.includes('/play-');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -61,12 +65,22 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
+  const navigateToHome = () => {
+    navigate('/');
+    window.scrollTo(0, 0);
+  };
+
+  // Special styling for play pages
+  const navbarClasses = isPlayPage 
+    ? "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-2 shadow-md" 
+    : "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3";
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3">
+    <header className={navbarClasses}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo on the left */}
-          <Link to="/" className="flex-shrink-0">
+          <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
             <img
               src="/lovable-uploads/40dbea4f-78a1-4de8-938d-6cc82fc77eae.png"
               alt="LottoFácil Logo"

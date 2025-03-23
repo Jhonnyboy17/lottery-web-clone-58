@@ -4,6 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
+import Navbar from "@/components/Navbar";
 
 interface PlayPageProps {
   logoSrc: string;
@@ -134,7 +135,8 @@ const PlayPage = ({
 
   return (
     <div className="min-h-screen bg-white">
-      <div className="mx-auto max-w-xl pt-4 px-3">
+      <Navbar />
+      <div className="mx-auto max-w-xl pt-24 px-3 pb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
             <img 
@@ -313,7 +315,7 @@ const PlayPage = ({
           </div>
         </Card>
 
-        <div className="flex justify-between items-center bg-white p-3 rounded-lg shadow-md">
+        <div className="flex justify-between items-center bg-white p-3 rounded-lg shadow-md mt-4">
           <div>
             <p className="text-sm font-medium">Total</p>
             <p className="text-xl font-bold">$ {getTicketPrice()}</p>
