@@ -6,3 +6,10 @@ export interface NumberSelectionType {
   includeFireball?: boolean;
   drawCount?: string;
 }
+
+export interface SavedLineType {
+  numbers: number[];
+  powerball: number | null;
+  includeExtraPlay?: boolean;
+  drawCount?: string;
+}
