@@ -1,8 +1,10 @@
 
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ShoppingCart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -60,11 +62,11 @@ const Navbar = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-4">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           {/* Logo on the left */}
-          <Link to="/" className="flex items-center">
+          <Link to="/" className="flex-shrink-0">
             <img
               src="/lovable-uploads/40dbea4f-78a1-4de8-938d-6cc82fc77eae.png"
               alt="LottoFácil Logo"
@@ -72,36 +74,47 @@ const Navbar = () => {
             />
           </Link>
 
-          {/* Desktop menu items right-aligned */}
-          <div className="hidden md:flex items-center space-x-8">
-            <button 
-              onClick={scrollToGames}
-              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
-            >
-              Loterias
-            </button>
-            <button 
-              onClick={navigateToResultsHub}
-              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
-            >
-              Resultados
-            </button>
-            <button 
-              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
-            >
-              Ganhadores
-            </button>
-            <button 
-              onClick={navigateToDuvidas}
-              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
-            >
-              Duvidas
-            </button>
-            <button 
-              className="text-white hover:text-white/80 transition-colors font-medium text-sm"
-            >
-              Assistência
-            </button>
+          {/* Main navigation - centered on desktop */}
+          <nav className="hidden md:flex justify-center flex-grow mx-4">
+            <div className="flex items-center space-x-10">
+              <button 
+                onClick={scrollToGames}
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Loterias
+              </button>
+              <button 
+                onClick={navigateToResultsHub}
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Resultados
+              </button>
+              <button 
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Ganhadores
+              </button>
+              <button 
+                onClick={navigateToDuvidas}
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Duvidas
+              </button>
+              <button 
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Assistência
+              </button>
+            </div>
+          </nav>
+
+          {/* Right side icons - search & cart */}
+          <div className="hidden md:flex items-center space-x-6">
+            <div className="flex items-center space-x-2 bg-white/10 px-3 py-1.5 rounded-full">
+              <Search className="h-4 w-4 text-white" />
+              <span className="text-white text-sm">Buscar</span>
+            </div>
+            <ShoppingCart className="h-6 w-6 text-white cursor-pointer" />
           </div>
 
           {/* Mobile menu button */}
@@ -151,6 +164,21 @@ const Navbar = () => {
               className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
             >
               Assistência
+            </Button>
+            <Separator className="my-2" />
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+            >
+              <Search className="h-4 w-4 mr-2" />
+              Buscar
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Carrinho
             </Button>
           </div>
         </div>
