@@ -74,9 +74,9 @@ const Navbar = () => {
             />
           </Link>
 
-          {/* Main navigation - centered on desktop */}
-          <nav className="hidden md:flex justify-center flex-grow mx-4">
-            <div className="flex items-center space-x-10">
+          {/* Main navigation - centered on desktop, moved closer to logo */}
+          <nav className="hidden md:flex justify-center flex-grow ml-2 mr-8">
+            <div className="flex items-center space-x-8">
               <button 
                 onClick={scrollToGames}
                 className="text-white hover:text-white/80 transition-colors font-medium"
@@ -110,9 +110,16 @@ const Navbar = () => {
 
           {/* Right side icons - search & cart */}
           <div className="hidden md:flex items-center space-x-6">
-            <div className="flex items-center space-x-2 bg-white/10 px-3 py-1.5 rounded-full">
-              <Search className="h-4 w-4 text-white" />
-              <span className="text-white text-sm">Buscar</span>
+            {/* Larger search input as shown in the image */}
+            <div className="relative">
+              <div className="flex items-center w-64 bg-white rounded-full overflow-hidden">
+                <Search className="absolute left-3 h-4 w-4 text-gray-500" />
+                <Input 
+                  type="text" 
+                  placeholder="Search" 
+                  className="border-none pl-10 h-9 focus-visible:ring-0 bg-white w-full rounded-full"
+                />
+              </div>
             </div>
             <ShoppingCart className="h-6 w-6 text-white cursor-pointer" />
           </div>
