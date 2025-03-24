@@ -45,7 +45,9 @@ export const FastPlayPage = ({
     isLineComplete,
     getTicketPrice,
     isEditing,
-    editingIndex
+    editingIndex,
+    handleToggleExtraPlay,
+    handleChangeDrawCount
   } = useTicketState();
 
   const getColorValue = () => {
@@ -103,6 +105,8 @@ export const FastPlayPage = ({
             onRemoveLine={handleRemoveLine}
             onEditLine={handleEditLine}
             extraPlayName={extraPlayName}
+            onToggleExtraPlay={handleToggleExtraPlay}
+            onChangeDrawCount={handleChangeDrawCount}
             editingIndex={editingIndex}
           />
         </Card>

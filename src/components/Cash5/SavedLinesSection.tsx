@@ -69,14 +69,14 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                     onCheckedChange={(checked) => onToggleExtraPlay(index, checked as boolean)} 
                   />
                   <label htmlFor={`extraplay-${index}`} className="text-sm font-medium">
-                    Adicionar {extraPlayName}
+                    Adicionar {extraPlayName} (+R$10.00 por linha)
                   </label>
                 </div>
               )}
               
               {onChangeDrawCount && (
                 <div className="flex items-center gap-2 mt-1">
-                  <label className="text-sm font-medium">Sorteios:</label>
+                  <label className="text-sm font-medium">Número de Sorteios:</label>
                   <Select 
                     value={line.drawCount || "1"} 
                     onValueChange={(value) => onChangeDrawCount(index, value)}
