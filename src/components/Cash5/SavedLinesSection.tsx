@@ -42,7 +42,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                   digit !== null && (
                     <span 
                       key={i} 
-                      className="text-white rounded-full w-7 h-7 flex items-center justify-center text-sm mx-0.5 bg-amber-500"
+                      className="text-white rounded-full w-8 h-8 flex items-center justify-center text-sm mx-0.5 bg-amber-500"
                     >
                       {digit === -1 ? "X" : digit}
                     </span>

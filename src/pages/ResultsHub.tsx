@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -9,7 +8,6 @@ import { Search, ArrowLeft, CalendarDays, ArrowRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
-// Game type definition
 interface Game {
   id: number;
   name: string;
@@ -20,7 +18,6 @@ interface Game {
   multiplier?: string;
 }
 
-// Sample games data
 const gamesData: Game[] = [
   {
     id: 1,
@@ -76,15 +73,12 @@ const ResultsHub = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const gamesPerPage = 5;
   
-  // Calculate current games to display
   const indexOfLastGame = currentPage * gamesPerPage;
   const indexOfFirstGame = indexOfLastGame - gamesPerPage;
   const currentGames = gamesData.slice(indexOfFirstGame, indexOfLastGame);
   
-  // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   
-  // Get color based on game name
   const getGameColor = (gameName: string) => {
     switch (gameName) {
       case "Mega Millions":
@@ -116,7 +110,6 @@ const ResultsHub = () => {
           <h1 className="text-4xl font-bold text-lottery-navy">Results Hub</h1>
         </div>
         
-        {/* Search and Filter Section */}
         <Card className="mb-10">
           <CardContent className="p-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -142,7 +135,6 @@ const ResultsHub = () => {
           </CardContent>
         </Card>
         
-        {/* Tabs Section */}
         <Tabs defaultValue="all-games" value={activeTab} onValueChange={setActiveTab} className="mb-10">
           <TabsList className="grid grid-cols-3 md:grid-cols-6 lg:w-3/4 bg-gray-100 p-1">
             <TabsTrigger value="all-games" className="data-[state=active]:bg-white data-[state=active]:text-lottery-navy">
@@ -223,7 +215,6 @@ const ResultsHub = () => {
               </Table>
             </div>
             
-            {/* Pagination */}
             <Pagination className="mt-6">
               <PaginationContent>
                 <PaginationItem>
@@ -264,7 +255,6 @@ const ResultsHub = () => {
             </Pagination>
           </TabsContent>
           
-          {/* Other tab contents - just a placeholder for now */}
           {["mega-millions", "powerball", "lucky-day", "pick4", "cash5"].map((tab) => (
             <TabsContent key={tab} value={tab} className="mt-6">
               <div className="bg-white p-6 rounded-lg shadow-sm">
