@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import Navbar from "@/components/Navbar";
 import { SavedLineType } from "./Cash5/types";
+
 interface PlayPageProps {
   logoSrc: string;
   jackpotAmount: string;
@@ -19,6 +20,7 @@ interface PlayPageProps {
   maxPowerballNumbers?: number;
   totalPowerballNumbers?: number;
 }
+
 const PlayPage = ({
   logoSrc,
   jackpotAmount,
@@ -30,8 +32,9 @@ const PlayPage = ({
   maxRegularNumbers = 5,
   totalRegularNumbers = 69,
   maxPowerballNumbers = 1,
-  totalPowerballNumbers = 26
+  totalPowerballNumbers = 26,
 }: PlayPageProps) => {
+  
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [selectedPowerball, setSelectedPowerball] = useState<number | null>(null);
   const [includeExtraPlay, setIncludeExtraPlay] = useState(false);
@@ -45,28 +48,30 @@ const PlayPage = ({
   const cooldownTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [isNumberClicked, setIsNumberClicked] = useState(false);
-  const regularNumbers = Array.from({
-    length: totalRegularNumbers
-  }, (_, i) => i + 1);
-  const powerballNumbers = Array.from({
-    length: totalPowerballNumbers
-  }, (_, i) => i + 1);
+
+  const regularNumbers = Array.from({ length: totalRegularNumbers }, (_, i) => i + 1);
+  const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
   const hasPowerball = maxPowerballNumbers > 0;
-  const calculateRegularProgress = () => selectedNumbers.length / maxRegularNumbers * 100;
+  
+  const calculateRegularProgress = () => (selectedNumbers.length / maxRegularNumbers) * 100;
   const calculatePowerballProgress = () => selectedPowerball ? 100 : 0;
+  
   useEffect(() => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null) && !isNumberClicked && !editMode) {
       const timer = setTimeout(() => {
         handleAddLine();
       }, 300);
+      
       return () => clearTimeout(timer);
     }
   }, [selectedNumbers, selectedPowerball, isNumberClicked, editMode]);
+
   useEffect(() => {
     if (!isAnimating) {
       setProgressValue(calculateRegularProgress());
       return;
     }
+
     const targetProgress = calculateRegularProgress();
     if (progressValue < targetProgress) {
       const animationStep = 2;
@@ -82,12 +87,14 @@ const PlayPage = ({
           }
         });
       }, 10);
+      
       return () => clearInterval(interval);
     } else {
       setProgressValue(targetProgress);
       setIsAnimating(false);
     }
   }, [isAnimating, selectedNumbers.length, maxRegularNumbers]);
+
   useEffect(() => {
     if (cooldownTime > 0) {
       cooldownTimerRef.current = setInterval(() => {
@@ -100,6 +107,7 @@ const PlayPage = ({
           return newValue;
         });
       }, 1000);
+      
       return () => {
         if (cooldownTimerRef.current) {
           clearInterval(cooldownTimerRef.current);
@@ -108,6 +116,7 @@ const PlayPage = ({
       };
     }
   }, [cooldownTime]);
+
   useEffect(() => {
     return () => {
       if (cooldownTimerRef.current) {
@@ -115,31 +124,39 @@ const PlayPage = ({
       }
     };
   }, []);
+
   const handleNumberSelect = (number: number) => {
     setIsNumberClicked(true);
+    
     if (selectedNumbers.includes(number)) {
       setSelectedNumbers(selectedNumbers.filter(n => n !== number));
     } else if (selectedNumbers.length < maxRegularNumbers) {
       const newNumbers = [...selectedNumbers, number];
       setSelectedNumbers(newNumbers);
     }
+    
     setTimeout(() => {
       setIsNumberClicked(false);
     }, 2000);
   };
+
   const handlePowerballSelect = (number: number) => {
     setIsNumberClicked(true);
+    
     if (selectedPowerball === number) {
       setSelectedPowerball(null);
     } else {
       setSelectedPowerball(number);
     }
+    
     setTimeout(() => {
       setIsNumberClicked(false);
     }, 2000);
   };
+
   const handleQuickPick = () => {
     if (isRandomizing) return;
+    
     const selectedCount = selectedNumbers.length;
     let newCooldownTime = 4; // Default cooldown
     if (selectedCount >= 3) {
@@ -149,14 +166,19 @@ const PlayPage = ({
     } else {
       newCooldownTime = 4;
     }
+    
     setCooldownTime(newCooldownTime);
     setIsRandomizing(true);
     setIsAnimating(true);
+    
     const currentSelectedCount = selectedNumbers.length;
     const numbersNeeded = maxRegularNumbers - currentSelectedCount;
+    
     if (numbersNeeded > 0) {
       const availableNumbers = regularNumbers.filter(num => !selectedNumbers.includes(num));
+      
       let newNumbers: number[] = [];
+      
       for (let i = 0; i < numbersNeeded; i++) {
         if (availableNumbers.length) {
           const randomIndex = Math.floor(Math.random() * availableNumbers.length);
@@ -164,9 +186,11 @@ const PlayPage = ({
           availableNumbers.splice(randomIndex, 1);
         }
       }
+      
       newNumbers.forEach((num, index) => {
         setTimeout(() => {
           setSelectedNumbers(prev => [...prev, num]);
+          
           if (index === newNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
             setTimeout(() => {
               setIsRandomizing(false);
@@ -175,10 +199,12 @@ const PlayPage = ({
         }, (index + 1) * 150);
       });
     }
+    
     if (hasPowerball && selectedPowerball === null) {
       setTimeout(() => {
         const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
         setSelectedPowerball(randomPowerball);
+        
         setTimeout(() => {
           setIsRandomizing(false);
         }, 300);
@@ -188,8 +214,10 @@ const PlayPage = ({
         setIsRandomizing(false);
       }, 300);
     }
+    
     setEditingLineIndex(null);
   };
+
   const handleAddLine = () => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
       if (editingLineIndex !== null) {
@@ -210,6 +238,7 @@ const PlayPage = ({
           drawCount: numberOfDraws
         }]);
       }
+      
       setSelectedNumbers([]);
       setSelectedPowerball(null);
       setIncludeExtraPlay(false);
@@ -219,6 +248,7 @@ const PlayPage = ({
       setEditMode(false);
     }
   };
+
   const handleRemoveLine = (lineIndex: number) => {
     setSavedLines(savedLines.filter((_, index) => index !== lineIndex));
     if (editingLineIndex === lineIndex) {
@@ -229,6 +259,7 @@ const PlayPage = ({
       setNumberOfDraws("1");
     }
   };
+
   const handleEditLine = (lineIndex: number) => {
     const lineToEdit = savedLines[lineIndex];
     setSelectedNumbers(lineToEdit.numbers);
@@ -238,18 +269,22 @@ const PlayPage = ({
     setEditingLineIndex(lineIndex);
     setEditMode(true);
   };
+
   const handleToggleExtraPlay = (lineIndex: number, checked: boolean) => {
     const updatedLines = [...savedLines];
     updatedLines[lineIndex].includeExtraPlay = checked;
     setSavedLines(updatedLines);
   };
+
   const handleChangeDrawCount = (lineIndex: number, count: string) => {
     const updatedLines = [...savedLines];
     updatedLines[lineIndex].drawCount = count;
     setSavedLines(updatedLines);
   };
+
   const getTicketPrice = () => {
     let price = 0;
+    
     savedLines.forEach(line => {
       let linePrice = basePrice;
       if (line.includeExtraPlay) {
@@ -257,6 +292,7 @@ const PlayPage = ({
       }
       price += linePrice * parseInt(line.drawCount || "1");
     });
+    
     return price.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
@@ -264,6 +300,7 @@ const PlayPage = ({
       maximumFractionDigits: 2
     }).replace('R$', 'R$ ');
   };
+
   const getColorValue = () => {
     switch (primaryColor) {
       case "blue-600":
@@ -282,7 +319,9 @@ const PlayPage = ({
         return "#000000";
     }
   };
+
   const colorValue = getColorValue();
+
   const isLineComplete = () => {
     if (hasPowerball) {
       return selectedNumbers.length === maxRegularNumbers && selectedPowerball !== null;
@@ -290,25 +329,32 @@ const PlayPage = ({
       return selectedNumbers.length === maxRegularNumbers;
     }
   };
+
   const canUseQuickPick = () => {
     return !isRandomizing && selectedNumbers.length < maxRegularNumbers;
   };
-  return <div className="min-h-screen bg-white">
+
+  return (
+    <div className="min-h-screen bg-white">
       <Navbar />
       <div className="mx-auto max-w-xl pt-24 px-3 pb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <img src={logoSrc} alt={gameName} className="h-12 w-auto mb-2" />
+            <img 
+              src={logoSrc} 
+              alt={gameName} 
+              className="h-12 w-auto mb-2"
+            />
           </div>
           <div className="text-right">
             <p className="text-xl font-bold text-black">JACKPOT ESTA VALIDO</p>
-            <h2 className="text-2xl font-bold" style={{
-            color: colorValue
-          }}>R$ {jackpotAmount}</h2>
-            <Button onClick={handleQuickPick} disabled={isRandomizing} className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6 mt-2" style={{
-            color: colorValue,
-            borderColor: colorValue
-          }}>
+            <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
+            <Button 
+              onClick={handleQuickPick}
+              disabled={isRandomizing}
+              className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6 mt-2"
+              style={{ color: colorValue, borderColor: colorValue }}
+            >
               JOGADA ALEATÓRIA
             </Button>
           </div>
@@ -317,9 +363,11 @@ const PlayPage = ({
         <Card className="border-0 shadow-md overflow-hidden mb-4">
           <div className="p-4">
             <div className="flex justify-between items-center mb-3">
-              {editingLineIndex !== null && <div className="text-sm font-medium p-1 px-2 bg-amber-100 text-amber-800 rounded">
+              {editingLineIndex !== null && (
+                <div className="text-sm font-medium p-1 px-2 bg-amber-100 text-amber-800 rounded">
                   Editando Linha {editingLineIndex + 1}
-                </div>}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-between items-center mb-2">
@@ -327,40 +375,68 @@ const PlayPage = ({
               <span className="text-xs font-medium">{selectedNumbers.length} de {maxRegularNumbers}</span>
             </div>
             <div className="mb-3">
-              <Progress value={progressValue} className="h-2" style={{
-              backgroundColor: "#e5e7eb"
-            }} />
+              <Progress 
+                value={progressValue}
+                className="h-2"
+                style={{ backgroundColor: "#e5e7eb" }}
+              />
             </div>
             <div className="grid grid-cols-9 gap-1 mb-4">
-              {regularNumbers.map(number => <button key={`regular-${number}`} onClick={() => handleNumberSelect(number)} disabled={isRandomizing} className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                    ${selectedNumbers.includes(number) ? "text-white" : "bg-gray-100 text-black hover:bg-gray-200"}`} style={selectedNumbers.includes(number) ? {
-              backgroundColor: colorValue
-            } : {}}>
+              {regularNumbers.map((number) => (
+                <button
+                  key={`regular-${number}`}
+                  onClick={() => handleNumberSelect(number)}
+                  disabled={isRandomizing}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
+                    ${selectedNumbers.includes(number) 
+                      ? "text-white" 
+                      : "bg-gray-100 text-black hover:bg-gray-200"}`}
+                  style={selectedNumbers.includes(number) ? { backgroundColor: colorValue } : {}}
+                >
                   {number}
-                </button>)}
+                </button>
+              ))}
             </div>
 
-            {hasPowerball && <>
+            {hasPowerball && (
+              <>
                 <div className="flex justify-between items-center mb-2">
                   <p className="text-sm font-medium">Escolha {maxPowerballNumbers} Powerball</p>
                   <span className="text-xs font-medium">{selectedPowerball ? 1 : 0} de {maxPowerballNumbers}</span>
                 </div>
                 <div className="mb-3">
-                  <Progress value={calculatePowerballProgress()} className="h-2" style={{
-                backgroundColor: "#e5e7eb"
-              }} />
+                  <Progress 
+                    value={calculatePowerballProgress()}
+                    className="h-2"
+                    style={{ backgroundColor: "#e5e7eb" }}
+                  />
                 </div>
                 <div className="grid grid-cols-9 gap-1 mb-4">
-                  {powerballNumbers.map(number => <button key={`powerball-${number}`} onClick={() => handlePowerballSelect(number)} disabled={isRandomizing} className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                        ${selectedPowerball === number ? "bg-amber-500 text-white" : "bg-gray-100 text-black hover:bg-gray-200"}`}>
+                  {powerballNumbers.map((number) => (
+                    <button
+                      key={`powerball-${number}`}
+                      onClick={() => handlePowerballSelect(number)}
+                      disabled={isRandomizing}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
+                        ${selectedPowerball === number 
+                          ? "bg-amber-500 text-white" 
+                          : "bg-gray-100 text-black hover:bg-gray-200"}`}
+                    >
                       {number}
-                    </button>)}
+                    </button>
+                  ))}
                 </div>
-              </>}
+              </>
+            )}
 
             <div className="flex items-center justify-between mt-4 mb-3">
               <div className="flex items-center gap-2">
-                <Checkbox id="extraplay" checked={includeExtraPlay} onCheckedChange={checked => setIncludeExtraPlay(checked as boolean)} disabled={isRandomizing} />
+                <Checkbox 
+                  id="extraplay" 
+                  checked={includeExtraPlay}
+                  onCheckedChange={(checked) => setIncludeExtraPlay(checked as boolean)} 
+                  disabled={isRandomizing}
+                />
                 <label htmlFor="extraplay" className="text-sm font-medium">
                   Adicionar {extraPlayName} (+R${extraPlayPrice.toFixed(2)} por linha)
                 </label>
@@ -383,9 +459,12 @@ const PlayPage = ({
               </Select>
             </div>
 
-            <Button onClick={handleAddLine} disabled={!isLineComplete() || isRandomizing} style={{
-            backgroundColor: colorValue
-          }} className="tira esse botao de todos os jogos das paginas \"JOGAR\"">
+            <Button 
+              onClick={handleAddLine} 
+              disabled={!isLineComplete() || isRandomizing}
+              className="w-full hover:bg-opacity-90 mt-2 px-10"
+              style={{ backgroundColor: colorValue }}
+            >
               {editingLineIndex !== null ? "ATUALIZAR LINHA" : "ADD LINHA"}
             </Button>
           </div>
@@ -393,29 +472,51 @@ const PlayPage = ({
           <div className="bg-gray-50 p-4">
             <h3 className="font-semibold mb-3">Minhas Linhas</h3>
             
-            {savedLines.length === 0 ? <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p> : savedLines.map((line, index) => <div key={index} className="mb-3">
-                  <div className="bg-white rounded p-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => handleEditLine(index)}>
+            {savedLines.length === 0 ? (
+              <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
+            ) : (
+              savedLines.map((line, index) => (
+                <div key={index} className="mb-3">
+                  <div 
+                    className="bg-white rounded p-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+                    onClick={() => handleEditLine(index)}
+                  >
                     <div className="flex items-center">
-                      {line.numbers.map((num, i) => <span key={i} className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5" style={{
-                  backgroundColor: colorValue
-                }}>
+                      {line.numbers.map((num, i) => (
+                        <span 
+                          key={i} 
+                          className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                          style={{ backgroundColor: colorValue }}
+                        >
                           {num}
-                        </span>)}
-                      {hasPowerball && line.powerball && <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
+                        </span>
+                      ))}
+                      {hasPowerball && line.powerball && (
+                        <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
                           {line.powerball}
-                        </span>}
+                        </span>
+                      )}
                     </div>
-                    <button onClick={e => {
-                e.stopPropagation();
-                handleRemoveLine(index);
-              }} className="text-gray-400 hover:text-gray-600" disabled={isRandomizing}>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveLine(index);
+                      }}
+                      className="text-gray-400 hover:text-gray-600"
+                      disabled={isRandomizing}
+                    >
                       ✕
                     </button>
                   </div>
                   
                   <div className="bg-gray-100 rounded p-2 pl-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-sm">
                     <div className="flex items-center gap-2">
-                      <Checkbox id={`extraplay-${index}`} checked={line.includeExtraPlay} onCheckedChange={checked => handleToggleExtraPlay(index, checked as boolean)} disabled={isRandomizing} />
+                      <Checkbox 
+                        id={`extraplay-${index}`} 
+                        checked={line.includeExtraPlay}
+                        onCheckedChange={(checked) => handleToggleExtraPlay(index, checked as boolean)} 
+                        disabled={isRandomizing}
+                      />
                       <label htmlFor={`extraplay-${index}`} className="text-sm font-medium">
                         Adicionar {extraPlayName}
                       </label>
@@ -423,7 +524,11 @@ const PlayPage = ({
                     
                     <div className="flex items-center gap-2">
                       <label className="text-sm font-medium">Sorteios:</label>
-                      <Select value={line.drawCount} onValueChange={value => handleChangeDrawCount(index, value)} disabled={isRandomizing}>
+                      <Select 
+                        value={line.drawCount} 
+                        onValueChange={(value) => handleChangeDrawCount(index, value)}
+                        disabled={isRandomizing}
+                      >
                         <SelectTrigger className="w-24 h-7 text-sm">
                           <SelectValue placeholder="Sorteios" />
                         </SelectTrigger>
@@ -437,7 +542,9 @@ const PlayPage = ({
                       </Select>
                     </div>
                   </div>
-                </div>)}
+                </div>
+              ))
+            )}
           </div>
         </Card>
 
@@ -446,13 +553,17 @@ const PlayPage = ({
             <p className="text-sm font-medium">Total</p>
             <p className="text-xl font-bold">{getTicketPrice()}</p>
           </div>
-          <Button className="hover:bg-opacity-90 px-6" style={{
-          backgroundColor: colorValue
-        }} disabled={savedLines.length === 0 || isRandomizing}>
+          <Button 
+            className="hover:bg-opacity-90 px-6"
+            style={{ backgroundColor: colorValue }}
+            disabled={savedLines.length === 0 || isRandomizing}
+          >
             ADICIONAR AO CARRINHO
           </Button>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default PlayPage;
