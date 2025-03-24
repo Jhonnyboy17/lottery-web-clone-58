@@ -363,7 +363,7 @@ const PlayPage = ({
 
   // New function to determine opacity based on selection count
   const getNumberOpacity = (isSelected: boolean) => {
-    if (isSelected) return 1; // Selected numbers always fully visible
+    if (isSelected) return 1.2; // Selected numbers get 120% opacity for more visibility
     
     if (shouldDimUnselected) {
       if (selectedNumbers.length === maxRegularNumbers) {
@@ -371,7 +371,7 @@ const PlayPage = ({
       }
     }
     
-    return 0.4; // 40% opacity for all other states
+    return 0.5; // 50% opacity for all other states
   }
 
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>

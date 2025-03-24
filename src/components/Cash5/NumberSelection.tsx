@@ -193,14 +193,14 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
 
   const getNumberOpacity = (isSelected: boolean) => {
-    if (isSelected) return 1; // Selected numbers always fully visible
+    if (isSelected) return 1.2; // Selected numbers get 120% opacity for more visibility
     
     if (shouldDimUnselected) {
       // Full line complete - use 10% opacity
       return 0.1;
     }
     
-    return 0.4; // Default 40% opacity
+    return 0.5; // Default 50% opacity
   }
 
   const selectionProgress = getSelectionProgress();
