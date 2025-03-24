@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -264,24 +265,26 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                   overflow: 'hidden',
                   height: '2.2em',
                   width: '2.2em',
-                  fontSize: '0.8em'
                 }}
               >
-                <span style={{
-                  position: 'absolute',
-                  borderRadius: '50%',
-                  content: '""',
-                  height: '100%',
-                  left: 0,
-                  top: 0,
-                  transform: isSelected || clickedNumber === number ? 'scale(1)' : 'scale(0)',
-                  transformOrigin: 'center',
-                  transition: 'transform 2s ease-in-out',
-                  width: '100%',
-                  zIndex: -1,
-                  backgroundColor: isSelected || clickedNumber === number ? colorValue : 'transparent'
-                }}></span>
-                {number}
+                <span 
+                  style={{
+                    fontSize: '0.8em',
+                    position: 'absolute',
+                    borderRadius: '50%',
+                    content: '""',
+                    height: '100%',
+                    left: 0,
+                    top: 0,
+                    transform: isSelected || clickedNumber === number ? 'scale(1)' : 'scale(0)',
+                    transformOrigin: 'center',
+                    transition: 'transform 2s ease-in-out',
+                    width: '100%',
+                    zIndex: -1,
+                    backgroundColor: isSelected || clickedNumber === number ? colorValue : 'transparent'
+                  }}
+                ></span>
+                <span style={{ fontSize: '0.8em' }}>{number}</span>
               </button>
             );
           })}
@@ -306,7 +309,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
               style={{
                 backgroundColor: isActive ? colorValue : isX ? '#e5e7eb' : digit === null ? '#f3f4f6' : '#dbeafe',
                 color: isActive ? 'white' : isX ? '#4b5563' : digit === null ? '#9ca3af' : '#1e40af',
-                borderColor: isActive ? colorValue : isX ? '#d1d5db' : '#e5e7eb'
+                borderColor: isActive ? colorValue : isX ? '#d1d5db' : '#e5e7eb',
+                fontSize: '0.8em'
               }}
             >
               {getDigitDisplay(idx)}

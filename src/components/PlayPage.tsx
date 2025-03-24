@@ -415,7 +415,6 @@ const PlayPage = ({
                       color: isSelected ? 'white' : '#333333',
                       cursor: 'pointer',
                       display: 'flex',
-                      fontSize: '0.8em',
                       fontWeight: 700,
                       height: '2.2em',
                       justifyContent: 'center',
@@ -443,7 +442,7 @@ const PlayPage = ({
                       zIndex: -1,
                       backgroundColor: isSelected ? colorValue : 'transparent'
                     }}></span>
-                    {number}
+                    <span style={{ fontSize: '0.8em' }}>{number}</span>
                   </button>
                 );
               })}
@@ -476,7 +475,6 @@ const PlayPage = ({
                           color: isSelected ? 'white' : '#333333',
                           cursor: 'pointer',
                           display: 'flex',
-                          fontSize: '0.8em',
                           fontWeight: 700,
                           height: '2.2em',
                           justifyContent: 'center',
@@ -504,7 +502,7 @@ const PlayPage = ({
                           zIndex: -1,
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
                         }}></span>
-                        {number}
+                        <span style={{ fontSize: '0.8em' }}>{number}</span>
                       </button>
                     );
                   })}
