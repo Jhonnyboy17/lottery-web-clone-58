@@ -25,7 +25,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
   const [animatedProgress, setAnimatedProgress] = useState<number>(0);
 
-  // Auto-add line when complete
+  // Auto-adicionar linha quando completa
   useEffect(() => {
     if (isLineComplete() && onAddLine) {
       const timer = setTimeout(() => {
@@ -36,23 +36,26 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   }, [currentLine.digits, isLineComplete, onAddLine]);
 
-  // Improved animation logic for the progress bar
+  // Animação suave da barra de progresso para 2 segundos
   useEffect(() => {
     const targetProgress = getSelectionProgress();
-    
-    // Use a smaller step size and slower interval for smoother, slower animation
-    // Step size and interval adjusted to make the animation take ~2 seconds
-    const step = targetProgress > animatedProgress ? 0.5 : -0.5;
-    
+    const duration = 2000; // 2 segundos
+    const stepTime = 10; // Atualização a cada 10ms
+    const steps = duration / stepTime;
+    const stepSize = (targetProgress - animatedProgress) / steps;
+
+    let currentStep = 0;
     const interval = setInterval(() => {
       setAnimatedProgress(prev => {
-        if ((step > 0 && prev >= targetProgress) || (step < 0 && prev <= targetProgress)) {
+        const newProgress = prev + stepSize;
+        currentStep++;
+        if (currentStep >= steps) {
           clearInterval(interval);
           return targetProgress;
         }
-        return prev + step;
+        return newProgress;
       });
-    }, 10); // More frequent updates for smoother animation
+    }, stepTime);
 
     return () => clearInterval(interval);
   }, [currentLine.digits, currentLine.playType, animatedProgress]);
