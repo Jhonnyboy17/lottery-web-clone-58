@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -418,7 +419,7 @@ const PlayPage = ({
                       fontWeight: 700,
                       height: '2.2em',
                       justifyContent: 'center',
-                      lineHeight: '2.2em',
+                      lineHeight: '1',
                       margin: '0.3em',
                       textAlign: 'center',
                       width: '2.2em',
@@ -442,7 +443,15 @@ const PlayPage = ({
                       zIndex: -1,
                       backgroundColor: isSelected ? colorValue : 'transparent'
                     }}></span>
-                    <span style={{ fontSize: '1.35em', fontWeight: 700 }}>{number}</span>
+                    <span style={{ 
+                      fontSize: '1em', 
+                      fontWeight: 700, 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      width: '100%', 
+                      height: '100%' 
+                    }}>{number}</span>
                   </button>
                 );
               })}
@@ -478,7 +487,7 @@ const PlayPage = ({
                           fontWeight: 700,
                           height: '2.2em',
                           justifyContent: 'center',
-                          lineHeight: '2.2em',
+                          lineHeight: '1',
                           margin: '0.3em',
                           textAlign: 'center',
                           width: '2.2em',
@@ -502,7 +511,15 @@ const PlayPage = ({
                           zIndex: -1,
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
                         }}></span>
-                        <span style={{ fontSize: '1.35em', fontWeight: 700 }}>{number}</span>
+                        <span style={{ 
+                          fontSize: '1em', 
+                          fontWeight: 700, 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'center', 
+                          width: '100%', 
+                          height: '100%' 
+                        }}>{number}</span>
                       </button>
                     );
                   })}

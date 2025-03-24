@@ -250,7 +250,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
               <button
                 key={number}
                 onClick={() => handleNumberClick(number)}
-                className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-medium transition-colors duration-300`}
+                className={`rounded-full flex items-center justify-center text-xl font-medium transition-colors duration-300`}
                 style={{
                   backgroundColor: clickedNumber === number || isSelected
                     ? colorValue
@@ -282,7 +282,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                     backgroundColor: isSelected || clickedNumber === number ? colorValue : 'transparent'
                   }}
                 ></span>
-                <span style={{ fontSize: '1.35em', fontWeight: 700 }}>{number}</span>
+                <span style={{ fontSize: '1em', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>{number}</span>
               </button>
             );
           })}
