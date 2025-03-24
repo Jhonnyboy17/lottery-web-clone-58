@@ -419,7 +419,7 @@ const PlayPage = ({
                     transition-all duration-200`}
                     style={{
                       backgroundColor: isSelected ? colorValue : '#f5f5f5',
-                      color: isSelected ? 'white' : '#444444',
+                      color: isSelected ? 'white' : '#888888',
                       opacity: opacity,
                       fontWeight: isSelected ? '600' : '500'
                     }}
@@ -454,7 +454,7 @@ const PlayPage = ({
                         transition-all duration-200`}
                         style={{
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f5f5f5',
-                          color: isSelected ? 'white' : '#444444',
+                          color: isSelected ? 'white' : '#888888',
                           opacity: opacity,
                           fontWeight: isSelected ? '600' : '500'
                         }}

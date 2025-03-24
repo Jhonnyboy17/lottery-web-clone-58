@@ -267,7 +267,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                     : '#f5f5f5',
                   color: clickedNumber === number || isSelected
                     ? 'white'
-                    : '#444444',
+                    : '#888888',
                   opacity: opacity,
                   fontWeight: isSelected ? '600' : '500'
                 }}
