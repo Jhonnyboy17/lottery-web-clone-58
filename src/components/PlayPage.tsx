@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -35,6 +34,7 @@ const PlayPage = ({
   maxPowerballNumbers = 1,
   totalPowerballNumbers = 26
 }: PlayPageProps) => {
+  
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [selectedPowerball, setSelectedPowerball] = useState<number | null>(null);
   const [includeExtraPlay, setIncludeExtraPlay] = useState(false);

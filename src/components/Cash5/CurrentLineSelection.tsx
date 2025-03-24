@@ -66,6 +66,7 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         onDigitSelect={onDigitSelect}
         isLineComplete={isLineComplete}
         onClearSelections={onClearSelections}
+        onAddLine={onAddLine}
         isEditing={isEditing}
         colorValue={colorValue}
       />
