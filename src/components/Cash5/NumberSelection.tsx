@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -23,7 +24,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   onAddLine
 }) => {
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
-  const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
+  const [animatedProgress, setAnimatedProgress] = useState<number>(0);
 
   // Auto-add line when complete
   useEffect(() => {
@@ -36,14 +37,19 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   }, [currentLine.digits, isLineComplete, onAddLine]);
 
-  // Handle animation effect for progress bar
+  // Handle animation effect for progress bar - this initializes when component mounts
   useEffect(() => {
-    if (animatedProgress !== null) {
+    setAnimatedProgress(getSelectionProgress());
+  }, []);
+  
+  // This effect runs when the selection progress changes
+  useEffect(() => {
+    const targetProgress = getSelectionProgress();
+    if (animatedProgress !== targetProgress) {
       const interval = setInterval(() => {
         setAnimatedProgress(prev => {
-          const targetProgress = getSelectionProgress();
-          if (prev !== null && prev < targetProgress) {
-            return prev + 5;
+          if (prev < targetProgress) {
+            return prev + 2;
           } else {
             clearInterval(interval);
             return targetProgress;
@@ -53,7 +59,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       
       return () => clearInterval(interval);
     }
-  }, [animatedProgress]);
+  }, [currentLine.digits, currentLine.playType]);
   
   useEffect(() => {
     if (currentLine.playType === "Back Pair") {
@@ -125,9 +131,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
 
   const handleRandomPick = () => {
-    // Start animation from current progress
-    setAnimatedProgress(getSelectionProgress());
-    
     let newDigits = [...currentLine.digits];
     
     if (currentLine.playType === "Back Pair") {
@@ -166,7 +169,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
 
   const selectionProgress = getSelectionProgress();
-  const displayProgress = animatedProgress !== null ? animatedProgress : selectionProgress;
 
   return (
     <div className="relative mb-6 mt-8">
@@ -181,14 +183,14 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       
       <div className="mb-3">
         <Progress 
-          value={displayProgress} 
+          value={animatedProgress} 
           className="h-2"
           style={{ backgroundColor: "#e5e7eb" }}
         >
           <div 
             className="h-full transition-all" 
             style={{ 
-              width: `${displayProgress}%`,
+              width: `${animatedProgress}%`,
               backgroundColor: "#0EA5E9" 
             }}
           />
