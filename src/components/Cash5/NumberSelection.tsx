@@ -260,8 +260,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                     : '#f5f5f5',
                   color: clickedNumber === number || isSelected
                     ? 'white'
-                    : '#888888',
-                  opacity: opacity
+                    : '#444444',
+                  opacity: opacity,
+                  fontWeight: isSelected ? '600' : '500'
                 }}
               >
                 {number}

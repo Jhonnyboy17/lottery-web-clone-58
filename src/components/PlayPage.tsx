@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -361,19 +362,16 @@ const PlayPage = ({
   const shouldDimUnselected = lineComplete && !isEditingNumber;
 
   const getNumberOpacity = (isSelected: boolean) => {
-    if (isSelected) return 1.0; // Números selecionados com opacidade normal
+    if (isSelected) return 1.0;
     
     if (shouldDimUnselected) {
-      // Linha completa - usar 40% de opacidade
       return 0.4;
     }
     
-    // Se nenhum número estiver selecionado, mostrar números não selecionados com opacidade normal
     if (selectedNumbers.length === 0) {
-      return 1.0; // Opacidade normal quando nada está selecionado
+      return 1.0;
     }
     
-    // Para estado normal quando alguns números estão selecionados, usar opacidade total
     return 1.0;
   }
 
@@ -384,9 +382,9 @@ const PlayPage = ({
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-semibold">Escolha seus números</h3>
               <Button onClick={handleQuickPick} disabled={isRandomizing} className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6" style={{
-              color: colorValue,
-              borderColor: colorValue
-            }}>
+                color: colorValue,
+                borderColor: colorValue
+              }}>
                 JOGADA ALEATÓRIA
               </Button>
             </div>
@@ -401,8 +399,8 @@ const PlayPage = ({
             </div>
             <div className="mb-3">
               <Progress value={progressValue} className="h-2" style={{
-              backgroundColor: "#e5e7eb"
-            }} />
+                backgroundColor: "#e5e7eb"
+              }} />
             </div>
             <div className="grid grid-cols-9 gap-1 mb-4">
               {regularNumbers.map(number => {
@@ -418,8 +416,9 @@ const PlayPage = ({
                     transition-all duration-200`}
                     style={{
                       backgroundColor: isSelected ? colorValue : '#f5f5f5',
-                      color: isSelected ? 'white' : '#888888',
-                      opacity: opacity
+                      color: isSelected ? 'white' : '#444444',
+                      opacity: opacity,
+                      fontWeight: isSelected ? '600' : '500'
                     }}
                   >
                     {number}
@@ -435,8 +434,8 @@ const PlayPage = ({
                 </div>
                 <div className="mb-3">
                   <Progress value={calculatePowerballProgress()} className="h-2" style={{
-                backgroundColor: "#e5e7eb"
-              }} />
+                    backgroundColor: "#e5e7eb"
+                  }} />
                 </div>
                 <div className="grid grid-cols-9 gap-1 mb-4">
                   {powerballNumbers.map(number => {
@@ -452,8 +451,9 @@ const PlayPage = ({
                         transition-all duration-200`}
                         style={{
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f5f5f5',
-                          color: isSelected ? 'white' : '#888888',
-                          opacity: opacity
+                          color: isSelected ? 'white' : '#444444',
+                          opacity: opacity,
+                          fontWeight: isSelected ? '600' : '500'
                         }}
                       >
                         {number}
