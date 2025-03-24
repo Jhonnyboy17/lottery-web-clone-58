@@ -25,7 +25,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
   const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
 
-  // Auto-add line when complete
   useEffect(() => {
     if (isLineComplete() && onAddLine) {
       const timer = setTimeout(() => {
@@ -36,7 +35,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   }, [currentLine.digits, isLineComplete, onAddLine]);
 
-  // Handle animation effect for progress bar
   useEffect(() => {
     if (animatedProgress !== null) {
       const interval = setInterval(() => {
@@ -57,14 +55,12 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   
   useEffect(() => {
     if (currentLine.playType === "Back Pair") {
-      // For Back Pair, focus on second digit if it's null
       if (currentLine.digits[1] === null) {
         setActiveDigitIndex(1);
       } else if (currentLine.digits[2] === null) {
         setActiveDigitIndex(2);
       }
     } else if (currentLine.playType === "Front Pair") {
-      // For Front Pair, focus on first digit if it's null
       if (currentLine.digits[0] === null) {
         setActiveDigitIndex(0);
       } else if (currentLine.digits[1] === null) {
@@ -90,7 +86,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const getDigitDisplay = (index: number) => {
     const digit = currentLine.digits[index];
     
-    // Special case for "X" representation
     if (digit === -1) {
       return "X";
     }
@@ -103,7 +98,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
            (currentLine.playType === "Front Pair" && index === 2);
   };
   
-  // Get appropriate heading text based on play type
   const getHeadingText = () => {
     if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
       return "Escolha 2 Números";
@@ -111,58 +105,40 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     return "Escolha 3 Números";
   };
 
-  // Calculate selection progress
   const getSelectionProgress = () => {
-    // For Back Pair and Front Pair, we only need to fill 2 digits
     if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
       const countFilled = currentLine.digits.filter(digit => digit !== null && digit !== -1).length;
       return (countFilled / 2) * 100;
     } else {
-      // For other play types, we need to fill all 3 digits
       const countFilled = currentLine.digits.filter(digit => digit !== null).length;
       return (countFilled / 3) * 100;
     }
   };
 
   const handleRandomPick = () => {
-    // Start animation from current progress
     setAnimatedProgress(getSelectionProgress());
     
     let newDigits = [...currentLine.digits];
+    let emptyPositions: number[] = [];
     
     if (currentLine.playType === "Back Pair") {
-      // Keep first digit as X, randomize positions 1 and 2 if they're null
-      if (newDigits[1] === null) {
-        newDigits[1] = Math.floor(Math.random() * 10);
-      }
-      if (newDigits[2] === null) {
-        newDigits[2] = Math.floor(Math.random() * 10);
-      }
+      if (newDigits[1] === null) emptyPositions.push(1);
+      if (newDigits[2] === null) emptyPositions.push(2);
     } else if (currentLine.playType === "Front Pair") {
-      // Keep last digit as X, randomize positions 0 and 1 if they're null
-      if (newDigits[0] === null) {
-        newDigits[0] = Math.floor(Math.random() * 10);
-      }
-      if (newDigits[1] === null) {
-        newDigits[1] = Math.floor(Math.random() * 10);
-      }
+      if (newDigits[0] === null) emptyPositions.push(0);
+      if (newDigits[1] === null) emptyPositions.push(1);
     } else {
-      // For other play types, randomize all positions that are null
-      for (let i = 0; i < newDigits.length; i++) {
-        if (newDigits[i] === null) {
-          newDigits[i] = Math.floor(Math.random() * 10);
-        }
-      }
+      newDigits.forEach((digit, index) => {
+        if (digit === null) emptyPositions.push(index);
+      });
     }
     
-    // Trigger each digit selection separately with a slight delay
-    for (let i = 0; i < newDigits.length; i++) {
-      if (currentLine.digits[i] === null && newDigits[i] !== null && newDigits[i] !== -1) {
-        setTimeout(() => {
-          onDigitSelect(newDigits[i] as number);
-        }, i * 100);
-      }
-    }
+    emptyPositions.forEach((position, index) => {
+      setTimeout(() => {
+        const randomDigit = Math.floor(Math.random() * 10);
+        onDigitSelect(randomDigit);
+      }, index * 200);
+    });
   };
 
   const selectionProgress = getSelectionProgress();
@@ -226,7 +202,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           const isActive = activeDigitIndex === idx && !isDisabled;
           const isX = digit === -1;
           
-          // Determine the appropriate style based on state
           let bgColor = isActive ? 'bg-blue-500' : isX ? 'bg-gray-200' : digit === null ? 'bg-gray-100' : 'bg-blue-100';
           let textColor = isActive ? 'text-white' : isX ? 'text-gray-700' : digit === null ? 'text-gray-400' : 'text-blue-800';
           let borderColor = isActive ? 'border-blue-600' : isX ? 'border-gray-300' : 'border-gray-200';

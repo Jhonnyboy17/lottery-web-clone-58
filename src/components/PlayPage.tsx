@@ -110,13 +110,16 @@ const PlayPage = ({
   const handleQuickPick = () => {
     setIsAnimating(true);
     
-    setSelectedNumbers([]);
+    const currentSelectedCount = selectedNumbers.length;
     
-    setTimeout(() => {
-      let newNumbers: number[] = [];
-      const availableNumbers = [...regularNumbers];
+    const numbersNeeded = maxRegularNumbers - currentSelectedCount;
+    
+    if (numbersNeeded > 0) {
+      const availableNumbers = regularNumbers.filter(num => !selectedNumbers.includes(num));
       
-      for (let i = 0; i < maxRegularNumbers; i++) {
+      let newNumbers: number[] = [];
+      
+      for (let i = 0; i < numbersNeeded; i++) {
         if (availableNumbers.length) {
           const randomIndex = Math.floor(Math.random() * availableNumbers.length);
           newNumbers.push(availableNumbers[randomIndex]);
@@ -127,16 +130,16 @@ const PlayPage = ({
       newNumbers.forEach((num, index) => {
         setTimeout(() => {
           setSelectedNumbers(prev => [...prev, num]);
-        }, index * 150);
+        }, (index + 1) * 150);
       });
-      
-      if (hasPowerball) {
-        setTimeout(() => {
-          const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
-          setSelectedPowerball(randomPowerball);
-        }, maxRegularNumbers * 150);
-      }
-    }, 100);
+    }
+    
+    if (hasPowerball && selectedPowerball === null) {
+      setTimeout(() => {
+        const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
+        setSelectedPowerball(randomPowerball);
+      }, (numbersNeeded + 1) * 150);
+    }
     
     setEditingLineIndex(null);
   };
