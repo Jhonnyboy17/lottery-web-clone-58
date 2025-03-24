@@ -263,7 +263,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                   position: 'relative',
                   overflow: 'hidden',
                   height: '2.2em',
-                  width: '2.2em'
+                  width: '2.2em',
+                  fontSize: '0.8em'
                 }}
               >
                 <span style={{
