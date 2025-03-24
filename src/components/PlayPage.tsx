@@ -6,7 +6,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { SavedLineType } from "./Cash5/types";
 import GameLayout from "./GameLayout";
-
 interface PlayPageProps {
   logoSrc: string;
   jackpotAmount: string;
@@ -20,7 +19,6 @@ interface PlayPageProps {
   maxPowerballNumbers?: number;
   totalPowerballNumbers?: number;
 }
-
 const PlayPage = ({
   logoSrc,
   jackpotAmount,
@@ -34,7 +32,6 @@ const PlayPage = ({
   maxPowerballNumbers = 1,
   totalPowerballNumbers = 26
 }: PlayPageProps) => {
-  
   const [selectedNumbers, setSelectedNumbers] = useState<number[]>([]);
   const [selectedPowerball, setSelectedPowerball] = useState<number | null>(null);
   const [includeExtraPlay, setIncludeExtraPlay] = useState(false);
@@ -56,14 +53,11 @@ const PlayPage = ({
     length: totalPowerballNumbers
   }, (_, i) => i + 1);
   const hasPowerball = maxPowerballNumbers > 0;
-
   const calculateRegularProgress = () => selectedNumbers.length / maxRegularNumbers * 100;
   const calculatePowerballProgress = () => selectedPowerball ? 100 : 0;
-
   const getLineCount = () => {
     return savedLines.length + 1;
   };
-
   useEffect(() => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null) && !isNumberClicked && !editMode) {
       const timer = setTimeout(() => {
@@ -72,7 +66,6 @@ const PlayPage = ({
       return () => clearTimeout(timer);
     }
   }, [selectedNumbers, selectedPowerball, isNumberClicked, editMode]);
-
   useEffect(() => {
     if (!isAnimating) {
       setProgressValue(calculateRegularProgress());
@@ -99,7 +92,6 @@ const PlayPage = ({
       setIsAnimating(false);
     }
   }, [isAnimating, selectedNumbers.length, maxRegularNumbers]);
-
   useEffect(() => {
     if (cooldownTime > 0) {
       cooldownTimerRef.current = setInterval(() => {
@@ -120,7 +112,6 @@ const PlayPage = ({
       };
     }
   }, [cooldownTime]);
-
   useEffect(() => {
     return () => {
       if (cooldownTimerRef.current) {
@@ -128,21 +119,18 @@ const PlayPage = ({
       }
     };
   }, []);
-
   const handleNumberSelect = (number: number) => {
     setIsNumberClicked(true);
     setIsEditingNumber(true);
-    
     if (selectedNumbers.includes(number)) {
       setSelectedNumbers(selectedNumbers.filter(n => n !== number));
     } else if (selectedNumbers.length < maxRegularNumbers) {
       const newNumbers = [...selectedNumbers, number];
       setSelectedNumbers(newNumbers);
     }
-    
     setTimeout(() => {
       setIsNumberClicked(false);
-      
+
       // Only reset editing state if line is not complete or if we're not in edit mode
       if (selectedNumbers.length < maxRegularNumbers - 1 || !editMode) {
         setTimeout(() => {
@@ -151,20 +139,17 @@ const PlayPage = ({
       }
     }, 2000);
   };
-
   const handlePowerballSelect = (number: number) => {
     setIsNumberClicked(true);
     setIsEditingNumber(true);
-    
     if (selectedPowerball === number) {
       setSelectedPowerball(null);
     } else {
       setSelectedPowerball(number);
     }
-    
     setTimeout(() => {
       setIsNumberClicked(false);
-      
+
       // Only reset editing state if we're not in edit mode
       if (!editMode) {
         setTimeout(() => {
@@ -173,7 +158,6 @@ const PlayPage = ({
       }
     }, 2000);
   };
-
   const handleQuickPick = () => {
     if (isRandomizing) return;
     const selectedCount = selectedNumbers.length;
@@ -189,7 +173,6 @@ const PlayPage = ({
     setIsRandomizing(true);
     setIsAnimating(true);
     setIsEditingNumber(true);
-    
     const currentSelectedCount = selectedNumbers.length;
     const numbersNeeded = maxRegularNumbers - currentSelectedCount;
     if (numbersNeeded > 0) {
@@ -243,7 +226,6 @@ const PlayPage = ({
     }
     setEditingLineIndex(null);
   };
-
   const handleAddLine = () => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
       if (editingLineIndex !== null) {
@@ -274,7 +256,6 @@ const PlayPage = ({
       setIsEditingNumber(false);
     }
   };
-
   const handleRemoveLine = (lineIndex: number) => {
     setSavedLines(savedLines.filter((_, index) => index !== lineIndex));
     if (editingLineIndex === lineIndex) {
@@ -287,7 +268,6 @@ const PlayPage = ({
       setIsEditingNumber(false);
     }
   };
-
   const handleEditLine = (lineIndex: number) => {
     const lineToEdit = savedLines[lineIndex];
     setSelectedNumbers(lineToEdit.numbers);
@@ -298,19 +278,16 @@ const PlayPage = ({
     setEditMode(true);
     setIsEditingNumber(true);
   };
-
   const handleToggleExtraPlay = (lineIndex: number, checked: boolean) => {
     const updatedLines = [...savedLines];
     updatedLines[lineIndex].includeExtraPlay = checked;
     setSavedLines(updatedLines);
   };
-
   const handleChangeDrawCount = (lineIndex: number, count: string) => {
     const updatedLines = [...savedLines];
     updatedLines[lineIndex].drawCount = count;
     setSavedLines(updatedLines);
   };
-
   const getTicketPrice = () => {
     let price = 0;
     savedLines.forEach(line => {
@@ -327,7 +304,6 @@ const PlayPage = ({
       maximumFractionDigits: 2
     }).replace('R$', 'R$ ');
   };
-
   const getColorValue = () => {
     switch (primaryColor) {
       case "blue-600":
@@ -346,9 +322,7 @@ const PlayPage = ({
         return "#000000";
     }
   };
-
   const colorValue = getColorValue();
-
   const isLineComplete = () => {
     if (hasPowerball) {
       return selectedNumbers.length === maxRegularNumbers && selectedPowerball !== null;
@@ -356,25 +330,20 @@ const PlayPage = ({
       return selectedNumbers.length === maxRegularNumbers;
     }
   };
-
   const canUseQuickPick = () => {
     return !isRandomizing && selectedNumbers.length < maxRegularNumbers;
   };
-  
   const lineComplete = isLineComplete();
   const shouldDimUnselected = lineComplete && !isEditingNumber;
-
   const getNumberOpacity = (isSelected: boolean) => {
     if (isSelected) return 1.0;
-    
+
     // Only dim unselected numbers when all numbers are selected (full line)
     if (selectedNumbers.length === maxRegularNumbers) {
       return 0.4;
     }
-    
     return 1.0;
-  }
-
+  };
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="border-0 shadow-md overflow-hidden h-full">
@@ -382,16 +351,14 @@ const PlayPage = ({
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-semibold">Linha {String(getLineCount()).padStart(2, '0')}</h3>
               <Button onClick={handleQuickPick} disabled={isRandomizing} className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6" style={{
-                color: colorValue,
-                borderColor: colorValue
-              }}>
+              color: colorValue,
+              borderColor: colorValue
+            }}>
                 JOGADA ALEATÓRIA
               </Button>
             </div>
 
-            {editingLineIndex !== null && <div className="text-sm font-medium p-1 px-2 bg-amber-100 text-amber-800 rounded mb-3">
-                Editando Linha {editingLineIndex + 1}
-              </div>}
+            {editingLineIndex !== null}
 
             <div className="flex justify-between items-center mb-2">
               <p className="text-sm font-medium">Escolha {maxRegularNumbers} Números</p>
@@ -399,65 +366,57 @@ const PlayPage = ({
             </div>
             <div className="mb-3">
               <Progress value={progressValue} className="h-2" style={{
-                backgroundColor: "#e5e7eb"
-              }} />
+              backgroundColor: "#e5e7eb"
+            }} />
             </div>
             <div className="grid grid-cols-9 gap-1 mb-4">
               {regularNumbers.map(number => {
-                const isSelected = selectedNumbers.includes(number);
-                const opacity = getNumberOpacity(isSelected);
-                
-                return (
-                  <button 
-                    key={`regular-${number}`} 
-                    onClick={() => handleNumberSelect(number)} 
-                    disabled={isRandomizing} 
-                    style={{
-                      alignItems: 'center',
-                      backgroundColor: isSelected ? colorValue : '#f0f0f0',
-                      borderRadius: '50%',
-                      color: isSelected ? 'white' : '#333333',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      fontWeight: 700,
-                      height: '3em',
-                      justifyContent: 'center',
-                      lineHeight: '1',
-                      margin: '0.3em',
-                      textAlign: 'center',
-                      width: '3em',
-                      zIndex: 2,
-                      opacity: opacity,
-                      position: 'relative',
-                      overflow: 'hidden'
-                    }}
-                  >
+              const isSelected = selectedNumbers.includes(number);
+              const opacity = getNumberOpacity(isSelected);
+              return <button key={`regular-${number}`} onClick={() => handleNumberSelect(number)} disabled={isRandomizing} style={{
+                alignItems: 'center',
+                backgroundColor: isSelected ? colorValue : '#f0f0f0',
+                borderRadius: '50%',
+                color: isSelected ? 'white' : '#333333',
+                cursor: 'pointer',
+                display: 'flex',
+                fontWeight: 700,
+                height: '3em',
+                justifyContent: 'center',
+                lineHeight: '1',
+                margin: '0.3em',
+                textAlign: 'center',
+                width: '3em',
+                zIndex: 2,
+                opacity: opacity,
+                position: 'relative',
+                overflow: 'hidden'
+              }}>
                     <span style={{
-                      position: 'absolute',
-                      borderRadius: '50%',
-                      content: '""',
-                      height: '100%',
-                      left: 0,
-                      top: 0,
-                      transform: isSelected ? 'scale(1)' : 'scale(0)',
-                      transformOrigin: 'center',
-                      transition: 'transform 2s ease-in-out',
-                      width: '100%',
-                      zIndex: -1,
-                      backgroundColor: isSelected ? colorValue : 'transparent'
-                    }}></span>
-                    <span style={{ 
-                      fontSize: '1.10em', 
-                      fontWeight: 700, 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      width: '100%', 
-                      height: '100%' 
-                    }}>{number}</span>
-                  </button>
-                );
-              })}
+                  position: 'absolute',
+                  borderRadius: '50%',
+                  content: '""',
+                  height: '100%',
+                  left: 0,
+                  top: 0,
+                  transform: isSelected ? 'scale(1)' : 'scale(0)',
+                  transformOrigin: 'center',
+                  transition: 'transform 2s ease-in-out',
+                  width: '100%',
+                  zIndex: -1,
+                  backgroundColor: isSelected ? colorValue : 'transparent'
+                }}></span>
+                    <span style={{
+                  fontSize: '1.10em',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                  height: '100%'
+                }}>{number}</span>
+                  </button>;
+            })}
             </div>
 
             {hasPowerball && <>
@@ -467,65 +426,57 @@ const PlayPage = ({
                 </div>
                 <div className="mb-3">
                   <Progress value={calculatePowerballProgress()} className="h-2" style={{
-                    backgroundColor: "#e5e7eb"
-                  }} />
+                backgroundColor: "#e5e7eb"
+              }} />
                 </div>
                 <div className="grid grid-cols-9 gap-1 mb-4">
                   {powerballNumbers.map(number => {
-                    const isSelected = selectedPowerball === number;
-                    const opacity = getNumberOpacity(isSelected);
-                    
-                    return (
-                      <button 
-                        key={`powerball-${number}`} 
-                        onClick={() => handlePowerballSelect(number)} 
-                        disabled={isRandomizing}
-                        style={{
-                          alignItems: 'center',
-                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f0f0f0',
-                          borderRadius: '50%',
-                          color: isSelected ? 'white' : '#333333',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          fontWeight: 700,
-                          height: '3em',
-                          justifyContent: 'center',
-                          lineHeight: '1',
-                          margin: '0.3em',
-                          textAlign: 'center',
-                          width: '3em',
-                          zIndex: 2,
-                          opacity: opacity,
-                          position: 'relative',
-                          overflow: 'hidden'
-                        }}
-                      >
+                const isSelected = selectedPowerball === number;
+                const opacity = getNumberOpacity(isSelected);
+                return <button key={`powerball-${number}`} onClick={() => handlePowerballSelect(number)} disabled={isRandomizing} style={{
+                  alignItems: 'center',
+                  backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f0f0f0',
+                  borderRadius: '50%',
+                  color: isSelected ? 'white' : '#333333',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  fontWeight: 700,
+                  height: '3em',
+                  justifyContent: 'center',
+                  lineHeight: '1',
+                  margin: '0.3em',
+                  textAlign: 'center',
+                  width: '3em',
+                  zIndex: 2,
+                  opacity: opacity,
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
                         <span style={{
-                          position: 'absolute',
-                          borderRadius: '50%',
-                          content: '""',
-                          height: '100%',
-                          left: 0,
-                          top: 0,
-                          transform: isSelected ? 'scale(1)' : 'scale(0)',
-                          transformOrigin: 'center',
-                          transition: 'transform 2s ease-in-out',
-                          width: '100%',
-                          zIndex: -1,
-                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
-                        }}></span>
-                        <span style={{ 
-                          fontSize: '1.10em', 
-                          fontWeight: 700, 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          justifyContent: 'center', 
-                          width: '100%', 
-                          height: '100%' 
-                        }}>{number}</span>
-                      </button>
-                    );
-                  })}
+                    position: 'absolute',
+                    borderRadius: '50%',
+                    content: '""',
+                    height: '100%',
+                    left: 0,
+                    top: 0,
+                    transform: isSelected ? 'scale(1)' : 'scale(0)',
+                    transformOrigin: 'center',
+                    transition: 'transform 2s ease-in-out',
+                    width: '100%',
+                    zIndex: -1,
+                    backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
+                  }}></span>
+                        <span style={{
+                    fontSize: '1.10em',
+                    fontWeight: 700,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    height: '100%'
+                  }}>{number}</span>
+                      </button>;
+              })}
                 </div>
               </>}
           </div>
@@ -614,5 +565,4 @@ const PlayPage = ({
       </div>
     </GameLayout>;
 };
-
 export default PlayPage;
