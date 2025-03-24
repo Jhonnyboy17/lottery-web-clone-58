@@ -1,9 +1,8 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
+import { NumberSelectionType } from "./types";
 import TicketOptions from "./TicketOptions";
 import NumberSelection from "./NumberSelection";
-import { NumberSelectionType } from "./types";
 
 interface CurrentLineSelectionProps {
   lineCount: number;
@@ -16,9 +15,8 @@ interface CurrentLineSelectionProps {
   onPlayTypeChange: (value: string) => void;
   onBetAmountChange: (value: string) => void;
   onDigitSelect: (digit: number) => void;
-  isLineComplete: () => boolean; // This should be a function that returns a boolean
+  isLineComplete: () => boolean;
   onClearSelections: () => void;
-  onAddLine: () => void;
   colorValue: string;
 }
 
@@ -35,13 +33,12 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
   onDigitSelect,
   isLineComplete,
   onClearSelections,
-  onAddLine,
   colorValue
 }) => {
   return (
-    <div className="p-3">
+    <div className="p-4">
       <TicketOptions 
-        lineCount={lineCount} 
+        lineCount={lineCount}
         currentLine={currentLine}
         playTypes={playTypes}
         betAmounts={betAmounts}
@@ -49,7 +46,7 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         onPlayTypeChange={onPlayTypeChange}
         onBetAmountChange={onBetAmountChange}
       />
-
+      
       <NumberSelection 
         activeDigitIndex={activeDigitIndex}
         setActiveDigitIndex={setActiveDigitIndex}
@@ -57,17 +54,8 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         onDigitSelect={onDigitSelect}
         isLineComplete={isLineComplete}
         onClearSelections={onClearSelections}
-        onAddLine={onAddLine}
+        colorValue={colorValue}
       />
-
-      <Button 
-        onClick={onAddLine} 
-        disabled={!isLineComplete()}
-        className="w-full hover:bg-opacity-90 mt-2"
-        style={{ backgroundColor: colorValue }}
-      >
-        ADD LINHA
-      </Button>
     </div>
   );
 };
