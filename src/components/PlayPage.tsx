@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -529,8 +528,8 @@ const PlayPage = ({
             <h3 className="font-semibold mb-3">Minhas Linhas</h3>
               
             {savedLines.length === 0 ? <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p> : savedLines.map((line, index) => (
-              <div key={index} className="mb-3">
-                <div className="bg-white rounded p-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border" onClick={() => handleEditLine(index)}>
+              <div key={index} className="mb-2">
+                <div className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border" onClick={() => handleEditLine(index)}>
                   <div className="flex items-center">
                     <span className="text-gray-500 font-medium w-6 mr-2">
                       {index + 1}
@@ -560,40 +559,6 @@ const PlayPage = ({
                   >
                     ✕
                   </button>
-                </div>
-                
-                <div className="bg-gray-100 rounded p-2 pl-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-sm">
-                  <div className="flex items-center gap-2">
-                    <Checkbox 
-                      id={`extraplay-${index}`} 
-                      checked={line.includeExtraPlay} 
-                      onCheckedChange={checked => handleToggleExtraPlay(index, checked as boolean)} 
-                      disabled={isRandomizing} 
-                    />
-                    <label htmlFor={`extraplay-${index}`} className="text-sm font-medium">
-                      Adicionar {extraPlayName} (+R${extraPlayPrice.toFixed(2)} por linha)
-                    </label>
-                  </div>
-                  
-                  <div className="flex items-center gap-2">
-                    <label className="text-sm font-medium">Número de Sorteios:</label>
-                    <Select 
-                      value={line.drawCount} 
-                      onValueChange={value => handleChangeDrawCount(index, value)} 
-                      disabled={isRandomizing}
-                    >
-                      <SelectTrigger className="w-32 h-7 text-sm">
-                        <SelectValue placeholder="Sorteios" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1">1 sorteio</SelectItem>
-                        <SelectItem value="2">2 sorteios</SelectItem>
-                        <SelectItem value="3">3 sorteios</SelectItem>
-                        <SelectItem value="4">4 sorteios</SelectItem>
-                        <SelectItem value="5">5 sorteios</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
                 </div>
               </div>
             ))}

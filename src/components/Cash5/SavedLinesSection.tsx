@@ -2,8 +2,6 @@
 import React from "react";
 import SavedLines from "./SavedLines";
 import { NumberSelectionType } from "./types";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface SavedLinesSectionProps {
   savedLines: NumberSelectionType[];
@@ -19,9 +17,6 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
   savedLines,
   onRemoveLine,
   onEditLine,
-  extraPlayName,
-  onToggleExtraPlay,
-  onChangeDrawCount,
   editingIndex
 }) => {
   return (
@@ -32,9 +27,9 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
         <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
       ) : (
         savedLines.map((line, index) => (
-          <div key={index} className="mb-4">
+          <div key={index} className="mb-2">
             <div 
-              className="bg-white rounded p-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+              className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
               onClick={() => onEditLine(index)}
             >
               <div className="flex items-center">
@@ -61,42 +56,6 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
               >
                 ✕
               </button>
-            </div>
-            
-            <div className="bg-gray-100 rounded p-2 pl-3 flex flex-col gap-2 text-sm">
-              {onToggleExtraPlay && (
-                <div className="flex items-center gap-2">
-                  <Checkbox 
-                    id={`extraplay-${index}`} 
-                    checked={line.includeFireball}
-                    onCheckedChange={(checked) => onToggleExtraPlay(index, checked as boolean)} 
-                  />
-                  <label htmlFor={`extraplay-${index}`} className="text-sm font-medium">
-                    Adicionar {extraPlayName} (+R$10.00 por linha)
-                  </label>
-                </div>
-              )}
-              
-              {onChangeDrawCount && (
-                <div className="flex items-center gap-2 mt-1">
-                  <label className="text-sm font-medium">Número de Sorteios:</label>
-                  <Select 
-                    value={line.drawCount || "1"} 
-                    onValueChange={(value) => onChangeDrawCount(index, value)}
-                  >
-                    <SelectTrigger className="w-32 h-7 text-sm">
-                      <SelectValue placeholder="Sorteios" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1 sorteio</SelectItem>
-                      <SelectItem value="2">2 sorteios</SelectItem>
-                      <SelectItem value="3">3 sorteios</SelectItem>
-                      <SelectItem value="4">4 sorteios</SelectItem>
-                      <SelectItem value="5">5 sorteios</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
             </div>
           </div>
         ))
