@@ -59,6 +59,14 @@ export const FastPlayPage = ({
   
   const colorValue = getColorValue();
 
+  // Get the correct line number to display
+  const getDisplayLineNumber = () => {
+    if (isEditing && editingIndex !== null) {
+      return editingIndex + 1;
+    }
+    return lineCount;
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -72,7 +80,7 @@ export const FastPlayPage = ({
 
         <Card className="border-0 shadow-md overflow-hidden mb-4">
           <CurrentLineSelection
-            lineCount={lineCount}
+            lineCount={getDisplayLineNumber()}
             currentLine={currentLine}
             activeDigitIndex={activeDigitIndex}
             setActiveDigitIndex={setActiveDigitIndex}

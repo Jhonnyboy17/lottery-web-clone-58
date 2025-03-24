@@ -53,12 +53,6 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         onBetAmountChange={onBetAmountChange}
       />
 
-      {isEditing && editingIndex !== null && (
-        <div className="text-sm font-medium p-1 px-2 bg-amber-100 text-amber-800 rounded mb-3">
-          Editando Linha {editingIndex + 1} - Clique em novos números para substituir
-        </div>
-      )}
-
       <NumberSelection 
         activeDigitIndex={activeDigitIndex}
         setActiveDigitIndex={setActiveDigitIndex}
