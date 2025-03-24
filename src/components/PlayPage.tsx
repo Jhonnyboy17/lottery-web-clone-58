@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { SavedLineType } from "./Cash5/types";
 import GameLayout from "./GameLayout";
+import { X } from "lucide-react";
 
 interface PlayPageProps {
   logoSrc: string;
@@ -134,11 +135,25 @@ const PlayPage = ({
     setIsNumberClicked(true);
     setIsEditingNumber(true);
     
+    let newSelectedNumbers;
     if (selectedNumbers.includes(number)) {
-      setSelectedNumbers(selectedNumbers.filter(n => n !== number));
+      newSelectedNumbers = selectedNumbers.filter(n => n !== number);
+      setSelectedNumbers(newSelectedNumbers);
     } else if (selectedNumbers.length < maxRegularNumbers) {
-      const newNumbers = [...selectedNumbers, number];
-      setSelectedNumbers(newNumbers);
+      newSelectedNumbers = [...selectedNumbers, number];
+      setSelectedNumbers(newSelectedNumbers);
+    } else {
+      newSelectedNumbers = selectedNumbers;
+    }
+    
+    // Update the savedLine if we're editing
+    if (editingLineIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingLineIndex] = {
+        ...updatedLines[editingLineIndex],
+        numbers: newSelectedNumbers
+      };
+      setSavedLines(updatedLines);
     }
     
     setTimeout(() => {
@@ -157,10 +172,23 @@ const PlayPage = ({
     setIsNumberClicked(true);
     setIsEditingNumber(true);
     
+    let newPowerball;
     if (selectedPowerball === number) {
+      newPowerball = null;
       setSelectedPowerball(null);
     } else {
+      newPowerball = number;
       setSelectedPowerball(number);
+    }
+    
+    // Update the savedLine if we're editing
+    if (editingLineIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingLineIndex] = {
+        ...updatedLines[editingLineIndex],
+        powerball: newPowerball
+      };
+      setSavedLines(updatedLines);
     }
     
     setTimeout(() => {
@@ -287,7 +315,7 @@ const PlayPage = ({
 
   const handleEditLine = (lineIndex: number) => {
     const lineToEdit = savedLines[lineIndex];
-    setSelectedNumbers(lineToEdit.numbers);
+    setSelectedNumbers([...lineToEdit.numbers]);
     setSelectedPowerball(lineToEdit.powerball);
     setEditingLineIndex(lineIndex);
     setEditMode(true);
@@ -557,7 +585,7 @@ const PlayPage = ({
                     className="text-gray-400 hover:text-gray-600" 
                     disabled={isRandomizing}
                   >
-                    ✕
+                    <X size={16} />
                   </button>
                 </div>
               </div>

@@ -2,6 +2,7 @@
 import React from "react";
 import SavedLines from "./SavedLines";
 import { NumberSelectionType } from "./types";
+import { X } from "lucide-react";
 
 interface SavedLinesSectionProps {
   savedLines: NumberSelectionType[];
@@ -42,7 +43,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                       key={i} 
                       className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-amber-500"
                     >
-                      {digit === -1 ? "X" : digit}
+                      {digit === -1 ? <span className="font-bold">x</span> : digit}
                     </span>
                   )
                 ))}
@@ -54,7 +55,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                 }}
                 className="text-gray-400 hover:text-gray-600"
               >
-                ✕
+                <X size={16} />
               </button>
             </div>
           </div>
