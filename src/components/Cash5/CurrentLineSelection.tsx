@@ -16,7 +16,7 @@ interface CurrentLineSelectionProps {
   onPlayTypeChange: (value: string) => void;
   onBetAmountChange: (value: string) => void;
   onDigitSelect: (digit: number) => void;
-  isLineComplete: () => boolean;
+  isLineComplete: () => boolean; // This should be a function that returns a boolean
   onClearSelections: () => void;
   onAddLine: () => void;
   colorValue: string;

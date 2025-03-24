@@ -6,7 +6,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import Navbar from "@/components/Navbar";
 import { SavedLineType } from "./Cash5/types";
-import TotalSummary from "./Cash5/TotalSummary";
 
 interface PlayPageProps {
   logoSrc: string;
@@ -320,7 +319,7 @@ const PlayPage = ({
         return "#000000";
     }
   };
-  
+
   const colorValue = getColorValue();
 
   const isLineComplete = () => {
@@ -335,15 +334,11 @@ const PlayPage = ({
     return !isRandomizing && selectedNumbers.length < maxRegularNumbers;
   };
 
-  const linesTotalText = savedLines.length > 0 
-    ? `${savedLines.length} ${savedLines.length === 1 ? 'line' : 'lines'} for 1 draw` 
-    : "";
-
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <div className="mx-auto max-w-7xl pt-24 px-3 pb-24">
-        <div className="flex items-center justify-between mb-6">
+      <div className="mx-auto max-w-xl pt-24 px-3 pb-6">
+        <div className="flex items-center justify-between mb-4">
           <div>
             <img 
               src={logoSrc} 
@@ -354,285 +349,219 @@ const PlayPage = ({
           <div className="text-right">
             <p className="text-xl font-bold text-black">JACKPOT ESTA VALIDO</p>
             <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
+            <Button 
+              onClick={handleQuickPick}
+              disabled={isRandomizing}
+              className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6 mt-2"
+              style={{ color: colorValue, borderColor: colorValue }}
+            >
+              JOGADA ALEATÓRIA
+            </Button>
           </div>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-6">
-          {/* Left column - Number selection */}
-          <div className="w-full md:w-3/5">
-            <Card className="border-0 shadow-md overflow-hidden mb-4">
-              <div className="p-4">
-                <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-lg font-semibold">Linha {savedLines.length + 1}</h3>
-                  <Button 
-                    onClick={handleQuickPick}
-                    disabled={isRandomizing}
-                    className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6"
-                    style={{ color: colorValue, borderColor: colorValue }}
-                  >
-                    JOGADA ALEATÓRIA
-                  </Button>
+        <Card className="border-0 shadow-md overflow-hidden mb-4">
+          <div className="p-4">
+            <div className="flex justify-between items-center mb-3">
+              {editingLineIndex !== null && (
+                <div className="text-sm font-medium p-1 px-2 bg-amber-100 text-amber-800 rounded">
+                  Editando Linha {editingLineIndex + 1}
                 </div>
+              )}
+            </div>
 
-                {editingLineIndex !== null && (
-                  <div className="text-sm font-medium p-1 px-2 bg-amber-100 text-amber-800 rounded mb-3">
-                    Editando Linha {editingLineIndex + 1}
-                  </div>
-                )}
+            <div className="flex justify-between items-center mb-2">
+              <p className="text-sm font-medium">Escolha {maxRegularNumbers} Números</p>
+              <span className="text-xs font-medium">{selectedNumbers.length} de {maxRegularNumbers}</span>
+            </div>
+            <div className="mb-3">
+              <Progress 
+                value={progressValue}
+                className="h-2"
+                style={{ backgroundColor: "#e5e7eb" }}
+              />
+            </div>
+            <div className="grid grid-cols-9 gap-1 mb-4">
+              {regularNumbers.map((number) => (
+                <button
+                  key={`regular-${number}`}
+                  onClick={() => handleNumberSelect(number)}
+                  disabled={isRandomizing}
+                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
+                    ${selectedNumbers.includes(number) 
+                      ? "text-white" 
+                      : "bg-gray-100 text-black hover:bg-gray-200"}`}
+                  style={selectedNumbers.includes(number) ? { backgroundColor: colorValue } : {}}
+                >
+                  {number}
+                </button>
+              ))}
+            </div>
 
+            {hasPowerball && (
+              <>
                 <div className="flex justify-between items-center mb-2">
-                  <p className="text-sm font-medium">Escolha {maxRegularNumbers} Números</p>
-                  <span className="text-xs font-medium">{selectedNumbers.length} de {maxRegularNumbers}</span>
+                  <p className="text-sm font-medium">Escolha {maxPowerballNumbers} Powerball</p>
+                  <span className="text-xs font-medium">{selectedPowerball ? 1 : 0} de {maxPowerballNumbers}</span>
                 </div>
                 <div className="mb-3">
                   <Progress 
-                    value={progressValue}
+                    value={calculatePowerballProgress()}
                     className="h-2"
                     style={{ backgroundColor: "#e5e7eb" }}
                   />
                 </div>
                 <div className="grid grid-cols-9 gap-1 mb-4">
-                  {regularNumbers.map((number) => (
+                  {powerballNumbers.map((number) => (
                     <button
-                      key={`regular-${number}`}
-                      onClick={() => handleNumberSelect(number)}
+                      key={`powerball-${number}`}
+                      onClick={() => handlePowerballSelect(number)}
                       disabled={isRandomizing}
                       className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                        ${selectedNumbers.includes(number) 
-                          ? "text-white" 
+                        ${selectedPowerball === number 
+                          ? "bg-amber-500 text-white" 
                           : "bg-gray-100 text-black hover:bg-gray-200"}`}
-                      style={selectedNumbers.includes(number) ? { backgroundColor: colorValue } : {}}
                     >
                       {number}
                     </button>
                   ))}
                 </div>
-
-                {hasPowerball && (
-                  <>
-                    <div className="flex justify-between items-center mb-2">
-                      <p className="text-sm font-medium">Escolha {maxPowerballNumbers} Powerball</p>
-                      <span className="text-xs font-medium">{selectedPowerball ? 1 : 0} de {maxPowerballNumbers}</span>
-                    </div>
-                    <div className="mb-3">
-                      <Progress 
-                        value={calculatePowerballProgress()}
-                        className="h-2"
-                        style={{ backgroundColor: "#e5e7eb" }}
-                      />
-                    </div>
-                    <div className="grid grid-cols-9 gap-1 mb-4">
-                      {powerballNumbers.map((number) => (
-                        <button
-                          key={`powerball-${number}`}
-                          onClick={() => handlePowerballSelect(number)}
-                          disabled={isRandomizing}
-                          className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                            ${selectedPowerball === number 
-                              ? "bg-amber-500 text-white" 
-                              : "bg-gray-100 text-black hover:bg-gray-200"}`}
-                        >
-                          {number}
-                        </button>
-                      ))}
-                    </div>
-                  </>
-                )}
-
-                <div className="flex items-center justify-between mt-4 mb-3">
-                  <div className="flex items-center gap-2">
-                    <Checkbox 
-                      id="extraplay" 
-                      checked={includeExtraPlay}
-                      onCheckedChange={(checked) => setIncludeExtraPlay(checked as boolean)} 
-                      disabled={isRandomizing}
-                    />
-                    <label htmlFor="extraplay" className="text-sm font-medium">
-                      Adicionar {extraPlayName} (+R${extraPlayPrice.toFixed(2)} por linha)
-                    </label>
-                  </div>
-                </div>
-
-                <div className="mb-3">
-                  <label className="text-sm font-medium block mb-1">Número de Sorteios</label>
-                  <Select value={numberOfDraws} onValueChange={setNumberOfDraws} disabled={isRandomizing}>
-                    <SelectTrigger className="w-full h-9 text-sm">
-                      <SelectValue placeholder="Selecionar número de sorteios" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="1">1 sorteio</SelectItem>
-                      <SelectItem value="2">2 sorteios</SelectItem>
-                      <SelectItem value="3">3 sorteios</SelectItem>
-                      <SelectItem value="4">4 sorteios</SelectItem>
-                      <SelectItem value="5">5 sorteios</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <Button 
-                  onClick={handleAddLine} 
-                  disabled={!isLineComplete() || isRandomizing}
-                  className="w-full hover:bg-opacity-90 mt-2"
-                  style={{ backgroundColor: colorValue }}
-                >
-                  {editingLineIndex !== null ? "ATUALIZAR LINHA" : "ADD LINHA"}
-                </Button>
-              </div>
-            </Card>
-          </div>
-
-          {/* Right column - Saved lines */}
-          <div className="w-full md:w-2/5">
-            <Card className="border-0 shadow-md overflow-hidden mb-4">
-              <div className="p-4">
-                <h3 className="font-semibold mb-3">Minhas Linhas</h3>
-                
-                {savedLines.length === 0 ? (
-                  <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
-                ) : (
-                  savedLines.map((line, index) => (
-                    <div key={index} className="mb-3">
-                      <div 
-                        className="bg-white border rounded p-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
-                        onClick={() => handleEditLine(index)}
-                      >
-                        <div className="flex items-center">
-                          {line.numbers.map((num, i) => (
-                            <span 
-                              key={i} 
-                              className="text-white rounded-full w-9 h-9 flex items-center justify-center text-sm mx-0.5"
-                              style={{ backgroundColor: colorValue }}
-                            >
-                              {num}
-                            </span>
-                          ))}
-                          {hasPowerball && line.powerball && (
-                            <span className="bg-amber-500 text-white rounded-full w-9 h-9 flex items-center justify-center text-sm ml-1">
-                              {line.powerball}
-                            </span>
-                          ))}
-                        </div>
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleRemoveLine(index);
-                          }}
-                          className="text-gray-400 hover:text-gray-600"
-                          disabled={isRandomizing}
-                        >
-                          ✕
-                        </button>
-                      </div>
-                      
-                      <div className="bg-gray-100 rounded p-2 pl-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-sm">
-                        <div className="flex items-center gap-2">
-                          <Checkbox 
-                            id={`extraplay-${index}`} 
-                            checked={line.includeExtraPlay}
-                            onCheckedChange={(checked) => handleToggleExtraPlay(index, checked as boolean)} 
-                            disabled={isRandomizing}
-                          />
-                          <label htmlFor={`extraplay-${index}`} className="text-sm font-medium">
-                            Adicionar {extraPlayName}
-                          </label>
-                        </div>
-                        
-                        <div className="flex items-center gap-2">
-                          <label className="text-sm font-medium">Sorteios:</label>
-                          <Select 
-                            value={line.drawCount} 
-                            onValueChange={(value) => handleChangeDrawCount(index, value)}
-                            disabled={isRandomizing}
-                          >
-                            <SelectTrigger className="w-24 h-7 text-sm">
-                              <SelectValue placeholder="Sorteios" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="1">1 sorteio</SelectItem>
-                              <SelectItem value="2">2 sorteios</SelectItem>
-                              <SelectItem value="3">3 sorteios</SelectItem>
-                              <SelectItem value="4">4 sorteios</SelectItem>
-                              <SelectItem value="5">5 sorteios</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </Card>
-
-            {/* Power Play option */}
-            {extraPlayName && (
-              <Card className="border-0 shadow-md overflow-hidden mb-4 p-4">
-                <div className="border border-gray-200 rounded-md p-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold text-lg">POWER</span>
-                      <span className="text-lg">PLAY®</span>
-                    </div>
-                    <Checkbox 
-                      id="powerplay-all"
-                      checked={savedLines.every(line => line.includeExtraPlay)}
-                      onCheckedChange={(checked) => {
-                        const updatedLines = savedLines.map(line => ({
-                          ...line,
-                          includeExtraPlay: !!checked
-                        }));
-                        setSavedLines(updatedLines);
-                      }}
-                      disabled={savedLines.length === 0}
-                    />
-                  </div>
-                  <p className="text-sm mb-1">Add Power Play® to your ticket!</p>
-                  <p className="text-xs">
-                    For an additional R${extraPlayPrice.toFixed(2)} per line, you can multiply your non-jackpot winnings.
-                  </p>
-                </div>
-              </Card>
+              </>
             )}
 
-            {/* Draw count selection */}
-            <Card className="border-0 shadow-md overflow-hidden mb-4">
-              <div className="p-4">
-                <h3 className="font-semibold mb-2">For how many draws?</h3>
-                <Select value={numberOfDraws} onValueChange={setNumberOfDraws}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecionar número de sorteios" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1 draw</SelectItem>
-                    <SelectItem value="2">2 draws</SelectItem>
-                    <SelectItem value="3">3 draws</SelectItem>
-                    <SelectItem value="4">4 draws</SelectItem>
-                    <SelectItem value="5">5 draws</SelectItem>
-                  </SelectContent>
-                </Select>
+            <div className="flex items-center justify-between mt-4 mb-3">
+              <div className="flex items-center gap-2">
+                <Checkbox 
+                  id="extraplay" 
+                  checked={includeExtraPlay}
+                  onCheckedChange={(checked) => setIncludeExtraPlay(checked as boolean)} 
+                  disabled={isRandomizing}
+                />
+                <label htmlFor="extraplay" className="text-sm font-medium">
+                  Adicionar {extraPlayName} (+R${extraPlayPrice.toFixed(2)} por linha)
+                </label>
+              </div>
+            </div>
 
-                <div className="mt-4 bg-blue-50 p-3 rounded-md">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium">Subscribe</h4>
-                    <div className="w-10 h-5 bg-gray-200 rounded-full relative">
-                      <div className="w-4 h-4 bg-white rounded-full absolute top-0.5 left-0.5"></div>
+            <div className="mb-3">
+              <label className="text-sm font-medium block mb-1">Número de Sorteios</label>
+              <Select value={numberOfDraws} onValueChange={setNumberOfDraws} disabled={isRandomizing}>
+                <SelectTrigger className="w-full h-9 text-sm">
+                  <SelectValue placeholder="Selecionar número de sorteios" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="1">1 sorteio</SelectItem>
+                  <SelectItem value="2">2 sorteios</SelectItem>
+                  <SelectItem value="3">3 sorteios</SelectItem>
+                  <SelectItem value="4">4 sorteios</SelectItem>
+                  <SelectItem value="5">5 sorteios</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Button 
+              onClick={handleAddLine} 
+              disabled={!isLineComplete() || isRandomizing}
+              className="w-full hover:bg-opacity-90 mt-2 px-10"
+              style={{ backgroundColor: colorValue }}
+            >
+              {editingLineIndex !== null ? "ATUALIZAR LINHA" : "ADD LINHA"}
+            </Button>
+          </div>
+
+          <div className="bg-gray-50 p-4">
+            <h3 className="font-semibold mb-3">Minhas Linhas</h3>
+            
+            {savedLines.length === 0 ? (
+              <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
+            ) : (
+              savedLines.map((line, index) => (
+                <div key={index} className="mb-3">
+                  <div 
+                    className="bg-white rounded p-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+                    onClick={() => handleEditLine(index)}
+                  >
+                    <div className="flex items-center">
+                      {line.numbers.map((num, i) => (
+                        <span 
+                          key={i} 
+                          className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                          style={{ backgroundColor: colorValue }}
+                        >
+                          {num}
+                        </span>
+                      ))}
+                      {hasPowerball && line.powerball && (
+                        <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
+                          {line.powerball}
+                        </span>
+                      )}
+                    </div>
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleRemoveLine(index);
+                      }}
+                      className="text-gray-400 hover:text-gray-600"
+                      disabled={isRandomizing}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  
+                  <div className="bg-gray-100 rounded p-2 pl-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Checkbox 
+                        id={`extraplay-${index}`} 
+                        checked={line.includeExtraPlay}
+                        onCheckedChange={(checked) => handleToggleExtraPlay(index, checked as boolean)} 
+                        disabled={isRandomizing}
+                      />
+                      <label htmlFor={`extraplay-${index}`} className="text-sm font-medium">
+                        Adicionar {extraPlayName}
+                      </label>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      <label className="text-sm font-medium">Sorteios:</label>
+                      <Select 
+                        value={line.drawCount} 
+                        onValueChange={(value) => handleChangeDrawCount(index, value)}
+                        disabled={isRandomizing}
+                      >
+                        <SelectTrigger className="w-24 h-7 text-sm">
+                          <SelectValue placeholder="Sorteios" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="1">1 sorteio</SelectItem>
+                          <SelectItem value="2">2 sorteios</SelectItem>
+                          <SelectItem value="3">3 sorteios</SelectItem>
+                          <SelectItem value="4">4 sorteios</SelectItem>
+                          <SelectItem value="5">5 sorteios</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
-                  <p className="text-xs mt-1">
-                    Automatically purchase tickets for each draw. Cancel whenever you like.
-                  </p>
                 </div>
-              </div>
-            </Card>
+              ))
+            )}
           </div>
+        </Card>
+
+        <div className="flex justify-between items-center bg-white p-3 rounded-lg shadow-md mt-4">
+          <div>
+            <p className="text-sm font-medium">Total</p>
+            <p className="text-xl font-bold">{getTicketPrice()}</p>
+          </div>
+          <Button 
+            className="hover:bg-opacity-90 px-6"
+            style={{ backgroundColor: colorValue }}
+            disabled={savedLines.length === 0 || isRandomizing}
+          >
+            ADICIONAR AO CARRINHO
+          </Button>
         </div>
       </div>
-
-      {/* Fixed bottom bar */}
-      <TotalSummary
-        ticketPrice={getTicketPrice()}
-        colorValue={colorValue}
-        hasLines={savedLines.length > 0}
-      />
     </div>
   );
 };

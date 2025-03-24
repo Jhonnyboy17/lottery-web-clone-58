@@ -28,25 +28,76 @@ const App = () => (
           {/* Mega Millions - R$15 */}
           <Route 
             path="/play-mega-millions" 
-            element={<PlayPage />} 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png"
+                jackpotAmount="344.000.000"
+                basePrice={15}
+                primaryColor="blue-600"
+                gameName="Mega Millions"
+                extraPlayName="Megaplier®"
+                maxRegularNumbers={5}
+                totalRegularNumbers={70}
+                maxPowerballNumbers={1}
+                totalPowerballNumbers={25}
+              />
+            } 
           />
           
           {/* Powerball - R$15 */}
           <Route 
             path="/play-powerball" 
-            element={<PlayPage />} 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png"
+                jackpotAmount="444.000.000" 
+                basePrice={15}
+                primaryColor="red-600"
+                gameName="Powerball"
+                maxRegularNumbers={5}
+                totalRegularNumbers={69}
+                maxPowerballNumbers={1}
+                totalPowerballNumbers={26}
+              />
+            } 
           />
           
           {/* Lucky Day - R$15 */}
           <Route 
             path="/play-lucky-day" 
-            element={<PlayPage />} 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png"
+                jackpotAmount="570.000" 
+                basePrice={15}
+                primaryColor="[#8CD444]"
+                gameName="Lucky Day Lotto"
+                extraPlayName="Lucky Boost"
+                maxRegularNumbers={6}
+                totalRegularNumbers={50}
+                maxPowerballNumbers={0}
+                totalPowerballNumbers={0}
+              />
+            } 
           />
           
           {/* Pick 4 - R$10 */}
           <Route 
             path="/play-pick4" 
-            element={<PlayPage />} 
+            element={
+              <PlayPage 
+                logoSrc="/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png"
+                jackpotAmount="100.000" 
+                basePrice={10}
+                primaryColor="cyan-600"
+                gameName="Pick 4"
+                extraPlayName="Pick Bonus"
+                maxRegularNumbers={5}
+                totalRegularNumbers={45}
+                maxPowerballNumbers={0}
+                totalPowerballNumbers={0}
+              />
+            } 
           />
           
           {/* Cash 5 - R$8 */}
