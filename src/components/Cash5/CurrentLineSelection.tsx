@@ -17,6 +17,7 @@ interface CurrentLineSelectionProps {
   onDigitSelect: (digit: number) => void;
   isLineComplete: () => boolean;
   onClearSelections: () => void;
+  onAddLine: () => void;
   isEditing: boolean;
   editingIndex: number | null;
   colorValue: string;
@@ -35,6 +36,7 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
   onDigitSelect,
   isLineComplete,
   onClearSelections,
+  onAddLine,
   isEditing,
   editingIndex,
   colorValue

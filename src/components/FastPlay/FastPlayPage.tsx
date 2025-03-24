@@ -43,7 +43,9 @@ export const FastPlayPage = ({
     handleRemoveLine,
     handleEditLine,
     isLineComplete,
-    getTicketPrice
+    getTicketPrice,
+    isEditing,
+    editingIndex
   } = useTicketState();
 
   const getColorValue = () => {
@@ -83,6 +85,8 @@ export const FastPlayPage = ({
             isLineComplete={isLineComplete}
             onClearSelections={clearSelections}
             onAddLine={handleAddLine}
+            isEditing={isEditing}
+            editingIndex={editingIndex}
             colorValue={colorValue}
           />
 
@@ -91,6 +95,7 @@ export const FastPlayPage = ({
             onRemoveLine={handleRemoveLine}
             onEditLine={handleEditLine}
             extraPlayName={extraPlayName}
+            editingIndex={editingIndex}
           />
         </Card>
 
