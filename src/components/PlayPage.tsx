@@ -146,7 +146,6 @@ const PlayPage = ({
       newSelectedNumbers = selectedNumbers;
     }
     
-    // Update the savedLine if we're editing
     if (editingLineIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingLineIndex] = {
@@ -159,7 +158,6 @@ const PlayPage = ({
     setTimeout(() => {
       setIsNumberClicked(false);
       
-      // Only reset editing state if line is not complete or if we're not in edit mode
       if (selectedNumbers.length < maxRegularNumbers - 1 || !editMode) {
         setTimeout(() => {
           setIsEditingNumber(false);
@@ -181,7 +179,6 @@ const PlayPage = ({
       setSelectedPowerball(number);
     }
     
-    // Update the savedLine if we're editing
     if (editingLineIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingLineIndex] = {
@@ -194,7 +191,6 @@ const PlayPage = ({
     setTimeout(() => {
       setIsNumberClicked(false);
       
-      // Only reset editing state if we're not in edit mode
       if (!editMode) {
         setTimeout(() => {
           setIsEditingNumber(false);
@@ -390,7 +386,6 @@ const PlayPage = ({
   const getNumberOpacity = (isSelected: boolean) => {
     if (isSelected) return 1.0;
     
-    // Only dim unselected numbers when all numbers are selected (full line)
     if (selectedNumbers.length === maxRegularNumbers) {
       return 0.4;
     }
@@ -555,41 +550,71 @@ const PlayPage = ({
           <div className="p-4">
             <h3 className="font-semibold mb-3">Minhas Linhas</h3>
               
-            {savedLines.length === 0 ? <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p> : savedLines.map((line, index) => (
-              <div key={index} className="mb-2">
-                <div className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border" onClick={() => handleEditLine(index)}>
-                  <div className="flex items-center">
-                    <span className="text-gray-500 font-medium w-6 mr-2">
-                      {index + 1}
-                    </span>
-                    {line.numbers.map((num, i) => (
-                      <span 
-                        key={i} 
-                        className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5" 
-                        style={{ backgroundColor: colorValue }}
+            {savedLines.length === 0 ? (
+              <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
+            ) : (
+              <>
+                {savedLines.map((line, index) => (
+                  <div key={index} className="mb-2">
+                    <div className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border" onClick={() => handleEditLine(index)}>
+                      <div className="flex items-center">
+                        <span className="text-gray-500 font-medium w-6 mr-2">
+                          {index + 1}
+                        </span>
+                        {line.numbers.map((num, i) => (
+                          <span 
+                            key={i} 
+                            className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5" 
+                            style={{ backgroundColor: colorValue }}
+                          >
+                            {num}
+                          </span>
+                        ))}
+                        {hasPowerball && line.powerball && (
+                          <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
+                            {line.powerball}
+                          </span>
+                        )}
+                      </div>
+                      <button 
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleRemoveLine(index);
+                        }} 
+                        className="text-gray-400 hover:text-gray-600" 
+                        disabled={isRandomizing}
                       >
-                        {num}
-                      </span>
-                    ))}
-                    {hasPowerball && line.powerball && (
-                      <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
-                        {line.powerball}
-                      </span>
-                    )}
+                        <X size={16} />
+                      </button>
+                    </div>
                   </div>
-                  <button 
-                    onClick={e => {
-                      e.stopPropagation();
-                      handleRemoveLine(index);
-                    }} 
-                    className="text-gray-400 hover:text-gray-600" 
-                    disabled={isRandomizing}
-                  >
-                    <X size={16} />
-                  </button>
+                ))}
+                
+                <div className="mb-2">
+                  <div className="bg-blue-50 rounded p-3 flex items-center justify-between border border-gray-200">
+                    <div className="flex items-center">
+                      <span className="text-gray-500 font-medium w-6 mr-2">
+                        {savedLines.length + 1}
+                      </span>
+                      {Array(maxRegularNumbers).fill(null).map((_, i) => (
+                        <span 
+                          key={i} 
+                          className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                        >
+                          ?
+                        </span>
+                      ))}
+                      {hasPowerball && (
+                        <span className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
+                          ?
+                        </span>
+                      )}
+                    </div>
+                    <div className="w-4"></div>
+                  </div>
                 </div>
-              </div>
-            ))}
+              </>
+            )}
           </div>
         </Card>
       </div>

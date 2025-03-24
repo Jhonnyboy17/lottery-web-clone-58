@@ -27,39 +27,63 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       {savedLines.length === 0 ? (
         <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
       ) : (
-        savedLines.map((line, index) => (
-          <div key={index} className="mb-2">
+        <>
+          {savedLines.map((line, index) => (
+            <div key={index} className="mb-2">
+              <div 
+                className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+                onClick={() => onEditLine(index)}
+              >
+                <div className="flex items-center">
+                  <span className="text-gray-500 font-medium w-6 mr-2">
+                    {index + 1}
+                  </span>
+                  {line.digits.map((digit, i) => (
+                    digit !== null && (
+                      <span 
+                        key={i} 
+                        className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-amber-500"
+                      >
+                        {digit === -1 ? <span className="font-bold">x</span> : digit}
+                      </span>
+                    )
+                  ))}
+                </div>
+                <button 
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemoveLine(index);
+                  }}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            </div>
+          ))}
+          
+          {/* Empty template line - always shown as the next line */}
+          <div className="mb-2">
             <div 
-              className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
-              onClick={() => onEditLine(index)}
+              className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border border-gray-200"
             >
               <div className="flex items-center">
                 <span className="text-gray-500 font-medium w-6 mr-2">
-                  {index + 1}
+                  {savedLines.length + 1}
                 </span>
-                {line.digits.map((digit, i) => (
-                  digit !== null && (
-                    <span 
-                      key={i} 
-                      className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-amber-500"
-                    >
-                      {digit === -1 ? <span className="font-bold">x</span> : digit}
-                    </span>
-                  )
+                {Array(5).fill(null).map((_, i) => (
+                  <span 
+                    key={i} 
+                    className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                  >
+                    ?
+                  </span>
                 ))}
               </div>
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemoveLine(index);
-                }}
-                className="text-gray-400 hover:text-gray-600"
-              >
-                <X size={16} />
-              </button>
+              <div className="w-4"></div> {/* Empty space where the X button would be */}
             </div>
           </div>
-        ))
+        </>
       )}
     </div>
   );
