@@ -130,8 +130,10 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
 
   const handleRandomPick = () => {
-    if (isRandomizing || cooldownTime > 0) return;
+    // Only allow randomization when not already randomizing
+    if (isRandomizing) return;
     
+    // Set cooldown internally but don't show to user
     const filledCount = currentLine.digits.filter(digit => digit !== null && digit !== -1).length;
     
     // Set cooldown based on filled numbers
@@ -182,6 +184,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 
   const selectionProgress = getSelectionProgress();
   const displayProgress = animatedProgress !== null ? animatedProgress : selectionProgress;
+  
+  // Check if there are any selections made
+  const hasNoSelections = currentLine.digits.every(digit => digit === null);
 
   return (
     <div className="relative mb-6 mt-8">
@@ -262,7 +267,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           onClick={handleRandomPick}
           variant="outline" 
           className={`text-xs text-blue-500 border-blue-500 ${isRandomizing ? 'opacity-50 cursor-not-allowed' : ''}`}
-          disabled={isRandomizing || cooldownTime > 0}
+          disabled={isRandomizing}
         >
           Jogada Aleatória
         </Button>

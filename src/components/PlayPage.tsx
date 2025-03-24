@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -94,7 +93,6 @@ const PlayPage = ({
     }
   }, [isAnimating, selectedNumbers.length, maxRegularNumbers]);
 
-  // Effect for cooldown timer
   useEffect(() => {
     if (cooldownTime > 0) {
       cooldownTimerRef.current = setInterval(() => {
@@ -117,7 +115,6 @@ const PlayPage = ({
     }
   }, [cooldownTime]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       if (cooldownTimerRef.current) {
@@ -144,10 +141,8 @@ const PlayPage = ({
   };
 
   const handleQuickPick = () => {
-    // Only allow quick pick when there are no selections or when in edit mode
-    if (isRandomizing || cooldownTime > 0) return;
+    if (isRandomizing) return;
     
-    // Calculate cooldown based on number of filled numbers
     const selectedCount = selectedNumbers.length;
     let newCooldownTime = 4; // Default cooldown
     if (selectedCount >= 3) {
@@ -178,12 +173,10 @@ const PlayPage = ({
         }
       }
       
-      // Add numbers with delay to create animation effect
       newNumbers.forEach((num, index) => {
         setTimeout(() => {
           setSelectedNumbers(prev => [...prev, num]);
           
-          // If this is the last number and no powerball is needed, end randomizing
           if (index === newNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
             setTimeout(() => {
               setIsRandomizing(false);
@@ -198,13 +191,11 @@ const PlayPage = ({
         const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
         setSelectedPowerball(randomPowerball);
         
-        // End randomizing after powerball is selected
         setTimeout(() => {
           setIsRandomizing(false);
         }, 300);
       }, (numbersNeeded + 1) * 150);
     } else if (numbersNeeded === 0) {
-      // If no numbers needed to be added and no powerball needed, end randomizing
       setTimeout(() => {
         setIsRandomizing(false);
       }, 300);
@@ -323,10 +314,8 @@ const PlayPage = ({
     }
   };
 
-  // Check if quick pick button should be enabled
-  // Only enable when selection is empty or during editing
   const canUseQuickPick = () => {
-    return !isRandomizing && cooldownTime === 0;
+    return !isRandomizing && selectedNumbers.length < maxRegularNumbers;
   };
 
   return (
@@ -346,7 +335,7 @@ const PlayPage = ({
             <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
             <Button 
               onClick={handleQuickPick}
-              disabled={isRandomizing || cooldownTime > 0}
+              disabled={isRandomizing}
               className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6 mt-2"
               style={{ color: colorValue, borderColor: colorValue }}
             >
