@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -43,6 +44,9 @@ const PlayPage = ({
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
+  const [isRandomizing, setIsRandomizing] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(0);
+  const cooldownTimerRef = useRef<NodeJS.Timeout | null>(null);
   
   const regularNumbers = Array.from({ length: totalRegularNumbers }, (_, i) => i + 1);
   const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
@@ -90,6 +94,38 @@ const PlayPage = ({
     }
   }, [isAnimating, selectedNumbers.length, maxRegularNumbers]);
 
+  // Effect for cooldown timer
+  useEffect(() => {
+    if (cooldownTime > 0) {
+      cooldownTimerRef.current = setInterval(() => {
+        setCooldownTime(prev => {
+          const newValue = Math.max(0, prev - 1);
+          if (newValue === 0) {
+            clearInterval(cooldownTimerRef.current as NodeJS.Timeout);
+            cooldownTimerRef.current = null;
+          }
+          return newValue;
+        });
+      }, 1000);
+      
+      return () => {
+        if (cooldownTimerRef.current) {
+          clearInterval(cooldownTimerRef.current);
+          cooldownTimerRef.current = null;
+        }
+      };
+    }
+  }, [cooldownTime]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (cooldownTimerRef.current) {
+        clearInterval(cooldownTimerRef.current);
+      }
+    };
+  }, []);
+
   const handleNumberSelect = (number: number) => {
     if (selectedNumbers.includes(number)) {
       setSelectedNumbers(selectedNumbers.filter(n => n !== number));
@@ -108,10 +144,25 @@ const PlayPage = ({
   };
 
   const handleQuickPick = () => {
+    // Prevent multiple rapid clicks
+    if (isRandomizing || cooldownTime > 0) return;
+    
+    // Calculate cooldown based on number of filled numbers
+    const selectedCount = selectedNumbers.length;
+    let newCooldownTime = 4; // Default cooldown
+    if (selectedCount >= 3) {
+      newCooldownTime = 2;
+    } else if (selectedCount >= 2) {
+      newCooldownTime = 3;
+    } else {
+      newCooldownTime = 4;
+    }
+    
+    setCooldownTime(newCooldownTime);
+    setIsRandomizing(true);
     setIsAnimating(true);
     
     const currentSelectedCount = selectedNumbers.length;
-    
     const numbersNeeded = maxRegularNumbers - currentSelectedCount;
     
     if (numbersNeeded > 0) {
@@ -127,9 +178,17 @@ const PlayPage = ({
         }
       }
       
+      // Add numbers with delay to create animation effect
       newNumbers.forEach((num, index) => {
         setTimeout(() => {
           setSelectedNumbers(prev => [...prev, num]);
+          
+          // If this is the last number and no powerball is needed, end randomizing
+          if (index === newNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
+            setTimeout(() => {
+              setIsRandomizing(false);
+            }, 300);
+          }
         }, (index + 1) * 150);
       });
     }
@@ -138,7 +197,17 @@ const PlayPage = ({
       setTimeout(() => {
         const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
         setSelectedPowerball(randomPowerball);
+        
+        // End randomizing after powerball is selected
+        setTimeout(() => {
+          setIsRandomizing(false);
+        }, 300);
       }, (numbersNeeded + 1) * 150);
+    } else if (numbersNeeded === 0) {
+      // If no numbers needed to be added and no powerball needed, end randomizing
+      setTimeout(() => {
+        setIsRandomizing(false);
+      }, 300);
     }
     
     setEditingLineIndex(null);
@@ -271,10 +340,11 @@ const PlayPage = ({
             <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
             <Button 
               onClick={handleQuickPick}
+              disabled={isRandomizing}
               className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6 mt-2"
               style={{ color: colorValue, borderColor: colorValue }}
             >
-              JOGADA ALEATÓRIA
+              {cooldownTime > 0 ? `JOGADA ALEATÓRIA (${cooldownTime}s)` : "JOGADA ALEATÓRIA"}
             </Button>
           </div>
         </div>
@@ -305,6 +375,7 @@ const PlayPage = ({
                 <button
                   key={`regular-${number}`}
                   onClick={() => handleNumberSelect(number)}
+                  disabled={isRandomizing}
                   className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
                     ${selectedNumbers.includes(number) 
                       ? "text-white" 
@@ -334,6 +405,7 @@ const PlayPage = ({
                     <button
                       key={`powerball-${number}`}
                       onClick={() => handlePowerballSelect(number)}
+                      disabled={isRandomizing}
                       className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
                         ${selectedPowerball === number 
                           ? "bg-amber-500 text-white" 
@@ -352,6 +424,7 @@ const PlayPage = ({
                   id="extraplay" 
                   checked={includeExtraPlay}
                   onCheckedChange={(checked) => setIncludeExtraPlay(checked as boolean)} 
+                  disabled={isRandomizing}
                 />
                 <label htmlFor="extraplay" className="text-sm font-medium">
                   Adicionar {extraPlayName} (+R${extraPlayPrice.toFixed(2)} por linha)
@@ -361,7 +434,7 @@ const PlayPage = ({
 
             <div className="mb-3">
               <label className="text-sm font-medium block mb-1">Número de Sorteios</label>
-              <Select value={numberOfDraws} onValueChange={setNumberOfDraws}>
+              <Select value={numberOfDraws} onValueChange={setNumberOfDraws} disabled={isRandomizing}>
                 <SelectTrigger className="w-full h-9 text-sm">
                   <SelectValue placeholder="Selecionar número de sorteios" />
                 </SelectTrigger>
@@ -377,7 +450,7 @@ const PlayPage = ({
 
             <Button 
               onClick={handleAddLine} 
-              disabled={!isLineComplete()}
+              disabled={!isLineComplete() || isRandomizing}
               className="w-full hover:bg-opacity-90 mt-2 px-10"
               style={{ backgroundColor: colorValue }}
             >
@@ -419,6 +492,7 @@ const PlayPage = ({
                         handleRemoveLine(index);
                       }}
                       className="text-gray-400 hover:text-gray-600"
+                      disabled={isRandomizing}
                     >
                       ✕
                     </button>
@@ -430,6 +504,7 @@ const PlayPage = ({
                         id={`extraplay-${index}`} 
                         checked={line.includeExtraPlay}
                         onCheckedChange={(checked) => handleToggleExtraPlay(index, checked as boolean)} 
+                        disabled={isRandomizing}
                       />
                       <label htmlFor={`extraplay-${index}`} className="text-sm font-medium">
                         Adicionar {extraPlayName}
@@ -441,6 +516,7 @@ const PlayPage = ({
                       <Select 
                         value={line.drawCount} 
                         onValueChange={(value) => handleChangeDrawCount(index, value)}
+                        disabled={isRandomizing}
                       >
                         <SelectTrigger className="w-24 h-7 text-sm">
                           <SelectValue placeholder="Sorteios" />
@@ -469,7 +545,7 @@ const PlayPage = ({
           <Button 
             className="hover:bg-opacity-90 px-6"
             style={{ backgroundColor: colorValue }}
-            disabled={savedLines.length === 0}
+            disabled={savedLines.length === 0 || isRandomizing}
           >
             ADICIONAR AO CARRINHO
           </Button>
