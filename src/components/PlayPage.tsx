@@ -46,7 +46,9 @@ const PlayPage = ({
   const [isRandomizing, setIsRandomizing] = useState(false);
   const [cooldownTime, setCooldownTime] = useState(0);
   const cooldownTimerRef = useRef<NodeJS.Timeout | null>(null);
-  
+  const [editMode, setEditMode] = useState(false);
+  const [isNumberClicked, setIsNumberClicked] = useState(false);
+
   const regularNumbers = Array.from({ length: totalRegularNumbers }, (_, i) => i + 1);
   const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
   const hasPowerball = maxPowerballNumbers > 0;
@@ -55,14 +57,14 @@ const PlayPage = ({
   const calculatePowerballProgress = () => selectedPowerball ? 100 : 0;
   
   useEffect(() => {
-    if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
+    if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null) && !isNumberClicked && !editMode) {
       const timer = setTimeout(() => {
         handleAddLine();
       }, 300);
       
       return () => clearTimeout(timer);
     }
-  }, [selectedNumbers, selectedPowerball]);
+  }, [selectedNumbers, selectedPowerball, isNumberClicked, editMode]);
 
   useEffect(() => {
     if (!isAnimating) {
@@ -124,20 +126,32 @@ const PlayPage = ({
   }, []);
 
   const handleNumberSelect = (number: number) => {
+    setIsNumberClicked(true);
+    
     if (selectedNumbers.includes(number)) {
       setSelectedNumbers(selectedNumbers.filter(n => n !== number));
     } else if (selectedNumbers.length < maxRegularNumbers) {
       const newNumbers = [...selectedNumbers, number];
       setSelectedNumbers(newNumbers);
     }
+    
+    setTimeout(() => {
+      setIsNumberClicked(false);
+    }, 2000);
   };
 
   const handlePowerballSelect = (number: number) => {
+    setIsNumberClicked(true);
+    
     if (selectedPowerball === number) {
       setSelectedPowerball(null);
     } else {
       setSelectedPowerball(number);
     }
+    
+    setTimeout(() => {
+      setIsNumberClicked(false);
+    }, 2000);
   };
 
   const handleQuickPick = () => {
@@ -231,6 +245,7 @@ const PlayPage = ({
       setNumberOfDraws("1");
       setProgressValue(0);
       setIsAnimating(false);
+      setEditMode(false);
     }
   };
 
@@ -252,6 +267,7 @@ const PlayPage = ({
     setIncludeExtraPlay(lineToEdit.includeExtraPlay);
     setNumberOfDraws(lineToEdit.drawCount);
     setEditingLineIndex(lineIndex);
+    setEditMode(true);
   };
 
   const handleToggleExtraPlay = (lineIndex: number, checked: boolean) => {

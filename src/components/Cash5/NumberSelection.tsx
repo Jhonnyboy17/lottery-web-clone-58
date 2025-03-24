@@ -218,26 +218,28 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       
       <div className="flex justify-center items-center h-[220px] relative">
         <div className="grid grid-cols-5 gap-4 z-10">
-          {[...Array(10).keys()].map((number) => (
-            <button
-              key={number}
-              onClick={() => handleNumberClick(number)}
-              className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-medium transition-colors duration-300`}
-              style={{
-                backgroundColor: clickedNumber === number 
-                  ? '#0EA5E9'
-                  : activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number
+          {[...Array(10).keys()].map((number) => {
+            // Check if the number is already selected in any position
+            const isSelected = currentLine.digits.includes(number);
+            
+            return (
+              <button
+                key={number}
+                onClick={() => handleNumberClick(number)}
+                className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-medium transition-colors duration-300`}
+                style={{
+                  backgroundColor: clickedNumber === number || isSelected
                     ? '#0EA5E9'
                     : '#dbeafe',
-                color: clickedNumber === number || 
-                      (activeDigitIndex !== null && currentLine.digits[activeDigitIndex] === number)
-                  ? 'white'
-                  : '#1e40af'
-              }}
-            >
-              {number}
-            </button>
-          ))}
+                  color: clickedNumber === number || isSelected
+                    ? 'white'
+                    : '#1e40af'
+                }}
+              >
+                {number}
+              </button>
+            );
+          })}
         </div>
       </div>
       
