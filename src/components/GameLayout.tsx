@@ -35,7 +35,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({
           {/* Game Navigation - Moved 40px to the left from previous position */}
           <div className="absolute left-[180px] bottom-0">
             <NavigationMenu className="max-w-none w-auto">
-              <NavigationMenuList className="flex space-x-6 px-[94px]">
+              <NavigationMenuList className="flex space-x-6 px-[217px]">
                 <NavigationMenuItem>
                   <NavigationMenuLink href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[15px] flex items-center">
                     Jogar {gameName}
