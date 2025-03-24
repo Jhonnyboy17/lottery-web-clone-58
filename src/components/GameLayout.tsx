@@ -34,8 +34,8 @@ const GameLayout: React.FC<GameLayoutProps> = ({
       {/* Game Banner with Background Color */}
       <div className="w-full py-8 relative" style={{ backgroundColor: colorValue }}>
         <div className="mx-auto max-w-7xl px-3">
-          {/* Game Navigation - Positioned in the left side of the banner */}
-          <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+          {/* Game Navigation - Positioned in the top-left corner of the banner */}
+          <div className="absolute left-4 top-4">
             <NavigationMenu className="max-w-none w-auto">
               <NavigationMenuList className="flex space-x-4">
                 <NavigationMenuItem>
