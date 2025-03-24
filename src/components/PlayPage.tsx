@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -446,7 +445,7 @@ const PlayPage = ({
                       top: 0,
                       transform: isSelected ? 'scale(1)' : 'scale(0)',
                       transformOrigin: 'center',
-                      transition: 'transform .2s ease-in-out',
+                      transition: 'transform 2s ease-in-out',
                       width: '100%',
                       zIndex: -1,
                       backgroundColor: isSelected ? colorValue : 'transparent'
@@ -507,7 +506,7 @@ const PlayPage = ({
                           top: 0,
                           transform: isSelected ? 'scale(1)' : 'scale(0)',
                           transformOrigin: 'center',
-                          transition: 'transform .2s ease-in-out',
+                          transition: 'transform 2s ease-in-out',
                           width: '100%',
                           zIndex: -1,
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'

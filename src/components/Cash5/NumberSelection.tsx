@@ -269,9 +269,25 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                     ? 'white'
                     : '#888888',
                   opacity: opacity,
-                  fontWeight: isSelected ? '600' : '500'
+                  fontWeight: isSelected ? '600' : '500',
+                  position: 'relative',
+                  overflow: 'hidden'
                 }}
               >
+                <span style={{
+                  position: 'absolute',
+                  borderRadius: '50%',
+                  content: '""',
+                  height: '100%',
+                  left: 0,
+                  top: 0,
+                  transform: isSelected || clickedNumber === number ? 'scale(1)' : 'scale(0)',
+                  transformOrigin: 'center',
+                  transition: 'transform 2s ease-in-out',
+                  width: '100%',
+                  zIndex: -1,
+                  backgroundColor: isSelected || clickedNumber === number ? colorValue : 'transparent'
+                }}></span>
                 {number}
               </button>
             );
