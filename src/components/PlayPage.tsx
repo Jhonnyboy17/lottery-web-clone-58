@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -139,7 +138,6 @@ const PlayPage = ({
     setTimeout(() => {
       setIsNumberClicked(false);
       
-      // Only reset editing state if line is not complete or if we're not in edit mode
       if (selectedNumbers.length < maxRegularNumbers - 1 || !editMode) {
         setTimeout(() => {
           setIsEditingNumber(false);
@@ -161,7 +159,6 @@ const PlayPage = ({
     setTimeout(() => {
       setIsNumberClicked(false);
       
-      // Only reset editing state if we're not in edit mode
       if (!editMode) {
         setTimeout(() => {
           setIsEditingNumber(false);
@@ -357,7 +354,6 @@ const PlayPage = ({
     return !isRandomizing && selectedNumbers.length < maxRegularNumbers;
   };
   
-  // Check if line is complete to determine if we should dim numbers
   const lineComplete = isLineComplete();
   const shouldDimUnselected = lineComplete && !isEditingNumber;
 
