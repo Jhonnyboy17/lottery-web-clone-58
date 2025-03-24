@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -358,26 +357,24 @@ const PlayPage = ({
     return !isRandomizing && selectedNumbers.length < maxRegularNumbers;
   };
   
-  // Check if line is complete to determine if we should dim numbers
   const lineComplete = isLineComplete();
   const shouldDimUnselected = lineComplete && !isEditingNumber;
 
-  // New function to determine opacity based on selection count
   const getNumberOpacity = (isSelected: boolean) => {
-    if (isSelected) return 1.2; // Selected numbers get 120% opacity
+    if (isSelected) return 1.0; // Números selecionados com opacidade normal
     
     if (shouldDimUnselected) {
-      // Full line complete - use 10% opacity
-      return 0.1;
+      // Linha completa - usar 40% de opacidade
+      return 0.4;
     }
     
-    // If no numbers are selected yet, show unselected numbers at much higher opacity
+    // Se nenhum número estiver selecionado, mostrar números não selecionados com opacidade normal
     if (selectedNumbers.length === 0) {
-      return 2.0; // 200% opacity when nothing is selected yet
+      return 1.0; // Opacidade normal quando nada está selecionado
     }
     
-    // For normal state when some numbers are selected, use full opacity
-    return 1.0; // Full opacity for unselected numbers when line is not complete
+    // Para estado normal quando alguns números estão selecionados, usar opacidade total
+    return 1.0;
   }
 
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>

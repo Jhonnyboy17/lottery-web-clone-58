@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -194,21 +193,17 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
 
   const getNumberOpacity = (isSelected: boolean) => {
-    // Selected numbers always get 120% opacity
-    if (isSelected) return 1.2;
+    if (isSelected) return 1.0;
     
-    // When line is complete and not editing, dim unselected numbers to 10%
     if (isLineComplete() && !isEditingNumber && !isEditing) {
-      return 0.1;
+      return 0.4;
     }
     
-    // If no numbers are selected yet, show unselected numbers at much higher opacity
     const hasAnySelections = currentLine.digits.some(digit => digit !== null && digit !== -1);
     if (!hasAnySelections) {
-      return 2.0; // 200% opacity when nothing is selected yet
+      return 1.0;
     }
     
-    // Normal state - use 100% opacity
     return 1.0;
   }
 
