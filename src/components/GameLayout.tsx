@@ -36,7 +36,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({
     }}>
         <div className="mx-auto max-w-7xl px-[34px]">
           {/* Game Navigation - Fine-tuning position */}
-          <div className="absolute left-[145px] bottom-0">
+          <div className="absolute left-[155px] bottom-0">
             <NavigationMenu className="max-w-none w-auto">
               <NavigationMenuList className="flex space-x-6 px-[150px]">
                 <NavigationMenuItem>
