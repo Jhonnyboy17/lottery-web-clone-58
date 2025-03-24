@@ -403,7 +403,7 @@ const PlayPage = ({
                     style={{
                       backgroundColor: isSelected ? colorValue : '#f5f5f5',
                       color: isSelected ? 'white' : '#888888',
-                      opacity: isDimmed ? 0.15 : 1
+                      opacity: isDimmed ? 0.08 : 1
                     }}
                   >
                     {number}
@@ -437,7 +437,7 @@ const PlayPage = ({
                         style={{
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f5f5f5',
                           color: isSelected ? 'white' : '#888888',
-                          opacity: isDimmed ? 0.15 : 1
+                          opacity: isDimmed ? 0.08 : 1
                         }}
                       >
                         {number}
