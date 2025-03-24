@@ -401,9 +401,9 @@ const PlayPage = ({
                     className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
                     transition-all duration-200`}
                     style={{
-                      backgroundColor: isSelected ? colorValue : isDimmed ? '#f3f4f6' : '#f3f4f6',
-                      color: isSelected ? 'white' : isDimmed ? '#a0a0a0' : '#000000',
-                      opacity: isDimmed ? 0.25 : 1
+                      backgroundColor: isSelected ? colorValue : '#f5f5f5',
+                      color: isSelected ? 'white' : '#888888',
+                      opacity: isDimmed ? 0.15 : 1
                     }}
                   >
                     {number}
@@ -435,9 +435,9 @@ const PlayPage = ({
                         className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
                         transition-all duration-200`}
                         style={{
-                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : isDimmed ? '#f3f4f6' : '#f3f4f6',
-                          color: isSelected ? 'white' : isDimmed ? '#a0a0a0' : '#000000',
-                          opacity: isDimmed ? 0.25 : 1
+                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f5f5f5',
+                          color: isSelected ? 'white' : '#888888',
+                          opacity: isDimmed ? 0.15 : 1
                         }}
                       >
                         {number}

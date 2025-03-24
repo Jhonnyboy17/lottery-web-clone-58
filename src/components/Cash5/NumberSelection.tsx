@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -242,11 +243,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                 style={{
                   backgroundColor: clickedNumber === number || isSelected
                     ? colorValue
-                    : isDimmed ? '#e6e6e6' : '#dbeafe',
+                    : '#f5f5f5',
                   color: clickedNumber === number || isSelected
                     ? 'white'
-                    : isDimmed ? '#b0b0b0' : '#1e40af',
-                  opacity: isDimmed ? 0.4 : 1
+                    : '#888888',
+                  opacity: isDimmed ? 0.15 : 1
                 }}
               >
                 {number}
