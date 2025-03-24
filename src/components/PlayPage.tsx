@@ -61,6 +61,9 @@ const PlayPage = ({
   const calculatePowerballProgress = () => selectedPowerball ? 100 : 0;
 
   const getLineCount = () => {
+    if (editingLineIndex !== null) {
+      return editingLineIndex + 1;
+    }
     return savedLines.length + 1;
   };
 
@@ -389,10 +392,6 @@ const PlayPage = ({
               </Button>
             </div>
 
-            {editingLineIndex !== null && <div className="text-sm font-medium p-1 px-2 bg-amber-100 text-amber-800 rounded mb-3">
-                Editando Linha {editingLineIndex + 1}
-              </div>}
-
             <div className="flex justify-between items-center mb-2">
               <p className="text-sm font-medium">Escolha {maxRegularNumbers} Números</p>
               <span className="text-xs font-medium">{selectedNumbers.length} de {maxRegularNumbers}</span>
@@ -402,6 +401,7 @@ const PlayPage = ({
                 backgroundColor: "#e5e7eb"
               }} />
             </div>
+            
             <div className="grid grid-cols-9 gap-1 mb-4">
               {regularNumbers.map(number => {
                 const isSelected = selectedNumbers.includes(number);
