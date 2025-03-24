@@ -366,12 +366,11 @@ const PlayPage = ({
     if (isSelected) return 1.2; // Selected numbers get 120% opacity for more visibility
     
     if (shouldDimUnselected) {
-      if (selectedNumbers.length === maxRegularNumbers) {
-        return 0.1; // 10% opacity when all numbers are selected (line complete)
-      }
+      // When all numbers are selected (line complete), apply 10% opacity to unselected numbers
+      return 0.1;
     }
     
-    return 0.5; // 50% opacity for all other states
+    return 0.5; // 50% opacity for all other states when line is not complete
   }
 
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>
