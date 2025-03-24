@@ -48,6 +48,7 @@ const PlayPage = ({
   const [editMode, setEditMode] = useState(false);
   const [isNumberClicked, setIsNumberClicked] = useState(false);
   const [isEditingNumber, setIsEditingNumber] = useState(false);
+
   const regularNumbers = Array.from({
     length: totalRegularNumbers
   }, (_, i) => i + 1);
@@ -574,18 +575,14 @@ const PlayPage = ({
                         {line.numbers.map((num, i) => (
                           <span 
                             key={i} 
-                            className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                              num ? `bg-${primaryColor} text-white` : 'bg-white border border-gray-200 text-gray-500'
-                            }`}
+                            className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-${primaryColor} text-white`}
                           >
-                            {num || '?'}
+                            {num}
                           </span>
                         ))}
-                        {hasPowerball && (
-                          <span className={`rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 ${
-                            line.powerball ? 'bg-amber-500 text-white' : 'bg-white border border-gray-200 text-gray-500'
-                          }`}>
-                            {line.powerball || '?'}
+                        {hasPowerball && line.powerball && (
+                          <span className="rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 bg-amber-500 text-white">
+                            {line.powerball}
                           </span>
                         )}
                       </div>
@@ -637,4 +634,3 @@ const PlayPage = ({
 };
 
 export default PlayPage;
-

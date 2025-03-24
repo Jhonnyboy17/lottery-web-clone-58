@@ -41,21 +41,17 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                   <span className="text-gray-500 font-medium w-6 mr-2">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  {line.numbers.map((num, i) => (
+                  {line.numbers && line.numbers.map((num, i) => (
                     <span 
                       key={i} 
-                      className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                        num ? 'bg-blue-500 text-white' : 'bg-white border border-gray-200 text-gray-500'
-                      }`}
+                      className="rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-blue-500 text-white"
                     >
-                      {num || '?'}
+                      {num}
                     </span>
                   ))}
                   {line.powerball !== undefined && (
-                    <span className={`rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 ${
-                      line.powerball ? 'bg-amber-500 text-white' : 'bg-white border border-gray-200 text-gray-500'
-                    }`}>
-                      {line.powerball || '?'}
+                    <span className="rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 bg-amber-500 text-white">
+                      {line.powerball}
                     </span>
                   )}
                 </div>

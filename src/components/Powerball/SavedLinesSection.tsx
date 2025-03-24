@@ -1,10 +1,10 @@
 
 import React from "react";
 import { X } from "lucide-react";
-import { NumberSelectionType } from "./types";
+import { SavedLineType } from "../Cash5/types";
 
 interface SavedLinesSectionProps {
-  savedLines: NumberSelectionType[];
+  savedLines: SavedLineType[];
   onRemoveLine: (index: number) => void;
   onEditLine: (index: number) => void;
   extraPlayName: string;
@@ -12,6 +12,7 @@ interface SavedLinesSectionProps {
   onChangeDrawCount?: (index: number, count: string) => void;
   editingIndex: number | null;
   onStartNewLine?: () => void;
+  primaryColor: string;
 }
 
 const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
@@ -19,7 +20,8 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
   onRemoveLine,
   onEditLine,
   editingIndex,
-  onStartNewLine
+  onStartNewLine,
+  primaryColor = "blue-600"
 }) => {
   return (
     <div className="bg-gray-50 p-4">
@@ -41,24 +43,25 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                   <span className="text-gray-500 font-medium w-6 mr-2">
                     {String(index + 1).padStart(2, '0')}
                   </span>
-                  {line.digits.map((digit, i) => (
+                  {line.numbers.map((num, i) => (
                     <span 
                       key={i} 
-                      className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                        digit === null ? 'bg-white border border-gray-200 text-gray-500' : 
-                        digit === -1 ? 'bg-red-500 text-white' : 
-                        'bg-blue-500 text-white'
-                      }`}
+                      className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-${primaryColor} text-white`}
                     >
-                      {digit === null ? '?' : digit === -1 ? <span className="font-bold">x</span> : digit}
+                      {num}
                     </span>
                   ))}
+                  {line.powerball !== undefined && (
+                    <span className="rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 bg-amber-500 text-white">
+                      {line.powerball}
+                    </span>
+                  )}
                 </div>
                 <button 
-                  onClick={(e) => {
+                  onClick={e => {
                     e.stopPropagation();
                     onRemoveLine(index);
-                  }}
+                  }} 
                   className="text-gray-400 hover:text-gray-600"
                 >
                   <X size={16} />
@@ -85,8 +88,11 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                     ?
                   </span>
                 ))}
+                <span className="bg-white border border-gray-200 text-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
+                  ?
+                </span>
               </div>
-              <div className="w-4"></div> {/* Empty space where the X button would be */}
+              <div className="w-4"></div>
             </div>
           </div>
         </>
