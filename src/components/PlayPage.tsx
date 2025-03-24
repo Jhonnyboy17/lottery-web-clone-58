@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -534,14 +535,14 @@ const PlayPage = ({
                     {line.numbers.map((num, i) => (
                       <span 
                         key={i} 
-                        className="text-white rounded-full w-7 h-7 flex items-center justify-center text-xs mx-0.5" 
+                        className="text-white rounded-full w-8 h-8 flex items-center justify-center text-sm mx-0.5" 
                         style={{ backgroundColor: colorValue }}
                       >
                         {num}
                       </span>
                     ))}
                     {hasPowerball && line.powerball && (
-                      <span className="bg-amber-500 text-white rounded-full w-7 h-7 flex items-center justify-center text-xs ml-1">
+                      <span className="bg-amber-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm ml-1">
                         {line.powerball}
                       </span>
                     )}
