@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -47,6 +48,7 @@ const PlayPage = ({
   const cooldownTimerRef = useRef<NodeJS.Timeout | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [isNumberClicked, setIsNumberClicked] = useState(false);
+  const [isEditingNumber, setIsEditingNumber] = useState(false);
   const regularNumbers = Array.from({
     length: totalRegularNumbers
   }, (_, i) => i + 1);
@@ -125,26 +127,46 @@ const PlayPage = ({
 
   const handleNumberSelect = (number: number) => {
     setIsNumberClicked(true);
+    setIsEditingNumber(true);
+    
     if (selectedNumbers.includes(number)) {
       setSelectedNumbers(selectedNumbers.filter(n => n !== number));
     } else if (selectedNumbers.length < maxRegularNumbers) {
       const newNumbers = [...selectedNumbers, number];
       setSelectedNumbers(newNumbers);
     }
+    
     setTimeout(() => {
       setIsNumberClicked(false);
+      
+      // Only reset editing state if line is not complete or if we're not in edit mode
+      if (selectedNumbers.length < maxRegularNumbers - 1 || !editMode) {
+        setTimeout(() => {
+          setIsEditingNumber(false);
+        }, 300);
+      }
     }, 2000);
   };
 
   const handlePowerballSelect = (number: number) => {
     setIsNumberClicked(true);
+    setIsEditingNumber(true);
+    
     if (selectedPowerball === number) {
       setSelectedPowerball(null);
     } else {
       setSelectedPowerball(number);
     }
+    
     setTimeout(() => {
       setIsNumberClicked(false);
+      
+      // Only reset editing state if we're not in edit mode
+      if (!editMode) {
+        setTimeout(() => {
+          setIsEditingNumber(false);
+        }, 300);
+      }
     }, 2000);
   };
 
@@ -162,6 +184,8 @@ const PlayPage = ({
     setCooldownTime(newCooldownTime);
     setIsRandomizing(true);
     setIsAnimating(true);
+    setIsEditingNumber(true);
+    
     const currentSelectedCount = selectedNumbers.length;
     const numbersNeeded = maxRegularNumbers - currentSelectedCount;
     if (numbersNeeded > 0) {
@@ -180,6 +204,11 @@ const PlayPage = ({
           if (index === newNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
             setTimeout(() => {
               setIsRandomizing(false);
+              setTimeout(() => {
+                if (!editMode) {
+                  setIsEditingNumber(false);
+                }
+              }, 300);
             }, 300);
           }
         }, (index + 1) * 150);
@@ -191,11 +220,21 @@ const PlayPage = ({
         setSelectedPowerball(randomPowerball);
         setTimeout(() => {
           setIsRandomizing(false);
+          setTimeout(() => {
+            if (!editMode) {
+              setIsEditingNumber(false);
+            }
+          }, 300);
         }, 300);
       }, (numbersNeeded + 1) * 150);
     } else if (numbersNeeded === 0) {
       setTimeout(() => {
         setIsRandomizing(false);
+        setTimeout(() => {
+          if (!editMode) {
+            setIsEditingNumber(false);
+          }
+        }, 300);
       }, 300);
     }
     setEditingLineIndex(null);
@@ -228,6 +267,7 @@ const PlayPage = ({
       setProgressValue(0);
       setIsAnimating(false);
       setEditMode(false);
+      setIsEditingNumber(false);
     }
   };
 
@@ -239,6 +279,8 @@ const PlayPage = ({
       setSelectedPowerball(null);
       setIncludeExtraPlay(false);
       setNumberOfDraws("1");
+      setEditMode(false);
+      setIsEditingNumber(false);
     }
   };
 
@@ -250,6 +292,7 @@ const PlayPage = ({
     setNumberOfDraws(lineToEdit.drawCount);
     setEditingLineIndex(lineIndex);
     setEditMode(true);
+    setIsEditingNumber(true);
   };
 
   const handleToggleExtraPlay = (lineIndex: number, checked: boolean) => {
@@ -313,6 +356,10 @@ const PlayPage = ({
   const canUseQuickPick = () => {
     return !isRandomizing && selectedNumbers.length < maxRegularNumbers;
   };
+  
+  // Check if line is complete to determine if we should dim numbers
+  const lineComplete = isLineComplete();
+  const shouldDimUnselected = lineComplete && !isEditingNumber;
 
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -342,12 +389,27 @@ const PlayPage = ({
             }} />
             </div>
             <div className="grid grid-cols-9 gap-1 mb-4">
-              {regularNumbers.map(number => <button key={`regular-${number}`} onClick={() => handleNumberSelect(number)} disabled={isRandomizing} className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                    ${selectedNumbers.includes(number) ? "text-white" : "bg-gray-100 text-black hover:bg-gray-200"}`} style={selectedNumbers.includes(number) ? {
-              backgroundColor: colorValue
-            } : {}}>
-                  {number}
-                </button>)}
+              {regularNumbers.map(number => {
+                const isSelected = selectedNumbers.includes(number);
+                const isDimmed = shouldDimUnselected && !isSelected;
+                
+                return (
+                  <button 
+                    key={`regular-${number}`} 
+                    onClick={() => handleNumberSelect(number)} 
+                    disabled={isRandomizing} 
+                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
+                    transition-all duration-200`}
+                    style={{
+                      backgroundColor: isSelected ? colorValue : isDimmed ? '#f1f1f1' : '#f3f4f6',
+                      color: isSelected ? 'white' : isDimmed ? '#c8c8c9' : '#000000',
+                      opacity: isDimmed ? 0.7 : 1
+                    }}
+                  >
+                    {number}
+                  </button>
+                );
+              })}
             </div>
 
             {hasPowerball && <>
@@ -361,10 +423,27 @@ const PlayPage = ({
               }} />
                 </div>
                 <div className="grid grid-cols-9 gap-1 mb-4">
-                  {powerballNumbers.map(number => <button key={`powerball-${number}`} onClick={() => handlePowerballSelect(number)} disabled={isRandomizing} className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                        ${selectedPowerball === number ? "bg-amber-500 text-white" : "bg-gray-100 text-black hover:bg-gray-200"}`}>
-                      {number}
-                    </button>)}
+                  {powerballNumbers.map(number => {
+                    const isSelected = selectedPowerball === number;
+                    const isDimmed = shouldDimUnselected && !isSelected && selectedPowerball !== null;
+                    
+                    return (
+                      <button 
+                        key={`powerball-${number}`} 
+                        onClick={() => handlePowerballSelect(number)} 
+                        disabled={isRandomizing}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
+                        transition-all duration-200`}
+                        style={{
+                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : isDimmed ? '#f1f1f1' : '#f3f4f6',
+                          color: isSelected ? 'white' : isDimmed ? '#c8c8c9' : '#000000',
+                          opacity: isDimmed ? 0.7 : 1
+                        }}
+                      >
+                        {number}
+                      </button>
+                    );
+                  })}
                 </div>
               </>}
           </div>
