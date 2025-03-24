@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import Navbar from "@/components/Navbar";
 import { SavedLineType } from "./Cash5/types";
+import TotalSummary from "./Cash5/TotalSummary";
 
 interface PlayPageProps {
   logoSrc: string;
@@ -362,7 +363,7 @@ const PlayPage = ({
             <Card className="border-0 shadow-md overflow-hidden mb-4">
               <div className="p-4">
                 <div className="flex justify-between items-center mb-3">
-                  <h3 className="text-lg font-semibold">Linha {String(lineCount).padStart(2, '0')}</h3>
+                  <h3 className="text-lg font-semibold">Linha {savedLines.length + 1}</h3>
                   <Button 
                     onClick={handleQuickPick}
                     disabled={isRandomizing}
@@ -627,28 +628,11 @@ const PlayPage = ({
       </div>
 
       {/* Fixed bottom bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-md py-3 px-4 z-10">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="flex items-center">
-            <p className="text-sm font-medium mr-2">{linesTotalText}</p>
-            {savedLines.length > 0 && (
-              <p className="text-xs text-gray-500">Add Power Play?</p>
-            )}
-          </div>
-          <div className="flex items-center gap-4">
-            <p className="text-xl font-bold">
-              <sup className="text-xs">$</sup>
-              {getTicketPrice()}
-            </p>
-            <Button 
-              className="hover:bg-opacity-90 px-6 bg-red-600"
-              disabled={savedLines.length === 0 || isRandomizing}
-            >
-              ADD TO CART
-            </Button>
-          </div>
-        </div>
-      </div>
+      <TotalSummary
+        ticketPrice={getTicketPrice()}
+        colorValue={colorValue}
+        hasLines={savedLines.length > 0}
+      />
     </div>
   );
 };
