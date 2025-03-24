@@ -39,8 +39,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   // Improved animation logic for the progress bar
   useEffect(() => {
     const targetProgress = getSelectionProgress();
-    let step = targetProgress > animatedProgress ? 2 : -2;
-
+    
+    // Use a smaller step size and slower interval for smoother, slower animation
+    // Step size and interval adjusted to make the animation take ~2 seconds
+    const step = targetProgress > animatedProgress ? 0.5 : -0.5;
+    
     const interval = setInterval(() => {
       setAnimatedProgress(prev => {
         if ((step > 0 && prev >= targetProgress) || (step < 0 && prev <= targetProgress)) {
@@ -49,7 +52,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
         }
         return prev + step;
       });
-    }, 20);
+    }, 10); // More frequent updates for smoother animation
 
     return () => clearInterval(interval);
   }, [currentLine.digits, currentLine.playType, animatedProgress]);
@@ -102,7 +105,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
            (currentLine.playType === "Front Pair" && index === 2);
   };
   
-  // Get appropriate heading text based on play type
   const getHeadingText = () => {
     if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
       return "Escolha 2 Números";
@@ -110,14 +112,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     return "Escolha 3 Números";
   };
 
-  // Calculate selection progress
   const getSelectionProgress = () => {
-    // For Back Pair and Front Pair, we only need to fill 2 digits
     if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
       const countFilled = currentLine.digits.filter(digit => digit !== null && digit !== -1).length;
       return (countFilled / 2) * 100;
     } else {
-      // For other play types, we need to fill all 3 digits
       const countFilled = currentLine.digits.filter(digit => digit !== null).length;
       return (countFilled / 3) * 100;
     }
@@ -219,7 +218,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           const isActive = activeDigitIndex === idx && !isDisabled;
           const isX = digit === -1;
           
-          // Determine the appropriate style based on state
           let bgColor = isActive ? 'bg-blue-500' : isX ? 'bg-gray-200' : digit === null ? 'bg-gray-100' : 'bg-blue-100';
           let textColor = isActive ? 'text-white' : isX ? 'text-gray-700' : digit === null ? 'text-gray-400' : 'text-blue-800';
           let borderColor = isActive ? 'border-blue-600' : isX ? 'border-gray-300' : 'border-gray-200';
