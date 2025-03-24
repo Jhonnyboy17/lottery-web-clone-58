@@ -202,10 +202,10 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       return 0.1;
     }
     
-    // If no numbers are selected yet, show unselected numbers at full opacity
+    // If no numbers are selected yet, show unselected numbers at much higher opacity
     const hasAnySelections = currentLine.digits.some(digit => digit !== null && digit !== -1);
     if (!hasAnySelections) {
-      return 1.2; // Higher opacity when nothing is selected yet
+      return 2.0; // 200% opacity when nothing is selected yet
     }
     
     // Normal state - use 100% opacity

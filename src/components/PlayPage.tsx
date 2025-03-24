@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -363,16 +364,16 @@ const PlayPage = ({
 
   // New function to determine opacity based on selection count
   const getNumberOpacity = (isSelected: boolean) => {
-    if (isSelected) return 1.2; // Selected numbers get 120% opacity for more visibility
+    if (isSelected) return 1.2; // Selected numbers get 120% opacity
     
     if (shouldDimUnselected) {
       // Full line complete - use 10% opacity
       return 0.1;
     }
     
-    // If no numbers are selected yet, show unselected numbers at higher opacity
+    // If no numbers are selected yet, show unselected numbers at much higher opacity
     if (selectedNumbers.length === 0) {
-      return 1.2; // Higher opacity when nothing is selected yet
+      return 2.0; // 200% opacity when nothing is selected yet
     }
     
     // For normal state when some numbers are selected, use full opacity
