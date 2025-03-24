@@ -32,8 +32,48 @@ const GameLayout: React.FC<GameLayoutProps> = ({
       <div className="h-12"></div>
       
       {/* Game Banner with Background Color */}
-      <div className="w-full py-8" style={{ backgroundColor: colorValue }}>
+      <div className="w-full py-8 relative" style={{ backgroundColor: colorValue }}>
         <div className="mx-auto max-w-7xl px-3">
+          {/* Game Navigation - Positioned in the left side of the banner */}
+          <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
+            <NavigationMenu className="max-w-none w-auto">
+              <NavigationMenuList className="flex space-x-4">
+                <NavigationMenuItem>
+                  <NavigationMenuLink 
+                    className="text-black hover:text-black/80 font-medium text-xs"
+                    href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    Jogar {gameName}
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink 
+                    className="text-black hover:text-black/80 font-medium text-xs"
+                    href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    Resultados
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink 
+                    className="text-black hover:text-black/80 font-medium text-xs"
+                    href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    Verificador de Números
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink 
+                    className="text-black hover:text-black/80 font-medium text-xs"
+                    href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    Como Jogar
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
+
           <div className="flex items-center justify-between">
             {/* Left side - Empty */}
             <div></div>
@@ -53,44 +93,6 @@ const GameLayout: React.FC<GameLayoutProps> = ({
               <h2 className="text-2xl font-bold text-black">R$ {jackpotAmount}</h2>
             </div>
           </div>
-          
-          {/* Game Navigation - Moved to top of content area */}
-          <NavigationMenu className="max-w-none w-auto absolute top-4 left-4">
-            <NavigationMenuList className="flex space-x-4">
-              <NavigationMenuItem>
-                <NavigationMenuLink 
-                  className="text-black hover:text-black/80 font-medium text-xs"
-                  href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  Jogar {gameName}
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink 
-                  className="text-black hover:text-black/80 font-medium text-xs"
-                  href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  Resultados
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink 
-                  className="text-black hover:text-black/80 font-medium text-xs"
-                  href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  Verificador de Números
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              <NavigationMenuItem>
-                <NavigationMenuLink 
-                  className="text-black hover:text-black/80 font-medium text-xs"
-                  href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
-                >
-                  Como Jogar
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            </NavigationMenuList>
-          </NavigationMenu>
         </div>
       </div>
 
