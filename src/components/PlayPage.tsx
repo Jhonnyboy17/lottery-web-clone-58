@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -424,12 +425,12 @@ const PlayPage = ({
                       display: 'flex',
                       fontSize: '1.2em',
                       fontWeight: 700,
-                      height: '2.7em',
+                      height: '2.2em',
                       justifyContent: 'center',
-                      lineHeight: '2.7em',
+                      lineHeight: '2.2em',
                       margin: '0.3em',
                       textAlign: 'center',
-                      width: '2.7em',
+                      width: '2.2em',
                       zIndex: 2,
                       opacity: opacity,
                       position: 'relative',
@@ -485,12 +486,12 @@ const PlayPage = ({
                           display: 'flex',
                           fontSize: '1.2em',
                           fontWeight: 700,
-                          height: '2.7em',
+                          height: '2.2em',
                           justifyContent: 'center',
-                          lineHeight: '2.7em',
+                          lineHeight: '2.2em',
                           margin: '0.3em',
                           textAlign: 'center',
-                          width: '2.7em',
+                          width: '2.2em',
                           zIndex: 2,
                           opacity: opacity,
                           position: 'relative',

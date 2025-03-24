@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -271,7 +270,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                   opacity: opacity,
                   fontWeight: isSelected ? '600' : '500',
                   position: 'relative',
-                  overflow: 'hidden'
+                  overflow: 'hidden',
+                  height: '2.2em',
+                  width: '2.2em'
                 }}
               >
                 <span style={{
