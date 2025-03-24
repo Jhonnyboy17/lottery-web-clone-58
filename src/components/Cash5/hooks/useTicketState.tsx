@@ -17,16 +17,6 @@ export const useTicketState = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  // Effect to auto-update the edited line when editing and line is complete
-  useEffect(() => {
-    if (isEditing && editingIndex !== null && isLineComplete()) {
-      // Update the line being edited
-      const updatedLines = [...savedLines];
-      updatedLines[editingIndex] = {...currentLine};
-      setSavedLines(updatedLines);
-    }
-  }, [currentLine, isEditing, editingIndex]);
-  
   // Ensure that the first empty index is selected when needed
   useEffect(() => {
     if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
@@ -71,9 +61,6 @@ export const useTicketState = () => {
   };
 
   const handleQuickPick = () => {
-    // If we're editing a line, the random numbers should go into that line
-    // If we're not editing, it just fills the current selection
-    
     const randomDigits = Array(4).fill(0).map(() => 
       Math.floor(Math.random() * 10)
     );

@@ -82,6 +82,7 @@ export const Cash5Page = ({
             onDigitSelect={handleDigitSelect}
             isLineComplete={isLineComplete}
             onClearSelections={clearSelections}
+            onAddLine={handleAddLine}
             colorValue={colorValue}
           />
 

@@ -39,6 +39,7 @@ export const FastPlayPage = ({
     handleBetAmountChange,
     handleQuickPick,
     clearSelections,
+    handleAddLine,
     handleRemoveLine,
     handleEditLine,
     isLineComplete,
@@ -49,8 +50,6 @@ export const FastPlayPage = ({
     switch (primaryColor) {
       case "amber-500":
         return "#f59e0b"; // Amber for Fast Play
-      case "blue-600":
-        return "#2563eb"; // Blue option
       default:
         return "#f59e0b"; // Default to amber
     }
@@ -83,6 +82,7 @@ export const FastPlayPage = ({
             onDigitSelect={handleDigitSelect}
             isLineComplete={isLineComplete}
             onClearSelections={clearSelections}
+            onAddLine={handleAddLine}
             colorValue={colorValue}
           />
 
