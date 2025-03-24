@@ -30,8 +30,8 @@ const GameLayout: React.FC<GameLayoutProps> = ({
       {/* Add space between navbar and colored banner */}
       <div className="h-12"></div>
       
-      {/* Game Banner with Background Color */}
-      <div className="w-full py-8 relative" style={{
+      {/* Game Banner with Background Color - Increased height by adding more padding */}
+      <div className="w-full py-12 relative" style={{
       backgroundColor: colorValue
     }}>
         <div className="mx-auto max-w-7xl px-[34px]">
