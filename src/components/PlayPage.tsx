@@ -595,7 +595,6 @@ const PlayPage = ({
                           handleRemoveLine(index);
                         }} 
                         className="text-gray-400 hover:text-gray-600" 
-                        disabled={isRandomizing}
                       >
                         <X size={16} />
                       </button>
@@ -638,3 +637,4 @@ const PlayPage = ({
 };
 
 export default PlayPage;
+
