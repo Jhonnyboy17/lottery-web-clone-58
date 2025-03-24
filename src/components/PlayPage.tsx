@@ -532,17 +532,20 @@ const PlayPage = ({
               <div key={index} className="mb-3">
                 <div className="bg-white rounded p-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border" onClick={() => handleEditLine(index)}>
                   <div className="flex items-center">
+                    <span className="text-gray-500 font-medium w-6 mr-2">
+                      {index + 1}
+                    </span>
                     {line.numbers.map((num, i) => (
                       <span 
                         key={i} 
-                        className="text-white rounded-full w-12 h-12 flex items-center justify-center text-base mx-0.5" 
+                        className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5" 
                         style={{ backgroundColor: colorValue }}
                       >
                         {num}
                       </span>
                     ))}
                     {hasPowerball && line.powerball && (
-                      <span className="bg-amber-500 text-white rounded-full w-12 h-12 flex items-center justify-center text-base ml-1">
+                      <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
                         {line.powerball}
                       </span>
                     )}

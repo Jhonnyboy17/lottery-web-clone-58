@@ -38,11 +38,14 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
               onClick={() => onEditLine(index)}
             >
               <div className="flex items-center">
+                <span className="text-gray-500 font-medium w-6 mr-2">
+                  {index + 1}
+                </span>
                 {line.digits.map((digit, i) => (
                   digit !== null && (
                     <span 
                       key={i} 
-                      className="text-white rounded-full w-12 h-12 flex items-center justify-center text-base mx-0.5 bg-amber-500"
+                      className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-amber-500"
                     >
                       {digit === -1 ? "X" : digit}
                     </span>
