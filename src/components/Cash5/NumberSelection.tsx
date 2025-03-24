@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -194,6 +195,12 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 
   const getNumberOpacity = (isSelected: boolean) => {
     if (isSelected) return 1.0;
+    
+    // Se a linha estiver completa com todos os dígitos preenchidos
+    const allDigitsFilled = currentLine.digits.every(digit => digit !== null && digit !== -1);
+    if (allDigitsFilled) {
+      return 1.0;
+    }
     
     if (isLineComplete() && !isEditingNumber && !isEditing) {
       return 0.4;

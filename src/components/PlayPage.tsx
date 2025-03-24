@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -363,6 +362,10 @@ const PlayPage = ({
 
   const getNumberOpacity = (isSelected: boolean) => {
     if (isSelected) return 1.0;
+    
+    if (selectedNumbers.length === maxRegularNumbers) {
+      return 1.0;
+    }
     
     if (shouldDimUnselected) {
       return 0.4;
