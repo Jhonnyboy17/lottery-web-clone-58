@@ -28,15 +28,16 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const [isRandomizing, setIsRandomizing] = useState(false);
   const [cooldownTime, setCooldownTime] = useState(0);
 
+  // Auto add line when complete (only if not a number was just clicked)
   useEffect(() => {
-    if (isLineComplete() && onAddLine) {
+    if (isLineComplete() && onAddLine && !clickedNumber) {
       const timer = setTimeout(() => {
         onAddLine();
       }, 300);
       
       return () => clearTimeout(timer);
     }
-  }, [currentLine.digits, isLineComplete, onAddLine]);
+  }, [currentLine.digits, isLineComplete, onAddLine, clickedNumber]);
 
   useEffect(() => {
     if (animatedProgress !== null) {
@@ -77,7 +78,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   }, [activeDigitIndex, currentLine.digits, currentLine.playType, setActiveDigitIndex]);
 
-  // Effect for cooldown timer
   useEffect(() => {
     if (cooldownTime > 0) {
       const interval = setInterval(() => {
@@ -92,6 +92,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     setClickedNumber(digit);
     onDigitSelect(digit);
     
+    // Clear the clicked number after 2 seconds
     setTimeout(() => {
       setClickedNumber(null);
     }, 2000);
