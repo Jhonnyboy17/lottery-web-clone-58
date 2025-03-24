@@ -1,11 +1,10 @@
 
 import React from "react";
-import SavedLines from "./SavedLines";
-import { NumberSelectionType } from "./types";
 import { X } from "lucide-react";
+import { SavedLineType } from "./Cash5/types";
 
 interface SavedLinesSectionProps {
-  savedLines: NumberSelectionType[];
+  savedLines: SavedLineType[];
   onRemoveLine: (index: number) => void;
   onEditLine: (index: number) => void;
   extraPlayName: string;
