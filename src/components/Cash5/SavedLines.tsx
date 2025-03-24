@@ -32,7 +32,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine, onEdi
                   <span 
                     key={i} 
                     className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                      digit === null ? 'bg-[#F1F1F1] text-gray-500' : 
+                      digit === null ? 'bg-white border border-gray-200 text-gray-500' : 
                       digit === -1 ? 'bg-red-500 text-white' : 
                       'bg-blue-500 text-white'
                     }`}
