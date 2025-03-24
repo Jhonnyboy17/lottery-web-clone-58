@@ -1,8 +1,8 @@
 
 import React from "react";
+import { NumberSelectionType } from "./types";
 import TicketOptions from "./TicketOptions";
 import NumberSelection from "./NumberSelection";
-import { NumberSelectionType } from "./types";
 
 interface CurrentLineSelectionProps {
   lineCount: number;
@@ -36,9 +36,9 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
   colorValue
 }) => {
   return (
-    <div className="p-3">
+    <div className="p-4">
       <TicketOptions 
-        lineCount={lineCount} 
+        lineCount={lineCount}
         currentLine={currentLine}
         playTypes={playTypes}
         betAmounts={betAmounts}
@@ -46,7 +46,7 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         onPlayTypeChange={onPlayTypeChange}
         onBetAmountChange={onBetAmountChange}
       />
-
+      
       <NumberSelection 
         activeDigitIndex={activeDigitIndex}
         setActiveDigitIndex={setActiveDigitIndex}
@@ -54,6 +54,7 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         onDigitSelect={onDigitSelect}
         isLineComplete={isLineComplete}
         onClearSelections={onClearSelections}
+        colorValue={colorValue}
       />
     </div>
   );
