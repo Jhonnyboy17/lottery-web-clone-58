@@ -12,6 +12,8 @@ interface NumberSelectionProps {
   isLineComplete: () => boolean;
   onClearSelections: () => void;
   onAddLine?: () => void;
+  isEditing?: boolean;
+  colorValue?: string;
 }
 
 const NumberSelection: React.FC<NumberSelectionProps> = ({
@@ -21,7 +23,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   onDigitSelect,
   isLineComplete,
   onClearSelections,
-  onAddLine
+  onAddLine,
+  isEditing = false,
+  colorValue = "#0EA5E9"
 }) => {
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
   const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
@@ -30,14 +34,14 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 
   // Auto add line when complete (only if not a number was just clicked)
   useEffect(() => {
-    if (isLineComplete() && onAddLine && !clickedNumber) {
+    if (isLineComplete() && onAddLine && !clickedNumber && !isEditing) {
       const timer = setTimeout(() => {
         onAddLine();
       }, 300);
       
       return () => clearTimeout(timer);
     }
-  }, [currentLine.digits, isLineComplete, onAddLine, clickedNumber]);
+  }, [currentLine.digits, isLineComplete, onAddLine, clickedNumber, isEditing]);
 
   useEffect(() => {
     if (animatedProgress !== null) {
@@ -114,7 +118,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
   
   const getHeadingText = () => {
-    if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
+    if (isEditing) {
+      return "Editar Números";
+    } else if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
       return "Escolha 2 Números";
     }
     return "Escolha 3 Números";
@@ -210,7 +216,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
             className="h-full transition-all" 
             style={{ 
               width: `${displayProgress}%`,
-              backgroundColor: "#0EA5E9" 
+              backgroundColor: colorValue 
             }}
           />
         </Progress>
@@ -229,7 +235,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                 className={`w-12 h-12 rounded-full flex items-center justify-center text-xl font-medium transition-colors duration-300`}
                 style={{
                   backgroundColor: clickedNumber === number || isSelected
-                    ? '#0EA5E9'
+                    ? colorValue
                     : '#dbeafe',
                   color: clickedNumber === number || isSelected
                     ? 'white'
@@ -258,6 +264,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
               key={idx} 
               className={`w-8 h-8 rounded-full flex items-center justify-center text-lg font-medium border cursor-pointer ${bgColor} ${textColor} ${borderColor} ${isDisabled ? 'cursor-not-allowed' : ''}`}
               onClick={() => !isDisabled && setActiveDigitIndex(idx)}
+              style={{
+                backgroundColor: isActive ? colorValue : isX ? '#e5e7eb' : digit === null ? '#f3f4f6' : '#dbeafe',
+                color: isActive ? 'white' : isX ? '#4b5563' : digit === null ? '#9ca3af' : '#1e40af',
+                borderColor: isActive ? colorValue : isX ? '#d1d5db' : '#e5e7eb'
+              }}
             >
               {getDigitDisplay(idx)}
             </div>
@@ -269,7 +280,13 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
         <Button 
           onClick={handleRandomPick}
           variant="outline" 
-          className={`text-xs text-blue-500 border-blue-500 ${isRandomizing ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className="text-xs border"
+          style={{
+            color: colorValue,
+            borderColor: colorValue,
+            opacity: isRandomizing ? 0.5 : 1,
+            cursor: isRandomizing ? 'not-allowed' : 'pointer'
+          }}
           disabled={isRandomizing}
         >
           Jogada Aleatória

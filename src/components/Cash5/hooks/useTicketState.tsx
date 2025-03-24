@@ -38,6 +38,16 @@ export const useTicketState = () => {
       digits: newDigits
     });
     
+    // If we're editing an existing line, update it immediately
+    if (isEditing && editingIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {
+        ...currentLine,
+        digits: newDigits
+      };
+      setSavedLines(updatedLines);
+    }
+    
     const nextEmptyIndex = newDigits.findIndex((d, i) => d === null && i > activeDigitIndex);
     if (nextEmptyIndex !== -1) {
       setActiveDigitIndex(nextEmptyIndex);
@@ -51,6 +61,16 @@ export const useTicketState = () => {
       ...currentLine,
       playType: value
     });
+    
+    // If editing, update the saved line with the new play type
+    if (isEditing && editingIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {
+        ...currentLine,
+        playType: value
+      };
+      setSavedLines(updatedLines);
+    }
   };
 
   const handleBetAmountChange = (value: string) => {
@@ -58,6 +78,16 @@ export const useTicketState = () => {
       ...currentLine,
       betAmount: value
     });
+    
+    // If editing, update the saved line with the new bet amount
+    if (isEditing && editingIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {
+        ...currentLine,
+        betAmount: value
+      };
+      setSavedLines(updatedLines);
+    }
   };
 
   const handleQuickPick = () => {
@@ -69,6 +99,16 @@ export const useTicketState = () => {
       ...currentLine,
       digits: randomDigits
     });
+    
+    // If editing, update the saved line with the random digits
+    if (isEditing && editingIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {
+        ...currentLine,
+        digits: randomDigits
+      };
+      setSavedLines(updatedLines);
+    }
     
     setActiveDigitIndex(null);
   };

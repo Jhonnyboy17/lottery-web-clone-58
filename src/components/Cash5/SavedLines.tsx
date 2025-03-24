@@ -15,9 +15,10 @@ interface SavedLinesProps {
   savedLines: NumberSelectionType[];
   onRemoveLine: (index: number) => void;
   onEditLine: (index: number) => void;
+  editingIndex?: number | null;
 }
 
-const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine, onEditLine }) => {
+const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine, onEditLine, editingIndex = null }) => {
   if (savedLines.length === 0) {
     return <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>;
   }
@@ -25,7 +26,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine, onEdi
   return (
     <>
       {savedLines.map((line, index) => (
-        <div key={index} className="bg-white rounded-md p-3 mb-3 shadow-sm border border-gray-100">
+        <div key={index} className={`bg-white rounded-md p-3 mb-3 shadow-sm ${editingIndex === index ? 'border-2 border-amber-500' : 'border border-gray-100'}`}>
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-4">
               <span className="text-gray-500 font-medium w-6">

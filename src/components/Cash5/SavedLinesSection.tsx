@@ -12,6 +12,7 @@ interface SavedLinesSectionProps {
   extraPlayName: string;
   onToggleExtraPlay?: (index: number, checked: boolean) => void;
   onChangeDrawCount?: (index: number, count: string) => void;
+  editingIndex: number | null;
 }
 
 const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
@@ -20,7 +21,8 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
   onEditLine,
   extraPlayName,
   onToggleExtraPlay,
-  onChangeDrawCount
+  onChangeDrawCount,
+  editingIndex
 }) => {
   return (
     <div className="bg-gray-50 p-4">
@@ -32,7 +34,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
         savedLines.map((line, index) => (
           <div key={index} className="mb-4">
             <div 
-              className="bg-white rounded p-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+              className={`bg-white rounded p-3 mb-2 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors ${editingIndex === index ? 'border-2 border-amber-500' : ''}`}
               onClick={() => onEditLine(index)}
             >
               <div className="flex items-center">
