@@ -212,6 +212,15 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   
   const shouldDimUnselected = lineComplete && !isEditingNumber && !isEditing;
 
+  const getLightColor = () => {
+    if (colorValue === "#0EA5E9") return "#E6F7FF";
+    if (colorValue === "#f59e0b") return "#FEF3C7";
+    if (colorValue.includes("green")) return "#ECFDF5";
+    if (colorValue.includes("red")) return "#FEE2E2";
+    
+    return "#F0F9FF";
+  };
+
   return (
     <div className="relative mb-6 mt-8">
       <h2 className="text-center text-xl font-semibold mb-4 text-blue-800">
@@ -322,6 +331,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           variant="outline" 
           className="text-xs border"
           style={{
+            backgroundColor: getLightColor(),
             color: colorValue,
             borderColor: colorValue,
             opacity: isRandomizing ? 0.5 : 1,

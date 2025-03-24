@@ -1,6 +1,5 @@
 
 import React from "react";
-import SavedLines from "./SavedLines";
 import { NumberSelectionType } from "./types";
 import { X } from "lucide-react";
 

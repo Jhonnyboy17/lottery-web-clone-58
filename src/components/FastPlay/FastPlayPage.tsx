@@ -108,6 +108,7 @@ export const FastPlayPage = ({
             onToggleExtraPlay={handleToggleExtraPlay}
             onChangeDrawCount={handleChangeDrawCount}
             editingIndex={editingIndex}
+            onStartNewLine={handleAddLine}
           />
         </Card>
 

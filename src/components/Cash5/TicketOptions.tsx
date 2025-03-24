@@ -39,8 +39,12 @@ const TicketOptions: React.FC<TicketOptionsProps> = ({
         <h3 className="text-lg font-semibold">Linha {String(lineCount).padStart(2, '0')}</h3>
         <Button 
           onClick={onQuickPick}
-          className="text-xs h-8 bg-white border hover:bg-opacity-10 rounded-full"
-          style={{ color: "#0EA5E9", borderColor: "#0EA5E9" }}
+          className="text-xs h-8 rounded-full"
+          style={{ 
+            backgroundColor: "#E6F7FF", 
+            color: "#0EA5E9", 
+            border: "1px solid #0EA5E9" 
+          }}
         >
           JOGADA ALEATÓRIA
         </Button>

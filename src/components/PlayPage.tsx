@@ -368,6 +368,27 @@ const PlayPage = ({
 
   const colorValue = getColorValue();
 
+  const getLightColorValue = () => {
+    switch (primaryColor) {
+      case "blue-600":
+        return "#E6F7FF";
+      case "red-600":
+        return "#FEE2E2";
+      case "green-600":
+        return "#ECFDF5";
+      case "cyan-600":
+        return "#E0FDFF";
+      case "amber-500":
+        return "#FEF3C7";
+      case "[#8CD444]":
+        return "#F0FEE4";
+      default:
+        return "#F5F5F5";
+    }
+  };
+
+  const lightColorValue = getLightColorValue();
+
   const isLineComplete = () => {
     if (hasPowerball) {
       return selectedNumbers.length === maxRegularNumbers && selectedPowerball !== null;
@@ -409,10 +430,16 @@ const PlayPage = ({
           <div className="p-4">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-semibold">Linha {String(getLineCount()).padStart(2, '0')}</h3>
-              <Button onClick={handleQuickPick} disabled={isRandomizing} className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6" style={{
-                color: colorValue,
-                borderColor: colorValue
-              }}>
+              <Button 
+                onClick={handleQuickPick} 
+                disabled={isRandomizing} 
+                className="text-xs h-8 px-6" 
+                style={{
+                  backgroundColor: lightColorValue,
+                  color: colorValue,
+                  border: `1px solid ${colorValue}`
+                }}
+              >
                 JOGADA ALEATÓRIA
               </Button>
             </div>
