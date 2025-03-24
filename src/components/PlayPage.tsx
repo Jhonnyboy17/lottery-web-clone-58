@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -432,8 +433,24 @@ const PlayPage = ({
                       width: '2.7em',
                       zIndex: 2,
                       opacity: opacity,
+                      position: 'relative',
+                      overflow: 'hidden'
                     }}
                   >
+                    <span style={{
+                      position: 'absolute',
+                      borderRadius: '50%',
+                      content: '""',
+                      height: '100%',
+                      left: 0,
+                      top: 0,
+                      transform: isSelected ? 'scale(1)' : 'scale(0)',
+                      transformOrigin: 'center',
+                      transition: 'transform .2s ease-in-out',
+                      width: '100%',
+                      zIndex: -1,
+                      backgroundColor: isSelected ? colorValue : 'transparent'
+                    }}></span>
                     {number}
                   </button>
                 );
@@ -460,15 +477,41 @@ const PlayPage = ({
                         key={`powerball-${number}`} 
                         onClick={() => handlePowerballSelect(number)} 
                         disabled={isRandomizing}
-                        className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                        transition-all duration-200`}
                         style={{
-                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f5f5f5',
+                          alignItems: 'center',
+                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f0f0f0',
+                          borderRadius: '50%',
                           color: isSelected ? 'white' : '#888888',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          fontSize: '1.2em',
+                          fontWeight: 700,
+                          height: '2.7em',
+                          justifyContent: 'center',
+                          lineHeight: '2.7em',
+                          margin: '0.3em',
+                          textAlign: 'center',
+                          width: '2.7em',
+                          zIndex: 2,
                           opacity: opacity,
-                          fontWeight: isSelected ? '600' : '500'
+                          position: 'relative',
+                          overflow: 'hidden'
                         }}
                       >
+                        <span style={{
+                          position: 'absolute',
+                          borderRadius: '50%',
+                          content: '""',
+                          height: '100%',
+                          left: 0,
+                          top: 0,
+                          transform: isSelected ? 'scale(1)' : 'scale(0)',
+                          transformOrigin: 'center',
+                          transition: 'transform .2s ease-in-out',
+                          width: '100%',
+                          zIndex: -1,
+                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
+                        }}></span>
                         {number}
                       </button>
                     );
