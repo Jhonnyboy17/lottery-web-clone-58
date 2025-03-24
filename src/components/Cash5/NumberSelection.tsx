@@ -192,6 +192,17 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   };
 
+  const getNumberOpacity = (isSelected: boolean) => {
+    if (isSelected) return 1; // Selected numbers always fully visible
+    
+    if (shouldDimUnselected) {
+      // Full line complete - use 7% opacity
+      return 0.07;
+    }
+    
+    return 0.2; // Default 20% opacity
+  }
+
   const selectionProgress = getSelectionProgress();
   const displayProgress = animatedProgress !== null ? animatedProgress : selectionProgress;
   
@@ -232,7 +243,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
         <div className="grid grid-cols-5 gap-4 z-10">
           {[...Array(10).keys()].map((number) => {
             const isSelected = currentLine.digits.includes(number);
-            const isDimmed = shouldDimUnselected && !isSelected;
+            const opacity = getNumberOpacity(isSelected);
             
             return (
               <button
@@ -246,7 +257,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                   color: clickedNumber === number || isSelected
                     ? 'white'
                     : '#888888',
-                  opacity: isDimmed ? 0.08 : 1
+                  opacity: opacity
                 }}
               >
                 {number}

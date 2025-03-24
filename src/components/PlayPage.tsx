@@ -361,6 +361,19 @@ const PlayPage = ({
   const lineComplete = isLineComplete();
   const shouldDimUnselected = lineComplete && !isEditingNumber;
 
+  // New function to determine opacity based on selection count
+  const getNumberOpacity = (isSelected: boolean) => {
+    if (isSelected) return 1; // Selected numbers always fully visible
+    
+    if (shouldDimUnselected) {
+      if (selectedNumbers.length === maxRegularNumbers) {
+        return 0.07; // 7% opacity when all 6 are selected (line complete)
+      }
+    }
+    
+    return 0.2; // 20% opacity for all other states
+  }
+
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="border-0 shadow-md overflow-hidden h-full">
@@ -391,7 +404,7 @@ const PlayPage = ({
             <div className="grid grid-cols-9 gap-1 mb-4">
               {regularNumbers.map(number => {
                 const isSelected = selectedNumbers.includes(number);
-                const isDimmed = shouldDimUnselected && !isSelected;
+                const opacity = getNumberOpacity(isSelected);
                 
                 return (
                   <button 
@@ -403,7 +416,7 @@ const PlayPage = ({
                     style={{
                       backgroundColor: isSelected ? colorValue : '#f5f5f5',
                       color: isSelected ? 'white' : '#888888',
-                      opacity: isDimmed ? 0.08 : 1
+                      opacity: opacity
                     }}
                   >
                     {number}
@@ -425,7 +438,7 @@ const PlayPage = ({
                 <div className="grid grid-cols-9 gap-1 mb-4">
                   {powerballNumbers.map(number => {
                     const isSelected = selectedPowerball === number;
-                    const isDimmed = shouldDimUnselected && !isSelected && selectedPowerball !== null;
+                    const opacity = getNumberOpacity(isSelected);
                     
                     return (
                       <button 
@@ -437,7 +450,7 @@ const PlayPage = ({
                         style={{
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f5f5f5',
                           color: isSelected ? 'white' : '#888888',
-                          opacity: isDimmed ? 0.08 : 1
+                          opacity: opacity
                         }}
                       >
                         {number}
