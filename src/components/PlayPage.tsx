@@ -370,7 +370,12 @@ const PlayPage = ({
       return 0.1;
     }
     
-    // Instead of 0.5, we now use 1.0 for unselected numbers when line is not complete
+    // If no numbers are selected yet, show unselected numbers at higher opacity
+    if (selectedNumbers.length === 0) {
+      return 1.2; // Higher opacity when nothing is selected yet
+    }
+    
+    // For normal state when some numbers are selected, use full opacity
     return 1.0; // Full opacity for unselected numbers when line is not complete
   }
 

@@ -194,16 +194,22 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
 
   const getNumberOpacity = (isSelected: boolean) => {
-    if (isSelected) return 1.2; // Selected numbers get 120% opacity
+    // Selected numbers always get 120% opacity
+    if (isSelected) return 1.2;
     
-    // Only dim the unselected numbers when line is complete AND 
-    // not in editing mode
+    // When line is complete and not editing, dim unselected numbers to 10%
     if (isLineComplete() && !isEditingNumber && !isEditing) {
-      return 0.1; // 10% opacity for unselected numbers when line is complete
+      return 0.1;
     }
     
-    // For normal state (line not complete or editing), use 1.0 opacity
-    return 1.0; // 100% full opacity for unselected numbers when line is not complete
+    // If no numbers are selected yet, show unselected numbers at full opacity
+    const hasAnySelections = currentLine.digits.some(digit => digit !== null && digit !== -1);
+    if (!hasAnySelections) {
+      return 1.2; // Higher opacity when nothing is selected yet
+    }
+    
+    // Normal state - use 100% opacity
+    return 1.0;
   }
 
   const selectionProgress = getSelectionProgress();
