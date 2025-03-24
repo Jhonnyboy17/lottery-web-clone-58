@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -24,6 +25,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
 }) => {
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
   const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
+  const [isRandomizing, setIsRandomizing] = useState(false);
+  const [cooldownTime, setCooldownTime] = useState(0);
 
   useEffect(() => {
     if (isLineComplete() && onAddLine) {
@@ -74,6 +77,17 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   }, [activeDigitIndex, currentLine.digits, currentLine.playType, setActiveDigitIndex]);
 
+  // Effect for cooldown timer
+  useEffect(() => {
+    if (cooldownTime > 0) {
+      const interval = setInterval(() => {
+        setCooldownTime(prev => Math.max(0, prev - 1));
+      }, 1000);
+      
+      return () => clearInterval(interval);
+    }
+  }, [cooldownTime]);
+
   const handleNumberClick = (digit: number) => {
     setClickedNumber(digit);
     onDigitSelect(digit);
@@ -116,29 +130,54 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
 
   const handleRandomPick = () => {
+    if (isRandomizing || cooldownTime > 0) return;
+    
+    const filledCount = currentLine.digits.filter(digit => digit !== null && digit !== -1).length;
+    
+    // Set cooldown based on filled numbers
+    let newCooldownTime = 4; // Default cooldown
+    if (filledCount === 3) newCooldownTime = 2;
+    else if (filledCount === 2) newCooldownTime = 3;
+    else if (filledCount === 1) newCooldownTime = 4;
+    else if (filledCount === 0) newCooldownTime = 4;
+    
+    setCooldownTime(newCooldownTime);
+    setIsRandomizing(true);
     setAnimatedProgress(getSelectionProgress());
     
-    let newDigits = [...currentLine.digits];
+    // Identify empty positions based on play type
     let emptyPositions: number[] = [];
     
     if (currentLine.playType === "Back Pair") {
-      if (newDigits[1] === null) emptyPositions.push(1);
-      if (newDigits[2] === null) emptyPositions.push(2);
+      if (currentLine.digits[1] === null) emptyPositions.push(1);
+      if (currentLine.digits[2] === null) emptyPositions.push(2);
     } else if (currentLine.playType === "Front Pair") {
-      if (newDigits[0] === null) emptyPositions.push(0);
-      if (newDigits[1] === null) emptyPositions.push(1);
+      if (currentLine.digits[0] === null) emptyPositions.push(0);
+      if (currentLine.digits[1] === null) emptyPositions.push(1);
     } else {
-      newDigits.forEach((digit, index) => {
+      currentLine.digits.forEach((digit, index) => {
         if (digit === null) emptyPositions.push(index);
       });
     }
     
-    emptyPositions.forEach((position, index) => {
-      setTimeout(() => {
-        const randomDigit = Math.floor(Math.random() * 10);
-        onDigitSelect(randomDigit);
-      }, index * 200);
-    });
+    // Generate random numbers one by one with delays
+    if (emptyPositions.length > 0) {
+      emptyPositions.forEach((position, index) => {
+        setTimeout(() => {
+          const randomDigit = Math.floor(Math.random() * 10);
+          onDigitSelect(randomDigit);
+          
+          // When last number is generated, end randomizing state
+          if (index === emptyPositions.length - 1) {
+            setTimeout(() => {
+              setIsRandomizing(false);
+            }, 500);
+          }
+        }, index * 400);
+      });
+    } else {
+      setIsRandomizing(false);
+    }
   };
 
   const selectionProgress = getSelectionProgress();
@@ -222,15 +261,17 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
         <Button 
           onClick={handleRandomPick}
           variant="outline" 
-          className="text-xs text-blue-500 border-blue-500"
+          className={`text-xs text-blue-500 border-blue-500 ${isRandomizing ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={isRandomizing}
         >
-          Jogada Aleatória
+          {cooldownTime > 0 ? `Jogada Aleatória (${cooldownTime}s)` : "Jogada Aleatória"}
         </Button>
         
         <Button 
           onClick={onClearSelections}
           variant="link" 
           className="text-xs text-gray-500"
+          disabled={isRandomizing}
         >
           Limpar seleções
         </Button>
