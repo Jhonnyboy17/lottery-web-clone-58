@@ -196,11 +196,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     if (isSelected) return 1; // Selected numbers always fully visible
     
     if (shouldDimUnselected) {
-      // Full line complete - use 7% opacity
-      return 0.07;
+      // Full line complete - use 10% opacity
+      return 0.1;
     }
     
-    return 0.2; // Default 20% opacity
+    return 0.4; // Default 40% opacity
   }
 
   const selectionProgress = getSelectionProgress();

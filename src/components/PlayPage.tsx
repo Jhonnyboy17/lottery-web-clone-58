@@ -367,11 +367,11 @@ const PlayPage = ({
     
     if (shouldDimUnselected) {
       if (selectedNumbers.length === maxRegularNumbers) {
-        return 0.07; // 7% opacity when all 6 are selected (line complete)
+        return 0.1; // 10% opacity when all numbers are selected (line complete)
       }
     }
     
-    return 0.2; // 20% opacity for all other states
+    return 0.4; // 40% opacity for all other states
   }
 
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>
