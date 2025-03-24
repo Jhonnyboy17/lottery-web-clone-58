@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -462,7 +463,7 @@ const PlayPage = ({
             <Button 
               onClick={handleAddLine} 
               disabled={!isLineComplete() || isRandomizing}
-              className="w-full hover:bg-opacity-90 mt-2 px-10"
+              className="w-full hover:bg-opacity-90 mt-2"
               style={{ backgroundColor: colorValue }}
             >
               {editingLineIndex !== null ? "ATUALIZAR LINHA" : "ADD LINHA"}
