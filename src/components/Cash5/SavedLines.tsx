@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Trash2, Edit, X } from "lucide-react";
+import { Trash2, Edit } from "lucide-react";
 import { NumberSelectionType } from "./types";
 
 interface SavedLinesProps {
@@ -31,7 +31,11 @@ const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine, onEdi
                 {line.digits.map((digit, i) => (
                   <span 
                     key={i} 
-                    className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-blue-500"
+                    className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
+                      digit === null ? 'bg-[#F1F1F1] text-gray-500' : 
+                      digit === -1 ? 'bg-red-500 text-white' : 
+                      'bg-blue-500 text-white'
+                    }`}
                   >
                     {digit === null ? '?' : digit === -1 ? <span className="font-bold">x</span> : digit}
                   </span>

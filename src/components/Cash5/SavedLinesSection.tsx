@@ -31,19 +31,25 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       ) : (
         <>
           {savedLines.map((line, index) => (
-            <div key={index} className="mb-2">
+            <div key={index} className={`mb-2 ${editingIndex === index ? 'bg-blue-50' : 'bg-white'}`}>
               <div 
-                className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+                className={`rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors ${
+                  editingIndex === index ? 'bg-blue-50' : 'bg-white'
+                }`}
                 onClick={() => onEditLine(index)}
               >
                 <div className="flex items-center">
                   <span className="text-gray-500 font-medium w-6 mr-2">
-                    {index + 1}
+                    {String(index + 1).padStart(2, '0')}
                   </span>
                   {line.digits.map((digit, i) => (
                     <span 
                       key={i} 
-                      className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-amber-500"
+                      className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
+                        digit === null ? 'bg-[#F1F1F1] text-gray-500' : 
+                        digit === -1 ? 'bg-red-500 text-white' : 
+                        'bg-blue-500 text-white'
+                      }`}
                     >
                       {digit === null ? '?' : digit === -1 ? <span className="font-bold">x</span> : digit}
                     </span>
@@ -62,7 +68,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
             </div>
           ))}
           
-          {/* Empty template line - always shown as the next line and now clickable */}
+          {/* Empty template line - always shown as the next line and clickable */}
           <div className="mb-2">
             <div 
               className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
@@ -70,12 +76,12 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
             >
               <div className="flex items-center">
                 <span className="text-gray-500 font-medium w-6 mr-2">
-                  {savedLines.length + 1}
+                  {String(savedLines.length + 1).padStart(2, '0')}
                 </span>
                 {Array(5).fill(null).map((_, i) => (
                   <span 
                     key={i} 
-                    className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                    className="bg-[#F1F1F1] text-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                   >
                     ?
                   </span>
