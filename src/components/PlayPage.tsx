@@ -41,15 +41,15 @@ const PlayPage = ({
   const [numberOfDraws, setNumberOfDraws] = useState("1");
   const [savedLines, setSavedLines] = useState<SavedLineType[]>([]);
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null);
-  const [animatedProgress, setAnimatedProgress] = useState<number>(0);
-  const [animating, setAnimating] = useState<boolean>(false);
-
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [progressValue, setProgressValue] = useState(0);
+  
   const regularNumbers = Array.from({ length: totalRegularNumbers }, (_, i) => i + 1);
   const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
   const hasPowerball = maxPowerballNumbers > 0;
   
-  const regularNumbersProgress = (selectedNumbers.length / maxRegularNumbers) * 100;
-  const powerballProgress = selectedPowerball ? 100 : 0;
+  const calculateRegularProgress = () => (selectedNumbers.length / maxRegularNumbers) * 100;
+  const calculatePowerballProgress = () => selectedPowerball ? 100 : 0;
   
   useEffect(() => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
@@ -62,34 +62,33 @@ const PlayPage = ({
   }, [selectedNumbers, selectedPowerball]);
 
   useEffect(() => {
-    if (animating) {
-      const targetProgress = regularNumbersProgress;
-      
-      if (animatedProgress < targetProgress) {
-        const interval = setInterval(() => {
-          setAnimatedProgress(prev => {
-            if (prev < targetProgress) {
-              const newProgress = Math.min(prev + 5, targetProgress);
-              return newProgress;
-            } else {
-              clearInterval(interval);
-              setAnimating(false);
-              return targetProgress;
-            }
-          });
-        }, 20);
-        
-        return () => clearInterval(interval);
-      } else {
-        setAnimatedProgress(targetProgress);
-        setAnimating(false);
-      }
-    } else if (!animating && !selectedNumbers.length) {
-      setAnimatedProgress(0);
-    } else if (!animating) {
-      setAnimatedProgress(regularNumbersProgress);
+    if (!isAnimating) {
+      setProgressValue(calculateRegularProgress());
+      return;
     }
-  }, [animating, regularNumbersProgress, selectedNumbers.length]);
+
+    const targetProgress = calculateRegularProgress();
+    if (progressValue < targetProgress) {
+      const animationStep = 2;
+      const interval = setInterval(() => {
+        setProgressValue(prev => {
+          if (prev < targetProgress) {
+            const next = Math.min(prev + animationStep, targetProgress);
+            return next;
+          } else {
+            clearInterval(interval);
+            setIsAnimating(false);
+            return targetProgress;
+          }
+        });
+      }, 10);
+      
+      return () => clearInterval(interval);
+    } else {
+      setProgressValue(targetProgress);
+      setIsAnimating(false);
+    }
+  }, [isAnimating, selectedNumbers.length, maxRegularNumbers]);
 
   const handleNumberSelect = (number: number) => {
     if (selectedNumbers.includes(number)) {
@@ -109,15 +108,15 @@ const PlayPage = ({
   };
 
   const handleQuickPick = () => {
-    setAnimating(true);
+    setIsAnimating(true);
     
-    let newNumbers = [...selectedNumbers];
-    const remainingCount = maxRegularNumbers - newNumbers.length;
+    setSelectedNumbers([]);
     
-    if (remainingCount > 0) {
-      const availableNumbers = regularNumbers.filter(num => !newNumbers.includes(num));
+    setTimeout(() => {
+      let newNumbers: number[] = [];
+      const availableNumbers = [...regularNumbers];
       
-      for (let i = 0; i < remainingCount; i++) {
+      for (let i = 0; i < maxRegularNumbers; i++) {
         if (availableNumbers.length) {
           const randomIndex = Math.floor(Math.random() * availableNumbers.length);
           newNumbers.push(availableNumbers[randomIndex]);
@@ -125,13 +124,19 @@ const PlayPage = ({
         }
       }
       
-      setSelectedNumbers(newNumbers);
-    }
-    
-    if (hasPowerball && selectedPowerball === null) {
-      const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
-      setSelectedPowerball(randomPowerball);
-    }
+      newNumbers.forEach((num, index) => {
+        setTimeout(() => {
+          setSelectedNumbers(prev => [...prev, num]);
+        }, index * 150);
+      });
+      
+      if (hasPowerball) {
+        setTimeout(() => {
+          const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
+          setSelectedPowerball(randomPowerball);
+        }, maxRegularNumbers * 150);
+      }
+    }, 100);
     
     setEditingLineIndex(null);
   };
@@ -161,8 +166,8 @@ const PlayPage = ({
       setSelectedPowerball(null);
       setIncludeExtraPlay(false);
       setNumberOfDraws("1");
-      setAnimatedProgress(0);
-      setAnimating(false);
+      setProgressValue(0);
+      setIsAnimating(false);
     }
   };
 
@@ -246,8 +251,6 @@ const PlayPage = ({
     }
   };
 
-  const displayProgress = animating ? animatedProgress : regularNumbersProgress;
-
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -289,11 +292,9 @@ const PlayPage = ({
             </div>
             <div className="mb-3">
               <Progress 
-                value={displayProgress} 
+                value={progressValue}
                 className="h-2"
-                style={{ 
-                  backgroundColor: "#e5e7eb"
-                }}
+                style={{ backgroundColor: "#e5e7eb" }}
               />
             </div>
             <div className="grid grid-cols-9 gap-1 mb-4">
@@ -320,11 +321,9 @@ const PlayPage = ({
                 </div>
                 <div className="mb-3">
                   <Progress 
-                    value={powerballProgress} 
+                    value={calculatePowerballProgress()}
                     className="h-2"
-                    style={{ 
-                      backgroundColor: "#e5e7eb"
-                    }}
+                    style={{ backgroundColor: "#e5e7eb" }}
                   />
                 </div>
                 <div className="grid grid-cols-9 gap-1 mb-4">
