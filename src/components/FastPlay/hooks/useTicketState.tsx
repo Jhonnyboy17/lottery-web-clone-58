@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react";
-import { NumberSelectionType } from "../../Cash5/types";
+
+import { useState } from "react";
+import { NumberSelectionType } from "../types";
+import { useDigitSelection } from "./useDigitSelection";
+import { useLineOptions } from "./useLineOptions";
+import { useSavedLines } from "./useSavedLines";
 
 export const useTicketState = () => {
   const [currentLine, setCurrentLine] = useState<NumberSelectionType>({
@@ -10,274 +14,27 @@ export const useTicketState = () => {
     drawCount: "1"
   });
   
-  const [savedLines, setSavedLines] = useState<NumberSelectionType[]>([]);
-  const [lineCount, setLineCount] = useState(1);
-  const [activeDigitIndex, setActiveDigitIndex] = useState<number | null>(0); // Start with first digit selected
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
+  // Get saved lines functionality
+  const {
+    savedLines,
+    lineCount,
+    isEditing,
+    editingIndex,
+    handleAddLine: addLine,
+    handleRemoveLine: removeLine,
+    handleEditLine: editLine,
+    getTicketPrice
+  } = useSavedLines();
 
-  // Effect to auto-add line when complete
-  useEffect(() => {
-    if (isLineComplete() && !isEditing) {
-      const timer = setTimeout(() => {
-        handleAddLine();
-      }, 300);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [currentLine.digits]);
-
-  // Handle changing active digit index when playType changes
-  useEffect(() => {
-    if (currentLine.playType === "Back Pair") {
-      // For Back Pair, first digit is disabled, so start with second digit
-      if (activeDigitIndex === 0 || activeDigitIndex === null) {
-        setActiveDigitIndex(1);
-      }
-    } else if (currentLine.playType === "Front Pair") {
-      // For Front Pair, last digit is disabled, so start with first digit
-      if (activeDigitIndex === 2 || activeDigitIndex === null) {
-        setActiveDigitIndex(0);
-      }
-    } else if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
-      // For other play types, find the first empty digit
-      const firstEmptyIndex = currentLine.digits.findIndex(digit => digit === null);
-      if (firstEmptyIndex !== -1) {
-        setActiveDigitIndex(firstEmptyIndex);
-      }
-    }
-  }, [currentLine.playType, currentLine.digits, activeDigitIndex]);
-
-  // Handle animation effect for progress bar
-  useEffect(() => {
-    if (animatedProgress !== null) {
-      const interval = setInterval(() => {
-        setAnimatedProgress(prev => {
-          if (prev !== null && prev < getProgressPercentage()) {
-            return prev + 5;
-          } else {
-            clearInterval(interval);
-            return getProgressPercentage();
-          }
-        });
-      }, 20);
-      
-      return () => clearInterval(interval);
-    }
-  }, [animatedProgress]);
-
-  const getProgressPercentage = () => {
-    if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
-      // For pair types, we need 2 digits (excluding the 'X' digit)
-      const filledCount = currentLine.digits.filter(d => d !== null && d !== -1).length;
-      return (filledCount / 2) * 100;
-    } else {
-      // For other types, we need all 3 digits
-      const filledCount = currentLine.digits.filter(d => d !== null).length;
-      return (filledCount / 3) * 100;
-    }
-  };
-
-  const handleDigitSelect = (digit: number) => {
-    if (activeDigitIndex === null) return;
-    
-    // Skip first digit for Back Pair
-    if (currentLine.playType === "Back Pair" && activeDigitIndex === 0) return;
-    
-    // Skip last digit for Front Pair
-    if (currentLine.playType === "Front Pair" && activeDigitIndex === 2) return;
-    
-    const newDigits = [...currentLine.digits];
-    newDigits[activeDigitIndex] = digit;
-    
-    setCurrentLine({
-      ...currentLine,
-      digits: newDigits
-    });
-    
-    // Find next available digit
-    let nextEmptyIndex = -1;
-    
-    if (currentLine.playType === "Back Pair") {
-      // For Back Pair, only check digits 1 and 2
-      for (let i = 1; i <= 2; i++) {
-        if (i > activeDigitIndex && newDigits[i] === null) {
-          nextEmptyIndex = i;
-          break;
-        }
-      }
-    } else if (currentLine.playType === "Front Pair") {
-      // For Front Pair, only check digits 0 and 1
-      for (let i = 0; i <= 1; i++) {
-        if (i > activeDigitIndex && newDigits[i] === null) {
-          nextEmptyIndex = i;
-          break;
-        }
-      }
-    } else {
-      // For other play types, check all digits
-      nextEmptyIndex = newDigits.findIndex((d, i) => d === null && i > activeDigitIndex);
-    }
-    
-    if (nextEmptyIndex !== -1) {
-      setActiveDigitIndex(nextEmptyIndex);
-    } else {
-      // If we're done entering digits, set to null
-      setActiveDigitIndex(null);
-    }
-  };
-
-  const handlePlayTypeChange = (value: string) => {
-    const newPlayType = value;
-    let newDigits = [...currentLine.digits];
-    
-    // Reset digits when switching between pair types and other types
-    if ((currentLine.playType !== "Back Pair" && currentLine.playType !== "Front Pair") && 
-        (newPlayType === "Back Pair" || newPlayType === "Front Pair")) {
-      newDigits = [null, null, null];
-    } else if ((currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") && 
-               (newPlayType !== "Back Pair" && newPlayType !== "Front Pair")) {
-      newDigits = [null, null, null];
-    }
-    
-    // Set the first digit to "X" (represented as -1) for Back Pair
-    if (newPlayType === "Back Pair") {
-      newDigits[0] = -1; // Using -1 to represent "X"
-      setActiveDigitIndex(1);
-    } 
-    // Set the last digit to "X" for Front Pair
-    else if (newPlayType === "Front Pair") {
-      newDigits[2] = -1; // Using -1 to represent "X"
-      setActiveDigitIndex(0);
-    } 
-    // Reset all digits to null when switching from a pair type to a non-pair type
-    else if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
-      newDigits = [null, null, null];
-      setActiveDigitIndex(0);
-    }
-    
-    setCurrentLine({
-      ...currentLine,
-      playType: newPlayType,
-      digits: newDigits
-    });
-  };
-
-  const handleBetAmountChange = (value: string) => {
-    setCurrentLine({
-      ...currentLine,
-      betAmount: value
-    });
-  };
-
-  const handleQuickPick = () => {
-    // Start animation from current progress
-    setAnimatedProgress(getProgressPercentage());
-    
-    let randomDigits = [null, null, null];
-    
-    if (currentLine.playType === "Back Pair") {
-      // For Back Pair, keep any existing digit selections
-      randomDigits = [...currentLine.digits];
-      
-      // Fill in any missing digits in positions 1 and 2
-      if (randomDigits[1] === null) {
-        randomDigits[1] = Math.floor(Math.random() * 10);
-      }
-      if (randomDigits[2] === null) {
-        randomDigits[2] = Math.floor(Math.random() * 10);
-      }
-      
-      // Ensure position 0 is set to -1 (X)
-      randomDigits[0] = -1;
-    } else if (currentLine.playType === "Front Pair") {
-      // For Front Pair, keep any existing digit selections
-      randomDigits = [...currentLine.digits];
-      
-      // Fill in any missing digits in positions 0 and 1
-      if (randomDigits[0] === null) {
-        randomDigits[0] = Math.floor(Math.random() * 10);
-      }
-      if (randomDigits[1] === null) {
-        randomDigits[1] = Math.floor(Math.random() * 10);
-      }
-      
-      // Ensure position 2 is set to -1 (X)
-      randomDigits[2] = -1;
-    } else {
-      // For other play types, keep any existing digit selections
-      randomDigits = [...currentLine.digits];
-      
-      // Fill in any missing digits
-      for (let i = 0; i < randomDigits.length; i++) {
-        if (randomDigits[i] === null) {
-          randomDigits[i] = Math.floor(Math.random() * 10);
-        }
-      }
-    }
-    
-    setCurrentLine({
-      ...currentLine,
-      digits: randomDigits
-    });
-    
-    setActiveDigitIndex(null);
-  };
-
-  const clearSelections = () => {
+  // This function will be passed to hooks that need to reset the current line
+  const resetCurrentLine = () => {
     // Initialize with appropriate values based on play type
     let newDigits = [null, null, null];
     
     if (currentLine.playType === "Back Pair") {
       newDigits[0] = -1; // Set first digit as "X" for Back Pair
-      setActiveDigitIndex(1);
     } else if (currentLine.playType === "Front Pair") {
       newDigits[2] = -1; // Set last digit as "X" for Front Pair
-      setActiveDigitIndex(0);
-    } else {
-      setActiveDigitIndex(0);
-    }
-    
-    setCurrentLine({
-      ...currentLine,
-      digits: newDigits
-    });
-    
-    // Reset animation
-    setAnimatedProgress(0);
-  };
-
-  const handleAddLine = () => {
-    // Check if line is complete based on play type
-    if (!isPairTypeLineComplete()) return;
-    
-    if (isEditing && editingIndex !== null) {
-      // Update existing line
-      const updatedLines = [...savedLines];
-      updatedLines[editingIndex] = {...currentLine};
-      setSavedLines(updatedLines);
-      
-      // Reset editing state
-      setIsEditing(false);
-      setEditingIndex(null);
-    } else {
-      // Add new line
-      setSavedLines([...savedLines, {...currentLine}]);
-      setLineCount(lineCount + 1);
-    }
-    
-    // Reset with appropriate values based on play type
-    let newDigits = [null, null, null];
-    
-    if (currentLine.playType === "Back Pair") {
-      newDigits[0] = -1; // Set first digit as "X" for Back Pair
-      setActiveDigitIndex(1);
-    } else if (currentLine.playType === "Front Pair") {
-      newDigits[2] = -1; // Set last digit as "X" for Front Pair
-      setActiveDigitIndex(0);
-    } else {
-      setActiveDigitIndex(0);
     }
     
     setCurrentLine({
@@ -289,96 +46,56 @@ export const useTicketState = () => {
     });
     
     // Reset animation
-    setAnimatedProgress(0);
+    digitSelection.setAnimatedProgress(0);
   };
 
+  // Get digit selection functionality
+  const digitSelection = useDigitSelection(
+    currentLine, 
+    setCurrentLine, 
+    isEditing,
+    () => addLine(currentLine, resetCurrentLine)
+  );
+
+  // Get line options functionality
+  const lineOptions = useLineOptions(
+    currentLine, 
+    setCurrentLine, 
+    digitSelection.setActiveDigitIndex,
+    digitSelection.setAnimatedProgress
+  );
+
+  // Wrapper functions to provide the needed parameters
+  const handleAddLine = () => addLine(currentLine, resetCurrentLine);
+  
   const handleRemoveLine = (lineIndex: number) => {
-    setSavedLines(savedLines.filter((_, index) => index !== lineIndex));
-    // Decrease the line count when a line is removed
-    if (lineCount > 1) {
-      setLineCount(lineCount - 1);
-    }
-    
-    // If removing the line we're currently editing, cancel editing
-    if (isEditing && editingIndex === lineIndex) {
-      setIsEditing(false);
-      setEditingIndex(null);
-      clearSelections();
-    }
+    removeLine(lineIndex, lineOptions.clearSelections);
   };
 
   const handleEditLine = (lineIndex: number) => {
-    // If lineIndex is -1, it's just a trigger to re-render
-    if (lineIndex === -1) return;
-    
-    const lineToEdit = savedLines[lineIndex];
-    if (!lineToEdit) return;
-    
-    setCurrentLine({...lineToEdit});
-    setIsEditing(true);
-    setEditingIndex(lineIndex);
-    setActiveDigitIndex(null); // Don't focus any digit initially when editing
-  };
-
-  // Check if line is complete based on play type
-  const isPairTypeLineComplete = () => {
-    if (currentLine.playType === "Back Pair") {
-      // For Back Pair, check if digits 1 and 2 are filled
-      return currentLine.digits[1] !== null && currentLine.digits[2] !== null;
-    } else if (currentLine.playType === "Front Pair") {
-      // For Front Pair, check if digits 0 and 1 are filled
-      return currentLine.digits[0] !== null && currentLine.digits[1] !== null;
-    } else {
-      // For other play types, check if all digits are filled
-      return !currentLine.digits.some(digit => digit === null);
-    }
-  };
-
-  const isLineComplete = () => {
-    return isPairTypeLineComplete();
-  };
-
-  const getTicketPrice = () => {
-    const calculateLinePrice = (line: NumberSelectionType) => {
-      // Extract the numeric value from the bet amount string and parse it
-      const amount = parseFloat(line.betAmount.replace('R$', ''));
-      const fireballAmount = line.includeFireball ? 1 : 0;
-      const drawCount = parseInt(line.drawCount || "1");
-      
-      return (amount + fireballAmount) * drawCount;
-    };
-
-    // Calculate total price for all lines
-    const totalPrice = savedLines.reduce((sum, line) => sum + calculateLinePrice(line), 0);
-    
-    // Format as BRL
-    return totalPrice.toLocaleString('pt-BR', {
-      style: 'currency',
-      currency: 'BRL',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).replace('R$', 'R$ ');
+    editLine(lineIndex, setCurrentLine);
+    digitSelection.setActiveDigitIndex(null); // Don't focus any digit initially when editing
   };
 
   return {
     currentLine,
     savedLines,
     lineCount,
-    activeDigitIndex,
+    activeDigitIndex: digitSelection.activeDigitIndex,
     isEditing,
     editingIndex,
-    animatedProgress,
-    setActiveDigitIndex,
-    handleDigitSelect,
-    handlePlayTypeChange,
-    handleBetAmountChange,
-    handleQuickPick,
-    clearSelections,
+    animatedProgress: digitSelection.animatedProgress,
+    setActiveDigitIndex: digitSelection.setActiveDigitIndex,
+    handleDigitSelect: digitSelection.handleDigitSelect,
+    handlePlayTypeChange: lineOptions.handlePlayTypeChange,
+    handleBetAmountChange: lineOptions.handleBetAmountChange,
+    handleQuickPick: lineOptions.handleQuickPick,
+    clearSelections: lineOptions.clearSelections,
     handleAddLine,
     handleRemoveLine,
     handleEditLine,
-    isLineComplete,
+    isLineComplete: digitSelection.isLineComplete,
     getTicketPrice,
-    getProgressPercentage
+    getProgressPercentage: digitSelection.getProgressPercentage
   };
 };

@@ -39,7 +39,6 @@ export const FastPlayPage = ({
     handleBetAmountChange,
     handleQuickPick,
     clearSelections,
-    handleAddLine,
     handleRemoveLine,
     handleEditLine,
     isLineComplete,
