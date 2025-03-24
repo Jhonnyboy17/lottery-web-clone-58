@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -60,6 +59,10 @@ const PlayPage = ({
 
   const calculateRegularProgress = () => selectedNumbers.length / maxRegularNumbers * 100;
   const calculatePowerballProgress = () => selectedPowerball ? 100 : 0;
+
+  const getLineCount = () => {
+    return savedLines.length + 1;
+  };
 
   useEffect(() => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null) && !isNumberClicked && !editMode) {
@@ -377,7 +380,7 @@ const PlayPage = ({
         <Card className="border-0 shadow-md overflow-hidden h-full">
           <div className="p-4">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold">Escolha seus números</h3>
+              <h3 className="font-semibold">Linha {String(getLineCount()).padStart(2, '0')}</h3>
               <Button onClick={handleQuickPick} disabled={isRandomizing} className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6" style={{
                 color: colorValue,
                 borderColor: colorValue
