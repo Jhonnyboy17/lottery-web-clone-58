@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -269,7 +268,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
               >
                 <span 
                   style={{
-                    fontSize: '0.8em',
                     position: 'absolute',
                     borderRadius: '50%',
                     content: '""',
@@ -284,7 +282,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                     backgroundColor: isSelected || clickedNumber === number ? colorValue : 'transparent'
                   }}
                 ></span>
-                <span style={{ fontSize: '0.8em' }}>{number}</span>
+                <span style={{ fontSize: '1.35em', fontWeight: 700 }}>{number}</span>
               </button>
             );
           })}

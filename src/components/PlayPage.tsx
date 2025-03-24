@@ -442,7 +442,7 @@ const PlayPage = ({
                       zIndex: -1,
                       backgroundColor: isSelected ? colorValue : 'transparent'
                     }}></span>
-                    <span style={{ fontSize: '0.8em' }}>{number}</span>
+                    <span style={{ fontSize: '1.35em', fontWeight: 700 }}>{number}</span>
                   </button>
                 );
               })}
@@ -502,7 +502,7 @@ const PlayPage = ({
                           zIndex: -1,
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
                         }}></span>
-                        <span style={{ fontSize: '0.8em' }}>{number}</span>
+                        <span style={{ fontSize: '1.35em', fontWeight: 700 }}>{number}</span>
                       </button>
                     );
                   })}
