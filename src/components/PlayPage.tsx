@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -443,7 +444,7 @@ const PlayPage = ({
                       backgroundColor: isSelected ? colorValue : 'transparent'
                     }}></span>
                     <span style={{ 
-                      fontSize: '0.95em', 
+                      fontSize: '1.10em', 
                       fontWeight: 700, 
                       display: 'flex', 
                       alignItems: 'center', 
@@ -511,7 +512,7 @@ const PlayPage = ({
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
                         }}></span>
                         <span style={{ 
-                          fontSize: '0.95em', 
+                          fontSize: '1.10em', 
                           fontWeight: 700, 
                           display: 'flex', 
                           alignItems: 'center', 

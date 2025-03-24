@@ -195,7 +195,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const getNumberOpacity = (isSelected: boolean) => {
     if (isSelected) return 1.0;
     
-    // Se a linha estiver completa com todos os dígitos preenchidos
     const allDigitsFilled = currentLine.digits.every(digit => digit !== null && digit !== -1);
     if (allDigitsFilled) {
       return 0.4;
@@ -282,7 +281,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                     backgroundColor: isSelected || clickedNumber === number ? colorValue : 'transparent'
                   }}
                 ></span>
-                <span style={{ fontSize: '0.95em', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>{number}</span>
+                <span style={{ fontSize: '1.10em', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>{number}</span>
               </button>
             );
           })}
