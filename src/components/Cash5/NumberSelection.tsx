@@ -198,16 +198,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     // Se a linha estiver completa com todos os dígitos preenchidos
     const allDigitsFilled = currentLine.digits.every(digit => digit !== null && digit !== -1);
     if (allDigitsFilled) {
-      return 1.0;
-    }
-    
-    if (isLineComplete() && !isEditingNumber && !isEditing) {
       return 0.4;
-    }
-    
-    const hasAnySelections = currentLine.digits.some(digit => digit !== null && digit !== -1);
-    if (!hasAnySelections) {
-      return 1.0;
     }
     
     return 1.0;
@@ -266,7 +257,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                     : '#f5f5f5',
                   color: clickedNumber === number || isSelected
                     ? 'white'
-                    : '#888888',
+                    : '#333333',
                   opacity: opacity,
                   fontWeight: isSelected ? '600' : '500',
                   position: 'relative',

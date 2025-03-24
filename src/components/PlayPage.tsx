@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -364,16 +363,9 @@ const PlayPage = ({
   const getNumberOpacity = (isSelected: boolean) => {
     if (isSelected) return 1.0;
     
+    // Only dim unselected numbers when all numbers are selected (full line)
     if (selectedNumbers.length === maxRegularNumbers) {
-      return 1.0;
-    }
-    
-    if (shouldDimUnselected) {
       return 0.4;
-    }
-    
-    if (selectedNumbers.length === 0) {
-      return 1.0;
     }
     
     return 1.0;
@@ -420,7 +412,7 @@ const PlayPage = ({
                       alignItems: 'center',
                       backgroundColor: isSelected ? colorValue : '#f0f0f0',
                       borderRadius: '50%',
-                      color: isSelected ? 'white' : '#888888',
+                      color: isSelected ? 'white' : '#333333',
                       cursor: 'pointer',
                       display: 'flex',
                       fontSize: '1.2em',
@@ -481,7 +473,7 @@ const PlayPage = ({
                           alignItems: 'center',
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f0f0f0',
                           borderRadius: '50%',
-                          color: isSelected ? 'white' : '#888888',
+                          color: isSelected ? 'white' : '#333333',
                           cursor: 'pointer',
                           display: 'flex',
                           fontSize: '1.2em',
