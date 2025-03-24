@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -47,11 +46,13 @@ const PlayPage = ({
   const regularNumbers = Array.from({ length: totalRegularNumbers }, (_, i) => i + 1);
   const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
   const hasPowerball = maxPowerballNumbers > 0;
+  
+  const regularNumbersProgress = (selectedNumbers.length / maxRegularNumbers) * 100;
+  const powerballProgress = selectedPowerball ? 100 : 0;
+  const displayProgress = animatedProgress !== null ? animatedProgress : regularNumbersProgress;
 
-  // Effect to auto-add line when complete
   useEffect(() => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
-      // Wait a bit before automatically adding the line
       const timer = setTimeout(() => {
         handleAddLine();
       }, 300);
@@ -60,7 +61,6 @@ const PlayPage = ({
     }
   }, [selectedNumbers, selectedPowerball]);
 
-  // Effect for animated progress bar
   useEffect(() => {
     if (animatedProgress !== null) {
       const interval = setInterval(() => {
@@ -76,7 +76,7 @@ const PlayPage = ({
       
       return () => clearInterval(interval);
     }
-  }, [animatedProgress]);
+  }, [animatedProgress, regularNumbersProgress]);
 
   const handleNumberSelect = (number: number) => {
     if (selectedNumbers.includes(number)) {
@@ -96,13 +96,10 @@ const PlayPage = ({
   };
 
   const handleQuickPick = () => {
-    // Start animation
     setAnimatedProgress(selectedNumbers.length * (100 / maxRegularNumbers));
     
-    // Keep already selected numbers
     let newNumbers = [...selectedNumbers];
     
-    // Add random numbers until we reach the max
     while (newNumbers.length < maxRegularNumbers) {
       const randomNumber = Math.floor(Math.random() * totalRegularNumbers) + 1;
       if (!newNumbers.includes(randomNumber)) {
@@ -123,7 +120,6 @@ const PlayPage = ({
   const handleAddLine = () => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
       if (editingLineIndex !== null) {
-        // Update existing line
         const updatedLines = [...savedLines];
         updatedLines[editingLineIndex] = {
           numbers: [...selectedNumbers],
@@ -134,7 +130,6 @@ const PlayPage = ({
         setSavedLines(updatedLines);
         setEditingLineIndex(null);
       } else {
-        // Add new line
         setSavedLines([...savedLines, {
           numbers: [...selectedNumbers],
           powerball: selectedPowerball,
@@ -143,7 +138,6 @@ const PlayPage = ({
         }]);
       }
       
-      // Reset for next line
       setSelectedNumbers([]);
       setSelectedPowerball(null);
       setIncludeExtraPlay(false);
@@ -195,7 +189,6 @@ const PlayPage = ({
       price += linePrice * parseInt(line.drawCount || "1");
     });
     
-    // Convert to BRL format
     return price.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',
@@ -224,11 +217,6 @@ const PlayPage = ({
   };
 
   const colorValue = getColorValue();
-
-  const regularNumbersProgress = (selectedNumbers.length / maxRegularNumbers) * 100;
-  const displayProgress = animatedProgress !== null ? animatedProgress : regularNumbersProgress;
-  
-  const powerballProgress = selectedPowerball ? 100 : 0;
 
   const isLineComplete = () => {
     if (hasPowerball) {
@@ -282,17 +270,9 @@ const PlayPage = ({
                 value={displayProgress} 
                 className="h-2"
                 style={{ 
-                  backgroundColor: "#e5e7eb", 
+                  backgroundColor: "#e5e7eb"
                 }}
-              >
-                <div 
-                  className="h-full transition-all" 
-                  style={{ 
-                    width: `${displayProgress}%`,
-                    backgroundColor: colorValue
-                  }}
-                />
-              </Progress>
+              />
             </div>
             <div className="grid grid-cols-9 gap-1 mb-4">
               {regularNumbers.map((number) => (
@@ -321,17 +301,9 @@ const PlayPage = ({
                     value={powerballProgress} 
                     className="h-2"
                     style={{ 
-                      backgroundColor: "#e5e7eb", 
+                      backgroundColor: "#e5e7eb"
                     }}
-                  >
-                    <div 
-                      className="h-full transition-all" 
-                      style={{ 
-                        width: `${powerballProgress}%`,
-                        backgroundColor: "#f59e0b" 
-                      }}
-                    />
-                  </Progress>
+                  />
                 </div>
                 <div className="grid grid-cols-9 gap-1 mb-4">
                   {powerballNumbers.map((number) => (
