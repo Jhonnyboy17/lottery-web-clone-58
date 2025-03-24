@@ -12,13 +12,15 @@ interface SavedLinesSectionProps {
   onToggleExtraPlay?: (index: number, checked: boolean) => void;
   onChangeDrawCount?: (index: number, count: string) => void;
   editingIndex: number | null;
+  onStartNewLine?: () => void;
 }
 
 const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
   savedLines,
   onRemoveLine,
   onEditLine,
-  editingIndex
+  editingIndex,
+  onStartNewLine
 }) => {
   return (
     <div className="bg-gray-50 p-4">
@@ -39,14 +41,12 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                     {index + 1}
                   </span>
                   {line.digits.map((digit, i) => (
-                    digit !== null && (
-                      <span 
-                        key={i} 
-                        className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-amber-500"
-                      >
-                        {digit === -1 ? <span className="font-bold">x</span> : digit}
-                      </span>
-                    )
+                    <span 
+                      key={i} 
+                      className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-amber-500"
+                    >
+                      {digit === null ? '?' : digit === -1 ? <span className="font-bold">x</span> : digit}
+                    </span>
                   ))}
                 </div>
                 <button 
@@ -62,10 +62,11 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
             </div>
           ))}
           
-          {/* Empty template line - always shown as the next line */}
+          {/* Empty template line - always shown as the next line and now clickable */}
           <div className="mb-2">
             <div 
-              className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border border-gray-200"
+              className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
+              onClick={onStartNewLine}
             >
               <div className="flex items-center">
                 <span className="text-gray-500 font-medium w-6 mr-2">

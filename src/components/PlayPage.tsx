@@ -393,6 +393,16 @@ const PlayPage = ({
     return 1.0;
   }
 
+  const handleStartNewLine = () => {
+    setEditingLineIndex(null);
+    setSelectedNumbers([]);
+    setSelectedPowerball(null);
+    setProgressValue(0);
+    setIsAnimating(false);
+    setEditMode(false);
+    setIsEditingNumber(false);
+  };
+
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="border-0 shadow-md overflow-hidden h-full">
@@ -567,12 +577,12 @@ const PlayPage = ({
                             className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5" 
                             style={{ backgroundColor: colorValue }}
                           >
-                            {num}
+                            {num === null ? '?' : num}
                           </span>
                         ))}
-                        {hasPowerball && line.powerball && (
+                        {hasPowerball && (
                           <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
-                            {line.powerball}
+                            {line.powerball === null ? '?' : line.powerball}
                           </span>
                         )}
                       </div>
@@ -591,7 +601,10 @@ const PlayPage = ({
                 ))}
                 
                 <div className="mb-2">
-                  <div className="bg-blue-50 rounded p-3 flex items-center justify-between border border-gray-200">
+                  <div 
+                    className="bg-blue-50 rounded p-3 flex items-center justify-between border border-gray-200 cursor-pointer hover:bg-blue-100 transition-colors"
+                    onClick={handleStartNewLine}
+                  >
                     <div className="flex items-center">
                       <span className="text-gray-500 font-medium w-6 mr-2">
                         {savedLines.length + 1}

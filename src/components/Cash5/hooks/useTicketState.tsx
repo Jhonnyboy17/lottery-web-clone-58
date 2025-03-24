@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../types";
 
@@ -116,9 +115,19 @@ export const useTicketState = () => {
   const clearSelections = () => {
     setCurrentLine({
       ...currentLine,
-      digits: [null, null, null, null]
+      digits: Array(currentLine.digits.length).fill(null)
     });
     setActiveDigitIndex(0);
+    
+    // If editing, update the saved line immediately with null values
+    if (isEditing && editingIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {
+        ...currentLine,
+        digits: Array(currentLine.digits.length).fill(null)
+      };
+      setSavedLines(updatedLines);
+    }
   };
 
   const handleAddLine = () => {
