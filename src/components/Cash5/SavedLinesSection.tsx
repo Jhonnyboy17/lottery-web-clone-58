@@ -71,7 +71,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
           {/* Empty template line - always shown as the next line and clickable */}
           <div className="mb-2">
             <div 
-              className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border border-gray-200"
+              className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
               onClick={onStartNewLine}
             >
               <div className="flex items-center">

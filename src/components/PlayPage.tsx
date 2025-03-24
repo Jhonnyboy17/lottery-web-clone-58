@@ -574,18 +574,15 @@ const PlayPage = ({
                         {line.numbers.map((num, i) => (
                           <span 
                             key={i} 
-                            className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                              num ? `bg-${primaryColor} text-white` : 'bg-white border border-gray-200 text-gray-500'
-                            }`}
+                            className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5" 
+                            style={{ backgroundColor: colorValue }}
                           >
-                            {num || '?'}
+                            {num === null ? '?' : num}
                           </span>
                         ))}
                         {hasPowerball && (
-                          <span className={`rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 ${
-                            line.powerball ? 'bg-amber-500 text-white' : 'bg-white border border-gray-200 text-gray-500'
-                          }`}>
-                            {line.powerball || '?'}
+                          <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
+                            {line.powerball === null ? '?' : line.powerball}
                           </span>
                         )}
                       </div>
@@ -605,7 +602,7 @@ const PlayPage = ({
                 
                 <div className="mb-2">
                   <div 
-                    className="bg-white rounded p-3 flex items-center justify-between border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors"
+                    className="bg-blue-50 rounded p-3 flex items-center justify-between border border-gray-200 cursor-pointer hover:bg-blue-100 transition-colors"
                     onClick={handleStartNewLine}
                   >
                     <div className="flex items-center">
@@ -615,13 +612,13 @@ const PlayPage = ({
                       {Array(maxRegularNumbers).fill(null).map((_, i) => (
                         <span 
                           key={i} 
-                          className="bg-white border border-gray-200 text-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                          className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                         >
                           ?
                         </span>
                       ))}
                       {hasPowerball && (
-                        <span className="bg-white border border-gray-200 text-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
+                        <span className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
                           ?
                         </span>
                       )}
