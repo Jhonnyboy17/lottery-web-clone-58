@@ -41,7 +41,8 @@ const PlayPage = ({
   const [numberOfDraws, setNumberOfDraws] = useState("1");
   const [savedLines, setSavedLines] = useState<SavedLineType[]>([]);
   const [editingLineIndex, setEditingLineIndex] = useState<number | null>(null);
-  const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
+  const [animatedProgress, setAnimatedProgress] = useState<number>(0);
+  const [animating, setAnimating] = useState<boolean>(false);
 
   const regularNumbers = Array.from({ length: totalRegularNumbers }, (_, i) => i + 1);
   const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
@@ -49,8 +50,7 @@ const PlayPage = ({
   
   const regularNumbersProgress = (selectedNumbers.length / maxRegularNumbers) * 100;
   const powerballProgress = selectedPowerball ? 100 : 0;
-  const displayProgress = animatedProgress !== null ? animatedProgress : regularNumbersProgress;
-
+  
   useEffect(() => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
       const timer = setTimeout(() => {
@@ -62,21 +62,34 @@ const PlayPage = ({
   }, [selectedNumbers, selectedPowerball]);
 
   useEffect(() => {
-    if (animatedProgress !== null) {
-      const interval = setInterval(() => {
-        setAnimatedProgress(prev => {
-          if (prev !== null && prev < regularNumbersProgress) {
-            return prev + 5;
-          } else {
-            clearInterval(interval);
-            return regularNumbersProgress;
-          }
-        });
-      }, 20);
+    if (animating) {
+      const targetProgress = regularNumbersProgress;
       
-      return () => clearInterval(interval);
+      if (animatedProgress < targetProgress) {
+        const interval = setInterval(() => {
+          setAnimatedProgress(prev => {
+            if (prev < targetProgress) {
+              const newProgress = Math.min(prev + 5, targetProgress);
+              return newProgress;
+            } else {
+              clearInterval(interval);
+              setAnimating(false);
+              return targetProgress;
+            }
+          });
+        }, 20);
+        
+        return () => clearInterval(interval);
+      } else {
+        setAnimatedProgress(targetProgress);
+        setAnimating(false);
+      }
+    } else if (!animating && !selectedNumbers.length) {
+      setAnimatedProgress(0);
+    } else if (!animating) {
+      setAnimatedProgress(regularNumbersProgress);
     }
-  }, [animatedProgress, regularNumbersProgress]);
+  }, [animating, regularNumbersProgress, selectedNumbers.length]);
 
   const handleNumberSelect = (number: number) => {
     if (selectedNumbers.includes(number)) {
@@ -96,24 +109,30 @@ const PlayPage = ({
   };
 
   const handleQuickPick = () => {
-    setAnimatedProgress(selectedNumbers.length * (100 / maxRegularNumbers));
+    setAnimating(true);
     
     let newNumbers = [...selectedNumbers];
+    const remainingCount = maxRegularNumbers - newNumbers.length;
     
-    while (newNumbers.length < maxRegularNumbers) {
-      const randomNumber = Math.floor(Math.random() * totalRegularNumbers) + 1;
-      if (!newNumbers.includes(randomNumber)) {
-        newNumbers.push(randomNumber);
+    if (remainingCount > 0) {
+      const availableNumbers = regularNumbers.filter(num => !newNumbers.includes(num));
+      
+      for (let i = 0; i < remainingCount; i++) {
+        if (availableNumbers.length) {
+          const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+          newNumbers.push(availableNumbers[randomIndex]);
+          availableNumbers.splice(randomIndex, 1);
+        }
       }
+      
+      setSelectedNumbers(newNumbers);
     }
     
-    let randomPowerball = selectedPowerball;
-    if (hasPowerball && randomPowerball === null) {
-      randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
+    if (hasPowerball && selectedPowerball === null) {
+      const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
+      setSelectedPowerball(randomPowerball);
     }
     
-    setSelectedNumbers(newNumbers);
-    setSelectedPowerball(randomPowerball);
     setEditingLineIndex(null);
   };
 
@@ -143,6 +162,7 @@ const PlayPage = ({
       setIncludeExtraPlay(false);
       setNumberOfDraws("1");
       setAnimatedProgress(0);
+      setAnimating(false);
     }
   };
 
@@ -225,6 +245,8 @@ const PlayPage = ({
       return selectedNumbers.length === maxRegularNumbers;
     }
   };
+
+  const displayProgress = animating ? animatedProgress : regularNumbersProgress;
 
   return (
     <div className="min-h-screen bg-white">
