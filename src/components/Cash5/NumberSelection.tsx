@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -37,29 +36,23 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   }, [currentLine.digits, isLineComplete, onAddLine]);
 
-  // Handle animation effect for progress bar - this initializes when component mounts
-  useEffect(() => {
-    setAnimatedProgress(getSelectionProgress());
-  }, []);
-  
-  // This effect runs when the selection progress changes
+  // Improved animation logic for the progress bar
   useEffect(() => {
     const targetProgress = getSelectionProgress();
-    if (animatedProgress !== targetProgress) {
-      const interval = setInterval(() => {
-        setAnimatedProgress(prev => {
-          if (prev < targetProgress) {
-            return prev + 2;
-          } else {
-            clearInterval(interval);
-            return targetProgress;
-          }
-        });
-      }, 20);
-      
-      return () => clearInterval(interval);
-    }
-  }, [currentLine.digits, currentLine.playType]);
+    let step = targetProgress > animatedProgress ? 2 : -2;
+
+    const interval = setInterval(() => {
+      setAnimatedProgress(prev => {
+        if ((step > 0 && prev >= targetProgress) || (step < 0 && prev <= targetProgress)) {
+          clearInterval(interval);
+          return targetProgress;
+        }
+        return prev + step;
+      });
+    }, 20);
+
+    return () => clearInterval(interval);
+  }, [currentLine.digits, currentLine.playType, animatedProgress]);
   
   useEffect(() => {
     if (currentLine.playType === "Back Pair") {
@@ -168,8 +161,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   };
 
-  const selectionProgress = getSelectionProgress();
-
   return (
     <div className="relative mb-6 mt-8">
       <h2 className="text-center text-xl font-semibold mb-4 text-blue-800">
@@ -178,7 +169,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       
       <div className="flex justify-between items-center mb-2">
         <p className="text-sm font-medium">Progresso da seleção</p>
-        <span className="text-xs font-medium">{Math.round(selectionProgress)}%</span>
+        <span className="text-xs font-medium">{Math.round(animatedProgress)}%</span>
       </div>
       
       <div className="mb-3">
