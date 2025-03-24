@@ -11,7 +11,6 @@ interface NumberSelectionProps {
   onDigitSelect: (digit: number) => void;
   isLineComplete: () => boolean;
   onClearSelections: () => void;
-  onAddLine?: () => void;
 }
 
 const NumberSelection: React.FC<NumberSelectionProps> = ({
@@ -20,24 +19,12 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   currentLine,
   onDigitSelect,
   isLineComplete,
-  onClearSelections,
-  onAddLine
+  onClearSelections
 }) => {
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
   const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
   const [isRandomizing, setIsRandomizing] = useState(false);
   const [cooldownTime, setCooldownTime] = useState(0);
-
-  // Auto add line when complete (only if not a number was just clicked)
-  useEffect(() => {
-    if (isLineComplete() && onAddLine && !clickedNumber) {
-      const timer = setTimeout(() => {
-        onAddLine();
-      }, 300);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [currentLine.digits, isLineComplete, onAddLine, clickedNumber]);
 
   useEffect(() => {
     if (animatedProgress !== null) {

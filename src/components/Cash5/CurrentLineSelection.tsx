@@ -1,6 +1,5 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
 import TicketOptions from "./TicketOptions";
 import NumberSelection from "./NumberSelection";
 import { NumberSelectionType } from "./types";
@@ -16,9 +15,8 @@ interface CurrentLineSelectionProps {
   onPlayTypeChange: (value: string) => void;
   onBetAmountChange: (value: string) => void;
   onDigitSelect: (digit: number) => void;
-  isLineComplete: () => boolean; // This should be a function that returns a boolean
+  isLineComplete: () => boolean;
   onClearSelections: () => void;
-  onAddLine: () => void;
   colorValue: string;
 }
 
@@ -35,7 +33,6 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
   onDigitSelect,
   isLineComplete,
   onClearSelections,
-  onAddLine,
   colorValue
 }) => {
   return (
@@ -57,17 +54,7 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         onDigitSelect={onDigitSelect}
         isLineComplete={isLineComplete}
         onClearSelections={onClearSelections}
-        onAddLine={onAddLine}
       />
-
-      <Button 
-        onClick={onAddLine} 
-        disabled={!isLineComplete()}
-        className="w-full hover:bg-opacity-90 mt-2"
-        style={{ backgroundColor: colorValue }}
-      >
-        ADD LINHA
-      </Button>
     </div>
   );
 };
