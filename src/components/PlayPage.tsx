@@ -415,13 +415,23 @@ const PlayPage = ({
                     key={`regular-${number}`} 
                     onClick={() => handleNumberSelect(number)} 
                     disabled={isRandomizing} 
-                    className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-medium
-                    transition-all duration-200`}
                     style={{
-                      backgroundColor: isSelected ? colorValue : '#f5f5f5',
+                      alignItems: 'center',
+                      backgroundColor: isSelected ? colorValue : '#f0f0f0',
+                      borderRadius: '50%',
                       color: isSelected ? 'white' : '#888888',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      fontSize: '1.2em',
+                      fontWeight: 700,
+                      height: '2.7em',
+                      justifyContent: 'center',
+                      lineHeight: '2.7em',
+                      margin: '0.3em',
+                      textAlign: 'center',
+                      width: '2.7em',
+                      zIndex: 2,
                       opacity: opacity,
-                      fontWeight: isSelected ? '600' : '500'
                     }}
                   >
                     {number}
