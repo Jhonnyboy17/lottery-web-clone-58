@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -47,8 +48,10 @@ const PlayPage = ({
   const powerballNumbers = Array.from({ length: totalPowerballNumbers }, (_, i) => i + 1);
   const hasPowerball = maxPowerballNumbers > 0;
 
+  // Effect to auto-add line when complete
   useEffect(() => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
+      // Wait a bit before automatically adding the line
       const timer = setTimeout(() => {
         handleAddLine();
       }, 300);
@@ -57,35 +60,23 @@ const PlayPage = ({
     }
   }, [selectedNumbers, selectedPowerball]);
 
+  // Effect for animated progress bar
   useEffect(() => {
-    const targetProgress = regularNumbersProgress;
-    if (animatedProgress === null) {
-      setAnimatedProgress(0);
-      return;
+    if (animatedProgress !== null) {
+      const interval = setInterval(() => {
+        setAnimatedProgress(prev => {
+          if (prev !== null && prev < regularNumbersProgress) {
+            return prev + 5;
+          } else {
+            clearInterval(interval);
+            return regularNumbersProgress;
+          }
+        });
+      }, 20);
+      
+      return () => clearInterval(interval);
     }
-    
-    const duration = 2000;
-    const stepTime = 10;
-    const steps = duration / stepTime;
-    const stepSize = (targetProgress - animatedProgress) / steps;
-    
-    let currentStep = 0;
-    const interval = setInterval(() => {
-      setAnimatedProgress(prev => {
-        if (prev === null) return 0;
-        
-        const newProgress = prev + stepSize;
-        currentStep++;
-        if (currentStep >= steps || Math.abs(newProgress - targetProgress) < 0.5) {
-          clearInterval(interval);
-          return targetProgress;
-        }
-        return newProgress;
-      });
-    }, stepTime);
-    
-    return () => clearInterval(interval);
-  }, [regularNumbersProgress, animatedProgress]);
+  }, [animatedProgress]);
 
   const handleNumberSelect = (number: number) => {
     if (selectedNumbers.includes(number)) {
@@ -105,10 +96,13 @@ const PlayPage = ({
   };
 
   const handleQuickPick = () => {
+    // Start animation
     setAnimatedProgress(selectedNumbers.length * (100 / maxRegularNumbers));
     
+    // Keep already selected numbers
     let newNumbers = [...selectedNumbers];
     
+    // Add random numbers until we reach the max
     while (newNumbers.length < maxRegularNumbers) {
       const randomNumber = Math.floor(Math.random() * totalRegularNumbers) + 1;
       if (!newNumbers.includes(randomNumber)) {
@@ -129,6 +123,7 @@ const PlayPage = ({
   const handleAddLine = () => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
       if (editingLineIndex !== null) {
+        // Update existing line
         const updatedLines = [...savedLines];
         updatedLines[editingLineIndex] = {
           numbers: [...selectedNumbers],
@@ -139,6 +134,7 @@ const PlayPage = ({
         setSavedLines(updatedLines);
         setEditingLineIndex(null);
       } else {
+        // Add new line
         setSavedLines([...savedLines, {
           numbers: [...selectedNumbers],
           powerball: selectedPowerball,
@@ -147,6 +143,7 @@ const PlayPage = ({
         }]);
       }
       
+      // Reset for next line
       setSelectedNumbers([]);
       setSelectedPowerball(null);
       setIncludeExtraPlay(false);
@@ -198,6 +195,7 @@ const PlayPage = ({
       price += linePrice * parseInt(line.drawCount || "1");
     });
     
+    // Convert to BRL format
     return price.toLocaleString('pt-BR', {
       style: 'currency',
       currency: 'BRL',

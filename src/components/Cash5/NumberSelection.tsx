@@ -23,9 +23,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   onAddLine
 }) => {
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
-  const [animatedProgress, setAnimatedProgress] = useState<number>(0);
+  const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
 
-  // Auto-adicionar linha quando completa
+  // Auto-add line when complete
   useEffect(() => {
     if (isLineComplete() && onAddLine) {
       const timer = setTimeout(() => {
@@ -36,29 +36,24 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   }, [currentLine.digits, isLineComplete, onAddLine]);
 
-  // Animação suave da barra de progresso para 2 segundos
+  // Handle animation effect for progress bar
   useEffect(() => {
-    const targetProgress = getSelectionProgress();
-    const duration = 2000; // 2 segundos
-    const stepTime = 10; // Atualização a cada 10ms
-    const steps = duration / stepTime;
-    const stepSize = (targetProgress - animatedProgress) / steps;
-
-    let currentStep = 0;
-    const interval = setInterval(() => {
-      setAnimatedProgress(prev => {
-        const newProgress = prev + stepSize;
-        currentStep++;
-        if (currentStep >= steps) {
-          clearInterval(interval);
-          return targetProgress;
-        }
-        return newProgress;
-      });
-    }, stepTime);
-
-    return () => clearInterval(interval);
-  }, [currentLine.digits, currentLine.playType, animatedProgress]);
+    if (animatedProgress !== null) {
+      const interval = setInterval(() => {
+        setAnimatedProgress(prev => {
+          const targetProgress = getSelectionProgress();
+          if (prev !== null && prev < targetProgress) {
+            return prev + 5;
+          } else {
+            clearInterval(interval);
+            return targetProgress;
+          }
+        });
+      }, 20);
+      
+      return () => clearInterval(interval);
+    }
+  }, [animatedProgress]);
   
   useEffect(() => {
     if (currentLine.playType === "Back Pair") {
@@ -108,6 +103,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
            (currentLine.playType === "Front Pair" && index === 2);
   };
   
+  // Get appropriate heading text based on play type
   const getHeadingText = () => {
     if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
       return "Escolha 2 Números";
@@ -115,17 +111,23 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     return "Escolha 3 Números";
   };
 
+  // Calculate selection progress
   const getSelectionProgress = () => {
+    // For Back Pair and Front Pair, we only need to fill 2 digits
     if (currentLine.playType === "Back Pair" || currentLine.playType === "Front Pair") {
       const countFilled = currentLine.digits.filter(digit => digit !== null && digit !== -1).length;
       return (countFilled / 2) * 100;
     } else {
+      // For other play types, we need to fill all 3 digits
       const countFilled = currentLine.digits.filter(digit => digit !== null).length;
       return (countFilled / 3) * 100;
     }
   };
 
   const handleRandomPick = () => {
+    // Start animation from current progress
+    setAnimatedProgress(getSelectionProgress());
+    
     let newDigits = [...currentLine.digits];
     
     if (currentLine.playType === "Back Pair") {
@@ -163,6 +165,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   };
 
+  const selectionProgress = getSelectionProgress();
+  const displayProgress = animatedProgress !== null ? animatedProgress : selectionProgress;
+
   return (
     <div className="relative mb-6 mt-8">
       <h2 className="text-center text-xl font-semibold mb-4 text-blue-800">
@@ -171,19 +176,19 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       
       <div className="flex justify-between items-center mb-2">
         <p className="text-sm font-medium">Progresso da seleção</p>
-        <span className="text-xs font-medium">{Math.round(animatedProgress)}%</span>
+        <span className="text-xs font-medium">{Math.round(selectionProgress)}%</span>
       </div>
       
       <div className="mb-3">
         <Progress 
-          value={animatedProgress} 
+          value={displayProgress} 
           className="h-2"
           style={{ backgroundColor: "#e5e7eb" }}
         >
           <div 
             className="h-full transition-all" 
             style={{ 
-              width: `${animatedProgress}%`,
+              width: `${displayProgress}%`,
               backgroundColor: "#0EA5E9" 
             }}
           />
@@ -221,6 +226,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           const isActive = activeDigitIndex === idx && !isDisabled;
           const isX = digit === -1;
           
+          // Determine the appropriate style based on state
           let bgColor = isActive ? 'bg-blue-500' : isX ? 'bg-gray-200' : digit === null ? 'bg-gray-100' : 'bg-blue-100';
           let textColor = isActive ? 'text-white' : isX ? 'text-gray-700' : digit === null ? 'text-gray-400' : 'text-blue-800';
           let borderColor = isActive ? 'border-blue-600' : isX ? 'border-gray-300' : 'border-gray-200';
