@@ -366,11 +366,12 @@ const PlayPage = ({
     if (isSelected) return 1.2; // Selected numbers get 120% opacity for more visibility
     
     if (shouldDimUnselected) {
-      // When all numbers are selected (line complete), apply 10% opacity to unselected numbers
+      // Full line complete - use 10% opacity
       return 0.1;
     }
     
-    return 0.5; // 50% opacity for all other states when line is not complete
+    // Instead of 0.5, we now use 1.0 for unselected numbers when line is not complete
+    return 1.0; // Full opacity for unselected numbers when line is not complete
   }
 
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>
