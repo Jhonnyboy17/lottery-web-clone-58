@@ -569,7 +569,7 @@ const PlayPage = ({
                     <div className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border" onClick={() => handleEditLine(index)}>
                       <div className="flex items-center">
                         <span className="text-gray-500 font-medium w-6 mr-2">
-                          {index + 1}
+                          {String(index + 1).padStart(2, '0')}
                         </span>
                         {line.numbers.map((num, i) => (
                           <span 
@@ -610,7 +610,7 @@ const PlayPage = ({
                   >
                     <div className="flex items-center">
                       <span className="text-gray-500 font-medium w-6 mr-2">
-                        {savedLines.length + 1}
+                        {String(savedLines.length + 1).padStart(2, '0')}
                       </span>
                       {Array(maxRegularNumbers).fill(null).map((_, i) => (
                         <span 
