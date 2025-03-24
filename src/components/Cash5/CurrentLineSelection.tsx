@@ -1,6 +1,5 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
 import TicketOptions from "./TicketOptions";
 import NumberSelection from "./NumberSelection";
 import { NumberSelectionType } from "./types";
@@ -59,15 +58,6 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         onClearSelections={onClearSelections}
         onAddLine={onAddLine}
       />
-
-      <Button 
-        onClick={onAddLine} 
-        disabled={!isLineComplete()}
-        className="w-full hover:bg-opacity-90 mt-2"
-        style={{ backgroundColor: colorValue }}
-      >
-        ADD LINHA
-      </Button>
     </div>
   );
 };

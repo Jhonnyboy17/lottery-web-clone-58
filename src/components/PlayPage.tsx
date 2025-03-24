@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { SavedLineType } from "./Cash5/types";
 import GameLayout from "./GameLayout";
+
 interface PlayPageProps {
   logoSrc: string;
   jackpotAmount: string;
@@ -19,6 +20,7 @@ interface PlayPageProps {
   maxPowerballNumbers?: number;
   totalPowerballNumbers?: number;
 }
+
 const PlayPage = ({
   logoSrc,
   jackpotAmount,
@@ -52,8 +54,10 @@ const PlayPage = ({
     length: totalPowerballNumbers
   }, (_, i) => i + 1);
   const hasPowerball = maxPowerballNumbers > 0;
+
   const calculateRegularProgress = () => selectedNumbers.length / maxRegularNumbers * 100;
   const calculatePowerballProgress = () => selectedPowerball ? 100 : 0;
+
   useEffect(() => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null) && !isNumberClicked && !editMode) {
       const timer = setTimeout(() => {
@@ -62,6 +66,7 @@ const PlayPage = ({
       return () => clearTimeout(timer);
     }
   }, [selectedNumbers, selectedPowerball, isNumberClicked, editMode]);
+
   useEffect(() => {
     if (!isAnimating) {
       setProgressValue(calculateRegularProgress());
@@ -88,6 +93,7 @@ const PlayPage = ({
       setIsAnimating(false);
     }
   }, [isAnimating, selectedNumbers.length, maxRegularNumbers]);
+
   useEffect(() => {
     if (cooldownTime > 0) {
       cooldownTimerRef.current = setInterval(() => {
@@ -108,6 +114,7 @@ const PlayPage = ({
       };
     }
   }, [cooldownTime]);
+
   useEffect(() => {
     return () => {
       if (cooldownTimerRef.current) {
@@ -115,6 +122,7 @@ const PlayPage = ({
       }
     };
   }, []);
+
   const handleNumberSelect = (number: number) => {
     setIsNumberClicked(true);
     if (selectedNumbers.includes(number)) {
@@ -127,6 +135,7 @@ const PlayPage = ({
       setIsNumberClicked(false);
     }, 2000);
   };
+
   const handlePowerballSelect = (number: number) => {
     setIsNumberClicked(true);
     if (selectedPowerball === number) {
@@ -138,6 +147,7 @@ const PlayPage = ({
       setIsNumberClicked(false);
     }, 2000);
   };
+
   const handleQuickPick = () => {
     if (isRandomizing) return;
     const selectedCount = selectedNumbers.length;
@@ -190,6 +200,7 @@ const PlayPage = ({
     }
     setEditingLineIndex(null);
   };
+
   const handleAddLine = () => {
     if (selectedNumbers.length === maxRegularNumbers && (!hasPowerball || selectedPowerball !== null)) {
       if (editingLineIndex !== null) {
@@ -219,6 +230,7 @@ const PlayPage = ({
       setEditMode(false);
     }
   };
+
   const handleRemoveLine = (lineIndex: number) => {
     setSavedLines(savedLines.filter((_, index) => index !== lineIndex));
     if (editingLineIndex === lineIndex) {
@@ -229,6 +241,7 @@ const PlayPage = ({
       setNumberOfDraws("1");
     }
   };
+
   const handleEditLine = (lineIndex: number) => {
     const lineToEdit = savedLines[lineIndex];
     setSelectedNumbers(lineToEdit.numbers);
@@ -238,16 +251,19 @@ const PlayPage = ({
     setEditingLineIndex(lineIndex);
     setEditMode(true);
   };
+
   const handleToggleExtraPlay = (lineIndex: number, checked: boolean) => {
     const updatedLines = [...savedLines];
     updatedLines[lineIndex].includeExtraPlay = checked;
     setSavedLines(updatedLines);
   };
+
   const handleChangeDrawCount = (lineIndex: number, count: string) => {
     const updatedLines = [...savedLines];
     updatedLines[lineIndex].drawCount = count;
     setSavedLines(updatedLines);
   };
+
   const getTicketPrice = () => {
     let price = 0;
     savedLines.forEach(line => {
@@ -264,6 +280,7 @@ const PlayPage = ({
       maximumFractionDigits: 2
     }).replace('R$', 'R$ ');
   };
+
   const getColorValue = () => {
     switch (primaryColor) {
       case "blue-600":
@@ -282,7 +299,9 @@ const PlayPage = ({
         return "#000000";
     }
   };
+
   const colorValue = getColorValue();
+
   const isLineComplete = () => {
     if (hasPowerball) {
       return selectedNumbers.length === maxRegularNumbers && selectedPowerball !== null;
@@ -290,9 +309,11 @@ const PlayPage = ({
       return selectedNumbers.length === maxRegularNumbers;
     }
   };
+
   const canUseQuickPick = () => {
     return !isRandomizing && selectedNumbers.length < maxRegularNumbers;
   };
+
   return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card className="border-0 shadow-md overflow-hidden h-full">
@@ -378,8 +399,6 @@ const PlayPage = ({
               </Select>
             </div>
 
-            
-
             <div className="mt-6">
               <h3 className="font-semibold mb-3">Minhas Linhas</h3>
               
@@ -434,4 +453,5 @@ const PlayPage = ({
       </div>
     </GameLayout>;
 };
+
 export default PlayPage;
