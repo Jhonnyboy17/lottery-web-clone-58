@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "./Navbar";
 import TotalSummary from "./Cash5/TotalSummary";
@@ -32,27 +33,27 @@ const GameLayout: React.FC<GameLayoutProps> = ({
       backgroundColor: colorValue
     }}>
         <div className="mx-auto max-w-7xl px-[34px]">
-          {/* Game Navigation - Moved 40px to the left from previous position */}
+          {/* Game Navigation - Moved right by adding more padding */}
           <div className="absolute left-[180px] bottom-0">
             <NavigationMenu className="max-w-none w-auto">
               <NavigationMenuList className="flex space-x-6 px-[217px]">
                 <NavigationMenuItem>
-                  <NavigationMenuLink href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[15px] flex items-center">
+                  <NavigationMenuLink href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[25px] flex items-center">
                     Jogar {gameName}
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[15px] flex items-center">
+                  <NavigationMenuLink href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[25px] flex items-center">
                     Resultados
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[15px] flex items-center" href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}>
+                  <NavigationMenuLink className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[25px] flex items-center" href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}>
                     Verificador de Números
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[15px] flex items-center">
+                  <NavigationMenuLink href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[25px] flex items-center">
                     Como Jogar
                   </NavigationMenuLink>
                 </NavigationMenuItem>
