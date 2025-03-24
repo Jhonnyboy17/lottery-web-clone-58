@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -33,7 +32,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const [cooldownTime, setCooldownTime] = useState(0);
   const [isEditingNumber, setIsEditingNumber] = useState(false);
 
-  // Auto add line when complete (only if not a number was just clicked)
   useEffect(() => {
     if (isLineComplete() && onAddLine && !clickedNumber && !isEditing) {
       const timer = setTimeout(() => {
@@ -93,12 +91,10 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     }
   }, [cooldownTime]);
   
-  // Set editing state when an active digit is selected
   useEffect(() => {
     if (activeDigitIndex !== null) {
       setIsEditingNumber(true);
     } else {
-      // Add a small delay before setting to false to allow animation to complete
       const timer = setTimeout(() => {
         setIsEditingNumber(false);
       }, 200);
@@ -110,7 +106,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     setClickedNumber(digit);
     onDigitSelect(digit);
     
-    // Clear the clicked number after 2 seconds
     setTimeout(() => {
       setClickedNumber(null);
     }, 2000);
@@ -151,14 +146,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   };
 
   const handleRandomPick = () => {
-    // Only allow randomization when not already randomizing
     if (isRandomizing) return;
     
-    // Set cooldown internally but don't show to user
     const filledCount = currentLine.digits.filter(digit => digit !== null && digit !== -1).length;
     
-    // Set cooldown based on filled numbers
-    let newCooldownTime = 4; // Default cooldown
+    let newCooldownTime = 4;
     if (filledCount === 3) newCooldownTime = 2;
     else if (filledCount === 2) newCooldownTime = 3;
     else if (filledCount === 1) newCooldownTime = 4;
@@ -168,7 +160,6 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     setIsRandomizing(true);
     setAnimatedProgress(getSelectionProgress());
     
-    // Identify empty positions based on play type
     let emptyPositions: number[] = [];
     
     if (currentLine.playType === "Back Pair") {
@@ -183,14 +174,12 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       });
     }
     
-    // Generate random numbers one by one with delays
     if (emptyPositions.length > 0) {
       emptyPositions.forEach((position, index) => {
         setTimeout(() => {
           const randomDigit = Math.floor(Math.random() * 10);
           onDigitSelect(randomDigit);
           
-          // When last number is generated, end randomizing state
           if (index === emptyPositions.length - 1) {
             setTimeout(() => {
               setIsRandomizing(false);
@@ -206,13 +195,10 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const selectionProgress = getSelectionProgress();
   const displayProgress = animatedProgress !== null ? animatedProgress : selectionProgress;
   
-  // Check if there are any selections made
   const hasNoSelections = currentLine.digits.every(digit => digit === null);
   
-  // Check if line is complete
   const lineComplete = isLineComplete();
   
-  // Determine if we should dim unselected numbers
   const shouldDimUnselected = lineComplete && !isEditingNumber && !isEditing;
 
   return (
@@ -245,10 +231,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       <div className="flex justify-center items-center h-[220px] relative">
         <div className="grid grid-cols-5 gap-4 z-10">
           {[...Array(10).keys()].map((number) => {
-            // Check if the number is already selected in any position
             const isSelected = currentLine.digits.includes(number);
-            
-            // Apply dimming only when shouldDimUnselected is true and number is not selected
             const isDimmed = shouldDimUnselected && !isSelected;
             
             return (
@@ -259,11 +242,11 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                 style={{
                   backgroundColor: clickedNumber === number || isSelected
                     ? colorValue
-                    : isDimmed ? '#f1f1f1' : '#dbeafe',
+                    : isDimmed ? '#e6e6e6' : '#dbeafe',
                   color: clickedNumber === number || isSelected
                     ? 'white'
-                    : isDimmed ? '#c8c8c9' : '#1e40af',
-                  opacity: isDimmed ? 0.7 : 1
+                    : isDimmed ? '#b0b0b0' : '#1e40af',
+                  opacity: isDimmed ? 0.4 : 1
                 }}
               >
                 {number}
