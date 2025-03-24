@@ -320,7 +320,18 @@ export const useTicketState = () => {
     setActiveDigitIndex(null); // Don't focus any digit initially when editing
   };
 
-  // Check if line is complete based on play type
+  const handleToggleExtraPlay = (lineIndex: number, checked: boolean) => {
+    const updatedLines = [...savedLines];
+    updatedLines[lineIndex].includeFireball = checked;
+    setSavedLines(updatedLines);
+  };
+
+  const handleChangeDrawCount = (lineIndex: number, count: string) => {
+    const updatedLines = [...savedLines];
+    updatedLines[lineIndex].drawCount = count;
+    setSavedLines(updatedLines);
+  };
+
   const isPairTypeLineComplete = () => {
     if (currentLine.playType === "Back Pair") {
       // For Back Pair, check if digits 1 and 2 are filled
@@ -379,6 +390,9 @@ export const useTicketState = () => {
     handleEditLine,
     isLineComplete,
     getTicketPrice,
-    getProgressPercentage
+    getProgressPercentage,
+    handleToggleExtraPlay,
+    handleChangeDrawCount
   };
 };
+
