@@ -35,43 +35,8 @@ const GameLayout: React.FC<GameLayoutProps> = ({
       <div className="w-full py-8" style={{ backgroundColor: colorValue }}>
         <div className="mx-auto max-w-7xl px-3">
           <div className="flex items-center justify-between">
-            {/* Left side - Game Navigation */}
-            <NavigationMenu className="max-w-none w-auto">
-              <NavigationMenuList className="flex space-x-4">
-                <NavigationMenuItem>
-                  <NavigationMenuLink 
-                    className="text-white hover:text-white/80 font-medium text-sm"
-                    href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    Jogar {gameName}
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink 
-                    className="text-white hover:text-white/80 font-medium text-sm"
-                    href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    Resultados
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink 
-                    className="text-white hover:text-white/80 font-medium text-sm"
-                    href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    Verificador de Números
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink 
-                    className="text-white hover:text-white/80 font-medium text-sm"
-                    href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
-                  >
-                    Como Jogar
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
+            {/* Left side - Empty */}
+            <div></div>
 
             {/* Center - Game Logo */}
             <div className="absolute left-1/2 transform -translate-x-1/2">
@@ -88,6 +53,44 @@ const GameLayout: React.FC<GameLayoutProps> = ({
               <h2 className="text-2xl font-bold text-black">R$ {jackpotAmount}</h2>
             </div>
           </div>
+          
+          {/* Game Navigation - Moved to top of content area */}
+          <NavigationMenu className="max-w-none w-auto absolute top-4 left-4">
+            <NavigationMenuList className="flex space-x-4">
+              <NavigationMenuItem>
+                <NavigationMenuLink 
+                  className="text-black hover:text-black/80 font-medium text-xs"
+                  href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  Jogar {gameName}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink 
+                  className="text-black hover:text-black/80 font-medium text-xs"
+                  href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  Resultados
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink 
+                  className="text-black hover:text-black/80 font-medium text-xs"
+                  href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  Verificador de Números
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink 
+                  className="text-black hover:text-black/80 font-medium text-xs"
+                  href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  Como Jogar
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
       </div>
 
