@@ -417,12 +417,12 @@ const PlayPage = ({
                       cursor: 'pointer',
                       display: 'flex',
                       fontWeight: 700,
-                      height: '2.2em',
+                      height: '3em',
                       justifyContent: 'center',
                       lineHeight: '1',
                       margin: '0.3em',
                       textAlign: 'center',
-                      width: '2.2em',
+                      width: '3em',
                       zIndex: 2,
                       opacity: opacity,
                       position: 'relative',
@@ -444,7 +444,7 @@ const PlayPage = ({
                       backgroundColor: isSelected ? colorValue : 'transparent'
                     }}></span>
                     <span style={{ 
-                      fontSize: '1em', 
+                      fontSize: '0.85em', 
                       fontWeight: 700, 
                       display: 'flex', 
                       alignItems: 'center', 
@@ -485,12 +485,12 @@ const PlayPage = ({
                           cursor: 'pointer',
                           display: 'flex',
                           fontWeight: 700,
-                          height: '2.2em',
+                          height: '3em',
                           justifyContent: 'center',
                           lineHeight: '1',
                           margin: '0.3em',
                           textAlign: 'center',
-                          width: '2.2em',
+                          width: '3em',
                           zIndex: 2,
                           opacity: opacity,
                           position: 'relative',
@@ -512,7 +512,7 @@ const PlayPage = ({
                           backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
                         }}></span>
                         <span style={{ 
-                          fontSize: '1em', 
+                          fontSize: '0.85em', 
                           fontWeight: 700, 
                           display: 'flex', 
                           alignItems: 'center', 

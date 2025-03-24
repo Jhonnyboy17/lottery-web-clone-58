@@ -262,8 +262,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                   fontWeight: isSelected ? '600' : '500',
                   position: 'relative',
                   overflow: 'hidden',
-                  height: '2.2em',
-                  width: '2.2em',
+                  height: '3em',
+                  width: '3em',
                 }}
               >
                 <span 
@@ -282,7 +282,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
                     backgroundColor: isSelected || clickedNumber === number ? colorValue : 'transparent'
                   }}
                 ></span>
-                <span style={{ fontSize: '1em', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>{number}</span>
+                <span style={{ fontSize: '0.85em', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>{number}</span>
               </button>
             );
           })}
