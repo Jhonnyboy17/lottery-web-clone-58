@@ -48,7 +48,6 @@ const PlayPage = ({
   const [editMode, setEditMode] = useState(false);
   const [isNumberClicked, setIsNumberClicked] = useState(false);
   const [isEditingNumber, setIsEditingNumber] = useState(false);
-
   const regularNumbers = Array.from({
     length: totalRegularNumbers
   }, (_, i) => i + 1);
@@ -570,19 +569,23 @@ const PlayPage = ({
                     <div className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border" onClick={() => handleEditLine(index)}>
                       <div className="flex items-center">
                         <span className="text-gray-500 font-medium w-6 mr-2">
-                          {String(index + 1).padStart(2, '0')}
+                          {index + 1}
                         </span>
                         {line.numbers.map((num, i) => (
                           <span 
                             key={i} 
-                            className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-${primaryColor} text-white`}
+                            className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
+                              num ? `bg-${primaryColor} text-white` : 'bg-white border border-gray-200 text-gray-500'
+                            }`}
                           >
-                            {num}
+                            {num || '?'}
                           </span>
                         ))}
-                        {hasPowerball && line.powerball && (
-                          <span className="rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 bg-amber-500 text-white">
-                            {line.powerball}
+                        {hasPowerball && (
+                          <span className={`rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 ${
+                            line.powerball ? 'bg-amber-500 text-white' : 'bg-white border border-gray-200 text-gray-500'
+                          }`}>
+                            {line.powerball || '?'}
                           </span>
                         )}
                       </div>
@@ -592,6 +595,7 @@ const PlayPage = ({
                           handleRemoveLine(index);
                         }} 
                         className="text-gray-400 hover:text-gray-600" 
+                        disabled={isRandomizing}
                       >
                         <X size={16} />
                       </button>
@@ -606,7 +610,7 @@ const PlayPage = ({
                   >
                     <div className="flex items-center">
                       <span className="text-gray-500 font-medium w-6 mr-2">
-                        {String(savedLines.length + 1).padStart(2, '0')}
+                        {savedLines.length + 1}
                       </span>
                       {Array(maxRegularNumbers).fill(null).map((_, i) => (
                         <span 
