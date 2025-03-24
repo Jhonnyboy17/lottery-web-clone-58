@@ -262,9 +262,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
           onClick={handleRandomPick}
           variant="outline" 
           className={`text-xs text-blue-500 border-blue-500 ${isRandomizing ? 'opacity-50 cursor-not-allowed' : ''}`}
-          disabled={isRandomizing}
+          disabled={isRandomizing || cooldownTime > 0}
         >
-          {cooldownTime > 0 ? `Jogada Aleatória (${cooldownTime}s)` : "Jogada Aleatória"}
+          Jogada Aleatória
         </Button>
         
         <Button 

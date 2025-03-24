@@ -144,7 +144,7 @@ const PlayPage = ({
   };
 
   const handleQuickPick = () => {
-    // Prevent multiple rapid clicks
+    // Only allow quick pick when there are no selections or when in edit mode
     if (isRandomizing || cooldownTime > 0) return;
     
     // Calculate cooldown based on number of filled numbers
@@ -323,6 +323,12 @@ const PlayPage = ({
     }
   };
 
+  // Check if quick pick button should be enabled
+  // Only enable when selection is empty or during editing
+  const canUseQuickPick = () => {
+    return !isRandomizing && cooldownTime === 0;
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
@@ -340,11 +346,11 @@ const PlayPage = ({
             <h2 className="text-2xl font-bold" style={{ color: colorValue }}>R$ {jackpotAmount}</h2>
             <Button 
               onClick={handleQuickPick}
-              disabled={isRandomizing}
+              disabled={isRandomizing || cooldownTime > 0}
               className="text-xs h-8 bg-white border hover:bg-opacity-10 px-6 mt-2"
               style={{ color: colorValue, borderColor: colorValue }}
             >
-              {cooldownTime > 0 ? `JOGADA ALEATÓRIA (${cooldownTime}s)` : "JOGADA ALEATÓRIA"}
+              JOGADA ALEATÓRIA
             </Button>
           </div>
         </div>
