@@ -40,22 +40,22 @@ const GameLayout: React.FC<GameLayoutProps> = ({
             <NavigationMenu className="max-w-none w-auto">
               <NavigationMenuList className="flex space-x-4">
                 <NavigationMenuItem>
-                  <NavigationMenuLink href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-xs py-0 px-0 mx-[15px] my-0">
+                  <NavigationMenuLink href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[15px] flex items-center">
                     Jogar {gameName}
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-xs py-0 my-0 px-0 mx-[15px]">
+                  <NavigationMenuLink href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[15px] flex items-center">
                     Resultados
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink className="text-black hover:text-black/80 font-medium text-xs py-0 px-0 mx-[15px]" href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}>
+                  <NavigationMenuLink className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[15px] flex items-center" href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}>
                     Verificador de Números
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem>
-                  <NavigationMenuLink href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-xs py-0 px-0 mx-[15px]">
+                  <NavigationMenuLink href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[15px] flex items-center">
                     Como Jogar
                   </NavigationMenuLink>
                 </NavigationMenuItem>
