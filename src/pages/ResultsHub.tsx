@@ -732,3 +732,350 @@ const ResultsHub = () => {
             Back
           </Button>
           <h1 className="text-4xl font-bold text-lottery-navy">Results Hub</h1>
+        </div>
+        
+        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
+            <TabsList className="grid w-full grid-cols-3 mb-8">
+              <TabsTrigger value="all-games">All Games</TabsTrigger>
+              <TabsTrigger value="mega-millions">Mega Millions</TabsTrigger>
+              <TabsTrigger value="powerball">Powerball</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="all-games">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {currentGames.map((game) => (
+                  <Card key={game.id} className="overflow-hidden border-0 shadow-md">
+                    <CardContent className="p-0">
+                      <div className="flex flex-col">
+                        <div className={`${getGameColor(game.name)} py-4 px-6 flex items-center`}>
+                          <img src={game.logo} alt={game.name} className="h-12 w-auto mr-4" />
+                          <div>
+                            <h3 className="text-white font-bold text-xl">{game.name}</h3>
+                            <p className="text-white/80 text-sm">{game.date}</p>
+                          </div>
+                        </div>
+                        
+                        <div className="p-6">
+                          <div className="flex flex-wrap gap-3 mb-4">
+                            {game.numbers.map((number, index) => (
+                              <div 
+                                key={index} 
+                                className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center font-bold text-gray-800"
+                              >
+                                {number}
+                              </div>
+                            ))}
+                            
+                            {game.specialNumbers && game.specialNumbers.map((number, index) => (
+                              <div 
+                                key={`special-${index}`} 
+                                className={`w-10 h-10 rounded-full ${getGameColor(game.name)} flex items-center justify-center font-bold text-white`}
+                              >
+                                {number}
+                              </div>
+                            ))}
+                          </div>
+                          
+                          {game.multiplier && (
+                            <div className="text-gray-600 mb-3">
+                              <span className="font-semibold">Multiplier:</span> {game.multiplier}
+                            </div>
+                          )}
+                          
+                          <div className="flex justify-between items-center">
+                            <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                              <FileText className="h-4 w-4 mr-1" />
+                              Game Details
+                            </Button>
+                            <Button variant="link" size="sm" className="text-lottery-pink flex items-center">
+                              View Results History
+                              <ChevronRight className="h-4 w-4 ml-1" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+              
+              <Pagination className="mt-8">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => paginate(currentPage > 1 ? currentPage - 1 : 1)}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                    />
+                  </PaginationItem>
+                  
+                  {[...Array(Math.ceil(gamesData.length / gamesPerPage)).keys()].map((number) => (
+                    <PaginationItem key={number + 1}>
+                      <PaginationLink
+                        isActive={currentPage === number + 1}
+                        onClick={() => paginate(number + 1)}
+                      >
+                        {number + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => 
+                        paginate(
+                          currentPage < Math.ceil(gamesData.length / gamesPerPage) 
+                            ? currentPage + 1 
+                            : currentPage
+                        )
+                      }
+                      className={
+                        currentPage === Math.ceil(gamesData.length / gamesPerPage) 
+                          ? "pointer-events-none opacity-50" 
+                          : ""
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </TabsContent>
+            
+            <TabsContent value="mega-millions">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center">
+                  <img 
+                    src="/lovable-uploads/bc3feaa6-86f8-46cb-b245-5467ab0e5fb4.png" 
+                    alt="Mega Millions" 
+                    className="h-12 w-auto mr-3"
+                  />
+                  <h2 className="text-2xl font-bold">Mega Millions Results History</h2>
+                </div>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input 
+                    type="text" 
+                    placeholder="Search by date or numbers"
+                    className="pl-10 pr-4 py-2 border rounded-lg w-64"
+                  />
+                </div>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Draw Date</TableHead>
+                      <TableHead>Draw Day</TableHead>
+                      <TableHead>Numbers</TableHead>
+                      <TableHead>Mega Ball</TableHead>
+                      <TableHead>Multiplier</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentMegaMillionsResults.map((result, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <div className="flex items-center">
+                            <CalendarDays className="h-4 w-4 mr-2 text-gray-500" />
+                            {result.displayDate}
+                          </div>
+                        </TableCell>
+                        <TableCell>{result.dayOfWeek}</TableCell>
+                        <TableCell>
+                          <div className="flex space-x-1">
+                            {result.numbers.map((number, idx) => (
+                              <div 
+                                key={idx}
+                                className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 text-sm font-medium"
+                              >
+                                {number}
+                              </div>
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div 
+                            className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium"
+                          >
+                            {result.megaBall}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <span className="font-medium">{result.multiplier}</span>
+                        </TableCell>
+                        <TableCell>
+                          <Button variant="outline" size="sm">
+                            View Details
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              
+              <Pagination className="mt-8">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => paginateMegaMillions(megaMillionsPage > 1 ? megaMillionsPage - 1 : 1)}
+                      className={megaMillionsPage === 1 ? "pointer-events-none opacity-50" : ""}
+                    />
+                  </PaginationItem>
+                  
+                  {[...Array(Math.ceil(megaMillionsHistory.length / megaMillionsResultsPerPage)).keys()].map((number) => (
+                    <PaginationItem key={number + 1}>
+                      <PaginationLink
+                        isActive={megaMillionsPage === number + 1}
+                        onClick={() => paginateMegaMillions(number + 1)}
+                      >
+                        {number + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => 
+                        paginateMegaMillions(
+                          megaMillionsPage < Math.ceil(megaMillionsHistory.length / megaMillionsResultsPerPage) 
+                            ? megaMillionsPage + 1 
+                            : megaMillionsPage
+                        )
+                      }
+                      className={
+                        megaMillionsPage === Math.ceil(megaMillionsHistory.length / megaMillionsResultsPerPage) 
+                          ? "pointer-events-none opacity-50" 
+                          : ""
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </TabsContent>
+            
+            <TabsContent value="powerball">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center">
+                  <img 
+                    src="/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png" 
+                    alt="Powerball" 
+                    className="h-12 w-auto mr-3"
+                  />
+                  <h2 className="text-2xl font-bold">Powerball Results History</h2>
+                </div>
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                  <input 
+                    type="text" 
+                    placeholder="Search by date or numbers"
+                    className="pl-10 pr-4 py-2 border rounded-lg w-64"
+                  />
+                </div>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Draw Date</TableHead>
+                      <TableHead>Draw Day</TableHead>
+                      <TableHead>Numbers</TableHead>
+                      <TableHead>Powerball</TableHead>
+                      <TableHead>Multiplier</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentPowerballResults.map((result, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <div className="flex items-center">
+                            <CalendarDays className="h-4 w-4 mr-2 text-gray-500" />
+                            {result.displayDate}
+                          </div>
+                        </TableCell>
+                        <TableCell>{result.dayOfWeek}</TableCell>
+                        <TableCell>
+                          <div className="flex space-x-1">
+                            {result.numbers.map((number, idx) => (
+                              <div 
+                                key={idx}
+                                className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-800 text-sm font-medium"
+                              >
+                                {number}
+                              </div>
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div 
+                            className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white text-sm font-medium"
+                          >
+                            {result.powerball}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <span className="font-medium">{result.multiplier}</span>
+                        </TableCell>
+                        <TableCell>
+                          <Button variant="outline" size="sm">
+                            View Details
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              
+              <Pagination className="mt-8">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => paginatePowerball(powerballPage > 1 ? powerballPage - 1 : 1)}
+                      className={powerballPage === 1 ? "pointer-events-none opacity-50" : ""}
+                    />
+                  </PaginationItem>
+                  
+                  {[...Array(Math.ceil(powerballHistory.length / powerballResultsPerPage)).keys()].map((number) => (
+                    <PaginationItem key={number + 1}>
+                      <PaginationLink
+                        isActive={powerballPage === number + 1}
+                        onClick={() => paginatePowerball(number + 1)}
+                      >
+                        {number + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => 
+                        paginatePowerball(
+                          powerballPage < Math.ceil(powerballHistory.length / powerballResultsPerPage) 
+                            ? powerballPage + 1 
+                            : powerballPage
+                        )
+                      }
+                      className={
+                        powerballPage === Math.ceil(powerballHistory.length / powerballResultsPerPage) 
+                          ? "pointer-events-none opacity-50" 
+                          : ""
+                      }
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </TabsContent>
+          </Tabs>
+        </div>
+      </main>
+      
+      <Footer />
+    </div>
+  );
+};
+
+export default ResultsHub;
