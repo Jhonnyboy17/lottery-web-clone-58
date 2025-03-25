@@ -22,7 +22,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
   const showEmptyMessage = savedLines.length === 0 && !currentLine;
 
   return (
-    <>
+    <div className="space-y-2">
       {showEmptyMessage && (
         <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
       )}
@@ -76,7 +76,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
         </div>
       ))}
       
-      {/* Always show the current line template - Force display by removing any conditions */}
+      {/* Always show the current line template - guaranteed to display */}
       <div className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200 mb-2">
         <div className="flex items-center">
           <span className="text-gray-500 font-medium w-6 mr-2">
@@ -97,7 +97,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
         </div>
         <div className="w-4"></div>
       </div>
-    </>
+    </div>
   );
 };
 

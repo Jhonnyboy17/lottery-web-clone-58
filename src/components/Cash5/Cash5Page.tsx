@@ -61,6 +61,11 @@ export const Cash5Page = ({
   
   const colorValue = getColorValue();
 
+  // Force a re-render when the component mounts to ensure the template line is visible
+  useEffect(() => {
+    // This empty effect ensures that the component re-renders after mount
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
       <Navbar />

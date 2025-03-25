@@ -31,9 +31,12 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       <h3 className="font-semibold mb-3">Minhas Linhas</h3>
       
       {savedLines.length === 0 ? (
-        // Display a template line with question marks instead of the message
+        // Display a template line with question marks
         <div className="mb-2">
-          <div className="bg-white rounded p-3 flex items-center justify-between">
+          <div 
+            className="bg-white rounded p-3 flex items-center justify-between cursor-pointer"
+            onClick={onStartNewLine}
+          >
             <div className="flex items-center">
               <span className="text-gray-500 font-medium w-6 mr-2">
                 01
@@ -91,7 +94,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
         </>
       )}
       
-      {/* Always show the current line template, regardless of any conditions */}
+      {/* Always show the new line template, guaranteed to display */}
       <div className="mb-2">
         <div 
           className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
