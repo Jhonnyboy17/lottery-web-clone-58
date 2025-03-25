@@ -45,7 +45,9 @@ export const Cash5Page = ({
     isLineComplete,
     getTicketPrice,
     isEditing,
-    editingIndex
+    editingIndex,
+    setIsEditing,
+    setEditingIndex
   } = useTicketState();
 
   const getColorValue = () => {

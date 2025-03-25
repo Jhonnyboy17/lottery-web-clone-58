@@ -234,6 +234,8 @@ export const useTicketState = () => {
     isEditing,
     editingIndex,
     setActiveDigitIndex,
+    setIsEditing,         // Expose these setter functions
+    setEditingIndex,      // Expose these setter functions
     handleDigitSelect,
     handlePlayTypeChange,
     handleBetAmountChange,
