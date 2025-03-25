@@ -26,11 +26,8 @@ const GameLayout: React.FC<GameLayoutProps> = ({
   return <div className="min-h-screen bg-white">
       <Navbar />
       
-      {/* Add space between navbar and colored banner */}
-      <div className="h-12"></div>
-      
-      {/* Game Banner with Background Color */}
-      <div className="w-full py-8 relative" style={{
+      {/* Game Banner with Background Color - directly below navbar */}
+      <div className="w-full py-8" style={{
         backgroundColor: colorValue
       }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -52,7 +49,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({
         </div>
       </div>
       
-      {/* Game Navigation - Now below the banner instead of overlapping */}
+      {/* Game Navigation - Now below the banner */}
       <div className="w-full bg-gray-100 border-b">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <NavigationMenu className="max-w-none w-auto">
