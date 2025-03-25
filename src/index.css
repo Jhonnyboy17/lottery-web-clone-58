@@ -66,6 +66,11 @@
     --border: 240 9% 20%;
     --input: 240 9% 20%;
     --ring: 336 79% 47%;
+    
+    /* New variables for dark purple gradients */
+    --purple-gradient-from: 270 50% 25%;
+    --purple-gradient-via: 270 50% 20%;
+    --purple-gradient-to: 270 50% 25%;
   }
 }
 
@@ -180,4 +185,13 @@
 
 .animate-fade-in {
   animation: fadeIn 0.3s ease forwards;
+}
+
+/* Custom purple gradient backgrounds */
+.bg-purple-gradient {
+  background: linear-gradient(to right, #2d224c, #372e48, #2d224c);
+}
+
+.bg-purple-gradient-vertical {
+  background: linear-gradient(to bottom, #2d224c, #372e48);
 }
