@@ -3,13 +3,14 @@ import { useState, useEffect, useRef } from 'react';
 
 interface Slide {
   id: number;
-  bgColor: string;
+  bgImage?: string;
+  bgColor?: string;
 }
 
 const slides: Slide[] = [
   {
     id: 1,
-    bgColor: "bg-gradient-to-r from-lottery-red to-lottery-pink",
+    bgImage: "/lovable-uploads/c2459874-7121-4fec-a9ea-bd77c1ce0ecc.png",
   },
   {
     id: 2,
@@ -72,11 +73,16 @@ const Hero = () => {
           key={slide.id}
           className={`slide ${
             index === currentSlide ? "active" : ""
-          } ${slide.bgColor} rounded-xl shadow-lg h-full cursor-pointer`}
+          } ${slide.bgColor || ""} rounded-xl shadow-lg h-full cursor-pointer`}
           onClick={handleSlideClick}
           role="button"
           tabIndex={0}
           aria-label={`Slide ${index + 1}, click to advance`}
+          style={slide.bgImage ? { 
+            backgroundImage: `url(${slide.bgImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          } : {}}
         />
       ))}
     </div>
