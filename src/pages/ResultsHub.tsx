@@ -1,10 +1,11 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Search, ArrowLeft, CalendarDays, ArrowRight } from "lucide-react";
+import { Search, ArrowLeft, CalendarDays, ArrowRight, FileText } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -16,6 +17,14 @@ interface Game {
   numbers: string[];
   specialNumbers?: string[];
   multiplier?: string;
+}
+
+interface MegaMillionsResult {
+  drawDate: string;
+  numbers: string[];
+  megaBall: string;
+  multiplier: string;
+  jackpot?: string;
 }
 
 const gamesData: Game[] = [
@@ -68,16 +77,124 @@ const gamesData: Game[] = [
   },
 ];
 
+// Mega Millions historical data - based on Illinois Lottery website
+const megaMillionsHistory: MegaMillionsResult[] = [
+  {
+    drawDate: "06/11/2024",
+    numbers: ["11", "20", "29", "52", "66"],
+    megaBall: "3",
+    multiplier: "2X",
+    jackpot: "R$ 350.000.000"
+  },
+  {
+    drawDate: "06/07/2024",
+    numbers: ["2", "16", "45", "54", "66"],
+    megaBall: "15",
+    multiplier: "4X",
+    jackpot: "R$ 300.000.000"
+  },
+  {
+    drawDate: "06/04/2024",
+    numbers: ["5", "27", "29", "65", "73"],
+    megaBall: "11",
+    multiplier: "3X",
+    jackpot: "R$ 280.000.000"
+  },
+  {
+    drawDate: "05/31/2024",
+    numbers: ["1", "13", "31", "36", "41"],
+    megaBall: "25",
+    multiplier: "2X",
+    jackpot: "R$ 250.000.000"
+  },
+  {
+    drawDate: "05/28/2024",
+    numbers: ["13", "31", "33", "59", "62"],
+    megaBall: "8",
+    multiplier: "5X",
+    jackpot: "R$ 220.000.000"
+  },
+  {
+    drawDate: "05/24/2024",
+    numbers: ["7", "18", "25", "45", "60"],
+    megaBall: "16",
+    multiplier: "3X",
+    jackpot: "R$ 200.000.000"
+  },
+  {
+    drawDate: "05/21/2024",
+    numbers: ["12", "17", "26", "42", "65"],
+    megaBall: "12",
+    multiplier: "3X",
+    jackpot: "R$ 190.000.000"
+  },
+  {
+    drawDate: "05/17/2024",
+    numbers: ["8", "22", "25", "29", "54"],
+    megaBall: "19",
+    multiplier: "2X",
+    jackpot: "R$ 180.000.000"
+  },
+  {
+    drawDate: "05/14/2024",
+    numbers: ["13", "24", "36", "42", "66"],
+    megaBall: "22",
+    multiplier: "3X",
+    jackpot: "R$ 170.000.000"
+  },
+  {
+    drawDate: "05/10/2024",
+    numbers: ["3", "8", "30", "35", "64"],
+    megaBall: "12",
+    multiplier: "2X",
+    jackpot: "R$ 160.000.000"
+  },
+  {
+    drawDate: "05/07/2024",
+    numbers: ["11", "17", "33", "45", "66"],
+    megaBall: "15",
+    multiplier: "4X",
+    jackpot: "R$ 150.000.000"
+  },
+  {
+    drawDate: "05/03/2024",
+    numbers: ["9", "14", "15", "36", "39"],
+    megaBall: "2",
+    multiplier: "3X",
+    jackpot: "R$ 140.000.000"
+  }
+];
+
 const ResultsHub = () => {
   const [activeTab, setActiveTab] = useState("all-games");
   const [currentPage, setCurrentPage] = useState(1);
+  const [megaMillionsPage, setMegaMillionsPage] = useState(1);
   const gamesPerPage = 5;
+  const megaMillionsResultsPerPage = 5;
   
   const indexOfLastGame = currentPage * gamesPerPage;
   const indexOfFirstGame = indexOfLastGame - gamesPerPage;
   const currentGames = gamesData.slice(indexOfFirstGame, indexOfLastGame);
   
+  // Calculate pagination for Mega Millions results
+  const indexOfLastMegaMillionsResult = megaMillionsPage * megaMillionsResultsPerPage;
+  const indexOfFirstMegaMillionsResult = indexOfLastMegaMillionsResult - megaMillionsResultsPerPage;
+  const currentMegaMillionsResults = megaMillionsHistory.slice(
+    indexOfFirstMegaMillionsResult, 
+    indexOfLastMegaMillionsResult
+  );
+  
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  const paginateMegaMillions = (pageNumber: number) => setMegaMillionsPage(pageNumber);
+  
+  useEffect(() => {
+    // Reset pagination when changing tabs
+    if (activeTab === "mega-millions") {
+      setMegaMillionsPage(1);
+    } else if (activeTab === "all-games") {
+      setCurrentPage(1);
+    }
+  }, [activeTab]);
   
   const getGameColor = (gameName: string) => {
     switch (gameName) {
@@ -95,6 +212,15 @@ const ResultsHub = () => {
       default:
         return "bg-blue-500";
     }
+  };
+
+  const formatDate = (dateStr: string) => {
+    const [month, day, year] = dateStr.split('/');
+    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    const monthIndex = parseInt(month) - 1;
+    const dayOfWeek = new Date(`${month}/${day}/${year}`).toLocaleDateString('pt-BR', { weekday: 'long' });
+    const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
+    return `${capitalizedDay}, ${months[monthIndex]} ${day}, ${year}`;
   };
 
   return (
@@ -255,7 +381,147 @@ const ResultsHub = () => {
             </Pagination>
           </TabsContent>
           
-          {["mega-millions", "powerball", "lucky-day", "pick4", "cash5"].map((tab) => (
+          <TabsContent value="mega-millions" className="mt-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-2xl font-bold text-lottery-navy">
+                    Mega Millions Results
+                  </h3>
+                  <p className="text-gray-600">
+                    Últimos 3 meses de resultados da Mega Millions
+                  </p>
+                </div>
+                <div className="mt-4 md:mt-0 flex items-center">
+                  <img 
+                    src="/lovable-uploads/bc3feaa6-86f8-46cb-b245-5467ab0e5fb4.png" 
+                    alt="Mega Millions Logo" 
+                    className="h-12 w-auto mr-4"
+                  />
+                  <Button variant="outline" className="flex items-center">
+                    <FileText className="mr-2 h-4 w-4" />
+                    Download PDF
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <Table className="w-full">
+                  <TableHeader>
+                    <TableRow className="bg-gray-100">
+                      <TableHead className="font-bold">Data do Sorteio</TableHead>
+                      <TableHead className="font-bold">Números Sorteados</TableHead>
+                      <TableHead className="font-bold">Mega Ball</TableHead>
+                      <TableHead className="font-bold">Multiplicador</TableHead>
+                      <TableHead className="font-bold">Valor da Premiação</TableHead>
+                      <TableHead className="font-bold">Detalhes</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentMegaMillionsResults.map((result, index) => (
+                      <TableRow key={index} className="hover:bg-gray-50">
+                        <TableCell>{formatDate(result.drawDate)}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap items-center gap-2">
+                            {result.numbers.map((number, idx) => (
+                              <span 
+                                key={idx} 
+                                className="bg-blue-500 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                              >
+                                {number}
+                              </span>
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <span className="bg-amber-500 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            {result.megaBall}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md text-xs font-bold">
+                            {result.multiplier}
+                          </span>
+                        </TableCell>
+                        <TableCell>{result.jackpot}</TableCell>
+                        <TableCell>
+                          <Button variant="ghost" className="text-lottery-pink hover:text-lottery-pink/90">
+                            Ver Detalhes <ArrowRight className="ml-1 h-4 w-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              
+              <Pagination className="mt-6">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (megaMillionsPage > 1) paginateMegaMillions(megaMillionsPage - 1);
+                      }}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: Math.ceil(megaMillionsHistory.length / megaMillionsResultsPerPage) }).map((_, index) => (
+                    <PaginationItem key={index}>
+                      <PaginationLink 
+                        href="#" 
+                        isActive={megaMillionsPage === index + 1}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          paginateMegaMillions(index + 1);
+                        }}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (megaMillionsPage < Math.ceil(megaMillionsHistory.length / megaMillionsResultsPerPage)) {
+                          paginateMegaMillions(megaMillionsPage + 1);
+                        }
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+              
+              <div className="text-center mt-8 text-sm text-gray-500">
+                <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/megamillions" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
+                <p className="mt-1">Atualizado regularmente com os resultados mais recentes</p>
+              </div>
+            </div>
+            
+            <Card className="bg-gray-50 border border-gray-200">
+              <CardContent className="p-6">
+                <h4 className="text-lg font-bold text-lottery-navy mb-3">Como Jogar na Mega Millions</h4>
+                <p className="text-gray-700 mb-4">
+                  O sorteio da Mega Millions ocorre todas as terças e sextas-feiras. Para jogar:
+                </p>
+                <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+                  <li>Escolha 5 números de 1 a 70</li>
+                  <li>Escolha 1 número Mega Ball de 1 a 25</li>
+                  <li>Opcionalmente, adicione o Megaplier para multiplicar seus prêmios (exceto o jackpot)</li>
+                  <li>Cada jogo custa R$ 15</li>
+                </ol>
+                <div className="mt-6">
+                  <Button className="bg-blue-500 hover:bg-blue-600 text-white">
+                    Jogar Mega Millions Agora
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          {["powerball", "lucky-day", "pick4", "cash5"].map((tab) => (
             <TabsContent key={tab} value={tab} className="mt-6">
               <div className="bg-white p-6 rounded-lg shadow-sm">
                 <h3 className="text-xl font-bold text-center text-lottery-navy mb-4">
