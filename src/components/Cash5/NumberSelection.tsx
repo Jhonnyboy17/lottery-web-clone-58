@@ -153,35 +153,70 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     setIsRandomizing(true);
     setAnimatedProgress(getSelectionProgress());
     
-    onQuickPick();
+    const newDigits = [...currentLine.digits];
     
-    const positionsToRandomize = getPositionsToRandomize();
-    let newCooldownTime = positionsToRandomize.length + 1;
-    setCooldownTime(newCooldownTime);
+    // Verifica se todos os dígitos estão preenchidos
+    const allFilled = currentLine.playType === "Back Pair" ? 
+      (newDigits[1] !== null && newDigits[2] !== null) :
+      currentLine.playType === "Front Pair" ?
+        (newDigits[0] !== null && newDigits[1] !== null) :
+        newDigits.every(digit => digit !== null && digit !== -1);
     
-    setTimeout(() => {
-      setIsRandomizing(false);
-    }, positionsToRandomize.length * 300 + 500);
-  };
-
-  const getPositionsToRandomize = () => {
-    const positions = [];
+    // Se todos estão preenchidos, limpa a linha antes de randomizar
+    if (allFilled) {
+      onClearSelections();
+      
+      // Retorna porque o onClearSelections já vai chamar uma nova randomização
+      setTimeout(() => {
+        onQuickPick();
+        setIsRandomizing(false);
+      }, 100);
+      
+      return;
+    }
+    
+    let positionsToRandomize: number[] = [];
     
     if (currentLine.playType === "Back Pair") {
-      if (currentLine.digits[1] === null) positions.push(1);
-      if (currentLine.digits[2] === null) positions.push(2);
+      if (newDigits[1] === null) positionsToRandomize.push(1);
+      if (newDigits[2] === null) positionsToRandomize.push(2);
+      
+      newDigits[0] = -1;
     } else if (currentLine.playType === "Front Pair") {
-      if (currentLine.digits[0] === null) positions.push(0);
-      if (currentLine.digits[1] === null) positions.push(1);
+      if (newDigits[0] === null) positionsToRandomize.push(0);
+      if (newDigits[1] === null) positionsToRandomize.push(1);
+      
+      newDigits[2] = -1;
     } else {
-      for (let i = 0; i < currentLine.digits.length; i++) {
-        if (currentLine.digits[i] === null) {
-          positions.push(i);
+      for (let i = 0; i < newDigits.length; i++) {
+        if (newDigits[i] === null) {
+          positionsToRandomize.push(i);
         }
       }
     }
     
-    return positions;
+    let newCooldownTime = positionsToRandomize.length + 1;
+    setCooldownTime(newCooldownTime);
+    
+    if (positionsToRandomize.length > 0) {
+      positionsToRandomize.forEach((position, index) => {
+        setTimeout(() => {
+          const randomDigit = Math.floor(Math.random() * 10);
+          
+          setActiveDigitIndex(position);
+          onDigitSelect(randomDigit);
+          
+          if (index === positionsToRandomize.length - 1) {
+            setTimeout(() => {
+              setIsRandomizing(false);
+              setActiveDigitIndex(null);
+            }, 500);
+          }
+        }, index * 400);
+      });
+    } else {
+      setIsRandomizing(false);
+    }
   };
 
   const getNumberOpacity = (isSelected: boolean) => {

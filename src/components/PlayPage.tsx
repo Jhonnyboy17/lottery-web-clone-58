@@ -233,85 +233,65 @@ const PlayPage = ({
         };
         setSavedLines(updatedLines);
       }
-      
-      // Wait a small amount of time before starting to add new random numbers
-      setTimeout(() => {
-        selectRandomNumbersSequentially();
-      }, 100);
-      
-      return;
     }
     
-    selectRandomNumbersSequentially();
-  };
-  
-  const selectRandomNumbersSequentially = () => {
-    // Get current selections
+    // Get current selections after potential clearing
     const existingNumbers = [...selectedNumbers];
+    let remainingPowerball = selectedPowerball;
     
     // Generate random numbers only for the empty slots
     const availableNumbers = Array.from({length: totalRegularNumbers}, (_, i) => i + 1)
       .filter(num => !existingNumbers.includes(num));
     
     const emptySlots = maxRegularNumbers - existingNumbers.length;
-    const numbersToSelect = [];
+    const randomNumbers = [];
     
-    // Prepare the random numbers we'll select
+    // Fill in random numbers for the empty slots
     for (let i = 0; i < emptySlots; i++) {
       if (availableNumbers.length) {
         const randomIndex = Math.floor(Math.random() * availableNumbers.length);
-        numbersToSelect.push(availableNumbers[randomIndex]);
+        randomNumbers.push(availableNumbers[randomIndex]);
         availableNumbers.splice(randomIndex, 1);
       }
     }
     
-    // Now select each number with a delay between selections
-    numbersToSelect.forEach((number, index) => {
+    // Generate random powerball if needed and not already selected
+    let randomPowerball: number | null = null;
+    if (hasPowerball && remainingPowerball === null) {
+      randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
+    }
+    
+    // Add the numbers one by one with animation
+    randomNumbers.forEach((num, index) => {
       setTimeout(() => {
-        setSelectedNumbers(prev => {
-          const updated = [...prev, number];
-          
-          // If editing an existing line, update it
-          if (editingLineIndex !== null) {
-            const updatedLines = [...savedLines];
-            updatedLines[editingLineIndex] = {
-              ...updatedLines[editingLineIndex],
-              numbers: updated
-            };
-            setSavedLines(updatedLines);
-          }
-          
-          return updated;
-        });
+        setSelectedNumbers(prev => [...prev, num]);
         
-        // After the last regular number, handle powerball if needed
-        if (index === numbersToSelect.length - 1) {
-          if (hasPowerball && selectedPowerball === null) {
-            setTimeout(() => {
-              const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
-              setSelectedPowerball(randomPowerball);
-              
-              if (editingLineIndex !== null) {
-                const updatedLines = [...savedLines];
-                updatedLines[editingLineIndex] = {
-                  ...updatedLines[editingLineIndex],
-                  powerball: randomPowerball
-                };
-                setSavedLines(updatedLines);
-              }
-              
-              // Set animation complete after powerball is selected
-              setTimeout(() => {
-                setIsRandomizing(false);
-                setTimeout(() => {
-                  if (!editMode) {
-                    setIsEditingNumber(false);
-                  }
-                }, 300);
-              }, 200);
-            }, 300); // Wait a bit before selecting powerball
-          } else {
-            // If no powerball needed, finish up here
+        // If we're editing an existing line, update it immediately with the partial selection
+        if (editingLineIndex !== null) {
+          const updatedLines = [...savedLines];
+          updatedLines[editingLineIndex] = {
+            ...updatedLines[editingLineIndex],
+            numbers: [...existingNumbers, ...randomNumbers.slice(0, index + 1)]
+          };
+          setSavedLines(updatedLines);
+        }
+        
+        if (index === randomNumbers.length - 1) {
+          // All regular numbers have been set
+          
+          // If there's no powerball needed or powerball is already selected, finish the animation
+          if (!hasPowerball || remainingPowerball !== null) {
+            // If editing, update the saved line with the complete set of numbers
+            if (editingLineIndex !== null) {
+              const updatedLines = [...savedLines];
+              updatedLines[editingLineIndex] = {
+                ...updatedLines[editingLineIndex],
+                numbers: [...existingNumbers, ...randomNumbers],
+                powerball: remainingPowerball
+              };
+              setSavedLines(updatedLines);
+            }
+            
             setTimeout(() => {
               setIsRandomizing(false);
               setTimeout(() => {
@@ -319,22 +299,24 @@ const PlayPage = ({
                   setIsEditingNumber(false);
                 }
               }, 300);
-            }, 200);
+            }, 300);
           }
         }
-      }, index * 300); // 300ms delay between each number selection
+      }, (index + 1) * 150);
     });
     
-    // If there are no numbers to select (but we need a powerball)
-    if (numbersToSelect.length === 0 && hasPowerball && selectedPowerball === null) {
+    // Handle powerball generation if needed and not already selected
+    if (hasPowerball && remainingPowerball === null) {
       setTimeout(() => {
         const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
         setSelectedPowerball(randomPowerball);
         
+        // If editing, update the saved line with both the numbers and powerball
         if (editingLineIndex !== null) {
           const updatedLines = [...savedLines];
           updatedLines[editingLineIndex] = {
             ...updatedLines[editingLineIndex],
+            numbers: [...existingNumbers, ...randomNumbers],
             powerball: randomPowerball
           };
           setSavedLines(updatedLines);
@@ -347,7 +329,19 @@ const PlayPage = ({
               setIsEditingNumber(false);
             }
           }, 300);
-        }, 200);
+        }, 300);
+      }, (randomNumbers.length + 1) * 150);
+    }
+    
+    // If no random numbers need to be added (all slots are filled)
+    if (randomNumbers.length === 0 && (remainingPowerball !== null || !hasPowerball)) {
+      setTimeout(() => {
+        setIsRandomizing(false);
+        setTimeout(() => {
+          if (!editMode) {
+            setIsEditingNumber(false);
+          }
+        }, 300);
       }, 300);
     }
   };

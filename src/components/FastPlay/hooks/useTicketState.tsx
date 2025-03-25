@@ -178,18 +178,76 @@ export const useTicketState = () => {
         digits: clearedDigits
       });
       
-      setTimeout(() => {
-        selectRandomDigitsSequentially();
-      }, 10);
+      if (currentLine.playType === "Back Pair") {
+        setActiveDigitIndex(1);
+      } else if (currentLine.playType === "Front Pair") {
+        setActiveDigitIndex(0);
+      } else {
+        setActiveDigitIndex(0);
+      }
       
+      if (isEditing && editingIndex !== null) {
+        const updatedLines = [...savedLines];
+        updatedLines[editingIndex] = {
+          ...currentLine,
+          digits: clearedDigits
+        };
+        setSavedLines(updatedLines);
+        
+        let randomDigits = [...clearedDigits];
+        
+        if (currentLine.playType === "Back Pair") {
+          randomDigits[1] = Math.floor(Math.random() * 10);
+          randomDigits[2] = Math.floor(Math.random() * 10);
+        } else if (currentLine.playType === "Front Pair") {
+          randomDigits[0] = Math.floor(Math.random() * 10);
+          randomDigits[1] = Math.floor(Math.random() * 10);
+        } else {
+          randomDigits = [
+            Math.floor(Math.random() * 10),
+            Math.floor(Math.random() * 10),
+            Math.floor(Math.random() * 10)
+          ];
+        }
+        
+        setCurrentLine({
+          ...currentLine,
+          digits: randomDigits
+        });
+        
+        updatedLines[editingIndex] = {
+          ...currentLine,
+          digits: randomDigits
+        };
+        setSavedLines(updatedLines);
+        setActiveDigitIndex(null);
+        return;
+      }
+      
+      let randomDigits = [...clearedDigits];
+      
+      if (currentLine.playType === "Back Pair") {
+        randomDigits[1] = Math.floor(Math.random() * 10);
+        randomDigits[2] = Math.floor(Math.random() * 10);
+      } else if (currentLine.playType === "Front Pair") {
+        randomDigits[0] = Math.floor(Math.random() * 10);
+        randomDigits[1] = Math.floor(Math.random() * 10);
+      } else {
+        randomDigits = [
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10)
+        ];
+      }
+      
+      setCurrentLine({
+        ...currentLine,
+        digits: randomDigits
+      });
+      
+      setActiveDigitIndex(null);
       return;
     }
-    
-    selectRandomDigitsSequentially();
-  };
-
-  const selectRandomDigitsSequentially = () => {
-    const newDigits = [...currentLine.digits];
     
     if (currentLine.playType === "Back Pair") {
       newDigits[0] = -1;
@@ -213,43 +271,25 @@ export const useTicketState = () => {
       }
     }
     
-    positionsToRandomize.forEach((position, index) => {
-      setTimeout(() => {
-        const randomDigit = Math.floor(Math.random() * 10);
-        
-        setCurrentLine(prev => {
-          const updatedDigits = [...prev.digits];
-          updatedDigits[position] = randomDigit;
-          
-          return {
-            ...prev,
-            digits: updatedDigits
-          };
-        });
-        
-        if (isEditing && editingIndex !== null) {
-          setSavedLines(prev => {
-            const updated = [...prev];
-            const updatedDigits = [...updated[editingIndex].digits];
-            updatedDigits[position] = randomDigit;
-            
-            updated[editingIndex] = {
-              ...updated[editingIndex],
-              digits: updatedDigits
-            };
-            return updated;
-          });
-        }
-        
-        setActiveDigitIndex(position);
-        
-        if (index === positionsToRandomize.length - 1) {
-          setTimeout(() => {
-            setActiveDigitIndex(null);
-          }, 100);
-        }
-      }, index * 300);
+    positionsToRandomize.forEach(position => {
+      newDigits[position] = Math.floor(Math.random() * 10);
     });
+    
+    setCurrentLine({
+      ...currentLine,
+      digits: newDigits
+    });
+    
+    setActiveDigitIndex(null);
+    
+    if (isEditing && editingIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {
+        ...currentLine,
+        digits: newDigits
+      };
+      setSavedLines(updatedLines);
+    }
   };
 
   const clearSelections = () => {
