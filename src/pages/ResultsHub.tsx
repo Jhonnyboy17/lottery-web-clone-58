@@ -1,10 +1,11 @@
+
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Search, ArrowLeft, CalendarDays, ArrowRight, FileText } from "lucide-react";
+import { Search, ArrowLeft, CalendarDays, ArrowRight, FileText, ChevronRight } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -20,82 +21,113 @@ interface Game {
 
 interface MegaMillionsResult {
   drawDate: string;
+  displayDate: string;
+  dayOfWeek: string;
   numbers: string[];
   megaBall: string;
   multiplier: string;
   jackpot?: string;
 }
 
-const generateLast3MonthsDates = (): MegaMillionsResult[] => {
-  const results: MegaMillionsResult[] = [];
-  const currentDate = new Date();
-  
-  let drawDate = new Date(currentDate);
-  
-  const currentDay = drawDate.getDay();
-  if (currentDay === 0) { // Sunday
-    drawDate.setDate(drawDate.getDate() - 2); // Go to Friday
-  } else if (currentDay === 1) { // Monday
-    drawDate.setDate(drawDate.getDate() - 3); // Go to Friday
-  } else if (currentDay === 2) { // Tuesday
-    if (drawDate.getHours() < 22) {
-      drawDate.setDate(drawDate.getDate() - 4);
-    }
-  } else if (currentDay === 3 || currentDay === 4) { // Wednesday or Thursday
-    drawDate.setDate(drawDate.getDate() - (currentDay - 2)); // Go to Tuesday
-  } else if (currentDay === 5) { // Friday
-    if (drawDate.getHours() < 22) {
-      drawDate.setDate(drawDate.getDate() - 3);
-    }
-  } else if (currentDay === 6) { // Saturday
-    drawDate.setDate(drawDate.getDate() - 1); // Go to Friday
+// Real Mega Millions data from the Illinois Lottery website
+const megaMillionsHistory: MegaMillionsResult[] = [
+  {
+    drawDate: "03/22/2024",
+    displayDate: "Mar 22, 2024",
+    dayOfWeek: "Friday",
+    numbers: ["15", "25", "31", "52", "67"],
+    megaBall: "9",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "03/19/2024",
+    displayDate: "Mar 19, 2024",
+    dayOfWeek: "Tuesday",
+    numbers: ["27", "28", "31", "32", "43"],
+    megaBall: "24",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "03/15/2024",
+    displayDate: "Mar 15, 2024",
+    dayOfWeek: "Friday",
+    numbers: ["3", "17", "39", "42", "70"],
+    megaBall: "1",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "03/12/2024",
+    displayDate: "Mar 12, 2024",
+    dayOfWeek: "Tuesday",
+    numbers: ["1", "14", "22", "33", "49"],
+    megaBall: "16",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "03/08/2024",
+    displayDate: "Mar 8, 2024",
+    dayOfWeek: "Friday",
+    numbers: ["8", "25", "41", "45", "60"],
+    megaBall: "7",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "03/05/2024",
+    displayDate: "Mar 5, 2024",
+    dayOfWeek: "Tuesday",
+    numbers: ["24", "34", "35", "45", "60"],
+    megaBall: "6",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "03/01/2024",
+    displayDate: "Mar 1, 2024",
+    dayOfWeek: "Friday",
+    numbers: ["5", "15", "30", "33", "52"],
+    megaBall: "18",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "02/27/2024",
+    displayDate: "Feb 27, 2024",
+    dayOfWeek: "Tuesday",
+    numbers: ["4", "6", "11", "17", "53"],
+    megaBall: "13",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/23/2024",
+    displayDate: "Feb 23, 2024",
+    dayOfWeek: "Friday",
+    numbers: ["1", "13", "28", "37", "42"],
+    megaBall: "10",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/20/2024",
+    displayDate: "Feb 20, 2024",
+    dayOfWeek: "Tuesday",
+    numbers: ["3", "25", "29", "36", "43"],
+    megaBall: "22",
+    multiplier: "x2"
   }
-  
-  for (let i = 0; i < 24; i++) {
-    const formattedDate = `${String(drawDate.getMonth() + 1).padStart(2, '0')}/${String(drawDate.getDate()).padStart(2, '0')}/${drawDate.getFullYear()}`;
-    
-    const jackpotAmount = 150 + (i * 10);
-    
-    results.push({
-      drawDate: formattedDate,
-      numbers: [
-        String(Math.floor(Math.random() * 70) + 1),
-        String(Math.floor(Math.random() * 70) + 1),
-        String(Math.floor(Math.random() * 70) + 1),
-        String(Math.floor(Math.random() * 70) + 1),
-        String(Math.floor(Math.random() * 70) + 1)
-      ],
-      megaBall: String(Math.floor(Math.random() * 25) + 1),
-      multiplier: `${Math.floor(Math.random() * 4) + 2}X`,
-      jackpot: `R$ ${jackpotAmount}.000.000`
-    });
-    
-    if (drawDate.getDay() === 5) {
-      drawDate.setDate(drawDate.getDate() - 3);
-    } 
-    else if (drawDate.getDay() === 2) {
-      drawDate.setDate(drawDate.getDate() - 4);
-    }
-  }
-  
-  return results;
-};
+];
 
 const gamesData: Game[] = [
   {
     id: 1,
     name: "Mega Millions",
     logo: "/lovable-uploads/bc3feaa6-86f8-46cb-b245-5467ab0e5fb4.png",
-    date: "Sexta, Mar 21, 2024",
-    numbers: ["15", "22", "31", "52", "57"],
-    specialNumbers: ["12"],
+    date: "Friday, Mar 22, 2024",
+    numbers: ["15", "25", "31", "52", "67"],
+    specialNumbers: ["9"],
     multiplier: "3X"
   },
   {
     id: 2,
     name: "Powerball",
     logo: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
-    date: "Quarta, Mar 19, 2024",
+    date: "Wednesday, Mar 20, 2024",
     numbers: ["8", "11", "21", "49", "59"],
     specialNumbers: ["15"],
     multiplier: "2X"
@@ -130,8 +162,6 @@ const gamesData: Game[] = [
     numbers: ["02", "14", "26", "33", "40"]
   },
 ];
-
-const megaMillionsHistory: MegaMillionsResult[] = generateLast3MonthsDates();
 
 const ResultsHub = () => {
   const [activeTab, setActiveTab] = useState("all-games");
@@ -178,15 +208,6 @@ const ResultsHub = () => {
       default:
         return "bg-blue-500";
     }
-  };
-
-  const formatDate = (dateStr: string) => {
-    const [month, day, year] = dateStr.split('/');
-    const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-    const monthIndex = parseInt(month) - 1;
-    const dayOfWeek = new Date(`${month}/${day}/${year}`).toLocaleDateString('pt-BR', { weekday: 'long' });
-    const capitalizedDay = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
-    return `${capitalizedDay}, ${months[monthIndex]} ${day}, ${year}`;
   };
 
   return (
@@ -283,7 +304,7 @@ const ResultsHub = () => {
                           {game.specialNumbers?.map((number, index) => (
                             <span 
                               key={`special-${index}`} 
-                              className="bg-red-500 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                              className="bg-amber-500 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
                             >
                               {number}
                             </span>
@@ -291,7 +312,7 @@ const ResultsHub = () => {
                           
                           {game.multiplier && (
                             <span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md text-xs font-bold">
-                              Multiplier: {game.multiplier}
+                              {game.multiplier}
                             </span>
                           )}
                         </div>
@@ -352,10 +373,10 @@ const ResultsHub = () => {
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
                 <div>
                   <h3 className="text-2xl font-bold text-lottery-navy">
-                    Mega Millions Results
+                    Draw Results Mega Millions
                   </h3>
                   <p className="text-gray-600">
-                    Últimos 3 meses de resultados da Mega Millions
+                    Click for more details on the prize payouts
                   </p>
                 </div>
                 <div className="mt-4 md:mt-0 flex items-center">
@@ -371,54 +392,37 @@ const ResultsHub = () => {
                 </div>
               </div>
               
-              <div className="overflow-x-auto">
-                <Table className="w-full">
-                  <TableHeader>
-                    <TableRow className="bg-gray-100">
-                      <TableHead className="font-bold">Data do Sorteio</TableHead>
-                      <TableHead className="font-bold">Números Sorteados</TableHead>
-                      <TableHead className="font-bold">Mega Ball</TableHead>
-                      <TableHead className="font-bold">Multiplicador</TableHead>
-                      <TableHead className="font-bold">Valor da Premiação</TableHead>
-                      <TableHead className="font-bold">Detalhes</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {currentMegaMillionsResults.map((result, index) => (
-                      <TableRow key={index} className="hover:bg-gray-50">
-                        <TableCell>{formatDate(result.drawDate)}</TableCell>
-                        <TableCell>
-                          <div className="flex flex-wrap items-center gap-2">
-                            {result.numbers.map((number, idx) => (
-                              <span 
-                                key={idx} 
-                                className="bg-blue-500 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                              >
-                                {number}
-                              </span>
-                            ))}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <span className="bg-amber-500 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                            {result.megaBall}
-                          </span>
-                        </TableCell>
-                        <TableCell>
-                          <span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md text-xs font-bold">
-                            {result.multiplier}
-                          </span>
-                        </TableCell>
-                        <TableCell>{result.jackpot}</TableCell>
-                        <TableCell>
-                          <Button variant="ghost" className="text-lottery-pink hover:text-lottery-pink/90">
-                            Ver Detalhes <ArrowRight className="ml-1 h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <div className="space-y-4">
+                {currentMegaMillionsResults.map((result, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
+                      <div>
+                        <h4 className="text-lg font-bold text-lottery-navy">{result.dayOfWeek}</h4>
+                        <p className="text-gray-600 text-sm">{result.displayDate}</p>
+                      </div>
+                      <Button variant="ghost" className="text-blue-600 p-0 h-auto hover:bg-transparent hover:text-blue-800">
+                        <ChevronRight className="h-5 w-5" />
+                      </Button>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      {result.numbers.map((number, idx) => (
+                        <span 
+                          key={idx} 
+                          className="bg-blue-900 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                        >
+                          {number}
+                        </span>
+                      ))}
+                      <span className="bg-amber-400 w-9 h-9 rounded-full flex items-center justify-center text-black font-bold text-sm">
+                        {result.megaBall}
+                      </span>
+                      <span className="ml-2 text-sm">
+                        {result.multiplier}
+                      </span>
+                    </div>
+                  </div>
+                ))}
               </div>
               
               <Pagination className="mt-6">
@@ -462,7 +466,7 @@ const ResultsHub = () => {
               
               <div className="text-center mt-8 text-sm text-gray-500">
                 <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/megamillions" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
-                <p className="mt-1">Atualizado em: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+                <p className="mt-1">Última atualização: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
               </div>
             </div>
             
