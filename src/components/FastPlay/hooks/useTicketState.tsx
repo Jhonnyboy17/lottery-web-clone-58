@@ -282,5 +282,64 @@ export const useTicketState = () => {
     setIsEditing(true);
     setEditingIndex(lineIndex);
     setActiveDigitIndex(null);
- 
+    setAnimatedProgress(100);
+  };
 
+  const isPairTypeLineComplete = () => {
+    if (currentLine.playType === "Back Pair") {
+      return currentLine.digits[1] !== null && currentLine.digits[2] !== null;
+    } else if (currentLine.playType === "Front Pair") {
+      return currentLine.digits[0] !== null && currentLine.digits[1] !== null;
+    } else {
+      return isLineComplete();
+    }
+  };
+
+  const isLineComplete = () => {
+    return !currentLine.digits.some(digit => digit === null);
+  };
+
+  const getTicketPrice = () => {
+    const calculateLinePrice = (line: NumberSelectionType) => {
+      const amount = parseFloat(line.betAmount.replace('R$', ''));
+      const fireballAmount = line.includeFireball ? 1 : 0;
+      const drawCount = parseInt(line.drawCount || "1");
+      
+      return (amount + fireballAmount) * drawCount;
+    };
+    
+    const totalPrice = savedLines.reduce((sum, line) => sum + calculateLinePrice(line), 0);
+    
+    return totalPrice.toLocaleString('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    }).replace('R$', 'R$ ');
+  };
+
+  return {
+    currentLine,
+    savedLines,
+    lineCount,
+    activeDigitIndex,
+    setActiveDigitIndex,
+    handleDigitSelect,
+    handlePlayTypeChange,
+    handleBetAmountChange,
+    handleQuickPick,
+    clearSelections,
+    handleAddLine,
+    handleRemoveLine,
+    handleEditLine,
+    isLineComplete,
+    isPairTypeLineComplete,
+    getTicketPrice,
+    isEditing,
+    editingIndex,
+    setIsEditing,
+    setEditingIndex,
+    animatedProgress,
+    setAnimatedProgress
+  };
+};
