@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -1309,7 +1310,7 @@ const ResultsHub = () => {
                           {result.lottoMillion1.map((val, idx) => (
                             <div
                               key={idx}
-                              className="w-8 h-8 rounded-full bg-gray-200 text-gray-800 flex items-center justify-center font-bold text-sm"
+                              className="w-8 h-8 rounded-full bg-[#c2e190] text-gray-800 flex items-center justify-center font-bold text-sm"
                             >
                               {val}
                             </div>
@@ -1322,7 +1323,7 @@ const ResultsHub = () => {
                           {result.lottoMillion2.map((val, idx) => (
                             <div
                               key={idx}
-                              className="w-8 h-8 rounded-full bg-gray-200 text-gray-800 flex items-center justify-center font-bold text-sm"
+                              className="w-8 h-8 rounded-full bg-[#c2e190] text-gray-800 flex items-center justify-center font-bold text-sm"
                             >
                               {val}
                             </div>
