@@ -96,6 +96,14 @@ export const Cash5Page = ({
             onEditLine={handleEditLine}
             extraPlayName={extraPlayName}
             editingIndex={editingIndex}
+            currentLine={currentLine}
+            onStartNewLine={() => {
+              if (isEditing) {
+                setIsEditing(false);
+                setEditingIndex(null);
+                clearSelections();
+              }
+            }}
           />
         </Card>
 
