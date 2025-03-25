@@ -26,8 +26,8 @@ const GameLayout: React.FC<GameLayoutProps> = ({
   return <div className="min-h-screen bg-white pb-20">
       <Navbar />
       
-      {/* Game Banner with Background Color - directly below navbar without space */}
-      <div className="w-full py-8" style={{
+      {/* Game Banner with Background Color - directly below navbar with proper spacing for logo */}
+      <div className="w-full py-8 mt-24" style={{
         backgroundColor: colorValue
       }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -36,7 +36,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({
             <div></div>
 
             {/* Center - Game Logo */}
-            <div className="absolute left-1/2 transform -translate-x-1/2">
+            <div className="flex justify-center">
               <img src={logoSrc} alt={gameName} className="h-16 w-auto" />
             </div>
 
