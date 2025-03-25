@@ -30,7 +30,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
     <div className="bg-gray-50 p-4">
       <h3 className="font-semibold mb-3">Minhas Linhas</h3>
       
-      {savedLines.length === 0 && !currentLine ? (
+      {savedLines.length === 0 ? (
         // Display a template line with question marks instead of the message
         <div className="mb-2">
           <div className="bg-white rounded p-3 flex items-center justify-between">
@@ -88,36 +88,36 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
               </div>
             </div>
           ))}
-          
-          {/* Always show the current line template, whether editing or creating a new line */}
-          {currentLine && (
-            <div className="mb-2">
-              <div 
-                className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
-                onClick={onStartNewLine}
-              >
-                <div className="flex items-center">
-                  <span className="text-gray-500 font-medium w-6 mr-2">
-                    {String(savedLines.length + 1).padStart(2, '0')}
-                  </span>
-                  {Array(currentLine.digits.length).fill(null).map((_, i) => (
-                    <span 
-                      key={i} 
-                      className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
-                    >
-                      {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
-                        <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
-                          {currentLine.digits[i] === -1 ? <span className="font-bold">X</span> : currentLine.digits[i]}
-                        </span>
-                      ) : '?'}
-                    </span>
-                  ))}
-                </div>
-                <div className="w-4"></div> {/* Empty space where the X button would be */}
-              </div>
-            </div>
-          )}
         </>
+      )}
+      
+      {/* Always show the current line template if there are saved lines or a current line is in progress */}
+      {(savedLines.length > 0 || currentLine) && (
+        <div className="mb-2">
+          <div 
+            className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
+            onClick={onStartNewLine}
+          >
+            <div className="flex items-center">
+              <span className="text-gray-500 font-medium w-6 mr-2">
+                {String(savedLines.length + 1).padStart(2, '0')}
+              </span>
+              {Array(currentLine?.digits.length || 5).fill(null).map((_, i) => (
+                <span 
+                  key={i} 
+                  className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                >
+                  {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
+                    <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
+                      {currentLine.digits[i] === -1 ? <span className="font-bold">X</span> : currentLine.digits[i]}
+                    </span>
+                  ) : '?'}
+                </span>
+              ))}
+            </div>
+            <div className="w-4"></div> {/* Empty space where the X button would be */}
+          </div>
+        </div>
       )}
     </div>
   );
