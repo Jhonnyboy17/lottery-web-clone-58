@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -29,87 +28,230 @@ interface MegaMillionsResult {
   jackpot?: string;
 }
 
-// Real Mega Millions data from the Illinois Lottery website
 const megaMillionsHistory: MegaMillionsResult[] = [
   {
-    drawDate: "03/22/2024",
-    displayDate: "Mar 22, 2024",
-    dayOfWeek: "Friday",
-    numbers: ["15", "25", "31", "52", "67"],
-    megaBall: "9",
+    drawDate: "03/21/2025",
+    displayDate: "21 de março de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["15", "22", "31", "52", "57"],
+    megaBall: "2",
     multiplier: "x3"
   },
   {
-    drawDate: "03/19/2024",
-    displayDate: "Mar 19, 2024",
-    dayOfWeek: "Tuesday",
-    numbers: ["27", "28", "31", "32", "43"],
+    drawDate: "03/18/2025",
+    displayDate: "18 de março de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["27", "28", "31", "32", "33"],
     megaBall: "24",
-    multiplier: "x2"
+    multiplier: "x3"
   },
   {
-    drawDate: "03/15/2024",
-    displayDate: "Mar 15, 2024",
-    dayOfWeek: "Friday",
+    drawDate: "03/14/2025",
+    displayDate: "14 de março de 2025",
+    dayOfWeek: "Sexta-feira",
     numbers: ["3", "17", "39", "42", "70"],
     megaBall: "1",
     multiplier: "x3"
   },
   {
-    drawDate: "03/12/2024",
-    displayDate: "Mar 12, 2024",
-    dayOfWeek: "Tuesday",
-    numbers: ["1", "14", "22", "33", "49"],
-    megaBall: "16",
+    drawDate: "03/11/2025",
+    displayDate: "11 de março de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["1", "19", "26", "38", "69"],
+    megaBall: "15",
     multiplier: "x3"
   },
   {
-    drawDate: "03/08/2024",
-    displayDate: "Mar 8, 2024",
-    dayOfWeek: "Friday",
-    numbers: ["8", "25", "41", "45", "60"],
+    drawDate: "03/07/2025",
+    displayDate: "7 de março de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["8", "20", "48", "58", "60"],
     megaBall: "7",
     multiplier: "x3"
   },
   {
-    drawDate: "03/05/2024",
-    displayDate: "Mar 5, 2024",
-    dayOfWeek: "Tuesday",
-    numbers: ["24", "34", "35", "45", "60"],
+    drawDate: "03/04/2025",
+    displayDate: "4 de março de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["14", "19", "47", "52", "70"],
     megaBall: "6",
     multiplier: "x2"
   },
   {
-    drawDate: "03/01/2024",
-    displayDate: "Mar 1, 2024",
-    dayOfWeek: "Friday",
-    numbers: ["5", "15", "30", "33", "52"],
-    megaBall: "18",
+    drawDate: "02/28/2025",
+    displayDate: "28 de fevereiro de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["9", "19", "30", "35", "66"],
+    megaBall: "16",
     multiplier: "x3"
   },
   {
-    drawDate: "02/27/2024",
-    displayDate: "Feb 27, 2024",
-    dayOfWeek: "Tuesday",
-    numbers: ["4", "6", "11", "17", "53"],
+    drawDate: "02/25/2025",
+    displayDate: "25 de fevereiro de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["4", "8", "11", "32", "52"],
     megaBall: "13",
     multiplier: "x2"
   },
   {
-    drawDate: "02/23/2024",
-    displayDate: "Feb 23, 2024",
-    dayOfWeek: "Friday",
-    numbers: ["1", "13", "28", "37", "42"],
+    drawDate: "02/21/2025",
+    displayDate: "21 de fevereiro de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["1", "13", "28", "37", "46"],
     megaBall: "10",
     multiplier: "x2"
   },
   {
-    drawDate: "02/20/2024",
-    displayDate: "Feb 20, 2024",
-    dayOfWeek: "Tuesday",
-    numbers: ["3", "25", "29", "36", "43"],
+    drawDate: "02/18/2025",
+    displayDate: "18 de fevereiro de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["1", "20", "25", "58", "61"],
     megaBall: "22",
     multiplier: "x2"
+  },
+  {
+    drawDate: "02/14/2025",
+    displayDate: "14 de fevereiro de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["11", "19", "31", "49", "56"],
+    megaBall: "16",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "02/11/2025",
+    displayDate: "11 de fevereiro de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["7", "30", "39", "41", "70"],
+    megaBall: "13",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "02/07/2025",
+    displayDate: "7 de fevereiro de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["10", "23", "32", "43", "65"],
+    megaBall: "3",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/04/2025",
+    displayDate: "4 de fevereiro de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["2", "14", "30", "40", "58"],
+    megaBall: "12",
+    multiplier: "x4"
+  },
+  {
+    drawDate: "01/31/2025",
+    displayDate: "31 de janeiro de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["5", "10", "15", "20", "25"],
+    megaBall: "5",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "01/28/2025",
+    displayDate: "28 de janeiro de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["12", "24", "37", "58", "60"],
+    megaBall: "6",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/24/2025",
+    displayDate: "24 de janeiro de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["1", "4", "23", "40", "45"],
+    megaBall: "11",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "01/21/2025",
+    displayDate: "21 de janeiro de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["9", "12", "17", "48", "68"],
+    megaBall: "8",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/17/2025",
+    displayDate: "17 de janeiro de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["3", "16", "21", "61", "62"],
+    megaBall: "19",
+    multiplier: "x4"
+  },
+  {
+    drawDate: "01/14/2025",
+    displayDate: "14 de janeiro de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["6", "15", "24", "34", "55"],
+    megaBall: "7",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "01/10/2025",
+    displayDate: "10 de janeiro de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["2", "11", "20", "32", "65"],
+    megaBall: "23",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "01/07/2025",
+    displayDate: "7 de janeiro de 2025",
+    dayOfWeek: "Terça-feira",
+    numbers: ["4", "22", "33", "44", "50"],
+    megaBall: "12",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/03/2025",
+    displayDate: "3 de janeiro de 2025",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["10", "15", "20", "30", "55"],
+    megaBall: "10",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "12/31/2024",
+    displayDate: "31 de dezembro de 2024",
+    dayOfWeek: "Terça-feira",
+    numbers: ["5", "14", "28", "31", "40"],
+    megaBall: "2",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "12/27/2024",
+    displayDate: "27 de dezembro de 2024",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["8", "19", "25", "36", "59"],
+    megaBall: "7",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "12/24/2024",
+    displayDate: "24 de dezembro de 2024",
+    dayOfWeek: "Terça-feira",
+    numbers: ["3", "6", "34", "53", "60"],
+    megaBall: "10",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "12/20/2024",
+    displayDate: "20 de dezembro de 2024",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["11", "13", "26", "50", "65"],
+    megaBall: "15",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "12/17/2024",
+    displayDate: "17 de dezembro de 2024",
+    dayOfWeek: "Terça-feira",
+    numbers: ["9", "10", "25", "38", "50"],
+    megaBall: "5",
+    multiplier: "x4"
   }
 ];
 

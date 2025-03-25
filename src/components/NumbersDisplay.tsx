@@ -27,21 +27,22 @@ const games: NumbersGame[] = [
     id: 1,
     name: "Mega Millions",
     logo: "https://via.placeholder.com/120x50/FFD100/000000?text=MEGA+MILLIONS",
-    date: "Sexta, Mar 21",
-    drawTime: "Evening Draw",
+    date: "Sexta-feira, 21 de março de 2025",
     numbers: [
       { value: "15", color: "bg-blue-500" },
       { value: "22", color: "bg-blue-500" },
       { value: "31", color: "bg-blue-500" },
-      { value: "52", color: "bg-red-500" },
+      { value: "52", color: "bg-blue-500" },
       { value: "57", color: "bg-blue-500" },
+      { value: "2", color: "bg-amber-500", isSpecial: true },
+      { value: "x3", color: "bg-gray-200", multiplier: "x3" },
     ],
   },
   {
     id: 2,
     name: "Powerball",
     logo: "https://via.placeholder.com/120x50/FF5247/FFFFFF?text=POWERBALL",
-    date: "Quarta, Mar 19",
+    date: "Quarta-feira, 19 de março de 2025",
     numbers: [
       { value: "8", color: "bg-blue-500" },
       { value: "11", color: "bg-blue-500" },
@@ -56,7 +57,7 @@ const games: NumbersGame[] = [
     id: 3,
     name: "Pick 4",
     logo: "https://via.placeholder.com/120x50/00A9E0/FFFFFF?text=PICK+4",
-    date: "Sexta, Mar 21",
+    date: "Sexta-feira, 21 de março de 2025",
     drawTime: "Evening Draw",
     numbers: [
       { value: "7", color: "bg-blue-500" },
@@ -70,7 +71,7 @@ const games: NumbersGame[] = [
     id: 4,
     name: "Lucky Day Lotto",
     logo: "https://via.placeholder.com/120x50/00CCC6/FFFFFF?text=LUCKY+DAY",
-    date: "Sexta, Mar 21",
+    date: "Sexta-feira, 21 de março de 2025",
     drawTime: "Evening Draw",
     numbers: [
       { value: "3", color: "bg-blue-500" },
@@ -84,7 +85,7 @@ const games: NumbersGame[] = [
     id: 5,
     name: "Lotto",
     logo: "https://via.placeholder.com/120x50/8CC63F/FFFFFF?text=LOTTO",
-    date: "Quinta, Mar 20",
+    date: "Quinta-feira, 20 de março de 2025",
     numbers: [
       { value: "6", color: "bg-blue-500" },
       { value: "12", color: "bg-green-500" },
@@ -182,9 +183,7 @@ const NumbersDisplay = () => {
   const navigate = useNavigate();
 
   const navigateToResultsHub = () => {
-    // Navigate to the Results Hub page
     navigate('/results-hub');
-    // Force scroll to top
     window.scrollTo(0, 0);
   };
 
