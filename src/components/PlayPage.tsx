@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -226,13 +227,15 @@ const PlayPage = ({
     }
     
     const numbersNeeded = maxRegularNumbers - (editMode ? 0 : selectedNumbers.length);
+    let randomNumbers: number[] = [];
+    
     if (numbersNeeded > 0) {
       const availableNumbers = regularNumbers.filter(num => !selectedNumbers.includes(num));
-      let newNumbers: number[] = [];
+      
       for (let i = 0; i < (editMode ? maxRegularNumbers : numbersNeeded); i++) {
         if (availableNumbers.length) {
           const randomIndex = Math.floor(Math.random() * availableNumbers.length);
-          newNumbers.push(availableNumbers[randomIndex]);
+          randomNumbers.push(availableNumbers[randomIndex]);
           availableNumbers.splice(randomIndex, 1);
         }
       }
@@ -240,13 +243,13 @@ const PlayPage = ({
       // Update the selectedNumbers state
       if (editMode) {
         // For edit mode, completely replace the selection
-        setSelectedNumbers(newNumbers);
+        setSelectedNumbers(randomNumbers);
       } else {
         // For new line, add to existing selection
-        newNumbers.forEach((num, index) => {
+        randomNumbers.forEach((num, index) => {
           setTimeout(() => {
             setSelectedNumbers(prev => [...prev, num]);
-            if (index === newNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
+            if (index === randomNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
               setTimeout(() => {
                 setIsRandomizing(false);
                 setTimeout(() => {
@@ -291,7 +294,7 @@ const PlayPage = ({
         const updatedLines = [...savedLines];
         updatedLines[editingLineIndex] = {
           ...updatedLines[editingLineIndex],
-          numbers: newNumbers,
+          numbers: randomNumbers,
           powerball: hasPowerball ? Math.floor(Math.random() * totalPowerballNumbers) + 1 : null
         };
         setSavedLines(updatedLines);
