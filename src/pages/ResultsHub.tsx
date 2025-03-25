@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -668,8 +669,8 @@ const ResultsHub = () => {
   const [megaMillionsPage, setMegaMillionsPage] = useState(1);
   const [powerballPage, setPowerballPage] = useState(1);
   const gamesPerPage = 5;
-  const megaMillionsResultsPerPage = 5;
-  const powerballResultsPerPage = 10;
+  const megaMillionsResultsPerPage = 6;
+  const powerballResultsPerPage = 6;
   
   const indexOfLastGame = currentPage * gamesPerPage;
   const indexOfFirstGame = indexOfLastGame - gamesPerPage;
@@ -860,59 +861,59 @@ const ResultsHub = () => {
                 </div>
               </div>
               
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Draw Date</TableHead>
-                      <TableHead>Draw Day</TableHead>
-                      <TableHead>Numbers</TableHead>
-                      <TableHead>Mega Ball</TableHead>
-                      <TableHead>Multiplier</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {currentMegaMillionsResults.map((result, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <div className="flex items-center">
-                            <CalendarDays className="h-4 w-4 mr-2 text-gray-500" />
-                            {result.displayDate}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {currentMegaMillionsResults.map((result, index) => (
+                  <Card key={index} className="overflow-hidden border-0 shadow-md">
+                    <CardContent className="p-0">
+                      <div className="flex flex-col">
+                        <div className="bg-blue-500 py-4 px-6 flex items-center">
+                          <img 
+                            src="/lovable-uploads/bc3feaa6-86f8-46cb-b245-5467ab0e5fb4.png" 
+                            alt="Mega Millions" 
+                            className="h-12 w-auto mr-4" 
+                          />
+                          <div>
+                            <h3 className="text-white font-bold text-xl">Mega Millions</h3>
+                            <p className="text-white/80 text-sm">{result.displayDate} - {result.dayOfWeek}</p>
                           </div>
-                        </TableCell>
-                        <TableCell>{result.dayOfWeek}</TableCell>
-                        <TableCell>
-                          <div className="flex space-x-1">
+                        </div>
+                        
+                        <div className="p-6">
+                          <div className="flex flex-wrap gap-3 mb-4">
                             {result.numbers.map((number, idx) => (
                               <div 
                                 key={idx}
-                                className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 text-sm font-medium"
+                                className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-800 text-sm font-medium"
                               >
                                 {number}
                               </div>
                             ))}
+                            <div 
+                              className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium"
+                            >
+                              {result.megaBall}
+                            </div>
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          <div 
-                            className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white text-sm font-medium"
-                          >
-                            {result.megaBall}
+                          
+                          <div className="text-gray-600 mb-3">
+                            <span className="font-semibold">Multiplier:</span> {result.multiplier}
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          <span className="font-medium">{result.multiplier}</span>
-                        </TableCell>
-                        <TableCell>
-                          <Button variant="outline" size="sm">
-                            View Details
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                          
+                          <div className="flex justify-between items-center">
+                            <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                              <FileText className="h-4 w-4 mr-1" />
+                              Game Details
+                            </Button>
+                            <Button variant="link" size="sm" className="text-lottery-pink flex items-center">
+                              View More
+                              <ChevronRight className="h-4 w-4 ml-1" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
               
               <Pagination className="mt-8">
@@ -975,59 +976,59 @@ const ResultsHub = () => {
                 </div>
               </div>
               
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Draw Date</TableHead>
-                      <TableHead>Draw Day</TableHead>
-                      <TableHead>Numbers</TableHead>
-                      <TableHead>Powerball</TableHead>
-                      <TableHead>Multiplier</TableHead>
-                      <TableHead>Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {currentPowerballResults.map((result, index) => (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <div className="flex items-center">
-                            <CalendarDays className="h-4 w-4 mr-2 text-gray-500" />
-                            {result.displayDate}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {currentPowerballResults.map((result, index) => (
+                  <Card key={index} className="overflow-hidden border-0 shadow-md">
+                    <CardContent className="p-0">
+                      <div className="flex flex-col">
+                        <div className="bg-[#ff5247] py-4 px-6 flex items-center">
+                          <img 
+                            src="/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png" 
+                            alt="Powerball" 
+                            className="h-12 w-auto mr-4" 
+                          />
+                          <div>
+                            <h3 className="text-white font-bold text-xl">Powerball</h3>
+                            <p className="text-white/80 text-sm">{result.displayDate} - {result.dayOfWeek}</p>
                           </div>
-                        </TableCell>
-                        <TableCell>{result.dayOfWeek}</TableCell>
-                        <TableCell>
-                          <div className="flex space-x-1">
+                        </div>
+                        
+                        <div className="p-6">
+                          <div className="flex flex-wrap gap-3 mb-4">
                             {result.numbers.map((number, idx) => (
                               <div 
                                 key={idx}
-                                className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center text-red-800 text-sm font-medium"
+                                className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-800 text-sm font-medium"
                               >
                                 {number}
                               </div>
                             ))}
+                            <div 
+                              className="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-white text-sm font-medium"
+                            >
+                              {result.powerball}
+                            </div>
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          <div 
-                            className="w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white text-sm font-medium"
-                          >
-                            {result.powerball}
+                          
+                          <div className="text-gray-600 mb-3">
+                            <span className="font-semibold">Multiplier:</span> {result.multiplier}
                           </div>
-                        </TableCell>
-                        <TableCell>
-                          <span className="font-medium">{result.multiplier}</span>
-                        </TableCell>
-                        <TableCell>
-                          <Button variant="outline" size="sm">
-                            View Details
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                          
+                          <div className="flex justify-between items-center">
+                            <Button variant="outline" size="sm" className="flex items-center space-x-1">
+                              <FileText className="h-4 w-4 mr-1" />
+                              Game Details
+                            </Button>
+                            <Button variant="link" size="sm" className="text-lottery-pink flex items-center">
+                              View More
+                              <ChevronRight className="h-4 w-4 ml-1" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
               
               <Pagination className="mt-8">
