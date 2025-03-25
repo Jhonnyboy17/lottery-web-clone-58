@@ -16,7 +16,6 @@ export const useTicketState = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
 
-  // Ensure that the first empty index is selected when needed
   useEffect(() => {
     if (activeDigitIndex === null && currentLine.digits.some(digit => digit === null)) {
       const firstEmptyIndex = currentLine.digits.findIndex(digit => digit === null);
@@ -37,7 +36,6 @@ export const useTicketState = () => {
       digits: newDigits
     });
     
-    // If we're editing an existing line, update it immediately
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
@@ -61,7 +59,6 @@ export const useTicketState = () => {
       playType: value
     });
     
-    // If editing, update the saved line with the new play type
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
@@ -78,7 +75,6 @@ export const useTicketState = () => {
       betAmount: value
     });
     
-    // If editing, update the saved line with the new bet amount
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
@@ -99,7 +95,6 @@ export const useTicketState = () => {
       digits: randomDigits
     });
     
-    // If editing, update the saved line with the random digits
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
@@ -119,7 +114,6 @@ export const useTicketState = () => {
     });
     setActiveDigitIndex(0);
     
-    // If editing, update the saved line immediately with null values
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
@@ -134,21 +128,17 @@ export const useTicketState = () => {
     if (currentLine.digits.some(digit => digit === null)) return;
     
     if (isEditing && editingIndex !== null) {
-      // Update existing line
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {...currentLine};
       setSavedLines(updatedLines);
       
-      // Reset editing state
       setIsEditing(false);
       setEditingIndex(null);
     } else {
-      // Add new line
       setSavedLines([...savedLines, {...currentLine}]);
       setLineCount(lineCount + 1);
     }
     
-    // Reset current line
     setCurrentLine({
       digits: [null, null, null, null],
       playType: currentLine.playType,
@@ -162,12 +152,10 @@ export const useTicketState = () => {
 
   const handleRemoveLine = (lineIndex: number) => {
     setSavedLines(savedLines.filter((_, index) => index !== lineIndex));
-    // Decrease the line count when a line is removed
     if (lineCount > 1) {
       setLineCount(lineCount - 1);
     }
     
-    // If removing the line we're currently editing, cancel editing
     if (isEditing && editingIndex === lineIndex) {
       setIsEditing(false);
       setEditingIndex(null);
@@ -176,7 +164,6 @@ export const useTicketState = () => {
   };
 
   const handleEditLine = (lineIndex: number) => {
-    // If lineIndex is -1, it's just a trigger to re-render
     if (lineIndex === -1) return;
     
     const lineToEdit = savedLines[lineIndex];
@@ -185,7 +172,7 @@ export const useTicketState = () => {
     setCurrentLine({...lineToEdit});
     setIsEditing(true);
     setEditingIndex(lineIndex);
-    setActiveDigitIndex(null); // Don't focus any digit initially when editing
+    setActiveDigitIndex(null);
   };
 
   const isLineComplete = () => {
@@ -193,7 +180,6 @@ export const useTicketState = () => {
   };
 
   const getTicketPrice = () => {
-    // Calculate the total price based on each line's individual settings
     const totalPrice = savedLines.reduce((sum, line) => {
       const baseAmount = parseFloat(line.betAmount.replace('R$', ''));
       const fireballAmount = line.includeFireball ? 1 : 0;
@@ -203,6 +189,38 @@ export const useTicketState = () => {
     }, 0);
     
     return totalPrice.toFixed(2);
+  };
+
+  const handleToggleExtraPlay = (value: boolean) => {
+    setCurrentLine({
+      ...currentLine,
+      includeFireball: value
+    });
+    
+    if (isEditing && editingIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {
+        ...currentLine,
+        includeFireball: value
+      };
+      setSavedLines(updatedLines);
+    }
+  };
+
+  const handleChangeDrawCount = (value: string) => {
+    setCurrentLine({
+      ...currentLine,
+      drawCount: value
+    });
+    
+    if (isEditing && editingIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {
+        ...currentLine,
+        drawCount: value
+      };
+      setSavedLines(updatedLines);
+    }
   };
 
   return {
@@ -222,6 +240,8 @@ export const useTicketState = () => {
     handleRemoveLine,
     handleEditLine,
     isLineComplete,
-    getTicketPrice
+    getTicketPrice,
+    handleToggleExtraPlay,
+    handleChangeDrawCount
   };
 };

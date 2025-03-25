@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -603,7 +604,7 @@ const PlayPage = ({
                     <div className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border" onClick={() => handleEditLine(index)}>
                       <div className="flex items-center">
                         <span className="text-gray-500 font-medium w-6 mr-2">
-                          {index + 1}
+                          {String(index + 1).padStart(2, '0')}
                         </span>
                         {line.numbers.map((num, i) => (
                           <span 
@@ -611,12 +612,12 @@ const PlayPage = ({
                             className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5" 
                             style={{ backgroundColor: colorValue }}
                           >
-                            {num === null ? '?' : num}
+                            {num}
                           </span>
                         ))}
                         {hasPowerball && (
                           <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
-                            {line.powerball === null ? '?' : line.powerball}
+                            {line.powerball}
                           </span>
                         )}
                       </div>
@@ -641,7 +642,7 @@ const PlayPage = ({
                   >
                     <div className="flex items-center">
                       <span className="text-gray-500 font-medium w-6 mr-2">
-                        {savedLines.length + 1}
+                        {String(savedLines.length + 1).padStart(2, '0')}
                       </span>
                       {Array(maxRegularNumbers).fill(null).map((_, i) => (
                         <span 
@@ -669,4 +670,3 @@ const PlayPage = ({
 };
 
 export default PlayPage;
-

@@ -37,7 +37,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine, onEdi
                       'bg-blue-500 text-white'
                     }`}
                   >
-                    {digit === null ? '?' : digit === -1 ? <span className="font-bold">x</span> : digit}
+                    {digit === null ? '?' : digit === -1 ? <span className="font-bold">X</span> : digit}
                   </span>
                 ))}
               </div>
