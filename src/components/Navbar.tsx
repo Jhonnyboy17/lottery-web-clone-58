@@ -12,7 +12,6 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check if we're on a play page
   const isPlayPage = location.pathname.includes('/play-');
 
   useEffect(() => {
@@ -29,39 +28,29 @@ const Navbar = () => {
   }, []);
 
   const scrollToGames = () => {
-    // Close mobile menu if open
     if (isOpen) setIsOpen(false);
     
-    // If we're already on the homepage, scroll to the games section
     if (window.location.pathname === '/') {
       const gamesSection = document.getElementById('lottery-games');
       if (gamesSection) {
         gamesSection.scrollIntoView({ behavior: 'smooth' });
       }
     } else {
-      // If we're on another page, navigate to homepage and then scroll to games
-      // We'll use a URL hash to trigger the scroll after navigation
       window.location.href = '/#lottery-games';
     }
   };
 
   const navigateToResultsHub = () => {
-    // Close mobile menu if open
     if (isOpen) setIsOpen(false);
     
-    // Navigate to the Results Hub page and scroll to top
     navigate('/results-hub');
-    // Force scroll to top
     window.scrollTo(0, 0);
   };
 
   const navigateToDuvidas = () => {
-    // Close mobile menu if open
     if (isOpen) setIsOpen(false);
     
-    // Navigate to the Duvidas page and scroll to top
     navigate('/duvidas');
-    // Force scroll to top
     window.scrollTo(0, 0);
   };
 
@@ -70,7 +59,6 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
-  // Special styling for play pages and dark mode
   const navbarClasses = isPlayPage 
     ? "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-2 shadow-md dark:bg-gradient-to-r dark:from-[#1a1433] dark:via-[#241b35] dark:to-[#1a1433]" 
     : "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3 dark:bg-gradient-to-r dark:from-[#1a1433] dark:via-[#241b35] dark:to-[#1a1433]";
@@ -79,16 +67,14 @@ const Navbar = () => {
     <header className={navbarClasses}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
-          {/* Logo on the left - Updated with new logo */}
           <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
             <img
               src="/lovable-uploads/408a1fb9-fd14-4d32-bf8a-2021e46fb734.png"
               alt="LotoEasy Logo"
-              className="h-12 w-auto"
+              className="h-24 w-auto"
             />
           </Link>
 
-          {/* Main navigation - centered on desktop, moved closer to logo */}
           <nav className="hidden md:flex justify-center flex-grow ml-2 mr-8">
             <div className="flex items-center space-x-8">
               <button 
@@ -122,12 +108,8 @@ const Navbar = () => {
             </div>
           </nav>
 
-          {/* Right side icons - theme toggle, search & cart */}
           <div className="hidden md:flex items-center space-x-6">
-            {/* Theme toggle */}
             <ThemeToggle />
-            
-            {/* Larger search input as shown in the image */}
             <div className="relative">
               <div className="flex items-center w-64 bg-white rounded-full overflow-hidden dark:bg-gray-800">
                 <Search className="absolute left-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
@@ -141,7 +123,6 @@ const Navbar = () => {
             <ShoppingCart className="h-6 w-6 text-white cursor-pointer" />
           </div>
 
-          {/* Mobile menu button */}
           <div className="md:hidden flex items-center space-x-4">
             <ThemeToggle />
             <button
@@ -155,7 +136,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile menu */}
       {isOpen && (
         <div className="md:hidden bg-white dark:bg-gradient-to-b dark:from-[#1a1433] dark:to-[#241b35] animate-fade-in">
           <div className="px-4 py-2 space-y-1">
