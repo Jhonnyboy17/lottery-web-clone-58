@@ -285,6 +285,28 @@ export const useTicketState = () => {
     setAnimatedProgress(100);
   };
 
+  const handleToggleExtraPlay = (lineIndex: number) => {
+    const updatedLines = [...savedLines];
+    if (updatedLines[lineIndex]) {
+      updatedLines[lineIndex] = {
+        ...updatedLines[lineIndex],
+        includeFireball: !updatedLines[lineIndex].includeFireball
+      };
+      setSavedLines(updatedLines);
+    }
+  };
+
+  const handleChangeDrawCount = (lineIndex: number, count: string) => {
+    const updatedLines = [...savedLines];
+    if (updatedLines[lineIndex]) {
+      updatedLines[lineIndex] = {
+        ...updatedLines[lineIndex],
+        drawCount: count
+      };
+      setSavedLines(updatedLines);
+    }
+  };
+
   const isPairTypeLineComplete = () => {
     if (currentLine.playType === "Back Pair") {
       return currentLine.digits[1] !== null && currentLine.digits[2] !== null;
@@ -340,6 +362,8 @@ export const useTicketState = () => {
     setIsEditing,
     setEditingIndex,
     animatedProgress,
-    setAnimatedProgress
+    setAnimatedProgress,
+    handleToggleExtraPlay,
+    handleChangeDrawCount
   };
 };
