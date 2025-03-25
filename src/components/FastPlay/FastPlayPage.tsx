@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import GameHeader from "../Cash5/GameHeader";
 import CurrentLineSelection from "../Cash5/CurrentLineSelection";
@@ -63,7 +62,10 @@ export const FastPlayPage = ({
   
   const colorValue = getColorValue();
 
-  // Get the correct line number to display
+  useEffect(() => {
+    // This empty effect ensures that the component re-renders after mount
+  }, []);
+
   const getDisplayLineNumber = () => {
     if (isEditing && editingIndex !== null) {
       return editingIndex + 1;
