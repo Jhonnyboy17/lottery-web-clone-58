@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -413,101 +414,111 @@ const ResultsHub = () => {
           </TabsList>
           
           <TabsContent value="all-games" className="mt-6">
-            <div className="overflow-x-auto">
-              <Table className="w-full">
-                <TableHeader>
-                  <TableRow className="bg-gray-100">
-                    <TableHead className="w-1/5 font-bold">Game</TableHead>
-                    <TableHead className="w-1/5 font-bold">Draw Date</TableHead>
-                    <TableHead className="w-2/5 font-bold">Numbers</TableHead>
-                    <TableHead className="w-1/5 font-bold">Details</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {currentGames.map((game) => (
-                    <TableRow key={game.id} className="hover:bg-gray-50">
-                      <TableCell className="py-4">
-                        <div className="flex items-center space-x-3">
-                          <img src={game.logo} alt={game.name} className="h-10 w-auto" />
+            <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-2xl font-bold text-lottery-navy">
+                    Draw Results - All Games
+                  </h3>
+                  <p className="text-gray-600">
+                    Results for all lottery games
+                  </p>
+                </div>
+                <div className="mt-4 md:mt-0 flex items-center">
+                  <Button variant="outline" className="flex items-center">
+                    <FileText className="mr-2 h-4 w-4" />
+                    Download PDF
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                {currentGames.map((game, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
+                      <div className="flex items-center">
+                        <img src={game.logo} alt={game.name} className="h-10 w-auto mr-3" />
+                        <div>
+                          <h4 className="text-lg font-bold text-lottery-navy">{game.name}</h4>
+                          <p className="text-gray-600 text-sm">{game.date}</p>
                         </div>
-                      </TableCell>
-                      <TableCell>{game.date}</TableCell>
-                      <TableCell>
-                        <div className="flex flex-wrap items-center gap-2">
-                          {game.numbers.map((number, index) => (
-                            <span 
-                              key={index} 
-                              className={`${getGameColor(game.name)} w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm`}
-                            >
-                              {number}
-                            </span>
-                          ))}
-                          
-                          {game.specialNumbers?.map((number, index) => (
-                            <span 
-                              key={`special-${index}`} 
-                              className="bg-amber-500 w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm"
-                            >
-                              {number}
-                            </span>
-                          ))}
-                          
-                          {game.multiplier && (
-                            <span className="bg-gray-200 text-gray-800 px-2 py-1 rounded-md text-xs font-bold">
-                              {game.multiplier}
-                            </span>
-                          )}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" className="text-lottery-pink hover:text-lottery-pink/90">
-                          View Details <ArrowRight className="ml-1 h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-            
-            <Pagination className="mt-6">
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious 
-                    href="#" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (currentPage > 1) paginate(currentPage - 1);
-                    }}
-                  />
-                </PaginationItem>
-                {Array.from({ length: Math.ceil(gamesData.length / gamesPerPage) }).map((_, index) => (
-                  <PaginationItem key={index}>
-                    <PaginationLink 
+                      </div>
+                      <Button variant="ghost" className="text-blue-600 p-0 h-auto hover:bg-transparent hover:text-blue-800 mt-2 md:mt-0">
+                        <ChevronRight className="h-5 w-5" />
+                      </Button>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      {game.numbers.map((number, idx) => (
+                        <span 
+                          key={idx} 
+                          className={`${getGameColor(game.name)} w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm`}
+                        >
+                          {number}
+                        </span>
+                      ))}
+                      {game.specialNumbers?.map((number, idx) => (
+                        <span 
+                          key={`special-${idx}`} 
+                          className="bg-amber-400 w-9 h-9 rounded-full flex items-center justify-center text-black font-bold text-sm"
+                        >
+                          {number}
+                        </span>
+                      ))}
+                      {game.multiplier && (
+                        <span className="ml-2 text-sm font-medium">
+                          {game.multiplier}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <Pagination className="mt-6">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
                       href="#" 
-                      isActive={currentPage === index + 1}
                       onClick={(e) => {
                         e.preventDefault();
-                        paginate(index + 1);
+                        if (currentPage > 1) paginate(currentPage - 1);
                       }}
-                    >
-                      {index + 1}
-                    </PaginationLink>
+                    />
                   </PaginationItem>
-                ))}
-                <PaginationItem>
-                  <PaginationNext 
-                    href="#" 
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (currentPage < Math.ceil(gamesData.length / gamesPerPage)) {
-                        paginate(currentPage + 1);
-                      }
-                    }}
-                  />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
+                  {Array.from({ length: Math.ceil(gamesData.length / gamesPerPage) }).map((_, index) => (
+                    <PaginationItem key={index}>
+                      <PaginationLink 
+                        href="#" 
+                        isActive={currentPage === index + 1}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          paginate(index + 1);
+                        }}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (currentPage < Math.ceil(gamesData.length / gamesPerPage)) {
+                          paginate(currentPage + 1);
+                        }
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+              
+              <div className="text-center mt-8 text-sm text-gray-500">
+                <p>Fonte: <a href="https://www.illinoislottery.com/results" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
+                <p className="mt-1">Última atualização: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+              </div>
+            </div>
           </TabsContent>
           
           <TabsContent value="mega-millions" className="mt-6">
