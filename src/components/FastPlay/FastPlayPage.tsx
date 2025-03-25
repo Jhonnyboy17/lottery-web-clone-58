@@ -46,6 +46,8 @@ export const FastPlayPage = ({
     getTicketPrice,
     isEditing,
     editingIndex,
+    setIsEditing,
+    setEditingIndex,
     handleToggleExtraPlay,
     handleChangeDrawCount
   } = useTicketState();
@@ -108,7 +110,16 @@ export const FastPlayPage = ({
             onToggleExtraPlay={handleToggleExtraPlay}
             onChangeDrawCount={handleChangeDrawCount}
             editingIndex={editingIndex}
-            onStartNewLine={handleAddLine}
+            onStartNewLine={() => {
+              if (isEditing) {
+                setIsEditing(false);
+                setEditingIndex(null);
+                clearSelections();
+              } else {
+                handleAddLine();
+              }
+            }}
+            currentLine={currentLine}
           />
         </Card>
 

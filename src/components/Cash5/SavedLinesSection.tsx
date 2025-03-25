@@ -19,6 +19,9 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
   savedLines,
   onRemoveLine,
   onEditLine,
+  extraPlayName,
+  onToggleExtraPlay,
+  onChangeDrawCount,
   editingIndex,
   onStartNewLine,
   currentLine
@@ -35,7 +38,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
               <span className="text-gray-500 font-medium w-6 mr-2">
                 01
               </span>
-              {Array(4).fill(null).map((_, i) => (
+              {Array(5).fill(null).map((_, i) => (
                 <span 
                   key={i} 
                   className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
@@ -97,7 +100,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                   <span className="text-gray-500 font-medium w-6 mr-2">
                     {String(savedLines.length + 1).padStart(2, '0')}
                   </span>
-                  {Array(4).fill(null).map((_, i) => (
+                  {Array(currentLine.digits.length).fill(null).map((_, i) => (
                     <span 
                       key={i} 
                       className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"

@@ -594,8 +594,31 @@ const PlayPage = ({
           <div className="p-4">
             <h3 className="font-semibold mb-3">Minhas Linhas</h3>
               
-            {savedLines.length === 0 ? (
-              <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
+            {savedLines.length === 0 && !selectedNumbers.length ? (
+              <div className="mb-2">
+                <div className="bg-white rounded p-3 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <span className="text-gray-500 font-medium w-6 mr-2">
+                      01
+                    </span>
+                    {Array(maxRegularNumbers).fill(null).map((_, i) => (
+                      <span 
+                        key={i} 
+                        className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                      >
+                        ?
+                      </span>
+                    ))}
+                    {hasPowerball && (
+                      <span 
+                        className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
+                      >
+                        ?
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
             ) : (
               <>
                 {savedLines.map((line, index) => (
@@ -637,42 +660,44 @@ const PlayPage = ({
                   </div>
                 ))}
                 
-                <div className="mb-2">
-                  <div 
-                    className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
-                    onClick={handleStartNewLine}
-                  >
-                    <div className="flex items-center">
-                      <span className="text-gray-500 font-medium w-6 mr-2">
-                        {String(savedLines.length + 1).padStart(2, '0')}
-                      </span>
-                      {Array(maxRegularNumbers).fill(null).map((_, i) => (
-                        <span 
-                          key={i} 
-                          className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
-                        >
-                          {editingLineIndex === null && selectedNumbers[i] !== undefined ? (
-                            <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center" style={{ backgroundColor: colorValue }}>
-                              {selectedNumbers[i]}
-                            </span>
-                          ) : '?'}
+                {selectedNumbers.length > 0 && (
+                  <div className="mb-2">
+                    <div 
+                      className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
+                      onClick={handleStartNewLine}
+                    >
+                      <div className="flex items-center">
+                        <span className="text-gray-500 font-medium w-6 mr-2">
+                          {String(savedLines.length + 1).padStart(2, '0')}
                         </span>
-                      ))}
-                      {hasPowerball && (
-                        <span 
-                          className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
-                        >
-                          {editingLineIndex === null && selectedPowerball !== null ? (
-                            <span className="bg-amber-500 text-white w-full h-full rounded-full flex items-center justify-center">
-                              {selectedPowerball}
-                            </span>
-                          ) : '?'}
-                        </span>
-                      )}
+                        {Array(maxRegularNumbers).fill(null).map((_, i) => (
+                          <span 
+                            key={i} 
+                            className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                          >
+                            {editingLineIndex === null && selectedNumbers[i] !== undefined ? (
+                              <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center" style={{ backgroundColor: colorValue }}>
+                                {selectedNumbers[i]}
+                              </span>
+                            ) : '?'}
+                          </span>
+                        ))}
+                        {hasPowerball && (
+                          <span 
+                            className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
+                          >
+                            {editingLineIndex === null && selectedPowerball !== null ? (
+                              <span className="bg-amber-500 text-white w-full h-full rounded-full flex items-center justify-center">
+                                {selectedPowerball}
+                              </span>
+                            ) : '?'}
+                          </span>
+                        )}
+                      </div>
+                      <div className="w-4"></div>
                     </div>
-                    <div className="w-4"></div>
                   </div>
-                </div>
+                )}
               </>
             )}
           </div>
