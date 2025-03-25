@@ -63,6 +63,7 @@ const CurrentLineSelection: React.FC<CurrentLineSelectionProps> = ({
         onAddLine={onAddLine}
         isEditing={isEditing}
         colorValue={colorValue}
+        onQuickPick={onQuickPick}
       />
     </div>
   );
