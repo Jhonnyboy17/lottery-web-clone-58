@@ -206,9 +206,52 @@ const PlayPage = ({
   const handleQuickPick = () => {
     if (isRandomizing) return;
     
-    // Set cooldown and animation flags
+    if (selectedNumbers.length === maxRegularNumbers) {
+      setIsRandomizing(true);
+      setIsAnimating(true);
+      setIsEditingNumber(true);
+      
+      const availableNumbers = Array.from({length: totalRegularNumbers}, (_, i) => i + 1);
+      const randomNumbers = [];
+      
+      for (let i = 0; i < maxRegularNumbers; i++) {
+        const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+        randomNumbers.push(availableNumbers[randomIndex]);
+        availableNumbers.splice(randomIndex, 1);
+      }
+      
+      setSelectedNumbers(randomNumbers);
+      
+      if (hasPowerball) {
+        const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
+        setSelectedPowerball(randomPowerball);
+      }
+      
+      if (editingLineIndex !== null) {
+        const updatedLines = [...savedLines];
+        updatedLines[editingLineIndex] = {
+          ...updatedLines[editingLineIndex],
+          numbers: randomNumbers,
+          powerball: hasPowerball ? 
+            Math.floor(Math.random() * totalPowerballNumbers) + 1 : 
+            updatedLines[editingLineIndex].powerball
+        };
+        setSavedLines(updatedLines);
+      }
+      
+      setTimeout(() => {
+        setIsRandomizing(false);
+        setTimeout(() => {
+          if (!editMode) {
+            setIsEditingNumber(false);
+          }
+        }, 300);
+      }, 300);
+      return;
+    }
+    
     const selectedCount = selectedNumbers.length;
-    let newCooldownTime = 4 - selectedCount; // Adjust cooldown based on how many numbers are already selected
+    let newCooldownTime = 4 - selectedCount;
     if (newCooldownTime < 1) newCooldownTime = 1;
     
     setCooldownTime(newCooldownTime);
@@ -216,37 +259,15 @@ const PlayPage = ({
     setIsAnimating(true);
     setIsEditingNumber(true);
     
-    // If all slots are filled, clear the selection and start fresh
-    if (selectedNumbers.length === maxRegularNumbers) {
-      setSelectedNumbers([]);
-      if (hasPowerball) {
-        setSelectedPowerball(null);
-      }
-      
-      // If editing, update the saved line to reflect cleared selection
-      if (editingLineIndex !== null) {
-        const updatedLines = [...savedLines];
-        updatedLines[editingLineIndex] = {
-          ...updatedLines[editingLineIndex],
-          numbers: [],
-          powerball: null
-        };
-        setSavedLines(updatedLines);
-      }
-    }
-    
-    // Get current selections after potential clearing
     const existingNumbers = [...selectedNumbers];
     let remainingPowerball = selectedPowerball;
     
-    // Generate random numbers only for the empty slots
     const availableNumbers = Array.from({length: totalRegularNumbers}, (_, i) => i + 1)
       .filter(num => !existingNumbers.includes(num));
     
     const emptySlots = maxRegularNumbers - existingNumbers.length;
     const randomNumbers = [];
     
-    // Fill in random numbers for the empty slots
     for (let i = 0; i < emptySlots; i++) {
       if (availableNumbers.length) {
         const randomIndex = Math.floor(Math.random() * availableNumbers.length);
@@ -255,18 +276,15 @@ const PlayPage = ({
       }
     }
     
-    // Generate random powerball if needed and not already selected
     let randomPowerball: number | null = null;
     if (hasPowerball && remainingPowerball === null) {
       randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
     }
     
-    // Add the numbers one by one with animation
     randomNumbers.forEach((num, index) => {
       setTimeout(() => {
         setSelectedNumbers(prev => [...prev, num]);
         
-        // If we're editing an existing line, update it immediately with the partial selection
         if (editingLineIndex !== null) {
           const updatedLines = [...savedLines];
           updatedLines[editingLineIndex] = {
@@ -277,11 +295,7 @@ const PlayPage = ({
         }
         
         if (index === randomNumbers.length - 1) {
-          // All regular numbers have been set
-          
-          // If there's no powerball needed or powerball is already selected, finish the animation
           if (!hasPowerball || remainingPowerball !== null) {
-            // If editing, update the saved line with the complete set of numbers
             if (editingLineIndex !== null) {
               const updatedLines = [...savedLines];
               updatedLines[editingLineIndex] = {
@@ -305,13 +319,11 @@ const PlayPage = ({
       }, (index + 1) * 150);
     });
     
-    // Handle powerball generation if needed and not already selected
     if (hasPowerball && remainingPowerball === null) {
       setTimeout(() => {
         const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
         setSelectedPowerball(randomPowerball);
         
-        // If editing, update the saved line with both the numbers and powerball
         if (editingLineIndex !== null) {
           const updatedLines = [...savedLines];
           updatedLines[editingLineIndex] = {
@@ -333,7 +345,6 @@ const PlayPage = ({
       }, (randomNumbers.length + 1) * 150);
     }
     
-    // If no random numbers need to be added (all slots are filled)
     if (randomNumbers.length === 0 && (remainingPowerball !== null || !hasPowerball)) {
       setTimeout(() => {
         setIsRandomizing(false);
@@ -756,7 +767,6 @@ const PlayPage = ({
                           key={i} 
                           className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                         >
-                          {/* Only show selected numbers when not editing an existing line */}
                           {editingLineIndex === null && selectedNumbers[i] !== undefined ? (
                             <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center" style={{ backgroundColor: colorValue }}>
                               {selectedNumbers[i]}
@@ -768,7 +778,6 @@ const PlayPage = ({
                         <span 
                           className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
                         >
-                          {/* Only show selected powerball when not editing an existing line */}
                           {editingLineIndex === null && selectedPowerball !== null ? (
                             <span className="bg-amber-500 text-white w-full h-full rounded-full flex items-center justify-center">
                               {selectedPowerball}

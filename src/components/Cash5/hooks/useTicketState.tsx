@@ -64,40 +64,6 @@ export const useTicketState = () => {
     
     const allFilled = newDigits.every(digit => digit !== null);
     if (allFilled) {
-      setCurrentLine({
-        ...currentLine,
-        digits: [null, null, null]
-      });
-      setActiveDigitIndex(0);
-      
-      if (isEditing && editingIndex !== null) {
-        const updatedLines = [...savedLines];
-        updatedLines[editingIndex] = {
-          ...currentLine,
-          digits: [null, null, null]
-        };
-        setSavedLines(updatedLines);
-        
-        const randomDigits = [
-          Math.floor(Math.random() * 10),
-          Math.floor(Math.random() * 10),
-          Math.floor(Math.random() * 10)
-        ];
-        
-        setCurrentLine({
-          ...currentLine,
-          digits: randomDigits
-        });
-        
-        updatedLines[editingIndex] = {
-          ...currentLine,
-          digits: randomDigits
-        };
-        setSavedLines(updatedLines);
-        setActiveDigitIndex(null);
-        return;
-      }
-      
       const randomDigits = [
         Math.floor(Math.random() * 10),
         Math.floor(Math.random() * 10),
@@ -110,6 +76,15 @@ export const useTicketState = () => {
       });
       
       setActiveDigitIndex(null);
+      
+      if (isEditing && editingIndex !== null) {
+        const updatedLines = [...savedLines];
+        updatedLines[editingIndex] = {
+          ...currentLine,
+          digits: randomDigits
+        };
+        setSavedLines(updatedLines);
+      }
       return;
     }
     

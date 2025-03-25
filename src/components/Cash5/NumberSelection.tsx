@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { NumberSelectionType } from "./types";
@@ -153,26 +154,26 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     setIsRandomizing(true);
     setAnimatedProgress(getSelectionProgress());
     
+    // Call the prop function directly without animations when all digits are filled
+    const allFilled = currentLine.playType === "Back Pair" ? 
+      (currentLine.digits[1] !== null && currentLine.digits[2] !== null) :
+      currentLine.playType === "Front Pair" ?
+        (currentLine.digits[0] !== null && currentLine.digits[1] !== null) :
+        currentLine.digits.every(digit => digit !== null && digit !== -1);
+        
+    if (allFilled) {
+      onQuickPick();
+      setIsRandomizing(false);
+      return;
+    }
+    
+    // Continue with sequential selection for unfilled fields
     const newDigits = [...currentLine.digits];
     
-    // Verifica se todos os dígitos estão preenchidos
-    const allFilled = currentLine.playType === "Back Pair" ? 
-      (newDigits[1] !== null && newDigits[2] !== null) :
-      currentLine.playType === "Front Pair" ?
-        (newDigits[0] !== null && newDigits[1] !== null) :
-        newDigits.every(digit => digit !== null && digit !== -1);
-    
-    // Se todos estão preenchidos, limpa a linha antes de randomizar
-    if (allFilled) {
-      onClearSelections();
-      
-      // Retorna porque o onClearSelections já vai chamar uma nova randomização
-      setTimeout(() => {
-        onQuickPick();
-        setIsRandomizing(false);
-      }, 100);
-      
-      return;
+    if (currentLine.playType === "Back Pair") {
+      newDigits[0] = -1;
+    } else if (currentLine.playType === "Front Pair") {
+      newDigits[2] = -1;
     }
     
     let positionsToRandomize: number[] = [];

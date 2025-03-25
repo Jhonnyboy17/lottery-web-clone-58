@@ -166,70 +166,16 @@ export const useTicketState = () => {
     
     if (allFilled) {
       let clearedDigits = [null, null, null];
+      let randomDigits = [];
       
       if (currentLine.playType === "Back Pair") {
         clearedDigits[0] = -1;
-      } else if (currentLine.playType === "Front Pair") {
-        clearedDigits[2] = -1;
-      }
-      
-      setCurrentLine({
-        ...currentLine,
-        digits: clearedDigits
-      });
-      
-      if (currentLine.playType === "Back Pair") {
-        setActiveDigitIndex(1);
-      } else if (currentLine.playType === "Front Pair") {
-        setActiveDigitIndex(0);
-      } else {
-        setActiveDigitIndex(0);
-      }
-      
-      if (isEditing && editingIndex !== null) {
-        const updatedLines = [...savedLines];
-        updatedLines[editingIndex] = {
-          ...currentLine,
-          digits: clearedDigits
-        };
-        setSavedLines(updatedLines);
-        
-        let randomDigits = [...clearedDigits];
-        
-        if (currentLine.playType === "Back Pair") {
-          randomDigits[1] = Math.floor(Math.random() * 10);
-          randomDigits[2] = Math.floor(Math.random() * 10);
-        } else if (currentLine.playType === "Front Pair") {
-          randomDigits[0] = Math.floor(Math.random() * 10);
-          randomDigits[1] = Math.floor(Math.random() * 10);
-        } else {
-          randomDigits = [
-            Math.floor(Math.random() * 10),
-            Math.floor(Math.random() * 10),
-            Math.floor(Math.random() * 10)
-          ];
-        }
-        
-        setCurrentLine({
-          ...currentLine,
-          digits: randomDigits
-        });
-        
-        updatedLines[editingIndex] = {
-          ...currentLine,
-          digits: randomDigits
-        };
-        setSavedLines(updatedLines);
-        setActiveDigitIndex(null);
-        return;
-      }
-      
-      let randomDigits = [...clearedDigits];
-      
-      if (currentLine.playType === "Back Pair") {
+        randomDigits = [...clearedDigits];
         randomDigits[1] = Math.floor(Math.random() * 10);
         randomDigits[2] = Math.floor(Math.random() * 10);
       } else if (currentLine.playType === "Front Pair") {
+        clearedDigits[2] = -1;
+        randomDigits = [...clearedDigits];
         randomDigits[0] = Math.floor(Math.random() * 10);
         randomDigits[1] = Math.floor(Math.random() * 10);
       } else {
@@ -246,6 +192,16 @@ export const useTicketState = () => {
       });
       
       setActiveDigitIndex(null);
+      
+      if (isEditing && editingIndex !== null) {
+        const updatedLines = [...savedLines];
+        updatedLines[editingIndex] = {
+          ...currentLine,
+          digits: randomDigits
+        };
+        setSavedLines(updatedLines);
+      }
+      
       return;
     }
     
