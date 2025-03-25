@@ -14,7 +14,7 @@ const slides: Slide[] = [
   },
   {
     id: 2,
-    bgColor: "bg-gradient-to-r from-lottery-navy to-lottery-pink",
+    bgImage: "/lovable-uploads/f5fa6c1e-b6ee-49c3-a80c-83267aa804a9.png",
   },
   {
     id: 3,
