@@ -216,7 +216,26 @@ const PlayPage = ({
     setIsAnimating(true);
     setIsEditingNumber(true);
     
-    // Keep existing selections - only randomize empty slots
+    // If all slots are filled, clear the selection and start fresh
+    if (selectedNumbers.length === maxRegularNumbers) {
+      setSelectedNumbers([]);
+      if (hasPowerball) {
+        setSelectedPowerball(null);
+      }
+      
+      // If editing, update the saved line to reflect cleared selection
+      if (editingLineIndex !== null) {
+        const updatedLines = [...savedLines];
+        updatedLines[editingLineIndex] = {
+          ...updatedLines[editingLineIndex],
+          numbers: [],
+          powerball: null
+        };
+        setSavedLines(updatedLines);
+      }
+    }
+    
+    // Get current selections after potential clearing
     const existingNumbers = [...selectedNumbers];
     let remainingPowerball = selectedPowerball;
     

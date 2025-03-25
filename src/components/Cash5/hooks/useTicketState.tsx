@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../types";
 
@@ -18,7 +17,6 @@ export const useTicketState = () => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   
   useEffect(() => {
-    // Não aplicamos o auto-add quando estamos no modo de edição
     if (isLineComplete() && !isEditing) {
       const timer = setTimeout(() => {
         handleAddLine();
@@ -64,7 +62,57 @@ export const useTicketState = () => {
   const handleQuickPick = () => {
     const newDigits = [...currentLine.digits];
     
-    // Crucial: Mantém números já selecionados e apenas randomiza os que ainda são nulos
+    const allFilled = newDigits.every(digit => digit !== null);
+    if (allFilled) {
+      setCurrentLine({
+        ...currentLine,
+        digits: [null, null, null]
+      });
+      setActiveDigitIndex(0);
+      
+      if (isEditing && editingIndex !== null) {
+        const updatedLines = [...savedLines];
+        updatedLines[editingIndex] = {
+          ...currentLine,
+          digits: [null, null, null]
+        };
+        setSavedLines(updatedLines);
+        
+        const randomDigits = [
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10)
+        ];
+        
+        setCurrentLine({
+          ...currentLine,
+          digits: randomDigits
+        });
+        
+        updatedLines[editingIndex] = {
+          ...currentLine,
+          digits: randomDigits
+        };
+        setSavedLines(updatedLines);
+        setActiveDigitIndex(null);
+        return;
+      }
+      
+      const randomDigits = [
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10),
+        Math.floor(Math.random() * 10)
+      ];
+      
+      setCurrentLine({
+        ...currentLine,
+        digits: randomDigits
+      });
+      
+      setActiveDigitIndex(null);
+      return;
+    }
+    
     const positionsToRandomize = [];
     for (let i = 0; i < newDigits.length; i++) {
       if (newDigits[i] === null) {
@@ -83,7 +131,6 @@ export const useTicketState = () => {
     
     setActiveDigitIndex(null);
     
-    // Corrigido: Atualiza a linha salva quando estamos editando
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {

@@ -13,6 +13,7 @@ interface NumberSelectionProps {
   onAddLine?: () => void;
   isEditing?: boolean;
   colorValue?: string;
+  onQuickPick: () => void;
 }
 
 const NumberSelection: React.FC<NumberSelectionProps> = ({
@@ -24,7 +25,8 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   onClearSelections,
   onAddLine,
   isEditing = false,
-  colorValue = "#0EA5E9"
+  colorValue = "#0EA5E9",
+  onQuickPick
 }) => {
   const [clickedNumber, setClickedNumber] = useState<number | null>(null);
   const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
@@ -152,6 +154,26 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     setAnimatedProgress(getSelectionProgress());
     
     const newDigits = [...currentLine.digits];
+    
+    // Verifica se todos os dígitos estão preenchidos
+    const allFilled = currentLine.playType === "Back Pair" ? 
+      (newDigits[1] !== null && newDigits[2] !== null) :
+      currentLine.playType === "Front Pair" ?
+        (newDigits[0] !== null && newDigits[1] !== null) :
+        newDigits.every(digit => digit !== null && digit !== -1);
+    
+    // Se todos estão preenchidos, limpa a linha antes de randomizar
+    if (allFilled) {
+      onClearSelections();
+      
+      // Retorna porque o onClearSelections já vai chamar uma nova randomização
+      setTimeout(() => {
+        onQuickPick();
+        setIsRandomizing(false);
+      }, 100);
+      
+      return;
+    }
     
     let positionsToRandomize: number[] = [];
     

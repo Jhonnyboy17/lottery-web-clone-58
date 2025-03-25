@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../../Cash5/types";
 
@@ -19,7 +18,6 @@ export const useTicketState = () => {
   const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
 
   useEffect(() => {
-    // Não aplicamos o auto-add quando estamos no modo de edição
     if (isLineComplete() && !isEditing) {
       const timer = setTimeout(() => {
         handleAddLine();
@@ -156,13 +154,107 @@ export const useTicketState = () => {
     
     const newDigits = [...currentLine.digits];
     
+    let allFilled = false;
+    
+    if (currentLine.playType === "Back Pair") {
+      allFilled = newDigits[1] !== null && newDigits[2] !== null;
+    } else if (currentLine.playType === "Front Pair") {
+      allFilled = newDigits[0] !== null && newDigits[1] !== null;
+    } else {
+      allFilled = newDigits.every(digit => digit !== null);
+    }
+    
+    if (allFilled) {
+      let clearedDigits = [null, null, null];
+      
+      if (currentLine.playType === "Back Pair") {
+        clearedDigits[0] = -1;
+      } else if (currentLine.playType === "Front Pair") {
+        clearedDigits[2] = -1;
+      }
+      
+      setCurrentLine({
+        ...currentLine,
+        digits: clearedDigits
+      });
+      
+      if (currentLine.playType === "Back Pair") {
+        setActiveDigitIndex(1);
+      } else if (currentLine.playType === "Front Pair") {
+        setActiveDigitIndex(0);
+      } else {
+        setActiveDigitIndex(0);
+      }
+      
+      if (isEditing && editingIndex !== null) {
+        const updatedLines = [...savedLines];
+        updatedLines[editingIndex] = {
+          ...currentLine,
+          digits: clearedDigits
+        };
+        setSavedLines(updatedLines);
+        
+        let randomDigits = [...clearedDigits];
+        
+        if (currentLine.playType === "Back Pair") {
+          randomDigits[1] = Math.floor(Math.random() * 10);
+          randomDigits[2] = Math.floor(Math.random() * 10);
+        } else if (currentLine.playType === "Front Pair") {
+          randomDigits[0] = Math.floor(Math.random() * 10);
+          randomDigits[1] = Math.floor(Math.random() * 10);
+        } else {
+          randomDigits = [
+            Math.floor(Math.random() * 10),
+            Math.floor(Math.random() * 10),
+            Math.floor(Math.random() * 10)
+          ];
+        }
+        
+        setCurrentLine({
+          ...currentLine,
+          digits: randomDigits
+        });
+        
+        updatedLines[editingIndex] = {
+          ...currentLine,
+          digits: randomDigits
+        };
+        setSavedLines(updatedLines);
+        setActiveDigitIndex(null);
+        return;
+      }
+      
+      let randomDigits = [...clearedDigits];
+      
+      if (currentLine.playType === "Back Pair") {
+        randomDigits[1] = Math.floor(Math.random() * 10);
+        randomDigits[2] = Math.floor(Math.random() * 10);
+      } else if (currentLine.playType === "Front Pair") {
+        randomDigits[0] = Math.floor(Math.random() * 10);
+        randomDigits[1] = Math.floor(Math.random() * 10);
+      } else {
+        randomDigits = [
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10),
+          Math.floor(Math.random() * 10)
+        ];
+      }
+      
+      setCurrentLine({
+        ...currentLine,
+        digits: randomDigits
+      });
+      
+      setActiveDigitIndex(null);
+      return;
+    }
+    
     if (currentLine.playType === "Back Pair") {
       newDigits[0] = -1;
     } else if (currentLine.playType === "Front Pair") {
       newDigits[2] = -1;
     }
     
-    // Crucial: Mantenha os dígitos já selecionados
     let positionsToRandomize = [];
     
     if (currentLine.playType === "Back Pair") {
@@ -190,7 +282,6 @@ export const useTicketState = () => {
     
     setActiveDigitIndex(null);
     
-    // Corrigido: Atualiza a linha salva quando estamos editando
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
