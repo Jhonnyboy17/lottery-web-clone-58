@@ -97,7 +97,9 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       {/* Always show the new line template, guaranteed to display */}
       <div className="mb-2">
         <div 
-          className="bg-white hover:bg-gray-50 rounded p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-200"
+          className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
+            editingIndex === null && currentLine ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
+          }`}
           onClick={onStartNewLine}
         >
           <div className="flex items-center">

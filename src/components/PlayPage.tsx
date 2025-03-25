@@ -669,7 +669,9 @@ const PlayPage = ({
                 
                 <div className="mb-2">
                   <div 
-                    className="bg-white hover:bg-gray-50 rounded p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-200"
+                    className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
+                      editingLineIndex === null ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
+                    }`}
                     onClick={handleStartNewLine}
                   >
                     <div className="flex items-center">
