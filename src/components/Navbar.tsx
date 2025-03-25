@@ -1,10 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -70,10 +70,10 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
-  // Special styling for play pages
+  // Special styling for play pages and dark mode
   const navbarClasses = isPlayPage 
-    ? "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-2 shadow-md" 
-    : "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3";
+    ? "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-2 shadow-md dark:bg-lottery-dark-nav" 
+    : "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3 dark:bg-lottery-dark-nav";
 
   return (
     <header className={navbarClasses}>
@@ -122,16 +122,19 @@ const Navbar = () => {
             </div>
           </nav>
 
-          {/* Right side icons - search & cart */}
+          {/* Right side icons - theme toggle, search & cart */}
           <div className="hidden md:flex items-center space-x-6">
+            {/* Theme toggle */}
+            <ThemeToggle />
+            
             {/* Larger search input as shown in the image */}
             <div className="relative">
-              <div className="flex items-center w-64 bg-white rounded-full overflow-hidden">
-                <Search className="absolute left-3 h-4 w-4 text-gray-500" />
+              <div className="flex items-center w-64 bg-white rounded-full overflow-hidden dark:bg-gray-800">
+                <Search className="absolute left-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
                 <Input 
                   type="text" 
                   placeholder="Search" 
-                  className="border-none pl-10 h-9 focus-visible:ring-0 bg-white w-full rounded-full"
+                  className="border-none pl-10 h-9 focus-visible:ring-0 bg-white w-full rounded-full dark:bg-gray-800 dark:text-white"
                 />
               </div>
             </div>
@@ -139,64 +142,67 @@ const Navbar = () => {
           </div>
 
           {/* Mobile menu button */}
-          <button
-            className="md:hidden text-white p-2"
-            onClick={() => setIsOpen(!isOpen)}
-            aria-label="toggle menu"
-          >
-            {isOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          <div className="md:hidden flex items-center space-x-4">
+            <ThemeToggle />
+            <button
+              className="text-white p-2"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="toggle menu"
+            >
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden bg-white animate-fade-in">
+        <div className="md:hidden bg-white dark:bg-lottery-dark-card animate-fade-in">
           <div className="px-4 py-2 space-y-1">
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               onClick={scrollToGames}
             >
               Loterias
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               onClick={navigateToResultsHub}
             >
               Resultados
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
             >
               Ganhadores
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
               onClick={navigateToDuvidas}
             >
               Duvidas
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
             >
               Assistência
             </Button>
             <Separator className="my-2" />
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
             >
               <Search className="h-4 w-4 mr-2" />
               Buscar
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100"
+              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
               Carrinho

@@ -119,7 +119,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-lottery-dark-bg transition-colors duration-300">
       <Navbar />
 
       <main className="pt-20">
@@ -128,7 +128,7 @@ const Index = () => {
         </section>
 
         <section id="lottery-games" className="container mx-auto px-4 py-12">
-          <h2 className="text-3xl font-bold text-center text-lottery-navy mb-8">Loterias</h2>
+          <h2 className="text-3xl font-bold text-center text-lottery-navy dark:text-white mb-8">Loterias</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {lotteryGames.map((game) => (
               <LotteryCard
@@ -147,18 +147,18 @@ const Index = () => {
           </div>
         </section>
 
-        <section className="container mx-auto px-4 py-12 bg-gray-50">
-          <div className="bg-white rounded-xl shadow-md p-8">
+        <section className="container mx-auto px-4 py-12 bg-gray-50 dark:bg-lottery-dark-bg">
+          <div className="bg-white dark:bg-lottery-dark-card rounded-xl shadow-md p-8">
             <NumbersDisplay />
           </div>
         </section>
 
         <section className="container mx-auto px-4 py-12">
-          <div className="bg-white rounded-xl shadow-md p-8 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold text-lottery-navy mb-4">
+          <div className="bg-white dark:bg-lottery-dark-card rounded-xl shadow-md p-8 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold text-lottery-navy dark:text-white mb-4">
               Where to Play
             </h2>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+            <p className="text-gray-600 dark:text-gray-300 mb-6 max-w-2xl mx-auto">
               Find the nearest Maryland Lottery retailer or casino to play your favorite games.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">

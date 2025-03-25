@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -69,6 +70,11 @@ export default {
           navy: '#2d224c',
           purple: '#372e48',
           gray: '#f6f6f7',
+          dark: {
+            bg: '#1A1F2C',
+            card: '#221F26',
+            nav: '#222222',
+          }
         }
       },
       fontFamily: {
