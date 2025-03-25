@@ -69,61 +69,63 @@ export const useTicketState = () => {
         digits: [null, null, null]
       });
       
-      const randomDigits = [
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10)
-      ];
-      
       setTimeout(() => {
-        setCurrentLine(prev => ({
-          ...prev,
-          digits: randomDigits
-        }));
-        
-        if (isEditing && editingIndex !== null) {
-          setSavedLines(prev => {
-            const updated = [...prev];
-            updated[editingIndex] = {
-              ...currentLine,
-              digits: randomDigits
-            };
-            return updated;
-          });
-        }
-        
-        setActiveDigitIndex(null);
+        selectRandomDigitsSequentially();
       }, 10);
       
       return;
     }
     
+    selectRandomDigitsSequentially();
+  };
+  
+  const selectRandomDigitsSequentially = () => {
     const positionsToRandomize = [];
+    const newDigits = [...currentLine.digits];
+    
     for (let i = 0; i < newDigits.length; i++) {
       if (newDigits[i] === null) {
         positionsToRandomize.push(i);
       }
     }
     
-    positionsToRandomize.forEach(position => {
-      newDigits[position] = Math.floor(Math.random() * 10);
+    positionsToRandomize.forEach((position, index) => {
+      setTimeout(() => {
+        const randomDigit = Math.floor(Math.random() * 10);
+        
+        setCurrentLine(prev => {
+          const updatedDigits = [...prev.digits];
+          updatedDigits[position] = randomDigit;
+          
+          return {
+            ...prev,
+            digits: updatedDigits
+          };
+        });
+        
+        if (isEditing && editingIndex !== null) {
+          setSavedLines(prev => {
+            const updated = [...prev];
+            const updatedDigits = [...updated[editingIndex].digits];
+            updatedDigits[position] = randomDigit;
+            
+            updated[editingIndex] = {
+              ...updated[editingIndex],
+              digits: updatedDigits
+            };
+            return updated;
+          });
+        }
+        
+        setActiveDigitIndex(position);
+        
+        if (index === positionsToRandomize.length - 1) {
+          setTimeout(() => {
+            setActiveDigitIndex(null);
+          }, 100);
+        }
+      }, index * 300);
     });
-    
-    setCurrentLine({
-      ...currentLine,
-      digits: newDigits
-    });
-    
-    setActiveDigitIndex(null);
-    
-    if (isEditing && editingIndex !== null) {
-      const updatedLines = [...savedLines];
-      updatedLines[editingIndex] = {
-        ...currentLine,
-        digits: newDigits
-      };
-      setSavedLines(updatedLines);
-    }
   };
 
   const clearSelections = () => {
