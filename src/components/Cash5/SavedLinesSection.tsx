@@ -91,34 +91,32 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
         </>
       )}
       
-      {/* Always show the current line template if there are saved lines or a current line is in progress */}
-      {(savedLines.length > 0 || currentLine) && (
-        <div className="mb-2">
-          <div 
-            className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
-            onClick={onStartNewLine}
-          >
-            <div className="flex items-center">
-              <span className="text-gray-500 font-medium w-6 mr-2">
-                {String(savedLines.length + 1).padStart(2, '0')}
+      {/* Always show the current line template, regardless of any conditions */}
+      <div className="mb-2">
+        <div 
+          className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
+          onClick={onStartNewLine}
+        >
+          <div className="flex items-center">
+            <span className="text-gray-500 font-medium w-6 mr-2">
+              {String(savedLines.length + 1).padStart(2, '0')}
+            </span>
+            {Array(currentLine?.digits.length || 5).fill(null).map((_, i) => (
+              <span 
+                key={i} 
+                className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+              >
+                {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
+                  <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
+                    {currentLine.digits[i] === -1 ? <span className="font-bold">X</span> : currentLine.digits[i]}
+                  </span>
+                ) : '?'}
               </span>
-              {Array(currentLine?.digits.length || 5).fill(null).map((_, i) => (
-                <span 
-                  key={i} 
-                  className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
-                >
-                  {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
-                    <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
-                      {currentLine.digits[i] === -1 ? <span className="font-bold">X</span> : currentLine.digits[i]}
-                    </span>
-                  ) : '?'}
-                </span>
-              ))}
-            </div>
-            <div className="w-4"></div> {/* Empty space where the X button would be */}
+            ))}
           </div>
+          <div className="w-4"></div> {/* Empty space where the X button would be */}
         </div>
-      )}
+      </div>
     </div>
   );
 };

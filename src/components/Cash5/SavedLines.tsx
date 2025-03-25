@@ -18,7 +18,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
   editingIndex = null, 
   currentLine 
 }) => {
-  // Sempre mostrar algo, mesmo se não houver linhas salvas
+  // Always show something, even if there are no saved lines
   const showEmptyMessage = savedLines.length === 0 && !currentLine;
 
   return (
@@ -76,29 +76,27 @@ const SavedLines: React.FC<SavedLinesProps> = ({
         </div>
       ))}
       
-      {/* Sempre mostrar a linha atual/template, mesmo se for a primeira */}
-      {currentLine && editingIndex === null && (
-        <div className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200 mb-2">
-          <div className="flex items-center">
-            <span className="text-gray-500 font-medium w-6 mr-2">
-              {String(savedLines.length + 1).padStart(2, '0')}
+      {/* Always show the current line template */}
+      <div className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200 mb-2">
+        <div className="flex items-center">
+          <span className="text-gray-500 font-medium w-6 mr-2">
+            {String(savedLines.length + 1).padStart(2, '0')}
+          </span>
+          {Array(currentLine?.digits.length || 5).fill(null).map((_, i) => (
+            <span 
+              key={i} 
+              className="rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-white border border-gray-200 text-gray-700 font-bold"
+            >
+              {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
+                <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
+                  {currentLine.digits[i] === -1 ? <span className="font-bold">X</span> : currentLine.digits[i]}
+                </span>
+              ) : '?'}
             </span>
-            {currentLine.digits.map((digit, i) => (
-              <span 
-                key={i} 
-                className="rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-white border border-gray-200 text-gray-700 font-bold"
-              >
-                {digit !== null ? (
-                  <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
-                    {digit}
-                  </span>
-                ) : '?'}
-              </span>
-            ))}
-          </div>
-          <div className="w-4"></div>
+          ))}
         </div>
-      )}
+        <div className="w-4"></div>
+      </div>
     </>
   );
 };
