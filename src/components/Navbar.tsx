@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
@@ -73,8 +72,8 @@ const Navbar = () => {
 
   // Special styling for play pages and dark mode
   const navbarClasses = isPlayPage 
-    ? "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-2 shadow-md dark:bg-gradient-to-r dark:from-purple-900 dark:via-purple-800 dark:to-purple-900" 
-    : "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3 dark:bg-gradient-to-r dark:from-purple-900 dark:via-purple-800 dark:to-purple-900";
+    ? "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-2 shadow-md dark:bg-gradient-to-r dark:from-[#1a1433] dark:via-[#241b35] dark:to-[#1a1433]" 
+    : "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3 dark:bg-gradient-to-r dark:from-[#1a1433] dark:via-[#241b35] dark:to-[#1a1433]";
 
   return (
     <header className={navbarClasses}>
@@ -158,7 +157,7 @@ const Navbar = () => {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-gradient-to-b dark:from-purple-900 dark:to-purple-800 animate-fade-in">
+        <div className="md:hidden bg-white dark:bg-gradient-to-b dark:from-[#1a1433] dark:to-[#241b35] animate-fade-in">
           <div className="px-4 py-2 space-y-1">
             <Button
               variant="ghost"
