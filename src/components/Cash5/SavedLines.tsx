@@ -18,12 +18,15 @@ const SavedLines: React.FC<SavedLinesProps> = ({
   editingIndex = null, 
   currentLine 
 }) => {
-  if (savedLines.length === 0) {
-    return <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>;
-  }
+  // Sempre mostrar algo, mesmo se não houver linhas salvas
+  const showEmptyMessage = savedLines.length === 0 && !currentLine;
 
   return (
     <>
+      {showEmptyMessage && (
+        <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
+      )}
+
       {savedLines.map((line, index) => (
         <div key={index} className={`bg-white rounded-md p-3 mb-2 shadow-sm ${editingIndex === index ? 'border-2 border-amber-500' : 'border border-gray-100'}`}>
           <div className="flex items-center justify-between">
@@ -39,7 +42,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
                   <span 
                     key={i} 
                     className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                      digit === null ? 'bg-white border border-gray-200 text-gray-500' : 
+                      digit === null ? 'bg-white border border-gray-200 text-gray-700 font-bold' : 
                       digit === -1 ? 'bg-red-500 text-white' : 
                       'bg-blue-500 text-white'
                     }`}
@@ -73,6 +76,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
         </div>
       ))}
       
+      {/* Sempre mostrar a linha atual/template, mesmo se for a primeira */}
       {currentLine && editingIndex === null && (
         <div className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200 mb-2">
           <div className="flex items-center">
@@ -82,11 +86,13 @@ const SavedLines: React.FC<SavedLinesProps> = ({
             {currentLine.digits.map((digit, i) => (
               <span 
                 key={i} 
-                className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                  digit !== null ? 'bg-blue-500 text-white' : 'bg-white border border-gray-200 text-gray-600 font-bold'
-                }`}
+                className="rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-white border border-gray-200 text-gray-700 font-bold"
               >
-                {digit !== null ? digit : '?'}
+                {digit !== null ? (
+                  <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
+                    {digit}
+                  </span>
+                ) : '?'}
               </span>
             ))}
           </div>
