@@ -23,11 +23,11 @@ const GameLayout: React.FC<GameLayoutProps> = ({
   hasLines,
   children
 }) => {
-  return <div className="min-h-screen bg-white">
+  return <div className="min-h-screen bg-white pb-20">
       <Navbar />
       
       {/* Game Banner with Background Color - directly below navbar without space */}
-      <div className="w-full py-8 mt-24" style={{
+      <div className="w-full py-8" style={{
         backgroundColor: colorValue
       }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -82,9 +82,11 @@ const GameLayout: React.FC<GameLayoutProps> = ({
       <div className="mx-auto max-w-7xl px-3 pt-6 pb-6">
         {/* Main Content */}
         {children}
+      </div>
 
-        {/* Total Summary */}
-        <div className="mt-4">
+      {/* Sticky Bottom Bar with Total Summary */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] z-50">
+        <div className="mx-auto max-w-7xl px-3">
           <TotalSummary ticketPrice={ticketPrice} colorValue={colorValue} hasLines={hasLines} />
         </div>
       </div>
