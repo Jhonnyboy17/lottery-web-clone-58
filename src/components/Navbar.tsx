@@ -74,26 +74,23 @@ const Navbar = () => {
   // Special styling for play pages and dark mode
   const navbarClasses = isPlayPage 
     ? "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-2 shadow-md dark:bg-lottery-dark-nav" 
-    : "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-4 dark:bg-lottery-dark-nav";
+    : "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3 dark:bg-lottery-dark-nav";
 
   return (
     <header className={navbarClasses}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
-          {/* Logo and Logo Text Side by Side */}
-          <div className="flex items-center">
-            <Link to="/" onClick={navigateToHome} className="flex items-center">
-              <img
-                src="/lovable-uploads/408a1fb9-fd14-4d32-bf8a-2021e46fb734.png"
-                alt="LotoEasy Logo"
-                className="h-10 w-auto transition-all duration-300"
-              />
-              <span className="text-black text-2xl ml-2 font-medium hidden md:inline-block">LotoEasy</span>
-            </Link>
-          </div>
+          {/* Logo on the left - Updated with new logo */}
+          <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
+            <img
+              src="/lovable-uploads/408a1fb9-fd14-4d32-bf8a-2021e46fb734.png"
+              alt="LotoEasy Logo"
+              className="h-12 w-auto"
+            />
+          </Link>
 
-          {/* Main navigation - centered */}
-          <nav className="hidden md:flex justify-center">
+          {/* Main navigation - centered on desktop, moved closer to logo */}
+          <nav className="hidden md:flex justify-center flex-grow ml-2 mr-8">
             <div className="flex items-center space-x-8">
               <button 
                 onClick={scrollToGames}
