@@ -86,6 +86,8 @@ export const useTicketState = () => {
   };
 
   const handleQuickPick = () => {
+    clearSelections();
+    
     const randomDigits = Array(4).fill(0).map(() => 
       Math.floor(Math.random() * 10)
     );
