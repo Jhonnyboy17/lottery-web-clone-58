@@ -26,8 +26,8 @@ const GameLayout: React.FC<GameLayoutProps> = ({
   return <div className="min-h-screen bg-white">
       <Navbar />
       
-      {/* Game Banner with Background Color - directly below navbar */}
-      <div className="w-full py-8" style={{
+      {/* Game Banner with Background Color - directly below navbar without space */}
+      <div className="w-full py-8 mt-24" style={{
         backgroundColor: colorValue
       }}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
