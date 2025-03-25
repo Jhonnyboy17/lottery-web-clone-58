@@ -380,6 +380,8 @@ export const useTicketState = () => {
     editingIndex,
     animatedProgress,
     setActiveDigitIndex,
+    setIsEditing,
+    setEditingIndex,
     handleDigitSelect,
     handlePlayTypeChange,
     handleBetAmountChange,
@@ -395,4 +397,3 @@ export const useTicketState = () => {
     handleChangeDrawCount
   };
 };
-
