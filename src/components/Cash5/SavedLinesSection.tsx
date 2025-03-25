@@ -47,12 +47,12 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                     <span 
                       key={i} 
                       className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                        digit === null ? 'bg-white border border-gray-200 text-gray-500' : 
+                        digit === null ? 'bg-white border border-gray-200 text-gray-600 font-bold' : 
                         digit === -1 ? 'bg-red-500 text-white' : 
                         'bg-blue-500 text-white'
                       }`}
                     >
-                      {digit === null ? '?' : digit === -1 ? <span className="font-bold">x</span> : digit}
+                      {digit === null ? '?' : digit === -1 ? <span className="font-bold">X</span> : digit}
                     </span>
                   ))}
                 </div>
@@ -82,10 +82,12 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                 {Array(5).fill(null).map((_, i) => (
                   <span 
                     key={i} 
-                    className="bg-white border border-gray-200 text-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                    className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                   >
                     {editingIndex === null && currentLine && currentLine.digits[i] !== null ? 
-                      currentLine.digits[i] : '?'}
+                      <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
+                        {currentLine.digits[i]}
+                      </span> : '?'}
                   </span>
                 ))}
               </div>

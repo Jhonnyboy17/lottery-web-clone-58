@@ -83,7 +83,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
               <span 
                 key={i} 
                 className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                  digit !== null ? 'bg-blue-500 text-white' : 'bg-white border border-gray-200 text-gray-500'
+                  digit !== null ? 'bg-blue-500 text-white' : 'bg-white border border-gray-200 text-gray-600 font-bold'
                 }`}
               >
                 {digit !== null ? digit : '?'}

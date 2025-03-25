@@ -649,34 +649,24 @@ const PlayPage = ({
                       {Array(maxRegularNumbers).fill(null).map((_, i) => (
                         <span 
                           key={i} 
-                          className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                            editingLineIndex !== null && selectedNumbers[i] !== undefined ? 
-                              'text-white' : 'bg-gray-100 text-gray-400'
-                          }`}
-                          style={{ 
-                            backgroundColor: editingLineIndex === null && selectedNumbers[i] !== undefined ? 
-                              colorValue : editingLineIndex !== null && selectedNumbers[i] !== undefined ? 
-                              colorValue : 'rgb(243, 244, 246)'
-                          }}
+                          className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                         >
-                          {editingLineIndex === null && selectedNumbers[i] !== undefined ? 
-                            selectedNumbers[i] : '?'}
+                          {editingLineIndex === null && selectedNumbers[i] !== undefined ? (
+                            <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center" style={{ backgroundColor: colorValue }}>
+                              {selectedNumbers[i]}
+                            </span>
+                          ) : '?'}
                         </span>
                       ))}
                       {hasPowerball && (
                         <span 
-                          className={`rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 ${
-                            editingLineIndex !== null && selectedPowerball !== null ?
-                              'text-white' : 'bg-gray-100 text-gray-400'
-                          }`}
-                          style={{ 
-                            backgroundColor: editingLineIndex === null && selectedPowerball !== null ? 
-                              'rgb(245, 158, 11)' : editingLineIndex !== null && selectedPowerball !== null ? 
-                              'rgb(245, 158, 11)' : 'rgb(243, 244, 246)'
-                          }}
+                          className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
                         >
-                          {editingLineIndex === null && selectedPowerball !== null ? 
-                            selectedPowerball : '?'}
+                          {editingLineIndex === null && selectedPowerball !== null ? (
+                            <span className="bg-amber-500 text-white w-full h-full rounded-full flex items-center justify-center">
+                              {selectedPowerball}
+                            </span>
+                          ) : '?'}
                         </span>
                       )}
                     </div>
