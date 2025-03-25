@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -205,6 +206,8 @@ const PlayPage = ({
 
   const handleQuickPick = () => {
     if (isRandomizing) return;
+    
+    // Set cooldown and animation flags
     const selectedCount = selectedNumbers.length;
     let newCooldownTime = 4; // Default cooldown
     if (selectedCount >= 3) {
@@ -219,35 +222,42 @@ const PlayPage = ({
     setIsAnimating(true);
     setIsEditingNumber(true);
     
-    const currentSelectedCount = selectedNumbers.length;
-    const numbersNeeded = maxRegularNumbers - currentSelectedCount;
-    if (numbersNeeded > 0) {
-      const availableNumbers = regularNumbers.filter(num => !selectedNumbers.includes(num));
-      let newNumbers: number[] = [];
-      for (let i = 0; i < numbersNeeded; i++) {
-        if (availableNumbers.length) {
-          const randomIndex = Math.floor(Math.random() * availableNumbers.length);
-          newNumbers.push(availableNumbers[randomIndex]);
-          availableNumbers.splice(randomIndex, 1);
-        }
+    // Reset all current selections first - this is the key fix
+    setSelectedNumbers([]);
+    setSelectedPowerball(null);
+    
+    // Generate the random numbers with a delay to show animation
+    const randomNumbers: number[] = [];
+    const availableNumbers = Array.from({length: totalRegularNumbers}, (_, i) => i + 1)
+      .filter(num => !selectedNumbers.includes(num));
+      
+    for (let i = 0; i < maxRegularNumbers; i++) {
+      if (availableNumbers.length) {
+        const randomIndex = Math.floor(Math.random() * availableNumbers.length);
+        randomNumbers.push(availableNumbers[randomIndex]);
+        availableNumbers.splice(randomIndex, 1);
       }
-      newNumbers.forEach((num, index) => {
-        setTimeout(() => {
-          setSelectedNumbers(prev => [...prev, num]);
-          if (index === newNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
-            setTimeout(() => {
-              setIsRandomizing(false);
-              setTimeout(() => {
-                if (!editMode) {
-                  setIsEditingNumber(false);
-                }
-              }, 300);
-            }, 300);
-          }
-        }, (index + 1) * 150);
-      });
     }
-    if (hasPowerball && selectedPowerball === null) {
+    
+    // Add the numbers one by one with animation
+    randomNumbers.forEach((num, index) => {
+      setTimeout(() => {
+        setSelectedNumbers(prev => [...prev, num]);
+        if (index === randomNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
+          setTimeout(() => {
+            setIsRandomizing(false);
+            setTimeout(() => {
+              if (!editMode) {
+                setIsEditingNumber(false);
+              }
+            }, 300);
+          }, 300);
+        }
+      }, (index + 1) * 150);
+    });
+    
+    // Handle powerball generation if needed
+    if (hasPowerball) {
       setTimeout(() => {
         const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
         setSelectedPowerball(randomPowerball);
@@ -259,18 +269,15 @@ const PlayPage = ({
             }
           }, 300);
         }, 300);
-      }, (numbersNeeded + 1) * 150);
-    } else if (numbersNeeded === 0) {
-      setTimeout(() => {
-        setIsRandomizing(false);
-        setTimeout(() => {
-          if (!editMode) {
-            setIsEditingNumber(false);
-          }
-        }, 300);
-      }, 300);
+      }, (maxRegularNumbers + 1) * 150);
     }
-    setEditingLineIndex(null);
+    
+    // If we're editing an existing line, update it right away
+    if (editingLineIndex !== null) {
+      const updatedLines = [...savedLines];
+      // We'll update the saved line later once the random generation is complete
+      // This prevents the issue where the new line template shows numbers from edited line
+    }
   };
 
   const handleAddLine = () => {

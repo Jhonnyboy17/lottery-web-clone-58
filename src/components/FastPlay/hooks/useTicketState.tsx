@@ -176,6 +176,7 @@ export const useTicketState = () => {
     // Important: First set animation from current progress
     setAnimatedProgress(getProgressPercentage());
     
+    // Always clear the current line before generating new random numbers
     // Initialize new digits based on the current play type
     let newDigits = [null, null, null];
     
@@ -185,6 +186,7 @@ export const useTicketState = () => {
       newDigits[2] = -1; // Set last digit as "X" for Front Pair
     }
     
+    // Apply the initial digit layout first
     setCurrentLine({
       ...currentLine,
       digits: newDigits
@@ -206,12 +208,24 @@ export const useTicketState = () => {
       randomDigits = Array(3).fill(0).map(() => Math.floor(Math.random() * 10));
     }
     
+    // Update with the new random digits
     setCurrentLine({
       ...currentLine,
       digits: randomDigits
     });
     
+    // No need to focus on any digit after quick pick
     setActiveDigitIndex(null);
+    
+    // If we're editing, immediately update the saved line
+    if (isEditing && editingIndex !== null) {
+      const updatedLines = [...savedLines];
+      updatedLines[editingIndex] = {
+        ...currentLine,
+        digits: randomDigits
+      };
+      setSavedLines(updatedLines);
+    }
   };
 
   const clearSelections = () => {
@@ -301,9 +315,11 @@ export const useTicketState = () => {
     if (lineIndex === -1) return;
     
     // Cancel any previous editing
-    if (isEditing) {
-      setIsEditing(false);
-      setEditingIndex(null);
+    if (isEditing && editingIndex !== null) {
+      // If we're already editing a line, we should apply those changes first
+      const currentUpdatedLines = [...savedLines];
+      currentUpdatedLines[editingIndex] = {...currentLine};
+      setSavedLines(currentUpdatedLines);
     }
     
     const lineToEdit = savedLines[lineIndex];
