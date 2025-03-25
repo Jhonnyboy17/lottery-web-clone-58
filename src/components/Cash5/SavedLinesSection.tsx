@@ -55,10 +55,10 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       ) : (
         <>
           {savedLines.map((line, index) => (
-            <div key={index} className={`mb-2 ${editingIndex === index ? 'bg-blue-50' : 'bg-white'}`}>
+            <div key={index} className="mb-2">
               <div 
-                className={`rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors ${
-                  editingIndex === index ? 'bg-blue-50' : 'bg-white'
+                className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
+                  editingIndex === index ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
                 }`}
                 onClick={() => onEditLine(index)}
               >

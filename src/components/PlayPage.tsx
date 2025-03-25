@@ -630,8 +630,8 @@ const PlayPage = ({
               <div className="space-y-2">
                 {savedLines.map((line, index) => (
                   <div key={index} className="mb-2">
-                    <div className={`rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors ${
-                      editingLineIndex === index ? 'bg-blue-50' : 'bg-white'
+                    <div className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
+                      editingLineIndex === index ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
                     }`}
                     onClick={() => handleEditLine(index)}>
                       <div className="flex items-center">
