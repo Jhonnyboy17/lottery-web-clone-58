@@ -152,7 +152,7 @@ export const useTicketState = () => {
   const handleQuickPick = () => {
     setAnimatedProgress(getProgressPercentage());
     
-    let newDigits = [null, null, null];
+    const newDigits = [...currentLine.digits];
     
     if (currentLine.playType === "Back Pair") {
       newDigits[0] = -1;
@@ -165,21 +165,29 @@ export const useTicketState = () => {
       digits: newDigits
     });
     
-    let randomDigits = [...newDigits];
+    let positionsToRandomize = [];
     
     if (currentLine.playType === "Back Pair") {
-      randomDigits[1] = Math.floor(Math.random() * 10);
-      randomDigits[2] = Math.floor(Math.random() * 10);
+      if (newDigits[1] === null) positionsToRandomize.push(1);
+      if (newDigits[2] === null) positionsToRandomize.push(2);
     } else if (currentLine.playType === "Front Pair") {
-      randomDigits[0] = Math.floor(Math.random() * 10);
-      randomDigits[1] = Math.floor(Math.random() * 10);
+      if (newDigits[0] === null) positionsToRandomize.push(0);
+      if (newDigits[1] === null) positionsToRandomize.push(1);
     } else {
-      randomDigits = Array(3).fill(0).map(() => Math.floor(Math.random() * 10));
+      for (let i = 0; i < newDigits.length; i++) {
+        if (newDigits[i] === null) {
+          positionsToRandomize.push(i);
+        }
+      }
     }
+    
+    positionsToRandomize.forEach(position => {
+      newDigits[position] = Math.floor(Math.random() * 10);
+    });
     
     setCurrentLine({
       ...currentLine,
-      digits: randomDigits
+      digits: newDigits
     });
     
     setActiveDigitIndex(null);
@@ -188,7 +196,7 @@ export const useTicketState = () => {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
         ...currentLine,
-        digits: randomDigits
+        digits: newDigits
       };
       setSavedLines(updatedLines);
     }

@@ -148,44 +148,43 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const handleRandomPick = () => {
     if (isRandomizing) return;
     
-    onClearSelections();
-    
-    const filledCount = currentLine.digits.length;
-    
-    let newCooldownTime = 4;
-    if (filledCount === 3) newCooldownTime = 2;
-    else if (filledCount === 2) newCooldownTime = 3;
-    else if (filledCount === 1) newCooldownTime = 4;
-    else if (filledCount === 0) newCooldownTime = 4;
-    
-    setCooldownTime(newCooldownTime);
     setIsRandomizing(true);
     setAnimatedProgress(getSelectionProgress());
     
-    let allPositions: number[] = [];
+    const newDigits = [...currentLine.digits];
+    
+    let positionsToRandomize: number[] = [];
     
     if (currentLine.playType === "Back Pair") {
-      allPositions = [1, 2];
+      if (newDigits[1] === null) positionsToRandomize.push(1);
+      if (newDigits[2] === null) positionsToRandomize.push(2);
+      
+      newDigits[0] = -1;
     } else if (currentLine.playType === "Front Pair") {
-      allPositions = [0, 1];
+      if (newDigits[0] === null) positionsToRandomize.push(0);
+      if (newDigits[1] === null) positionsToRandomize.push(1);
+      
+      newDigits[2] = -1;
     } else {
-      allPositions = Array.from({ length: currentLine.digits.length }, (_, i) => i);
+      for (let i = 0; i < newDigits.length; i++) {
+        if (newDigits[i] === null) {
+          positionsToRandomize.push(i);
+        }
+      }
     }
     
-    if (allPositions.length > 0) {
-      allPositions.forEach((position, index) => {
+    let newCooldownTime = positionsToRandomize.length + 1;
+    setCooldownTime(newCooldownTime);
+    
+    if (positionsToRandomize.length > 0) {
+      positionsToRandomize.forEach((position, index) => {
         setTimeout(() => {
-          if ((currentLine.playType === "Back Pair" && position === 0) ||
-              (currentLine.playType === "Front Pair" && position === currentLine.digits.length - 1)) {
-            return;
-          }
-          
           const randomDigit = Math.floor(Math.random() * 10);
           
           setActiveDigitIndex(position);
           onDigitSelect(randomDigit);
           
-          if (index === allPositions.length - 1) {
+          if (index === positionsToRandomize.length - 1) {
             setTimeout(() => {
               setIsRandomizing(false);
               setActiveDigitIndex(null);
@@ -235,19 +234,19 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
       
       <div className="flex justify-between items-center mb-2">
         <p className="text-sm font-medium">Progresso da seleção</p>
-        <span className="text-xs font-medium">{Math.round(selectionProgress)}%</span>
+        <span className="text-xs font-medium">{Math.round(getSelectionProgress())}%</span>
       </div>
       
       <div className="mb-3">
         <Progress 
-          value={displayProgress} 
+          value={animatedProgress !== null ? animatedProgress : getSelectionProgress()} 
           className="h-2"
           style={{ backgroundColor: "#e5e7eb" }}
         >
           <div 
             className="h-full transition-all" 
             style={{ 
-              width: `${displayProgress}%`,
+              width: `${animatedProgress !== null ? animatedProgress : getSelectionProgress()}%`,
               backgroundColor: colorValue 
             }}
           />
@@ -303,7 +302,7 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
         </div>
       </div>
       
-      <div className="flex gap-2 justify-center mt-4 mb-4">
+      <div className="flex justify-between mt-4 mb-4">
         {currentLine.digits.map((digit, idx) => {
           const isDisabled = isDigitDisabled(idx);
           const isActive = activeDigitIndex === idx && !isDisabled;

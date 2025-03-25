@@ -60,18 +60,22 @@ export const useTicketState = () => {
   };
 
   const handleQuickPick = () => {
-    const emptyDigits = [null, null, null];
+    const newDigits = [...currentLine.digits];
     
-    setCurrentLine({
-      ...currentLine,
-      digits: emptyDigits
+    const positionsToRandomize = [];
+    for (let i = 0; i < newDigits.length; i++) {
+      if (newDigits[i] === null) {
+        positionsToRandomize.push(i);
+      }
+    }
+    
+    positionsToRandomize.forEach(position => {
+      newDigits[position] = Math.floor(Math.random() * 10);
     });
     
-    const randomDigits = Array(3).fill(0).map(() => Math.floor(Math.random() * 10));
-    
     setCurrentLine({
       ...currentLine,
-      digits: randomDigits
+      digits: newDigits
     });
     
     setActiveDigitIndex(null);
@@ -80,7 +84,7 @@ export const useTicketState = () => {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
         ...currentLine,
-        digits: randomDigits
+        digits: newDigits
       };
       setSavedLines(updatedLines);
     }
