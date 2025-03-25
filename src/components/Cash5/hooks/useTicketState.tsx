@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../types";
 
@@ -17,7 +16,6 @@ export const useTicketState = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   
-  // Effect for animating selection
   useEffect(() => {
     if (isLineComplete() && !isEditing) {
       const timer = setTimeout(() => {
@@ -39,7 +37,6 @@ export const useTicketState = () => {
       digits: newDigits
     });
     
-    // Find next empty digit
     const nextEmptyIndex = newDigits.findIndex((d, i) => d === null && i > activeDigitIndex);
     if (nextEmptyIndex !== -1) {
       setActiveDigitIndex(nextEmptyIndex);
@@ -63,29 +60,22 @@ export const useTicketState = () => {
   };
 
   const handleQuickPick = () => {
-    // Always create fresh random numbers regardless of editing state
-    // Clear the current selection first
     const emptyDigits = [null, null, null];
     
-    // Apply empty digits first to clear the UI
     setCurrentLine({
       ...currentLine,
       digits: emptyDigits
     });
     
-    // Generate random digits
     const randomDigits = Array(3).fill(0).map(() => Math.floor(Math.random() * 10));
     
-    // Set the random digits
     setCurrentLine({
       ...currentLine,
       digits: randomDigits
     });
     
-    // Clear focus
     setActiveDigitIndex(null);
     
-    // If we're editing, update the saved line immediately
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
@@ -109,21 +99,17 @@ export const useTicketState = () => {
     if (!isLineComplete()) return;
     
     if (isEditing && editingIndex !== null) {
-      // Update existing line
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {...currentLine};
       setSavedLines(updatedLines);
       
-      // Reset editing state
       setIsEditing(false);
       setEditingIndex(null);
     } else {
-      // Add new line
       setSavedLines([...savedLines, {...currentLine}]);
       setLineCount(lineCount + 1);
     }
     
-    // Reset current line
     setCurrentLine({
       digits: [null, null, null],
       playType: currentLine.playType,
@@ -138,7 +124,6 @@ export const useTicketState = () => {
   const handleRemoveLine = (lineIndex: number) => {
     setSavedLines(savedLines.filter((_, index) => index !== lineIndex));
     
-    // If removing the line we're currently editing, cancel editing
     if (isEditing && editingIndex === lineIndex) {
       setIsEditing(false);
       setEditingIndex(null);
@@ -147,7 +132,6 @@ export const useTicketState = () => {
   };
 
   const handleEditLine = (lineIndex: number) => {
-    // If we're already editing a line, save those changes first
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {...currentLine};
@@ -157,11 +141,10 @@ export const useTicketState = () => {
     const lineToEdit = savedLines[lineIndex];
     if (!lineToEdit) return;
     
-    // Set current line to the selected line for editing
     setCurrentLine({...lineToEdit});
     setIsEditing(true);
     setEditingIndex(lineIndex);
-    setActiveDigitIndex(null); // Don't focus any digit initially when editing
+    setActiveDigitIndex(null);
   };
 
   const isLineComplete = () => {

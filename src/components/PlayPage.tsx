@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -222,14 +221,13 @@ const PlayPage = ({
     setIsAnimating(true);
     setIsEditingNumber(true);
     
-    // Reset all current selections first - this is the key fix
+    // Reset all current selections first
     setSelectedNumbers([]);
     setSelectedPowerball(null);
     
-    // Generate the random numbers with a delay to show animation
+    // Generate random numbers with a delay to show animation
     const randomNumbers: number[] = [];
-    const availableNumbers = Array.from({length: totalRegularNumbers}, (_, i) => i + 1)
-      .filter(num => !selectedNumbers.includes(num));
+    const availableNumbers = Array.from({length: totalRegularNumbers}, (_, i) => i + 1);
       
     for (let i = 0; i < maxRegularNumbers; i++) {
       if (availableNumbers.length) {
@@ -239,19 +237,51 @@ const PlayPage = ({
       }
     }
     
+    // Generate random powerball if needed
+    let randomPowerball: number | null = null;
+    if (hasPowerball) {
+      randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
+    }
+    
     // Add the numbers one by one with animation
     randomNumbers.forEach((num, index) => {
       setTimeout(() => {
         setSelectedNumbers(prev => [...prev, num]);
-        if (index === randomNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
-          setTimeout(() => {
-            setIsRandomizing(false);
+        
+        // If we're editing an existing line, update it immediately with the partial selection
+        if (editingLineIndex !== null) {
+          const updatedLines = [...savedLines];
+          updatedLines[editingLineIndex] = {
+            ...updatedLines[editingLineIndex],
+            numbers: [...randomNumbers.slice(0, index + 1)]
+          };
+          setSavedLines(updatedLines);
+        }
+        
+        if (index === randomNumbers.length - 1) {
+          // All regular numbers have been set
+          
+          // If there's no powerball needed, finish the animation
+          if (!hasPowerball) {
+            // If editing, update the saved line with the complete set of numbers
+            if (editingLineIndex !== null) {
+              const updatedLines = [...savedLines];
+              updatedLines[editingLineIndex] = {
+                ...updatedLines[editingLineIndex],
+                numbers: randomNumbers,
+              };
+              setSavedLines(updatedLines);
+            }
+            
             setTimeout(() => {
-              if (!editMode) {
-                setIsEditingNumber(false);
-              }
+              setIsRandomizing(false);
+              setTimeout(() => {
+                if (!editMode) {
+                  setIsEditingNumber(false);
+                }
+              }, 300);
             }, 300);
-          }, 300);
+          }
         }
       }, (index + 1) * 150);
     });
@@ -261,6 +291,18 @@ const PlayPage = ({
       setTimeout(() => {
         const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
         setSelectedPowerball(randomPowerball);
+        
+        // If editing, update the saved line with both the numbers and powerball
+        if (editingLineIndex !== null) {
+          const updatedLines = [...savedLines];
+          updatedLines[editingLineIndex] = {
+            ...updatedLines[editingLineIndex],
+            numbers: randomNumbers,
+            powerball: randomPowerball
+          };
+          setSavedLines(updatedLines);
+        }
+        
         setTimeout(() => {
           setIsRandomizing(false);
           setTimeout(() => {
@@ -270,13 +312,6 @@ const PlayPage = ({
           }, 300);
         }, 300);
       }, (maxRegularNumbers + 1) * 150);
-    }
-    
-    // If we're editing an existing line, update it right away
-    if (editingLineIndex !== null) {
-      const updatedLines = [...savedLines];
-      // We'll update the saved line later once the random generation is complete
-      // This prevents the issue where the new line template shows numbers from edited line
     }
   };
 
