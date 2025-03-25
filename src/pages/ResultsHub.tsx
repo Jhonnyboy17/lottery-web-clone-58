@@ -345,6 +345,270 @@ const powerballHistory: PowerballResult[] = [
     numbers: ["18", "20", "50", "52", "56"],
     powerball: "20",
     multiplier: "x2"
+  },
+  {
+    drawDate: "03/01/2025",
+    displayDate: "1 de março de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["3", "8", "40", "53", "58"],
+    powerball: "3",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "02/26/2025",
+    displayDate: "26 de fevereiro de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["4", "27", "42", "50", "60"],
+    powerball: "13",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "02/24/2025",
+    displayDate: "24 de fevereiro de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["1", "22", "30", "42", "47"],
+    powerball: "23",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/22/2025",
+    displayDate: "22 de fevereiro de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["2", "3", "19", "40", "69"],
+    powerball: "9",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "02/19/2025",
+    displayDate: "19 de fevereiro de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["1", "4", "45", "47", "67"],
+    powerball: "18",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/17/2025",
+    displayDate: "17 de fevereiro de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["5", "6", "24", "32", "43"],
+    powerball: "1",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/15/2025",
+    displayDate: "15 de fevereiro de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["10", "17", "19", "44", "45"],
+    powerball: "2",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/12/2025",
+    displayDate: "12 de fevereiro de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["25", "30", "52", "54", "67"],
+    powerball: "24",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/10/2025",
+    displayDate: "10 de fevereiro de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["16", "26", "31", "60", "61"],
+    powerball: "23",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/08/2025",
+    displayDate: "8 de fevereiro de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["2", "9", "36", "53", "63"],
+    powerball: "11",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/05/2025",
+    displayDate: "5 de fevereiro de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["5", "9", "27", "39", "42"],
+    powerball: "16",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/03/2025",
+    displayDate: "3 de fevereiro de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["6", "9", "13", "29", "66"],
+    powerball: "24",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "02/01/2025",
+    displayDate: "1 de fevereiro de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["6", "16", "31", "62", "66"],
+    powerball: "18",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/29/2025",
+    displayDate: "29 de janeiro de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["6", "8", "19", "23", "26"],
+    powerball: "5",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/27/2025",
+    displayDate: "27 de janeiro de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["1", "2", "5", "13", "29"],
+    powerball: "25",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "01/25/2025",
+    displayDate: "25 de janeiro de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["24", "26", "39", "47", "57"],
+    powerball: "19",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "01/22/2025",
+    displayDate: "22 de janeiro de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["1", "5", "12", "13", "58"],
+    powerball: "21",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/20/2025",
+    displayDate: "20 de janeiro de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["7", "10", "11", "44", "67"],
+    powerball: "2",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/18/2025",
+    displayDate: "18 de janeiro de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["14", "20", "23", "39", "67"],
+    powerball: "2",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "01/15/2025",
+    displayDate: "15 de janeiro de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["1", "9", "10", "35", "44"],
+    powerball: "18",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/13/2025",
+    displayDate: "13 de janeiro de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["7", "17", "27", "39", "42"],
+    powerball: "6",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/11/2025",
+    displayDate: "11 de janeiro de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["4", "6", "14", "20", "32"],
+    powerball: "17",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/08/2025",
+    displayDate: "8 de janeiro de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["12", "21", "42", "44", "49"],
+    powerball: "1",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "01/06/2025",
+    displayDate: "6 de janeiro de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["2", "11", "22", "35", "60"],
+    powerball: "23",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "01/04/2025",
+    displayDate: "4 de janeiro de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["12", "21", "42", "44", "49"],
+    powerball: "1",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "01/01/2025",
+    displayDate: "1 de janeiro de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["12", "21", "42", "44", "49"],
+    powerball: "1",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "12/30/2024",
+    displayDate: "30 de dezembro de 2024",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["17", "35", "46", "54", "67"],
+    powerball: "8",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "12/27/2024",
+    displayDate: "27 de dezembro de 2024",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["10", "11", "26", "27", "34"],
+    powerball: "7",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "12/25/2024",
+    displayDate: "25 de dezembro de 2024",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["14", "17", "18", "21", "27"],
+    powerball: "9",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "12/23/2024",
+    displayDate: "23 de dezembro de 2024",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["1", "13", "33", "44", "56"],
+    powerball: "9",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "12/20/2024",
+    displayDate: "20 de dezembro de 2024",
+    dayOfWeek: "Sexta-feira",
+    numbers: ["3", "7", "33", "50", "69"],
+    powerball: "24",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "12/18/2024",
+    displayDate: "18 de dezembro de 2024",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["2", "4", "21", "38", "50"],
+    powerball: "10",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "12/16/2024",
+    displayDate: "16 de dezembro de 2024",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["8", "12", "23", "26", "30"],
+    powerball: "11",
+    multiplier: "x2"
   }
 ];
 
@@ -405,7 +669,7 @@ const ResultsHub = () => {
   const [powerballPage, setPowerballPage] = useState(1);
   const gamesPerPage = 5;
   const megaMillionsResultsPerPage = 5;
-  const powerballResultsPerPage = 5;
+  const powerballResultsPerPage = 10;
   
   const indexOfLastGame = currentPage * gamesPerPage;
   const indexOfFirstGame = indexOfLastGame - gamesPerPage;
