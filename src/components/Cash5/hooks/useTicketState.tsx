@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../types";
 
@@ -87,8 +86,6 @@ export const useTicketState = () => {
   };
 
   const handleQuickPick = () => {
-    // Quando estiver editando uma linha ou criando uma nova,
-    // gere números aleatórios para todos os dígitos
     const randomDigits = Array(4).fill(0).map(() => 
       Math.floor(Math.random() * 10)
     );
@@ -234,8 +231,8 @@ export const useTicketState = () => {
     isEditing,
     editingIndex,
     setActiveDigitIndex,
-    setIsEditing,         // Expose these setter functions
-    setEditingIndex,      // Expose these setter functions
+    setIsEditing,
+    setEditingIndex,
     handleDigitSelect,
     handlePlayTypeChange,
     handleBetAmountChange,

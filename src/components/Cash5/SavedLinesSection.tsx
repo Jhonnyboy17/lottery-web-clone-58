@@ -28,7 +28,24 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       <h3 className="font-semibold mb-3">Minhas Linhas</h3>
       
       {savedLines.length === 0 && !currentLine ? (
-        <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>
+        // Display a template line with question marks instead of the message
+        <div className="mb-2">
+          <div className="bg-white rounded p-3 flex items-center justify-between">
+            <div className="flex items-center">
+              <span className="text-gray-500 font-medium w-6 mr-2">
+                01
+              </span>
+              {Array(4).fill(null).map((_, i) => (
+                <span 
+                  key={i} 
+                  className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                >
+                  ?
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
       ) : (
         <>
           {savedLines.map((line, index) => (
@@ -69,8 +86,8 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
             </div>
           ))}
           
-          {/* Empty template line - always shown as the next line and clickable */}
-          {currentLine && editingIndex === null && (
+          {/* Always show the current line template, whether editing or creating a new line */}
+          {currentLine && (
             <div className="mb-2">
               <div 
                 className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
@@ -80,14 +97,14 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                   <span className="text-gray-500 font-medium w-6 mr-2">
                     {String(savedLines.length + 1).padStart(2, '0')}
                   </span>
-                  {Array(5).fill(null).map((_, i) => (
+                  {Array(4).fill(null).map((_, i) => (
                     <span 
                       key={i} 
                       className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                     >
-                      {currentLine && currentLine.digits[i] !== null ? (
+                      {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
                         <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
-                          {currentLine.digits[i]}
+                          {currentLine.digits[i] === -1 ? <span className="font-bold">X</span> : currentLine.digits[i]}
                         </span>
                       ) : '?'}
                     </span>

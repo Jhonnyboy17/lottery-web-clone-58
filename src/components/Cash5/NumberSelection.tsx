@@ -148,7 +148,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
   const handleRandomPick = () => {
     if (isRandomizing) return;
     
-    const filledCount = currentLine.digits.filter(digit => digit !== null && digit !== -1).length;
+    onClearSelections();
+    
+    const filledCount = currentLine.digits.length;
     
     let newCooldownTime = 4;
     if (filledCount === 3) newCooldownTime = 2;
@@ -160,29 +162,33 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
     setIsRandomizing(true);
     setAnimatedProgress(getSelectionProgress());
     
-    let emptyPositions: number[] = [];
+    let allPositions: number[] = [];
     
     if (currentLine.playType === "Back Pair") {
-      if (currentLine.digits[1] === null) emptyPositions.push(1);
-      if (currentLine.digits[2] === null) emptyPositions.push(2);
+      allPositions = [1, 2];
     } else if (currentLine.playType === "Front Pair") {
-      if (currentLine.digits[0] === null) emptyPositions.push(0);
-      if (currentLine.digits[1] === null) emptyPositions.push(1);
+      allPositions = [0, 1];
     } else {
-      currentLine.digits.forEach((digit, index) => {
-        if (digit === null) emptyPositions.push(index);
-      });
+      allPositions = Array.from({ length: currentLine.digits.length }, (_, i) => i);
     }
     
-    if (emptyPositions.length > 0) {
-      emptyPositions.forEach((position, index) => {
+    if (allPositions.length > 0) {
+      allPositions.forEach((position, index) => {
         setTimeout(() => {
+          if ((currentLine.playType === "Back Pair" && position === 0) ||
+              (currentLine.playType === "Front Pair" && position === currentLine.digits.length - 1)) {
+            return;
+          }
+          
           const randomDigit = Math.floor(Math.random() * 10);
+          
+          setActiveDigitIndex(position);
           onDigitSelect(randomDigit);
           
-          if (index === emptyPositions.length - 1) {
+          if (index === allPositions.length - 1) {
             setTimeout(() => {
               setIsRandomizing(false);
+              setActiveDigitIndex(null);
             }, 500);
           }
         }, index * 400);
