@@ -77,7 +77,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
       ))}
       
       {/* Always show the current line template - guaranteed to display */}
-      <div className="bg-gray-50 hover:bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-200 mb-2">
+      <div className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border border-gray-200 mb-2">
         <div className="flex items-center">
           <span className="text-gray-500 font-medium w-6 mr-2">
             {String(savedLines.length + 1).padStart(2, '0')}

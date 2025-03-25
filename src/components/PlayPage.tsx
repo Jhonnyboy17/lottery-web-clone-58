@@ -601,7 +601,7 @@ const PlayPage = ({
             {savedLines.length === 0 && !selectedNumbers.length ? (
               <div className="mb-2">
                 <div 
-                  className="bg-white rounded p-3 flex items-center justify-between cursor-pointer"
+                  className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
                   onClick={handleStartNewLine}
                 >
                   <div className="flex items-center">
@@ -611,14 +611,14 @@ const PlayPage = ({
                     {Array(maxRegularNumbers).fill(null).map((_, i) => (
                       <span 
                         key={i} 
-                        className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                        className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                       >
                         ?
                       </span>
                     ))}
                     {hasPowerball && (
                       <span 
-                        className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
+                        className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
                       >
                         ?
                       </span>
@@ -669,7 +669,7 @@ const PlayPage = ({
                 
                 <div className="mb-2">
                   <div 
-                    className="bg-gray-50 hover:bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-200"
+                    className="bg-white hover:bg-gray-50 rounded p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-200"
                     onClick={handleStartNewLine}
                   >
                     <div className="flex items-center">

@@ -34,7 +34,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
         // Display a template line with question marks
         <div className="mb-2">
           <div 
-            className="bg-white rounded p-3 flex items-center justify-between cursor-pointer"
+            className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
             onClick={onStartNewLine}
           >
             <div className="flex items-center">
@@ -97,7 +97,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       {/* Always show the new line template, guaranteed to display */}
       <div className="mb-2">
         <div 
-          className="bg-gray-50 hover:bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-200"
+          className="bg-white hover:bg-gray-50 rounded p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-200"
           onClick={onStartNewLine}
         >
           <div className="flex items-center">
