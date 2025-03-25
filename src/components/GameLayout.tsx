@@ -3,7 +3,6 @@ import React from "react";
 import Navbar from "./Navbar";
 import TotalSummary from "./Cash5/TotalSummary";
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from "@/components/ui/navigation-menu";
-import { cn } from "@/lib/utils";
 
 interface GameLayoutProps {
   logoSrc: string;
@@ -30,39 +29,11 @@ const GameLayout: React.FC<GameLayoutProps> = ({
       {/* Add space between navbar and colored banner */}
       <div className="h-12"></div>
       
-      {/* Game Banner with Background Color - Increased height by adding more padding */}
-      <div className="w-full py-12 relative" style={{
-      backgroundColor: colorValue
-    }}>
-        <div className="mx-auto max-w-7xl px-[34px]">
-          {/* Game Navigation - Fine-tuning position */}
-          <div className="absolute left-[160px] bottom-0">
-            <NavigationMenu className="max-w-none w-auto">
-              <NavigationMenuList className="flex space-x-6 px-[150px]">
-                <NavigationMenuItem>
-                  <NavigationMenuLink href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[20px] flex items-center">
-                    Jogar {gameName}
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[20px] flex items-center">
-                    Resultados
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[20px] flex items-center" href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}>
-                    Verificador de Números
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-1 px-0 mx-[20px] flex items-center">
-                    Como Jogar
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-          </div>
-
+      {/* Game Banner with Background Color */}
+      <div className="w-full py-8 relative" style={{
+        backgroundColor: colorValue
+      }}>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center justify-between">
             {/* Left side - Empty */}
             <div></div>
@@ -78,6 +49,36 @@ const GameLayout: React.FC<GameLayoutProps> = ({
               <h2 className="text-2xl font-bold text-black">R$ {jackpotAmount}</h2>
             </div>
           </div>
+        </div>
+      </div>
+      
+      {/* Game Navigation - Now below the banner instead of overlapping */}
+      <div className="w-full bg-gray-100 border-b">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <NavigationMenu className="max-w-none w-auto">
+            <NavigationMenuList className="flex space-x-6 justify-center">
+              <NavigationMenuItem>
+                <NavigationMenuLink href={`/play-${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-3 px-4 flex items-center">
+                  Jogar {gameName}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink href={`/results/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-3 px-4 flex items-center">
+                  Resultados
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink className="text-black hover:text-black/80 font-medium text-sm py-3 px-4 flex items-center" href={`/checker/${gameName.toLowerCase().replace(/\s+/g, '-')}`}>
+                  Verificador de Números
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuLink href={`/how-to-play/${gameName.toLowerCase().replace(/\s+/g, '-')}`} className="text-black hover:text-black/80 font-medium text-sm py-3 px-4 flex items-center">
+                  Como Jogar
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
       </div>
 
