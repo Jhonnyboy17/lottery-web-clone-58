@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../types";
 
@@ -17,6 +18,7 @@ export const useTicketState = () => {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   
   useEffect(() => {
+    // Não aplicamos o auto-add quando estamos no modo de edição
     if (isLineComplete() && !isEditing) {
       const timer = setTimeout(() => {
         handleAddLine();
@@ -62,6 +64,7 @@ export const useTicketState = () => {
   const handleQuickPick = () => {
     const newDigits = [...currentLine.digits];
     
+    // Crucial: Mantém números já selecionados e apenas randomiza os que ainda são nulos
     const positionsToRandomize = [];
     for (let i = 0; i < newDigits.length; i++) {
       if (newDigits[i] === null) {
@@ -80,6 +83,7 @@ export const useTicketState = () => {
     
     setActiveDigitIndex(null);
     
+    // Corrigido: Atualiza a linha salva quando estamos editando
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {

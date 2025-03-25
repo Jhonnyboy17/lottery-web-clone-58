@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../../Cash5/types";
 
@@ -18,6 +19,7 @@ export const useTicketState = () => {
   const [animatedProgress, setAnimatedProgress] = useState<number | null>(null);
 
   useEffect(() => {
+    // Não aplicamos o auto-add quando estamos no modo de edição
     if (isLineComplete() && !isEditing) {
       const timer = setTimeout(() => {
         handleAddLine();
@@ -160,11 +162,7 @@ export const useTicketState = () => {
       newDigits[2] = -1;
     }
     
-    setCurrentLine({
-      ...currentLine,
-      digits: newDigits
-    });
-    
+    // Crucial: Mantenha os dígitos já selecionados
     let positionsToRandomize = [];
     
     if (currentLine.playType === "Back Pair") {
@@ -192,6 +190,7 @@ export const useTicketState = () => {
     
     setActiveDigitIndex(null);
     
+    // Corrigido: Atualiza a linha salva quando estamos editando
     if (isEditing && editingIndex !== null) {
       const updatedLines = [...savedLines];
       updatedLines[editingIndex] = {
