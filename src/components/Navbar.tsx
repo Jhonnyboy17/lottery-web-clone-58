@@ -10,6 +10,7 @@ import ThemeToggle from "./ThemeToggle";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [logoSize, setLogoSize] = useState(24); // Start with a larger size
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -71,6 +72,15 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
+  // Handle logo size change
+  const increaseLogo = () => {
+    setLogoSize(prevSize => prevSize + 2);
+  };
+
+  const decreaseLogo = () => {
+    setLogoSize(prevSize => Math.max(12, prevSize - 2));
+  };
+
   // Special styling for play pages and dark mode
   const navbarClasses = isPlayPage 
     ? "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-2 shadow-md dark:bg-lottery-dark-nav" 
@@ -81,13 +91,32 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo on the left - Updated with new logo */}
-          <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
-            <img
-              src="/lovable-uploads/408a1fb9-fd14-4d32-bf8a-2021e46fb734.png"
-              alt="LotoEasy Logo"
-              className="h-12 w-auto"
-            />
-          </Link>
+          <div className="flex-shrink-0 flex items-center">
+            <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
+              <img
+                src="/lovable-uploads/408a1fb9-fd14-4d32-bf8a-2021e46fb734.png"
+                alt="LotoEasy Logo"
+                style={{ height: `${logoSize}vh`, width: 'auto' }}
+                className="transition-all duration-300"
+              />
+            </Link>
+            
+            {/* Logo resizing controls */}
+            <div className="ml-2 flex flex-col space-y-1">
+              <button 
+                onClick={increaseLogo} 
+                className="bg-white/20 text-white px-2 py-1 rounded text-xs hover:bg-white/30 transition-colors"
+              >
+                +
+              </button>
+              <button 
+                onClick={decreaseLogo} 
+                className="bg-white/20 text-white px-2 py-1 rounded text-xs hover:bg-white/30 transition-colors"
+              >
+                -
+              </button>
+            </div>
+          </div>
 
           {/* Main navigation - centered on desktop, moved closer to logo */}
           <nav className="hidden md:flex justify-center flex-grow ml-2 mr-8">
