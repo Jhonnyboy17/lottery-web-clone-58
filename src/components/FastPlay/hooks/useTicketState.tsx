@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { NumberSelectionType } from "../../Cash5/types";
 
@@ -172,49 +173,37 @@ export const useTicketState = () => {
   };
 
   const handleQuickPick = () => {
-    // Start animation from current progress
+    // Important: First set animation from current progress
     setAnimatedProgress(getProgressPercentage());
     
-    let randomDigits = [null, null, null];
+    // Initialize new digits based on the current play type
+    let newDigits = [null, null, null];
     
     if (currentLine.playType === "Back Pair") {
-      // For Back Pair, keep any existing digit selections
-      randomDigits = [...currentLine.digits];
-      
-      // Fill in any missing digits in positions 1 and 2
-      if (randomDigits[1] === null) {
-        randomDigits[1] = Math.floor(Math.random() * 10);
-      }
-      if (randomDigits[2] === null) {
-        randomDigits[2] = Math.floor(Math.random() * 10);
-      }
-      
-      // Ensure position 0 is set to -1 (X)
-      randomDigits[0] = -1;
+      newDigits[0] = -1; // Set first digit as "X" for Back Pair
     } else if (currentLine.playType === "Front Pair") {
-      // For Front Pair, keep any existing digit selections
-      randomDigits = [...currentLine.digits];
-      
-      // Fill in any missing digits in positions 0 and 1
-      if (randomDigits[0] === null) {
-        randomDigits[0] = Math.floor(Math.random() * 10);
-      }
-      if (randomDigits[1] === null) {
-        randomDigits[1] = Math.floor(Math.random() * 10);
-      }
-      
-      // Ensure position 2 is set to -1 (X)
-      randomDigits[2] = -1;
+      newDigits[2] = -1; // Set last digit as "X" for Front Pair
+    }
+    
+    setCurrentLine({
+      ...currentLine,
+      digits: newDigits
+    });
+    
+    // Now generate random digits based on the play type
+    let randomDigits = [...newDigits];
+    
+    if (currentLine.playType === "Back Pair") {
+      // For Back Pair, generate random digits for positions 1 and 2
+      randomDigits[1] = Math.floor(Math.random() * 10);
+      randomDigits[2] = Math.floor(Math.random() * 10);
+    } else if (currentLine.playType === "Front Pair") {
+      // For Front Pair, generate random digits for positions 0 and 1
+      randomDigits[0] = Math.floor(Math.random() * 10);
+      randomDigits[1] = Math.floor(Math.random() * 10);
     } else {
-      // For other play types, keep any existing digit selections
-      randomDigits = [...currentLine.digits];
-      
-      // Fill in any missing digits
-      for (let i = 0; i < randomDigits.length; i++) {
-        if (randomDigits[i] === null) {
-          randomDigits[i] = Math.floor(Math.random() * 10);
-        }
-      }
+      // For other play types, generate random digits for all positions
+      randomDigits = Array(3).fill(0).map(() => Math.floor(Math.random() * 10));
     }
     
     setCurrentLine({
@@ -311,9 +300,16 @@ export const useTicketState = () => {
     // If lineIndex is -1, it's just a trigger to re-render
     if (lineIndex === -1) return;
     
+    // Cancel any previous editing
+    if (isEditing) {
+      setIsEditing(false);
+      setEditingIndex(null);
+    }
+    
     const lineToEdit = savedLines[lineIndex];
     if (!lineToEdit) return;
     
+    // Set current line to the selected line for editing
     setCurrentLine({...lineToEdit});
     setIsEditing(true);
     setEditingIndex(lineIndex);

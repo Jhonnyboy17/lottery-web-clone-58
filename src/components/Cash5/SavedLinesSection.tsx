@@ -12,7 +12,7 @@ interface SavedLinesSectionProps {
   onChangeDrawCount?: (index: number, count: string) => void;
   editingIndex: number | null;
   onStartNewLine?: () => void;
-  currentLine?: NumberSelectionType;
+  currentLine?: NumberSelectionType | null;
 }
 
 const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
@@ -41,7 +41,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
               <span className="text-gray-500 font-medium w-6 mr-2">
                 01
               </span>
-              {Array(5).fill(null).map((_, i) => (
+              {Array(3).fill(null).map((_, i) => (
                 <span 
                   key={i} 
                   className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
@@ -94,35 +94,38 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
         </>
       )}
       
-      {/* Always show the new line template, guaranteed to display */}
-      <div className="mb-2">
-        <div 
-          className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
-            editingIndex === null && currentLine ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
-          }`}
-          onClick={onStartNewLine}
-        >
-          <div className="flex items-center">
-            <span className="text-gray-500 font-medium w-6 mr-2">
-              {String(savedLines.length + 1).padStart(2, '0')}
-            </span>
-            {Array(currentLine?.digits.length || 5).fill(null).map((_, i) => (
-              <span 
-                key={i} 
-                className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
-              >
-                {/* Only show digits in new line template when not editing an existing line */}
-                {editingIndex === null && currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
-                  <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
-                    {currentLine.digits[i] === -1 ? <span className="font-bold">X</span> : currentLine.digits[i]}
-                  </span>
-                ) : '?'}
+      {/* Show the new line template only when not editing */}
+      {editingIndex === null && (
+        <div className="mb-2">
+          <div 
+            className="bg-white hover:bg-gray-50 rounded p-3 flex items-center justify-between cursor-pointer"
+            onClick={onStartNewLine}
+          >
+            <div className="flex items-center">
+              <span className="text-gray-500 font-medium w-6 mr-2">
+                {String(savedLines.length + 1).padStart(2, '0')}
               </span>
-            ))}
+              {Array(3).fill(null).map((_, i) => (
+                <span 
+                  key={i} 
+                  className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                >
+                  {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
+                    <span 
+                      className={`w-full h-full rounded-full flex items-center justify-center ${
+                        currentLine.digits[i] === -1 ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
+                      }`}
+                    >
+                      {currentLine.digits[i] === -1 ? <span className="font-bold">X</span> : currentLine.digits[i]}
+                    </span>
+                  ) : '?'}
+                </span>
+              ))}
+            </div>
+            <div className="w-4"></div> {/* Empty space where the X button would be */}
           </div>
-          <div className="w-4"></div> {/* Empty space where the X button would be */}
         </div>
-      </div>
+      )}
     </div>
   );
 };
