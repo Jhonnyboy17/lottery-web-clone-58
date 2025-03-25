@@ -600,7 +600,10 @@ const PlayPage = ({
               <>
                 {savedLines.map((line, index) => (
                   <div key={index} className="mb-2">
-                    <div className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors border" onClick={() => handleEditLine(index)}>
+                    <div className={`rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors ${
+                      editingLineIndex === index ? 'bg-blue-50' : 'bg-white'
+                    }`}
+                    onClick={() => handleEditLine(index)}>
                       <div className="flex items-center">
                         <span className="text-gray-500 font-medium w-6 mr-2">
                           {String(index + 1).padStart(2, '0')}
@@ -636,7 +639,7 @@ const PlayPage = ({
                 
                 <div className="mb-2">
                   <div 
-                    className="bg-blue-50 rounded p-3 flex items-center justify-between border border-gray-200 cursor-pointer hover:bg-blue-100 transition-colors"
+                    className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
                     onClick={handleStartNewLine}
                   >
                     <div className="flex items-center">
@@ -646,14 +649,34 @@ const PlayPage = ({
                       {Array(maxRegularNumbers).fill(null).map((_, i) => (
                         <span 
                           key={i} 
-                          className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                          className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
+                            editingLineIndex !== null && selectedNumbers[i] !== undefined ? 
+                              'text-white' : 'bg-gray-100 text-gray-400'
+                          }`}
+                          style={{ 
+                            backgroundColor: editingLineIndex === null && selectedNumbers[i] !== undefined ? 
+                              colorValue : editingLineIndex !== null && selectedNumbers[i] !== undefined ? 
+                              colorValue : 'rgb(243, 244, 246)'
+                          }}
                         >
-                          {selectedNumbers[i] !== undefined ? selectedNumbers[i] : '?'}
+                          {editingLineIndex === null && selectedNumbers[i] !== undefined ? 
+                            selectedNumbers[i] : '?'}
                         </span>
                       ))}
                       {hasPowerball && (
-                        <span className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
-                          {selectedPowerball !== null ? selectedPowerball : '?'}
+                        <span 
+                          className={`rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1 ${
+                            editingLineIndex !== null && selectedPowerball !== null ?
+                              'text-white' : 'bg-gray-100 text-gray-400'
+                          }`}
+                          style={{ 
+                            backgroundColor: editingLineIndex === null && selectedPowerball !== null ? 
+                              'rgb(245, 158, 11)' : editingLineIndex !== null && selectedPowerball !== null ? 
+                              'rgb(245, 158, 11)' : 'rgb(243, 244, 246)'
+                          }}
+                        >
+                          {editingLineIndex === null && selectedPowerball !== null ? 
+                            selectedPowerball : '?'}
                         </span>
                       )}
                     </div>

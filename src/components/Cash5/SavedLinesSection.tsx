@@ -84,7 +84,8 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                     key={i} 
                     className="bg-white border border-gray-200 text-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                   >
-                    {currentLine && currentLine.digits[i] !== null ? currentLine.digits[i] : '?'}
+                    {editingIndex === null && currentLine && currentLine.digits[i] !== null ? 
+                      currentLine.digits[i] : '?'}
                   </span>
                 ))}
               </div>
