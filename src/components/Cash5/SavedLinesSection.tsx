@@ -109,7 +109,8 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                 key={i} 
                 className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
               >
-                {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
+                {/* Only show digits in new line template when not editing an existing line */}
+                {editingIndex === null && currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
                   <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
                     {currentLine.digits[i] === -1 ? <span className="font-bold">X</span> : currentLine.digits[i]}
                   </span>

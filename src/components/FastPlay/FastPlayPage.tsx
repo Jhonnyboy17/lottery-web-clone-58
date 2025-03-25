@@ -1,3 +1,4 @@
+
 import React, { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import GameHeader from "../Cash5/GameHeader";
@@ -107,7 +108,10 @@ export const FastPlayPage = ({
           <SavedLinesSection
             savedLines={savedLines}
             onRemoveLine={handleRemoveLine}
-            onEditLine={handleEditLine}
+            onEditLine={(index) => {
+              // When editing a line, make sure the new line template doesn't show selected numbers
+              handleEditLine(index);
+            }}
             extraPlayName={extraPlayName}
             onToggleExtraPlay={handleToggleExtraPlay}
             onChangeDrawCount={handleChangeDrawCount}
@@ -118,10 +122,13 @@ export const FastPlayPage = ({
                 setEditingIndex(null);
                 clearSelections();
               } else {
-                handleAddLine();
+                // Ensure we're not editing when starting a new line
+                setIsEditing(false);
+                setEditingIndex(null);
+                clearSelections();
               }
             }}
-            currentLine={currentLine}
+            currentLine={isEditing ? currentLine : null} // Only pass currentLine when actually editing
           />
         </Card>
 

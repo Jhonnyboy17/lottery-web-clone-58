@@ -100,12 +100,20 @@ export const Cash5Page = ({
           <SavedLinesSection
             savedLines={savedLines}
             onRemoveLine={handleRemoveLine}
-            onEditLine={handleEditLine}
+            onEditLine={(index) => {
+              // When editing a line, make sure the new line template doesn't show selected numbers
+              handleEditLine(index);
+            }}
             extraPlayName={extraPlayName}
             editingIndex={editingIndex}
-            currentLine={currentLine}
+            currentLine={isEditing ? currentLine : null} // Only pass currentLine when actually editing
             onStartNewLine={() => {
               if (isEditing) {
+                setIsEditing(false);
+                setEditingIndex(null);
+                clearSelections();
+              } else {
+                // Ensure we're not editing when starting a new line
                 setIsEditing(false);
                 setEditingIndex(null);
                 clearSelections();

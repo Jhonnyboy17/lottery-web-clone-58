@@ -681,7 +681,8 @@ const PlayPage = ({
                           key={i} 
                           className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                         >
-                          {selectedNumbers[i] !== undefined ? (
+                          {/* Only show selected numbers when not editing an existing line */}
+                          {editingLineIndex === null && selectedNumbers[i] !== undefined ? (
                             <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center" style={{ backgroundColor: colorValue }}>
                               {selectedNumbers[i]}
                             </span>
@@ -692,7 +693,8 @@ const PlayPage = ({
                         <span 
                           className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
                         >
-                          {selectedPowerball !== null ? (
+                          {/* Only show selected powerball when not editing an existing line */}
+                          {editingLineIndex === null && selectedPowerball !== null ? (
                             <span className="bg-amber-500 text-white w-full h-full rounded-full flex items-center justify-center">
                               {selectedPowerball}
                             </span>
