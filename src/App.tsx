@@ -14,6 +14,9 @@ import ResultsHub from "./pages/ResultsHub";
 
 const queryClient = new QueryClient();
 
+// Add console log for debugging
+console.log("App component loaded");
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
