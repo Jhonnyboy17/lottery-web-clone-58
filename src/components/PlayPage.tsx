@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -220,51 +219,35 @@ const PlayPage = ({
     setIsAnimating(true);
     setIsEditingNumber(true);
     
-    // Clear any existing selections first to ensure a complete random selection
-    if (editMode && editingLineIndex !== null) {
-      setSelectedNumbers([]);
-      setSelectedPowerball(null);
-    }
-    
-    const numbersNeeded = maxRegularNumbers - (editMode ? 0 : selectedNumbers.length);
-    let randomNumbers: number[] = [];
-    
+    const currentSelectedCount = selectedNumbers.length;
+    const numbersNeeded = maxRegularNumbers - currentSelectedCount;
     if (numbersNeeded > 0) {
       const availableNumbers = regularNumbers.filter(num => !selectedNumbers.includes(num));
-      
-      for (let i = 0; i < (editMode ? maxRegularNumbers : numbersNeeded); i++) {
+      let newNumbers: number[] = [];
+      for (let i = 0; i < numbersNeeded; i++) {
         if (availableNumbers.length) {
           const randomIndex = Math.floor(Math.random() * availableNumbers.length);
-          randomNumbers.push(availableNumbers[randomIndex]);
+          newNumbers.push(availableNumbers[randomIndex]);
           availableNumbers.splice(randomIndex, 1);
         }
       }
-      
-      // Update the selectedNumbers state
-      if (editMode) {
-        // For edit mode, completely replace the selection
-        setSelectedNumbers(randomNumbers);
-      } else {
-        // For new line, add to existing selection
-        randomNumbers.forEach((num, index) => {
-          setTimeout(() => {
-            setSelectedNumbers(prev => [...prev, num]);
-            if (index === randomNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
+      newNumbers.forEach((num, index) => {
+        setTimeout(() => {
+          setSelectedNumbers(prev => [...prev, num]);
+          if (index === newNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
+            setTimeout(() => {
+              setIsRandomizing(false);
               setTimeout(() => {
-                setIsRandomizing(false);
-                setTimeout(() => {
-                  if (!editMode) {
-                    setIsEditingNumber(false);
-                  }
-                }, 300);
+                if (!editMode) {
+                  setIsEditingNumber(false);
+                }
               }, 300);
-            }
-          }, (index + 1) * 150);
-        });
-      }
+            }, 300);
+          }
+        }, (index + 1) * 150);
+      });
     }
-    
-    if (hasPowerball && (selectedPowerball === null || editMode)) {
+    if (hasPowerball && selectedPowerball === null) {
       setTimeout(() => {
         const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
         setSelectedPowerball(randomPowerball);
@@ -287,19 +270,7 @@ const PlayPage = ({
         }, 300);
       }, 300);
     }
-    
-    // If we're editing a line, update it in the savedLines array
-    if (editMode && editingLineIndex !== null) {
-      setTimeout(() => {
-        const updatedLines = [...savedLines];
-        updatedLines[editingLineIndex] = {
-          ...updatedLines[editingLineIndex],
-          numbers: randomNumbers,
-          powerball: hasPowerball ? Math.floor(Math.random() * totalPowerballNumbers) + 1 : null
-        };
-        setSavedLines(updatedLines);
-      }, (maxRegularNumbers + (hasPowerball ? 1 : 0)) * 150 + 100);
-    }
+    setEditingLineIndex(null);
   };
 
   const handleAddLine = () => {
@@ -699,7 +670,7 @@ const PlayPage = ({
                 <div className="mb-2">
                   <div 
                     className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
-                      editingLineIndex === null && selectedNumbers.length > 0 ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
+                      editingLineIndex === null ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
                     }`}
                     onClick={handleStartNewLine}
                   >
