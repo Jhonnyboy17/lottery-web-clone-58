@@ -219,35 +219,49 @@ const PlayPage = ({
     setIsAnimating(true);
     setIsEditingNumber(true);
     
-    const currentSelectedCount = selectedNumbers.length;
-    const numbersNeeded = maxRegularNumbers - currentSelectedCount;
+    // Clear any existing selections first to ensure a complete random selection
+    if (editMode && editingLineIndex !== null) {
+      setSelectedNumbers([]);
+      setSelectedPowerball(null);
+    }
+    
+    const numbersNeeded = maxRegularNumbers - (editMode ? 0 : selectedNumbers.length);
     if (numbersNeeded > 0) {
       const availableNumbers = regularNumbers.filter(num => !selectedNumbers.includes(num));
       let newNumbers: number[] = [];
-      for (let i = 0; i < numbersNeeded; i++) {
+      for (let i = 0; i < (editMode ? maxRegularNumbers : numbersNeeded); i++) {
         if (availableNumbers.length) {
           const randomIndex = Math.floor(Math.random() * availableNumbers.length);
           newNumbers.push(availableNumbers[randomIndex]);
           availableNumbers.splice(randomIndex, 1);
         }
       }
-      newNumbers.forEach((num, index) => {
-        setTimeout(() => {
-          setSelectedNumbers(prev => [...prev, num]);
-          if (index === newNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
-            setTimeout(() => {
-              setIsRandomizing(false);
+      
+      // Update the selectedNumbers state
+      if (editMode) {
+        // For edit mode, completely replace the selection
+        setSelectedNumbers(newNumbers);
+      } else {
+        // For new line, add to existing selection
+        newNumbers.forEach((num, index) => {
+          setTimeout(() => {
+            setSelectedNumbers(prev => [...prev, num]);
+            if (index === newNumbers.length - 1 && (!hasPowerball || selectedPowerball !== null)) {
               setTimeout(() => {
-                if (!editMode) {
-                  setIsEditingNumber(false);
-                }
+                setIsRandomizing(false);
+                setTimeout(() => {
+                  if (!editMode) {
+                    setIsEditingNumber(false);
+                  }
+                }, 300);
               }, 300);
-            }, 300);
-          }
-        }, (index + 1) * 150);
-      });
+            }
+          }, (index + 1) * 150);
+        });
+      }
     }
-    if (hasPowerball && selectedPowerball === null) {
+    
+    if (hasPowerball && (selectedPowerball === null || editMode)) {
       setTimeout(() => {
         const randomPowerball = Math.floor(Math.random() * totalPowerballNumbers) + 1;
         setSelectedPowerball(randomPowerball);
@@ -270,7 +284,19 @@ const PlayPage = ({
         }, 300);
       }, 300);
     }
-    setEditingLineIndex(null);
+    
+    // If we're editing a line, update it in the savedLines array
+    if (editMode && editingLineIndex !== null) {
+      setTimeout(() => {
+        const updatedLines = [...savedLines];
+        updatedLines[editingLineIndex] = {
+          ...updatedLines[editingLineIndex],
+          numbers: newNumbers,
+          powerball: hasPowerball ? Math.floor(Math.random() * totalPowerballNumbers) + 1 : null
+        };
+        setSavedLines(updatedLines);
+      }, (maxRegularNumbers + (hasPowerball ? 1 : 0)) * 150 + 100);
+    }
   };
 
   const handleAddLine = () => {
@@ -670,7 +696,7 @@ const PlayPage = ({
                 <div className="mb-2">
                   <div 
                     className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
-                      editingLineIndex === null ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
+                      editingLineIndex === null && selectedNumbers.length > 0 ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
                     }`}
                     onClick={handleStartNewLine}
                   >
