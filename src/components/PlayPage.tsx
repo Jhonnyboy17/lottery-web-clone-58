@@ -669,7 +669,7 @@ const PlayPage = ({
                 
                 <div className="mb-2">
                   <div 
-                    className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200"
+                    className="bg-gray-50 hover:bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-200"
                     onClick={handleStartNewLine}
                   >
                     <div className="flex items-center">
