@@ -329,9 +329,9 @@ const NumberSelection: React.FC<NumberSelectionProps> = ({
         <Button 
           onClick={handleRandomPick}
           variant="outline" 
-          className="text-xs border"
+          className="text-xs border bg-white hover:bg-opacity-10"
           style={{
-            backgroundColor: getLightColor(),
+            backgroundColor: "white",
             color: colorValue,
             borderColor: colorValue,
             opacity: isRandomizing ? 0.5 : 1,

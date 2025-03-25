@@ -39,9 +39,8 @@ const TicketOptions: React.FC<TicketOptionsProps> = ({
         <h3 className="text-lg font-semibold">Linha {String(lineCount).padStart(2, '0')}</h3>
         <Button 
           onClick={onQuickPick}
-          className="text-xs h-8 rounded-full"
+          className="text-xs h-8 rounded-full bg-white hover:bg-[#E6F7FF] transition-colors"
           style={{ 
-            backgroundColor: "#E6F7FF", 
             color: "#0EA5E9", 
             border: "1px solid #0EA5E9" 
           }}

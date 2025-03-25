@@ -433,11 +433,18 @@ const PlayPage = ({
               <Button 
                 onClick={handleQuickPick} 
                 disabled={isRandomizing} 
-                className="text-xs h-8 px-6" 
+                className="text-xs h-8 px-6 bg-white hover:bg-opacity-10 rounded-full"
                 style={{
-                  backgroundColor: lightColorValue,
                   color: colorValue,
-                  border: `1px solid ${colorValue}`
+                  border: `1px solid ${colorValue}`,
+                  backgroundColor: "white",
+                  transition: "background-color 0.3s",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.backgroundColor = lightColorValue;
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.backgroundColor = "white";
                 }}
               >
                 JOGADA ALEATÓRIA
@@ -662,3 +669,4 @@ const PlayPage = ({
 };
 
 export default PlayPage;
+
