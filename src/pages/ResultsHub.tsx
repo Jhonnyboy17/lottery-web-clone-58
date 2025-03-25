@@ -38,6 +38,16 @@ interface PowerballResult {
   jackpot?: string;
 }
 
+interface LuckyDayResult {
+  drawDate: string;
+  displayDate: string;
+  dayOfWeek: string;
+  numbers: string[];
+  bonusNumber: string;
+  lottoMillion1: string[];
+  lottoMillion2: string[];
+}
+
 const megaMillionsHistory: MegaMillionsResult[] = [
   {
     drawDate: "03/21/2025",
@@ -662,14 +672,110 @@ const gamesData: Game[] = [
   },
 ];
 
+const luckyDayHistory: LuckyDayResult[] = [
+  {
+    drawDate: "03/24/2025",
+    displayDate: "24 de março de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["9", "13", "16", "31", "36", "42"],
+    bonusNumber: "21",
+    lottoMillion1: ["12", "25", "30", "32", "34", "42"],
+    lottoMillion2: ["1", "4", "11", "29", "42", "49"]
+  },
+  {
+    drawDate: "03/22/2025",
+    displayDate: "22 de março de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["11", "20", "24", "27", "39", "48"],
+    bonusNumber: "12",
+    lottoMillion1: ["3", "8", "25", "28", "38", "40"],
+    lottoMillion2: ["11", "16", "18", "21", "24", "43"]
+  },
+  {
+    drawDate: "03/20/2025",
+    displayDate: "20 de março de 2025",
+    dayOfWeek: "Quinta-feira",
+    numbers: ["6", "12", "13", "20", "29", "31"],
+    bonusNumber: "15",
+    lottoMillion1: ["9", "14", "21", "25", "38", "43"],
+    lottoMillion2: ["2", "12", "14", "17", "39", "44"]
+  },
+  {
+    drawDate: "03/17/2025",
+    displayDate: "17 de março de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["21", "22", "26", "29", "42", "49"],
+    bonusNumber: "4",
+    lottoMillion1: ["6", "14", "17", "36", "40", "44"],
+    lottoMillion2: ["2", "5", "9", "14", "21", "48"]
+  },
+  {
+    drawDate: "03/15/2025",
+    displayDate: "15 de março de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["1", "8", "26", "36", "43", "49"],
+    bonusNumber: "5",
+    lottoMillion1: ["1", "9", "11", "24", "39", "49"],
+    lottoMillion2: ["31", "34", "36", "38", "43", "44"]
+  },
+  {
+    drawDate: "03/13/2025",
+    displayDate: "13 de março de 2025",
+    dayOfWeek: "Quinta-feira",
+    numbers: ["6", "20", "31", "32", "38", "45"],
+    bonusNumber: "16",
+    lottoMillion1: ["13", "17", "24", "33", "37", "39"],
+    lottoMillion2: ["2", "8", "11", "13", "29", "32"]
+  },
+  {
+    drawDate: "03/10/2025",
+    displayDate: "10 de março de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["20", "22", "28", "29", "32", "48"],
+    bonusNumber: "2",
+    lottoMillion1: ["16", "22", "40", "41", "44", "47"],
+    lottoMillion2: ["1", "5", "14", "31", "45", "46"]
+  },
+  {
+    drawDate: "03/08/2025",
+    displayDate: "8 de março de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["3", "5", "18", "22", "40", "44"],
+    bonusNumber: "16",
+    lottoMillion1: ["1", "11", "17", "35", "44", "46"],
+    lottoMillion2: ["3", "5", "19", "26", "35", "39"]
+  },
+  {
+    drawDate: "03/06/2025",
+    displayDate: "6 de março de 2025",
+    dayOfWeek: "Quinta-feira",
+    numbers: ["14", "22", "25", "26", "28", "37"],
+    bonusNumber: "8",
+    lottoMillion1: ["3", "11", "15", "23", "28", "37"],
+    lottoMillion2: ["2", "29", "38", "41", "42", "49"]
+  },
+  {
+    drawDate: "03/03/2025",
+    displayDate: "3 de março de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["9", "17", "25", "43", "45", "46"],
+    bonusNumber: "11",
+    lottoMillion1: ["1", "23", "30", "33", "41", "43"],
+    lottoMillion2: ["4", "31", "42", "44", "45", "50"]
+  }
+];
+
 const ResultsHub = () => {
   const [activeTab, setActiveTab] = useState("all-games");
   const [currentPage, setCurrentPage] = useState(1);
   const [megaMillionsPage, setMegaMillionsPage] = useState(1);
   const [powerballPage, setPowerballPage] = useState(1);
+  const [luckyDayPage, setLuckyDayPage] = useState(1);
+  
   const gamesPerPage = 5;
   const megaMillionsResultsPerPage = 5;
   const powerballResultsPerPage = 10;
+  const luckyDayResultsPerPage = 5;
   
   const indexOfLastGame = currentPage * gamesPerPage;
   const indexOfFirstGame = indexOfLastGame - gamesPerPage;
@@ -689,15 +795,25 @@ const ResultsHub = () => {
     indexOfLastPowerballResult
   );
   
+  const indexOfLastLuckyDayResult = luckyDayPage * luckyDayResultsPerPage;
+  const indexOfFirstLuckyDayResult = indexOfLastLuckyDayResult - luckyDayResultsPerPage;
+  const currentLuckyDayResults = luckyDayHistory.slice(
+    indexOfFirstLuckyDayResult, 
+    indexOfLastLuckyDayResult
+  );
+  
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const paginateMegaMillions = (pageNumber: number) => setMegaMillionsPage(pageNumber);
   const paginatePowerball = (pageNumber: number) => setPowerballPage(pageNumber);
+  const paginateLuckyDay = (pageNumber: number) => setLuckyDayPage(pageNumber);
   
   useEffect(() => {
     if (activeTab === "mega-millions") {
       setMegaMillionsPage(1);
     } else if (activeTab === "powerball") {
       setPowerballPage(1);
+    } else if (activeTab === "lucky-day") {
+      setLuckyDayPage(1);
     } else if (activeTab === "all-games") {
       setCurrentPage(1);
     }
@@ -1135,7 +1251,155 @@ const ResultsHub = () => {
             </Card>
           </TabsContent>
           
-          {["lucky-day", "pick4", "cash5"].map((tab) => (
+          <TabsContent value="lucky-day" className="mt-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-2xl font-bold text-lottery-navy">
+                    Draw Results Lucky Day Lotto
+                  </h3>
+                  <p className="text-gray-600">
+                    Click for more details on the prize payouts
+                  </p>
+                </div>
+                <div className="mt-4 md:mt-0 flex items-center">
+                  <img 
+                    src="/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png" 
+                    alt="Lucky Day Logo" 
+                    className="h-12 w-auto mr-4"
+                  />
+                  <Button variant="outline" className="flex items-center">
+                    <FileText className="mr-2 h-4 w-4" />
+                    Download PDF
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                {currentLuckyDayResults.map((result, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
+                      <div>
+                        <h4 className="text-lg font-bold text-lottery-navy">{result.dayOfWeek}</h4>
+                        <p className="text-gray-600 text-sm">{result.displayDate}</p>
+                      </div>
+                      <Button variant="ghost" className="text-blue-600 p-0 h-auto hover:bg-transparent hover:text-blue-800">
+                        <ChevronRight className="h-5 w-5" />
+                      </Button>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 mb-4 flex-wrap">
+                      {result.numbers.map((number, idx) => (
+                        <span 
+                          key={idx} 
+                          className="bg-[#8CD444] w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                        >
+                          {number}
+                        </span>
+                      ))}
+                      <span className="bg-amber-500 w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                        {result.bonusNumber}
+                      </span>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-3 rounded-lg">
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 mb-2">LOTTO MILLION 1</p>
+                        <div className="flex flex-wrap gap-2">
+                          {result.lottoMillion1.map((val, idx) => (
+                            <div
+                              key={idx}
+                              className="w-8 h-8 rounded-full bg-gray-200 text-gray-800 flex items-center justify-center font-bold text-sm"
+                            >
+                              {val}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium text-gray-700 mb-2">LOTTO MILLION 2</p>
+                        <div className="flex flex-wrap gap-2">
+                          {result.lottoMillion2.map((val, idx) => (
+                            <div
+                              key={idx}
+                              className="w-8 h-8 rounded-full bg-gray-200 text-gray-800 flex items-center justify-center font-bold text-sm"
+                            >
+                              {val}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <Pagination className="mt-6">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (luckyDayPage > 1) paginateLuckyDay(luckyDayPage - 1);
+                      }}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: Math.ceil(luckyDayHistory.length / luckyDayResultsPerPage) }).map((_, index) => (
+                    <PaginationItem key={index}>
+                      <PaginationLink 
+                        href="#" 
+                        isActive={luckyDayPage === index + 1}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          paginateLuckyDay(index + 1);
+                        }}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (luckyDayPage < Math.ceil(luckyDayHistory.length / luckyDayResultsPerPage)) {
+                          paginateLuckyDay(luckyDayPage + 1);
+                        }
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+              
+              <div className="text-center mt-8 text-sm text-gray-500">
+                <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/luckydaylotto" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
+                <p className="mt-1">Última atualização: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+              </div>
+            </div>
+            
+            <Card className="bg-gray-50 border border-gray-200">
+              <CardContent className="p-6">
+                <h4 className="text-lg font-bold text-lottery-navy mb-3">Como Jogar no Lucky Day Lotto</h4>
+                <p className="text-gray-700 mb-4">
+                  O sorteio do Lucky Day Lotto ocorre duas vezes por dia. Para jogar:
+                </p>
+                <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+                  <li>Escolha 5 números de 1 a 45</li>
+                  <li>Opcionalmente, adicione o Lucky Boost para aumentar seus prêmios</li>
+                  <li>Cada jogo custa R$ 15</li>
+                </ol>
+                <div className="mt-6">
+                  <Button className="bg-[#8CD444] hover:bg-[#8CD444]/90 text-white">
+                    Jogar Lucky Day Lotto Agora
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          {["pick4", "cash5"].map((tab) => (
             <TabsContent key={tab} value={tab} className="mt-6">
               <div className="bg-white p-6 rounded-lg shadow-sm">
                 <h3 className="text-xl font-bold text-center text-lottery-navy mb-4">
