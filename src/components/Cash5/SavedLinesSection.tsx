@@ -12,6 +12,7 @@ interface SavedLinesSectionProps {
   onChangeDrawCount?: (index: number, count: string) => void;
   editingIndex: number | null;
   onStartNewLine?: () => void;
+  currentLine?: NumberSelectionType;
 }
 
 const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
@@ -19,7 +20,8 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
   onRemoveLine,
   onEditLine,
   editingIndex,
-  onStartNewLine
+  onStartNewLine,
+  currentLine
 }) => {
   return (
     <div className="bg-gray-50 p-4">
@@ -82,7 +84,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                     key={i} 
                     className="bg-white border border-gray-200 text-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                   >
-                    ?
+                    {currentLine && currentLine.digits[i] !== null ? currentLine.digits[i] : '?'}
                   </span>
                 ))}
               </div>

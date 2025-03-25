@@ -8,9 +8,16 @@ interface SavedLinesProps {
   onRemoveLine: (index: number) => void;
   onEditLine: (index: number) => void;
   editingIndex?: number | null;
+  currentLine?: NumberSelectionType;
 }
 
-const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine, onEditLine, editingIndex = null }) => {
+const SavedLines: React.FC<SavedLinesProps> = ({ 
+  savedLines, 
+  onRemoveLine, 
+  onEditLine, 
+  editingIndex = null, 
+  currentLine 
+}) => {
   if (savedLines.length === 0) {
     return <p className="text-sm text-gray-500 mb-3">Nenhuma linha adicionada ainda</p>;
   }
@@ -65,6 +72,25 @@ const SavedLines: React.FC<SavedLinesProps> = ({ savedLines, onRemoveLine, onEdi
           </div>
         </div>
       ))}
+      
+      {currentLine && (
+        <div className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200 mb-2">
+          <div className="flex items-center">
+            <span className="text-gray-500 font-medium w-6 mr-2">
+              {String(savedLines.length + 1).padStart(2, '0')}
+            </span>
+            {currentLine.digits.map((digit, i) => (
+              <span 
+                key={i} 
+                className="bg-white border border-gray-200 text-gray-500 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+              >
+                {digit !== null ? digit : '?'}
+              </span>
+            ))}
+          </div>
+          <div className="w-4"></div>
+        </div>
+      )}
     </>
   );
 };

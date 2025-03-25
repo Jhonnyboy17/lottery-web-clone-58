@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -615,7 +614,7 @@ const PlayPage = ({
                             {num}
                           </span>
                         ))}
-                        {hasPowerball && (
+                        {hasPowerball && line.powerball && (
                           <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
                             {line.powerball}
                           </span>
@@ -649,12 +648,12 @@ const PlayPage = ({
                           key={i} 
                           className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                         >
-                          ?
+                          {selectedNumbers[i] !== undefined ? selectedNumbers[i] : '?'}
                         </span>
                       ))}
                       {hasPowerball && (
                         <span className="bg-gray-100 text-gray-400 rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
-                          ?
+                          {selectedPowerball !== null ? selectedPowerball : '?'}
                         </span>
                       )}
                     </div>
