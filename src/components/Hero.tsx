@@ -1,56 +1,90 @@
 
-import { Link } from 'react-router-dom';
-import { Button } from './ui/button';
+import { useState, useEffect, useRef } from 'react';
+
+interface Slide {
+  id: number;
+  bgImage?: string;
+  bgColor?: string;
+}
+
+const slides: Slide[] = [
+  {
+    id: 1,
+    bgImage: "/lovable-uploads/c2459874-7121-4fec-a9ea-bd77c1ce0ecc.png",
+  },
+  {
+    id: 2,
+    bgColor: "bg-gradient-to-r from-lottery-navy to-lottery-pink",
+  },
+  {
+    id: 3,
+    bgColor: "bg-gradient-to-r from-lottery-purple to-lottery-pink",
+  },
+];
 
 const Hero = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [isAutoPlay, setIsAutoPlay] = useState(true);
+
+  const startAutoSlide = () => {
+    if (!isAutoPlay) return;
+    
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+    
+    timerRef.current = setInterval(() => {
+      setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 5000);
+  };
+
+  useEffect(() => {
+    if (isAutoPlay) {
+      startAutoSlide();
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isAutoPlay]);
+
+  const handleSlideClick = () => {
+    // Move to the next slide when the current slide is clicked
+    setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    
+    // Reset autoplay timer
+    setIsAutoPlay(false);
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+    
+    // Restart autoplay after manual navigation
+    setIsAutoPlay(true);
+  };
+
   return (
-    <div className="hero-banner w-full h-[400px] rounded-xl shadow-lg overflow-hidden relative">
-      <div className="w-full h-full bg-gradient-to-r from-lottery-purple to-lottery-pink relative">
-        <div className="container mx-auto h-full flex items-center justify-between px-4">
-          {/* Left side with person image */}
-          <div className="hidden md:block w-1/3">
-            <img
-              src="/lovable-uploads/59487644-35d4-4cbe-b9d9-eba3b661a20b.png"
-              alt="Man using smartphone"
-              className="h-[400px] object-contain object-left"
-            />
-          </div>
-          
-          {/* Right side with text and button */}
-          <div className="flex flex-col items-end justify-center w-full md:w-2/3 space-y-6 text-right">
-            {/* Logo badges */}
-            <div className="absolute top-6 left-6 flex space-x-2">
-              <div className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xs font-bold">18</div>
-              <div className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xs font-bold">21</div>
-              <div className="bg-white rounded-full w-10 h-10 flex items-center justify-center text-xs font-bold">30</div>
-            </div>
-            
-            {/* Main heading with colored markers */}
-            <div className="text-4xl md:text-5xl font-bold text-white">
-              <div className="flex items-center justify-end">
-                <div className="text-[#ff4d4d] mr-2">✓</div>
-                Jogue em Real
-              </div>
-              <div className="flex items-center justify-end">
-                Ganhe em Dolar
-                <div className="text-[#4dff4d] ml-2">↗</div>
-              </div>
-            </div>
-            
-            {/* CTA Button */}
-            <Link to="/#lottery-games">
-              <Button className="bg-black hover:bg-black/80 text-white px-8 py-6 rounded-full text-lg font-bold">
-                JOGAR AGORA
-              </Button>
-            </Link>
-            
-            {/* Promotion banner */}
-            <div className="bg-black text-white px-4 py-2 font-semibold">
-              -50% taxa na primeira compra!
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="hero-slider w-full overflow-hidden mt-20 relative">
+      {slides.map((slide, index) => (
+        <div
+          key={slide.id}
+          className={`slide ${
+            index === currentSlide ? "active" : ""
+          } ${slide.bgColor || ""} rounded-xl shadow-lg h-full cursor-pointer`}
+          onClick={handleSlideClick}
+          role="button"
+          tabIndex={0}
+          aria-label={`Slide ${index + 1}, click to advance`}
+          style={slide.bgImage ? { 
+            backgroundImage: `url(${slide.bgImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          } : {}}
+        />
+      ))}
     </div>
   );
 };
