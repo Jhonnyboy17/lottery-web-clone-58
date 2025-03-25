@@ -76,7 +76,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
         </div>
       ))}
       
-      {/* Always show the current line template */}
+      {/* Always show the current line template - Force display by removing any conditions */}
       <div className="bg-blue-50 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-blue-100 transition-colors border border-gray-200 mb-2">
         <div className="flex items-center">
           <span className="text-gray-500 font-medium w-6 mr-2">
