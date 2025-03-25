@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
@@ -25,6 +24,16 @@ interface MegaMillionsResult {
   dayOfWeek: string;
   numbers: string[];
   megaBall: string;
+  multiplier: string;
+  jackpot?: string;
+}
+
+interface PowerballResult {
+  drawDate: string;
+  displayDate: string;
+  dayOfWeek: string;
+  numbers: string[];
+  powerball: string;
   multiplier: string;
   jackpot?: string;
 }
@@ -256,6 +265,89 @@ const megaMillionsHistory: MegaMillionsResult[] = [
   }
 ];
 
+const powerballHistory: PowerballResult[] = [
+  {
+    drawDate: "03/24/2025",
+    displayDate: "24 de março de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["6", "23", "35", "36", "47"],
+    powerball: "12",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "03/22/2025",
+    displayDate: "22 de março de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["6", "7", "25", "46", "57"],
+    powerball: "12",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "03/19/2025",
+    displayDate: "19 de março de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["8", "11", "21", "49", "59"],
+    powerball: "15",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "03/17/2025",
+    displayDate: "17 de março de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["11", "18", "23", "38", "60"],
+    powerball: "9",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "03/15/2025",
+    displayDate: "15 de março de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["12", "28", "33", "36", "54"],
+    powerball: "5",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "03/12/2025",
+    displayDate: "12 de março de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["11", "13", "28", "51", "58"],
+    powerball: "1",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "03/10/2025",
+    displayDate: "10 de março de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["17", "40", "47", "50", "55"],
+    powerball: "6",
+    multiplier: "x2"
+  },
+  {
+    drawDate: "03/08/2025",
+    displayDate: "8 de março de 2025",
+    dayOfWeek: "Sábado",
+    numbers: ["2", "4", "16", "23", "63"],
+    powerball: "13",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "03/05/2025",
+    displayDate: "5 de março de 2025",
+    dayOfWeek: "Quarta-feira",
+    numbers: ["24", "28", "40", "63", "65"],
+    powerball: "20",
+    multiplier: "x3"
+  },
+  {
+    drawDate: "03/03/2025",
+    displayDate: "3 de março de 2025",
+    dayOfWeek: "Segunda-feira",
+    numbers: ["18", "20", "50", "52", "56"],
+    powerball: "20",
+    multiplier: "x2"
+  }
+];
+
 const gamesData: Game[] = [
   {
     id: 1,
@@ -310,8 +402,10 @@ const ResultsHub = () => {
   const [activeTab, setActiveTab] = useState("all-games");
   const [currentPage, setCurrentPage] = useState(1);
   const [megaMillionsPage, setMegaMillionsPage] = useState(1);
+  const [powerballPage, setPowerballPage] = useState(1);
   const gamesPerPage = 5;
   const megaMillionsResultsPerPage = 5;
+  const powerballResultsPerPage = 5;
   
   const indexOfLastGame = currentPage * gamesPerPage;
   const indexOfFirstGame = indexOfLastGame - gamesPerPage;
@@ -324,12 +418,22 @@ const ResultsHub = () => {
     indexOfLastMegaMillionsResult
   );
   
+  const indexOfLastPowerballResult = powerballPage * powerballResultsPerPage;
+  const indexOfFirstPowerballResult = indexOfLastPowerballResult - powerballResultsPerPage;
+  const currentPowerballResults = powerballHistory.slice(
+    indexOfFirstPowerballResult, 
+    indexOfLastPowerballResult
+  );
+  
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const paginateMegaMillions = (pageNumber: number) => setMegaMillionsPage(pageNumber);
+  const paginatePowerball = (pageNumber: number) => setPowerballPage(pageNumber);
   
   useEffect(() => {
     if (activeTab === "mega-millions") {
       setMegaMillionsPage(1);
+    } else if (activeTab === "powerball") {
+      setPowerballPage(1);
     } else if (activeTab === "all-games") {
       setCurrentPage(1);
     }
@@ -644,7 +748,130 @@ const ResultsHub = () => {
             </Card>
           </TabsContent>
           
-          {["powerball", "lucky-day", "pick4", "cash5"].map((tab) => (
+          <TabsContent value="powerball" className="mt-6">
+            <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                <div>
+                  <h3 className="text-2xl font-bold text-lottery-navy">
+                    Draw Results Powerball
+                  </h3>
+                  <p className="text-gray-600">
+                    Click for more details on the prize payouts
+                  </p>
+                </div>
+                <div className="mt-4 md:mt-0 flex items-center">
+                  <img 
+                    src="/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png" 
+                    alt="Powerball Logo" 
+                    className="h-12 w-auto mr-4"
+                  />
+                  <Button variant="outline" className="flex items-center">
+                    <FileText className="mr-2 h-4 w-4" />
+                    Download PDF
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                {currentPowerballResults.map((result, index) => (
+                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
+                      <div>
+                        <h4 className="text-lg font-bold text-lottery-navy">{result.dayOfWeek}</h4>
+                        <p className="text-gray-600 text-sm">{result.displayDate}</p>
+                      </div>
+                      <Button variant="ghost" className="text-blue-600 p-0 h-auto hover:bg-transparent hover:text-blue-800">
+                        <ChevronRight className="h-5 w-5" />
+                      </Button>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                      {result.numbers.map((number, idx) => (
+                        <span 
+                          key={idx} 
+                          className="bg-[#ff5247] w-9 h-9 rounded-full flex items-center justify-center text-white font-bold text-sm"
+                        >
+                          {number}
+                        </span>
+                      ))}
+                      <span className="bg-amber-400 w-9 h-9 rounded-full flex items-center justify-center text-black font-bold text-sm">
+                        {result.powerball}
+                      </span>
+                      <span className="ml-2 text-sm">
+                        {result.multiplier}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <Pagination className="mt-6">
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (powerballPage > 1) paginatePowerball(powerballPage - 1);
+                      }}
+                    />
+                  </PaginationItem>
+                  {Array.from({ length: Math.ceil(powerballHistory.length / powerballResultsPerPage) }).map((_, index) => (
+                    <PaginationItem key={index}>
+                      <PaginationLink 
+                        href="#" 
+                        isActive={powerballPage === index + 1}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          paginatePowerball(index + 1);
+                        }}
+                      >
+                        {index + 1}
+                      </PaginationLink>
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext 
+                      href="#" 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (powerballPage < Math.ceil(powerballHistory.length / powerballResultsPerPage)) {
+                          paginatePowerball(powerballPage + 1);
+                        }
+                      }}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+              
+              <div className="text-center mt-8 text-sm text-gray-500">
+                <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/powerball" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
+                <p className="mt-1">Última atualização: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
+              </div>
+            </div>
+            
+            <Card className="bg-gray-50 border border-gray-200">
+              <CardContent className="p-6">
+                <h4 className="text-lg font-bold text-lottery-navy mb-3">Como Jogar na Powerball</h4>
+                <p className="text-gray-700 mb-4">
+                  O sorteio da Powerball ocorre segundas, quartas e sábados. Para jogar:
+                </p>
+                <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+                  <li>Escolha 5 números de 1 a 69</li>
+                  <li>Escolha 1 número Powerball de 1 a 26</li>
+                  <li>Opcionalmente, adicione o Power Play para multiplicar seus prêmios (exceto o jackpot)</li>
+                  <li>Cada jogo custa R$ 15</li>
+                </ol>
+                <div className="mt-6">
+                  <Button className="bg-[#ff5247] hover:bg-[#ff5247]/90 text-white">
+                    Jogar Powerball Agora
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          {["lucky-day", "pick4", "cash5"].map((tab) => (
             <TabsContent key={tab} value={tab} className="mt-6">
               <div className="bg-white p-6 rounded-lg shadow-sm">
                 <h3 className="text-xl font-bold text-center text-lottery-navy mb-4">

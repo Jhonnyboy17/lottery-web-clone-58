@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,7 @@ const games: NumbersGame[] = [
   {
     id: 1,
     name: "Mega Millions",
-    logo: "https://via.placeholder.com/120x50/FFD100/000000?text=MEGA+MILLIONS",
+    logo: "/lovable-uploads/bc3feaa6-86f8-46cb-b245-5467ab0e5fb4.png",
     date: "Sexta-feira, 21 de março de 2025",
     numbers: [
       { value: "15", color: "bg-blue-500" },
@@ -41,15 +42,15 @@ const games: NumbersGame[] = [
   {
     id: 2,
     name: "Powerball",
-    logo: "https://via.placeholder.com/120x50/FF5247/FFFFFF?text=POWERBALL",
-    date: "Quarta-feira, 19 de março de 2025",
+    logo: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
+    date: "Segunda-feira, 24 de março de 2025",
     numbers: [
-      { value: "8", color: "bg-blue-500" },
-      { value: "11", color: "bg-blue-500" },
-      { value: "21", color: "bg-blue-500" },
-      { value: "49", color: "bg-blue-500" },
-      { value: "59", color: "bg-blue-500" },
-      { value: "15", color: "bg-red-500", isSpecial: true },
+      { value: "6", color: "bg-red-500" },
+      { value: "23", color: "bg-red-500" },
+      { value: "35", color: "bg-red-500" },
+      { value: "36", color: "bg-red-500" },
+      { value: "47", color: "bg-red-500" },
+      { value: "12", color: "bg-amber-500", isSpecial: true },
       { value: "x2", color: "bg-gray-200", isSpecial: true },
     ],
   },
