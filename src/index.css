@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap');
 
 @tailwind base;
@@ -35,6 +36,9 @@
     --ring: 336 79% 47%;
 
     --radius: 0.5rem;
+    
+    /* Navbar dark purple background for both light and dark modes */
+    --navbar-bg: 263 54% 13%;
   }
 
   .dark {
@@ -193,4 +197,9 @@
 
 .bg-purple-gradient-vertical {
   background: linear-gradient(to bottom, #1a1433, #241b35);
+}
+
+/* Add a navbar specific background color class */
+.bg-navbar {
+  background-color: #1a0f36;
 }

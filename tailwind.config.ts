@@ -70,10 +70,11 @@ export default {
           navy: '#2d224c',
           purple: '#372e48',
           gray: '#f6f6f7',
+          navbar: '#1a0f36', // Added the dark purple navbar color
           dark: {
             bg: '#1A1F2C',
             card: '#221F26',
-            nav: '#222222',
+            nav: '#1a0f36',  // Updated to match the navbar dark purple
           }
         }
       },

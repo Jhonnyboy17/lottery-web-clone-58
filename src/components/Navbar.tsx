@@ -60,9 +60,8 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
-  const navbarClasses = isPlayPage 
-    ? "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-2 shadow-md dark:bg-gradient-to-r dark:from-[#1a1433] dark:via-[#241b35] dark:to-[#1a1433]" 
-    : "fixed top-0 left-0 right-0 z-50 bg-lottery-pink py-3 dark:bg-gradient-to-r dark:from-[#1a1433] dark:via-[#241b35] dark:to-[#1a1433]";
+  // Updated navbar class to use a fixed dark purple background for both light and dark modes
+  const navbarClasses = "fixed top-0 left-0 right-0 z-50 bg-[#1a0f36] py-3";
 
   return (
     <header className={navbarClasses}>
@@ -138,52 +137,52 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-white dark:bg-gradient-to-b dark:from-[#1a1433] dark:to-[#241b35] animate-fade-in">
+        <div className="md:hidden bg-[#1a0f36] animate-fade-in">
           <div className="px-4 py-2 space-y-1">
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-purple-700/50"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
               onClick={scrollToGames}
             >
               Loterias
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-purple-700/50"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
               onClick={navigateToResultsHub}
             >
               Resultados
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-purple-700/50"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
             >
               Ganhadores
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-purple-700/50"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
               onClick={navigateToDuvidas}
             >
               Duvidas
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-purple-700/50"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
             >
               Assistência
             </Button>
-            <Separator className="my-2" />
+            <Separator className="my-2 bg-white/20" />
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-purple-700/50"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
             >
               <Search className="h-4 w-4 mr-2" />
               Buscar
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-lottery-pink hover:text-lottery-pink/80 hover:bg-gray-100 dark:text-white dark:hover:bg-purple-700/50"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
               Carrinho
