@@ -11,9 +11,8 @@ const Duvidas = () => {
       <main className="pt-28 pb-12">
         <div className="container mx-auto px-4">
           {/* Header Section */}
-          <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-6">
-            Tudo sobre as loterias na TheLotter
-          </h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-center text-gray-900 mb-6">Tudo sobre as loterias na LotoEasy
+        </h1>
 
           {/* Introduction text */}
           <div className="max-w-4xl mx-auto mb-10 text-base text-gray-700 leading-relaxed">
