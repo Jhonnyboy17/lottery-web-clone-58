@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
@@ -60,7 +59,6 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
-  // Updated navbar class to use a fixed dark purple background for both light and dark modes
   const navbarClasses = "fixed top-0 left-0 right-0 z-50 bg-[#1a0f36] py-3";
 
   return (
@@ -69,7 +67,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
             <img
-              src="/lovable-uploads/833d0a13-db22-4231-9655-778c7c4baa2c.png"
+              src="/lovable-uploads/49af7c32-e87d-4f46-a005-b535bbdf18ed.png"
               alt="LotoEasy Logo"
               className="h-16 w-auto"
             />
