@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
@@ -77,29 +78,29 @@ const Navbar = () => {
             <div className="flex items-center space-x-8">
               <button 
                 onClick={scrollToGames}
-                className="text-white hover:text-white/80 transition-colors font-medium"
+                className="text-white hover:text-white/80 transition-colors font-medium font-nunito"
               >
                 Loterias
               </button>
               <button 
                 onClick={navigateToResultsHub}
-                className="text-white hover:text-white/80 transition-colors font-medium"
+                className="text-white hover:text-white/80 transition-colors font-medium font-nunito"
               >
                 Resultados
               </button>
               <button 
-                className="text-white hover:text-white/80 transition-colors font-medium"
+                className="text-white hover:text-white/80 transition-colors font-medium font-nunito"
               >
                 Ganhadores
               </button>
               <button 
                 onClick={navigateToDuvidas}
-                className="text-white hover:text-white/80 transition-colors font-medium"
+                className="text-white hover:text-white/80 transition-colors font-medium font-nunito"
               >
                 Duvidas
               </button>
               <button 
-                className="text-white hover:text-white/80 transition-colors font-medium"
+                className="text-white hover:text-white/80 transition-colors font-medium font-nunito"
               >
                 Assistência
               </button>
@@ -139,48 +140,48 @@ const Navbar = () => {
           <div className="px-4 py-2 space-y-1">
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d] font-nunito"
               onClick={scrollToGames}
             >
               Loterias
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d] font-nunito"
               onClick={navigateToResultsHub}
             >
               Resultados
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d] font-nunito"
             >
               Ganhadores
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d] font-nunito"
               onClick={navigateToDuvidas}
             >
               Duvidas
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d] font-nunito"
             >
               Assistência
             </Button>
             <Separator className="my-2 bg-white/20" />
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d] font-nunito"
             >
               <Search className="h-4 w-4 mr-2" />
               Buscar
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d] font-nunito"
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
               Carrinho

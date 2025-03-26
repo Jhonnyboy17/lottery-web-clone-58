@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -70,17 +69,18 @@ export default {
           navy: '#2d224c',
           purple: '#372e48',
           gray: '#f6f6f7',
-          navbar: '#1a0f36', // Added the dark purple navbar color
+          navbar: '#1a0f36',
           dark: {
             bg: '#1A1F2C',
             card: '#221F26',
-            nav: '#1a0f36',  // Updated to match the navbar dark purple
+            nav: '#1a0f36',
           }
         }
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         heading: ['Montserrat', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
