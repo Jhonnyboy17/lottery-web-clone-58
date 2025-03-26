@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
@@ -69,9 +70,9 @@ const Navbar = () => {
         <div className="flex items-center justify-between">
           <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
             <img
-              src="/lovable-uploads/408a1fb9-fd14-4d32-bf8a-2021e46fb734.png"
+              src="/lovable-uploads/833d0a13-db22-4231-9655-778c7c4baa2c.png"
               alt="LotoEasy Logo"
-              className="h-24 w-auto"
+              className="h-16 w-auto"
             />
           </Link>
 
