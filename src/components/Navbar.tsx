@@ -59,7 +59,7 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
-  const navbarClasses = "fixed top-0 left-0 right-0 z-50 bg-[#1a0f36]/90 py-3";
+  const navbarClasses = "fixed top-0 left-0 right-0 z-50 bg-[#1a0f36]/97 py-3";
 
   return (
     <header className={navbarClasses}>
@@ -135,52 +135,52 @@ const Navbar = () => {
       </div>
 
       {isOpen && (
-        <div className="md:hidden bg-[#1a0f36]/90 animate-fade-in">
+        <div className="md:hidden bg-[#1a0f36]/97 animate-fade-in">
           <div className="px-4 py-2 space-y-1">
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/90"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/97"
               onClick={scrollToGames}
             >
               Loterias
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/90"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/97"
               onClick={navigateToResultsHub}
             >
               Resultados
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/90"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/97"
             >
               Ganhadores
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/90"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/97"
               onClick={navigateToDuvidas}
             >
               Duvidas
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/90"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/97"
             >
               Assistência
             </Button>
             <Separator className="my-2 bg-white/20" />
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/90"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/97"
             >
               <Search className="h-4 w-4 mr-2" />
               Buscar
             </Button>
             <Button
               variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/90"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/97"
             >
               <ShoppingCart className="h-4 w-4 mr-2" />
               Carrinho
