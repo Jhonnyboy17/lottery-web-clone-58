@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -70,7 +69,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   className = "" 
 }) => {
   // Get the background color for the current game type
-  const bgColor = gameColors[gameType] || "bg-purple-800";
+  const bgColor = gameColors[gameType] || "bg-purple-600"; // Default to purple if gameType not found
   const logoSrc = gameLogos[gameType];
   const formattedDate = getFormattedDate(date);
   const gamePath = getGamePath(gameType);
@@ -98,7 +97,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
             <div 
               key={index}
               className="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-sm"
-              style={{ color: `var(--${colorName.replace('-', '-')})` }}
+              style={{ color: `rgb(var(--${colorName.replace('-', '-')}))` }}
             >
               {number}
             </div>
@@ -114,8 +113,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
         <div className="mt-auto space-y-2">
           <Button 
             asChild
-            className="w-full bg-white hover:bg-opacity-90 font-medium"
-            style={{ color: `var(--${colorName.replace('-', '-')})` }}
+            className="w-full bg-white hover:bg-opacity-90 font-medium text-purple-600"
           >
             <Link to={gamePath}>
               VER TODOS
