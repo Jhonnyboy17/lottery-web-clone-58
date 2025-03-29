@@ -30,7 +30,7 @@ const App = () => (
             path="/play-mega-millions" 
             element={
               <PlayPage 
-                logoSrc="/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png"
+                logoSrc="/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png"
                 jackpotAmount="344.000.000"
                 basePrice={15}
                 primaryColor="blue-600"

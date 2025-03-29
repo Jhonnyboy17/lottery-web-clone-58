@@ -35,7 +35,7 @@ const numberTextColors: Record<string, string> = {
 };
 
 const gameLogos: Record<string, string> = {
-  "Mega-Sena": "/lovable-uploads/8b7ebe33-b3af-45c9-b98b-7d363835a20d.png", // Mega Millions logo
+  "Mega-Sena": "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png", // Updated Mega Millions logo
   "Quina": "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png", // Powerball logo
   "Lotofácil": "/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png", // Illinois Lotto logo
   "Lotomania": "/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png", // Lucky Day logo

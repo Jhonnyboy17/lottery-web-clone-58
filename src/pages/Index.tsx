@@ -10,7 +10,7 @@ import { ChevronRight } from "lucide-react";
 const lotteryGames = [
   {
     id: 1,
-    logoSrc: "/lovable-uploads/bc3feaa6-86f8-46cb-b245-5467ab0e5fb4.png",
+    logoSrc: "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
     amount: "344,000,000",
     unit: "",
     cashOption: "161.5 MILLION",
