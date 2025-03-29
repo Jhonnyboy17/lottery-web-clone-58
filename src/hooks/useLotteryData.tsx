@@ -41,10 +41,10 @@ const fetchLotteryData = async (): Promise<LotteryGame[]> => {
     {
       id: 2,
       logoSrc: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
-      amount: "135,000,000", // Valor do Powerball
+      amount: "209,000,000", // Valor atualizado do Powerball conforme link https://www.lotterypost.com/results/il/powerball
       unit: "",
-      cashOption: "64.9 MILLION",
-      nextDrawing: "SEGUNDA, ABR 08, 9:59 PM", 
+      cashOption: "99.6 MILLION",
+      nextDrawing: "QUARTA, ABR 10, 9:59 PM", // Data atualizada do próximo sorteio Powerball
       backgroundColor: "bg-[#ff5247]",
       showPlayButton: true,
       route: "/play-powerball",
