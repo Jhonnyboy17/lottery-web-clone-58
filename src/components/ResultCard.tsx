@@ -31,16 +31,6 @@ const gameLogos: Record<string, string> = {
   "Pick 3": "/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png" // Pick 3 logo (using same as Pick 4 for now)
 };
 
-// Define text colors to ensure contrast with the background
-const textColors: Record<string, string> = {
-  "green-600": "#166534",    // Dark green for text on white buttons
-  "purple-600": "#7e22ce",   // Dark purple for text on white buttons
-  "lime-500": "#3f6212",     // Dark lime for text on white buttons
-  "orange-500": "#c2410c",   // Dark orange for text on white buttons
-  "amber-500": "#92400e",    // Dark amber for text on white buttons
-  "red-500": "#b91c1c"       // Dark red for text on white buttons
-};
-
 const getFormattedDate = (dateString: string) => {
   const days = ["DOMINGO", "SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA", "SÁBADO"];
   const months = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
@@ -87,10 +77,9 @@ const ResultCard: React.FC<ResultCardProps> = ({
   
   // Extract the color name without the 'bg-' prefix for text color
   const colorName = bgColor.replace('bg-', '');
-  const textColor = textColors[colorName] || "#4c1d95"; // Default to dark purple if not found
   
   return (
-    <Card className={`overflow-hidden border-0 shadow-lg !${bgColor} ${className}`}>
+    <Card className={`overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
       <div className="p-5 flex flex-col h-full text-white">
         {/* Logo */}
         <div className="flex justify-center mb-3 h-12">
@@ -109,7 +98,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
             <div 
               key={index}
               className="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-sm"
-              style={{ color: textColor }}
+              style={{ color: `var(--${colorName.replace('-', '-')})` }}
             >
               {number}
             </div>
@@ -126,7 +115,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
           <Button 
             asChild
             className="w-full bg-white hover:bg-opacity-90 font-medium"
-            style={{ color: textColor }}
+            style={{ color: `var(--${colorName.replace('-', '-')})` }}
           >
             <Link to={gamePath}>
               VER TODOS
