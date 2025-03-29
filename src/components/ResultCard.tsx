@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -90,14 +91,15 @@ const ResultCard: React.FC<ResultCardProps> = ({
   
   const limitedCurrentNumbers = getLimitedNumbers(gameType, numbers);
   
+  // Limit history to the last 3 games (including current)
   const allHistory = [
     { date, numbers: limitedCurrentNumbers },
-    ...(history || []).slice(0, 3)
+    ...(history || []).slice(0, 2) // Only take 2 previous games to make 3 total
   ];
   
   return (
-    <Card className={`overflow-hidden border-0 shadow-lg max-w-md w-full ${bgColor} ${className}`}>
-      <div className="p-5 flex flex-col h-full min-h-[400px] text-white">
+    <Card className={`overflow-hidden border-0 shadow-lg max-w-xl w-full ${bgColor} ${className}`}>
+      <div className="p-4 flex flex-col h-full min-h-[350px] text-white">
         <div className="flex justify-center mb-3 h-12">
           {logoSrc && <img src={logoSrc} alt={gameType} className="h-full object-contain" />}
         </div>
@@ -107,11 +109,11 @@ const ResultCard: React.FC<ResultCardProps> = ({
         </div>
         
         {allHistory.map((item, historyIndex) => (
-          <div key={historyIndex} className={`${historyIndex > 0 ? 'border-t border-white/20' : ''} pt-3 pb-3`}>
+          <div key={historyIndex} className={`${historyIndex > 0 ? 'border-t border-white/20' : ''} pt-2 pb-2`}>
             <div className="font-semibold text-sm">{getFormattedWeekday(item.date)}</div>
             <div className="text-xs text-white/80 mb-2">{formatDateAsDayMonthYear(item.date)}</div>
             
-            <div className="flex flex-wrap gap-2 justify-start mb-4">
+            <div className="flex flex-wrap gap-2 justify-start mb-3">
               {getLimitedNumbers(gameType, item.numbers).map((number, index) => (
                 <div 
                   key={index}
@@ -135,7 +137,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
             className="w-full bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white text-sm py-2 h-auto"
           >
             <Link to={gamePath}>
-              View all results
+              Ver todos os resultados
             </Link>
           </Button>
           
@@ -144,7 +146,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
             className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white border border-white/20 text-sm py-2 h-auto"
           >
             <Link to={gamePath}>
-              Check your numbers
+              Confira seus números
             </Link>
           </Button>
         </div>
