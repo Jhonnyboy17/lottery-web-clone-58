@@ -105,25 +105,25 @@ const ResultCard: React.FC<ResultCardProps> = ({
   
   return (
     <Card className={`overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
-      <div className="p-2 flex flex-col h-full text-white">
+      <div className="p-4 flex flex-col h-full min-h-[380px] text-white">
         {/* Logo */}
-        <div className="flex justify-center mb-1 h-8">
+        <div className="flex justify-center mb-2 h-10">
           {logoSrc && <img src={logoSrc} alt={gameType} className="h-full object-contain" />}
         </div>
         
         {/* Jackpot Pending or Main Info */}
-        <div className="text-center mb-1">
+        <div className="text-center mb-2">
           <div className="text-sm font-bold">JACKPOT PENDING</div>
         </div>
         
         {/* Game History */}
         {allHistory.map((item, historyIndex) => (
-          <div key={historyIndex} className={`${historyIndex > 0 ? 'border-t border-white/20' : ''} pt-1.5 pb-1`}>
+          <div key={historyIndex} className={`${historyIndex > 0 ? 'border-t border-white/20' : ''} pt-2.5 pb-2`}>
             <div className="font-semibold text-sm">{getFormattedWeekday(item.date)}</div>
-            <div className="text-xs text-white/80 mb-1">{formatDateAsDayMonthYear(item.date)}</div>
+            <div className="text-xs text-white/80 mb-2">{formatDateAsDayMonthYear(item.date)}</div>
             
             {/* Numbers for this draw - Increased size of balls and text */}
-            <div className="flex flex-wrap gap-1 justify-start mb-1.5">
+            <div className="flex flex-wrap gap-1.5 justify-start mb-3">
               {getLimitedNumbers(gameType, item.numbers).map((number, index) => (
                 <div 
                   key={index}
@@ -142,7 +142,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
         ))}
         
         {/* Buttons */}
-        <div className="mt-auto flex gap-2 border-t border-white/20 pt-1.5">
+        <div className="mt-auto flex gap-2 border-t border-white/20 pt-2.5">
           <Button 
             asChild
             className="flex-1 bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white text-xs px-2 py-1 h-auto"
