@@ -10,6 +10,7 @@ interface ResultCardProps {
   numbers: number[];
   jackpot?: string;
   className?: string;
+  previousDraw?: string; // Add a prop for the previous draw date
 }
 
 // Define game colors explicitly using Tailwind classes
@@ -76,7 +77,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   date, 
   gameType, 
   numbers, 
-  jackpot, 
+  previousDraw, 
   className = "" 
 }) => {
   // Get the background color for the current game type
@@ -84,6 +85,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   const textColor = numberTextColors[gameType] || "text-purple-600"; // Default to purple text if gameType not found
   const logoSrc = gameLogos[gameType];
   const formattedDate = getFormattedDate(date);
+  const formattedPreviousDraw = previousDraw ? getFormattedDate(previousDraw) : null;
   const gamePath = getGamePath(gameType);
   
   return (
@@ -94,10 +96,13 @@ const ResultCard: React.FC<ResultCardProps> = ({
           {logoSrc && <img src={logoSrc} alt={gameType} className="h-full object-contain" />}
         </div>
         
-        {/* Jackpot */}
+        {/* Last 2 Draws */}
         <div className="text-center mb-3">
-          <div className="text-2xl font-bold">{jackpot}</div>
-          <div className="text-xs opacity-75">(Prêmio Estimado)</div>
+          <div className="text-sm font-medium">ÚLTIMOS SORTEIOS</div>
+          <div className="text-lg font-bold">{formattedDate}</div>
+          {formattedPreviousDraw && (
+            <div className="text-sm opacity-75">{formattedPreviousDraw}</div>
+          )}
         </div>
         
         {/* Numbers */}
@@ -110,11 +115,6 @@ const ResultCard: React.FC<ResultCardProps> = ({
               {number}
             </div>
           ))}
-        </div>
-        
-        {/* Date */}
-        <div className="text-center text-sm mb-4">
-          {formattedDate}
         </div>
         
         {/* Buttons */}
