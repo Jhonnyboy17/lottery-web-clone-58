@@ -127,7 +127,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
               {getLimitedNumbers(gameType, item.numbers).map((number, index) => (
                 <div 
                   key={index}
-                  className="w-7 h-7 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-sm text-white"
+                  className="w-9 h-9 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-base text-white"
                 >
                   {number}
                 </div>
