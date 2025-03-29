@@ -121,7 +121,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
         <div className="mt-auto space-y-2">
           <Button 
             asChild
-            className={`w-full bg-white hover:bg-opacity-90 font-medium ${textColor}`}
+            className="w-full bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white"
           >
             <Link to={gamePath}>
               VER TODOS
