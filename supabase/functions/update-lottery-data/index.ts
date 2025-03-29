@@ -18,9 +18,11 @@ async function fetchLatestMegaMillionsData() {
   
   try {
     if (!openAIApiKey) {
+      console.error("OpenAI API key is not configured or is empty");
       throw new Error("OpenAI API key is not configured");
     }
     
+    console.log("Starting OpenAI API request for Mega Millions data");
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -50,8 +52,14 @@ async function fetchLatestMegaMillionsData() {
     });
     
     if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`OpenAI API error: ${response.status} ${errorText}`);
+      const errorBody = await response.text();
+      console.error(`OpenAI API error status ${response.status}: ${errorBody}`);
+      
+      if (response.status === 429) {
+        console.error("OpenAI API quota exceeded. Please check your billing status at platform.openai.com");
+      }
+      
+      throw new Error(`OpenAI API error: ${response.status} ${errorBody}`);
     }
     
     const data = await response.json();
@@ -63,11 +71,13 @@ async function fetchLatestMegaMillionsData() {
     try {
       megaMillionsData = JSON.parse(content);
     } catch (error) {
+      console.error(`Failed to parse OpenAI response as JSON. Response: ${content}`);
       throw new Error(`Failed to parse OpenAI response as JSON: ${error.message}. Response: ${content}`);
     }
     
     // Validate required fields
     if (!megaMillionsData.jackpot_amount || !megaMillionsData.next_drawing) {
+      console.error(`Response missing required fields: ${JSON.stringify(megaMillionsData)}`);
       throw new Error(`Response missing required fields: ${JSON.stringify(megaMillionsData)}`);
     }
     
@@ -82,6 +92,7 @@ async function fetchLatestMegaMillionsData() {
     console.error("Error fetching Mega Millions data from OpenAI:", error);
     
     // Fallback to default data if the API call fails
+    console.log("Using fallback data for Mega Millions");
     return {
       game_name: "Mega Millions",
       jackpot_amount: "380,000,000",
