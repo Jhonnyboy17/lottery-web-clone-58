@@ -34,13 +34,13 @@ const GameHeader: React.FC<GameHeaderProps> = ({
         <div className="text-right">
           {shouldShowDrawTimes ? (
             <div className="text-right">
-              <p className="text-2xl font-bold font-akhand" style={{ color: colorValue }}>2 sorteios Diários</p>
+              <p className="text-2xl font-bold font-nunito" style={{ color: colorValue }}>2 sorteios Diários</p>
               <p className="text-sm font-medium text-gray-700">Sorteio FECHA: 12:35 & 21:15</p>
             </div>
           ) : (
             <>
-              <p className="text-xl font-bold text-black font-akhand">JACKPOT ESTA VALIDO</p>
-              <h2 className="text-4xl font-bold font-akhand" style={{ color: colorValue }}>$ {jackpotAmount}</h2>
+              <p className="text-xl font-bold text-black font-nunito">JACKPOT ESTA VALIDO</p>
+              <h2 className="text-4xl font-bold font-nunito" style={{ color: colorValue }}>$ {jackpotAmount}</h2>
             </>
           )}
         </div>
