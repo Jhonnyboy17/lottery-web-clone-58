@@ -29,10 +29,10 @@ const LotteryCard = ({
   isLoading = false,
 }: LotteryCardProps) => {
   // Calculate the approximate value in Brazilian Real (BRL)
-  // Using an approximate exchange rate of 1 USD = 5.5 BRL
+  // Using an exchange rate of 1 USD = 5.0 BRL (atualizado)
   const getAmountInBRL = (amountStr: string) => {
     const numericAmount = parseFloat(amountStr.replace(/,/g, ''));
-    const brlAmount = (numericAmount * 5.5).toLocaleString('pt-BR');
+    const brlAmount = (numericAmount * 5.0).toLocaleString('pt-BR');
     return brlAmount;
   };
 

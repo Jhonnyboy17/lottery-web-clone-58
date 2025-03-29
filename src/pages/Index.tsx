@@ -5,15 +5,12 @@ import Hero from "@/components/Hero";
 import LotteryCard from "@/components/LotteryCard";
 import NumbersDisplay from "@/components/NumbersDisplay";
 import Footer from "@/components/Footer";
-import { ChevronRight, RefreshCw } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
 import { useLotteryData } from "@/hooks/useLotteryData";
-import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const { data: lotteryGames, loading, lastUpdated, refreshData } = useLotteryData();
-  const { toast } = useToast();
+  const { data: lotteryGames, loading, lastUpdated } = useLotteryData();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,16 +45,8 @@ const Index = () => {
     });
   };
 
-  const handleRefresh = () => {
-    refreshData();
-    toast({
-      title: "Atualizando dados",
-      description: "Buscando os valores mais recentes das loterias...",
-    });
-  };
-
   const formatLastUpdated = () => {
-    if (!lastUpdated) return "Nunca atualizado";
+    if (!lastUpdated) return "Carregando dados...";
     
     return new Intl.DateTimeFormat('pt-BR', {
       day: '2-digit',
@@ -80,20 +69,10 @@ const Index = () => {
         <section id="lottery-games" className="container mx-auto px-4 py-12">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-lottery-navy dark:text-white">Loterias</h2>
-            <div className="flex items-center gap-3">
+            <div>
               <span className="text-sm text-gray-500 dark:text-gray-400">
-                Última atualização: {formatLastUpdated()}
+                Atualizado em: {formatLastUpdated()}
               </span>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                className="flex items-center gap-2"
-                onClick={handleRefresh}
-                disabled={loading}
-              >
-                <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
-                Atualizar
-              </Button>
             </div>
           </div>
           
