@@ -83,6 +83,7 @@ export default {
         heading: ['Montserrat', 'sans-serif'],
         akhand: ['Akhand Black', 'sans-serif'],
         nunito: ['Nunito', 'sans-serif'],
+        bebas: ['Bebas Neue', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
