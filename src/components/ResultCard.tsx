@@ -105,7 +105,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
           {numbers.map((number, index) => (
             <div 
               key={index}
-              className={`w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-sm ${textColor}`}
+              className={`w-8 h-8 rounded-full bg-purple-900 flex items-center justify-center font-bold text-sm ${textColor}`}
             >
               {number}
             </div>
