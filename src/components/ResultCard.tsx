@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,7 +15,7 @@ interface ResultCardProps {
 const gameColors: Record<string, string> = {
   "Mega-Sena": "bg-green-600",    // Green for Mega-Sena
   "Quina": "bg-purple-600",       // Purple for Quina
-  "Lotofácil": "bg-pink-500",     // Pink for Lotofácil
+  "Lotofácil": "bg-lime-500",     // Bright Green for Lotofácil (updated)
   "Lotomania": "bg-orange-500",   // Orange for Lotomania
   "Pick 4": "bg-amber-500",       // Amber for Pick 4
   "Pick 3": "bg-red-500"          // Red for Pick 3
