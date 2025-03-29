@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -88,11 +89,11 @@ const ResultsHub: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="results-page flex-grow pb-12 pt-16 md:pt-24">
+      <div className="results-page flex-grow pb-16 pt-20 md:pt-28">
         <Container className="px-4">
           <div className="max-w-6xl mx-auto">
-            <h1 className="text-3xl font-bold mb-2">Resultados de Loterias</h1>
-            <p className="text-gray-300 mb-8">
+            <h1 className="text-4xl font-bold mb-3">Resultados de Loterias</h1>
+            <p className="text-xl text-gray-300 mb-10">
               Confira os resultados dos últimos sorteios das loterias
             </p>
             
@@ -103,7 +104,7 @@ const ResultsHub: React.FC = () => {
               onTimeframeChange={setTimeframe}
             />
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
               {filteredResults.map((result) => (
                 <ResultCard
                   key={result.id}
@@ -116,20 +117,20 @@ const ResultsHub: React.FC = () => {
             </div>
             
             {filteredResults.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-gray-400">Nenhum resultado encontrado para os filtros selecionados.</p>
+              <div className="text-center py-16">
+                <p className="text-xl text-gray-400">Nenhum resultado encontrado para os filtros selecionados.</p>
               </div>
             )}
             
-            <div className="flex flex-col md:flex-row justify-center gap-4 mt-10">
+            <div className="flex flex-col md:flex-row justify-center gap-5 mt-12">
               <Button 
-                className="bg-white text-purple-800 hover:bg-gray-100 font-medium text-sm"
+                className="bg-white text-purple-800 hover:bg-gray-100 font-medium text-lg py-3 px-6"
               >
                 VERIFICAR SEUS NÚMEROS
               </Button>
               
               <Button 
-                className="bg-purple-600 hover:bg-purple-700 text-white border-0 font-medium text-sm"
+                className="bg-purple-600 hover:bg-purple-700 text-white border-0 font-medium text-lg py-3 px-6"
               >
                 VER TODOS RESULTADOS
               </Button>

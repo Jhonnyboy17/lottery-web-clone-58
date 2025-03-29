@@ -99,31 +99,31 @@ const ResultCard: React.FC<ResultCardProps> = ({
   
   return (
     <Card className={`overflow-hidden border-0 shadow-lg w-full ${bgColor} ${className}`}>
-      <div className="p-4 flex flex-col h-full min-h-[320px] text-white">
-        <div className="flex justify-center mb-2 h-12">
+      <div className="p-5 flex flex-col h-full min-h-[300px] text-white">
+        <div className="flex justify-center mb-3 h-14">
           {logoSrc && <img src={logoSrc} alt={gameType} className="h-full object-contain" />}
         </div>
         
-        <div className="text-center mb-3">
-          <div className="text-sm font-bold">JACKPOT PENDENTE</div>
+        <div className="text-center mb-4">
+          <div className="text-base font-bold">JACKPOT PENDENTE</div>
         </div>
         
         {allHistory.map((item, historyIndex) => (
-          <div key={historyIndex} className={`${historyIndex > 0 ? 'border-t border-white/20' : ''} pt-2 pb-2`}>
-            <div className="font-semibold text-base">{getFormattedWeekday(item.date)}</div>
-            <div className="text-sm text-white/80 mb-2">{formatDateAsDayMonthYear(item.date)}</div>
+          <div key={historyIndex} className={`${historyIndex > 0 ? 'border-t border-white/20' : ''} pt-3 pb-3`}>
+            <div className="font-semibold text-xl">{getFormattedWeekday(item.date)}</div>
+            <div className="text-base text-white/80 mb-3">{formatDateAsDayMonthYear(item.date)}</div>
             
-            <div className="flex flex-wrap gap-2 justify-start mb-2">
+            <div className="flex flex-wrap gap-3 justify-start mb-3">
               {getLimitedNumbers(gameType, item.numbers).map((number, index) => (
                 <div 
                   key={index}
-                  className="w-10 h-10 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-base text-white"
+                  className="w-12 h-12 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-lg text-white"
                 >
                   {number}
                 </div>
               ))}
               {item.numbers.length > 0 && (
-                <div className="text-xs self-center font-light">
+                <div className="text-sm self-center font-light">
                   ×{item.numbers.length > 5 ? "5" : "2"}
                 </div>
               )}
@@ -131,10 +131,10 @@ const ResultCard: React.FC<ResultCardProps> = ({
           </div>
         ))}
         
-        <div className="mt-auto flex flex-col gap-2 border-t border-white/20 pt-3">
+        <div className="mt-auto flex flex-col gap-3 border-t border-white/20 pt-4">
           <Button 
             asChild
-            className="w-full bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white text-sm py-1.5 h-auto"
+            className="w-full bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white text-base py-2 h-auto"
           >
             <Link to={gamePath}>
               Ver todos resultados
@@ -143,7 +143,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
           
           <Button 
             asChild
-            className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white border-white/20 text-sm py-1.5 h-auto"
+            className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white border-white/20 text-base py-2 h-auto"
           >
             <Link to={gamePath}>
               Jogar
