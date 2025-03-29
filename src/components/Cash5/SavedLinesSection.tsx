@@ -59,7 +59,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
               <div 
                 className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
                   editingIndex === index 
-                    ? 'bg-blue-100 dark:bg-purple-900/60 dark:border dark:border-purple-400' 
+                    ? 'bg-blue-100 dark:bg-gray-800 dark:border dark:border-purple-400' 
                     : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
                 onClick={() => onEditLine(index)}

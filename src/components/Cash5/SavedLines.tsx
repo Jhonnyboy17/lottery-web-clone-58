@@ -30,7 +30,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
       {savedLines.map((line, index) => (
         <div key={index} className={`bg-white dark:bg-gray-800 rounded-md p-3 mb-2 shadow-sm ${
           editingIndex === index 
-            ? 'border-2 border-amber-500 dark:border-purple-400 dark:bg-purple-900/60' 
+            ? 'border-2 border-amber-500 dark:border-purple-400 dark:bg-gray-800' 
             : 'border border-gray-100 dark:border-gray-700'
         }`}>
           <div className="flex items-center justify-between">
@@ -99,7 +99,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
             </span>
           ))}
         </div>
-        <div className="w-4"></div>
+        <div className="w-4"></div> {/* Empty space where the X button would be */}
       </div>
     </div>
   );
