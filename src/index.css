@@ -41,7 +41,7 @@
   }
 
   .dark {
-    --background: 263 50% 10%;  /* Dark purple background */
+    --background: 0 0% 0%;  /* Changed to black background */
     --foreground: 210 40% 98%;  /* Light text */
 
     --card: 263 45% 13%;  /* Slightly lighter purple for cards */
@@ -73,6 +73,9 @@
     --purple-gradient-from: 263 50% 18%;
     --purple-gradient-via: 263 50% 15%;
     --purple-gradient-to: 263 50% 12%;
+    
+    /* Navbar dark purple background remains the same */
+    --navbar-bg: 263 54% 13%;
   }
 }
 
@@ -213,7 +216,12 @@
 }
 
 .dark .bg-white-element {
-  background-color: #1a0f36;
+  background-color: #000000;
+  color: white;
+}
+
+.dark .bg-white {
+  background-color: #000000;
   color: white;
 }
 
