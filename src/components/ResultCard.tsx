@@ -2,6 +2,7 @@ import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { formatDateAsDayMonthYear, getFormattedWeekday } from "@/utils/dateUtils";
 
 interface ResultCardProps {
   date: string;
@@ -11,6 +12,10 @@ interface ResultCardProps {
   className?: string;
   previousDraw?: string; // Previous draw date
   previousNumbers?: number[]; // Add previous draw numbers
+  history?: Array<{
+    date: string;
+    numbers: number[];
+  }>;
 }
 
 // Define game colors explicitly using Tailwind classes - Updated colors to match index page
@@ -58,31 +63,6 @@ const getLimitedNumbers = (gameType: string, numbers: number[]) => {
   return numbers.slice(0, limit);
 };
 
-const getFormattedDate = (dateString: string) => {
-  const days = ["DOMINGO", "SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA", "SÁBADO"];
-  const months = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
-  
-  const dateParts = dateString.split('/');
-  const date = new Date(
-    parseInt(dateParts[2]), // year
-    parseInt(dateParts[1]) - 1, // month (0-based)
-    parseInt(dateParts[0]) // day
-  );
-  
-  // Get day name (e.g., "Friday")
-  const dayName = days[date.getDay()];
-  
-  // Format as "Mar 28 2025"
-  const monthName = months[date.getMonth()];
-  const day = date.getDate();
-  const year = date.getFullYear();
-  
-  return {
-    dayName: dayName,
-    shortDate: `${monthName} ${day} ${year}`
-  };
-};
-
 const getGamePath = (gameType: string) => {
   const gameMap: Record<string, string> = {
     "Mega-Sena": "/play-mega-millions",
@@ -102,87 +82,66 @@ const ResultCard: React.FC<ResultCardProps> = ({
   numbers, 
   previousDraw,
   previousNumbers = [],
+  history = [],
   className = "" 
 }) => {
   // Get the background color for the current game type
   const bgColor = gameColors[gameType] || "bg-blue-500"; // Default to blue if gameType not found
   const textColor = numberTextColors[gameType] || "text-blue-500"; // Default to blue text if gameType not found
   const logoSrc = gameLogos[gameType];
-  const formattedCurrentDate = getFormattedDate(date);
-  const formattedPreviousDate = previousDraw ? getFormattedDate(previousDraw) : null;
+  const formattedDate = formatDateAsDayMonthYear(date);
+  const dayName = getFormattedWeekday(date);
   const gamePath = getGamePath(gameType);
   
   // Limit the number of balls based on game type
   const limitedCurrentNumbers = getLimitedNumbers(gameType, numbers);
-  const limitedPreviousNumbers = previousNumbers ? getLimitedNumbers(gameType, previousNumbers) : [];
+  
+  // Get all history items including the current numbers
+  const allHistory = [
+    { date, numbers: limitedCurrentNumbers },
+    ...(history || []).slice(0, 3) // Get only 3 historical items to show a total of 4 (current + 3 past)
+  ];
   
   return (
     <Card className={`overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
-      <div className="p-3 flex flex-col h-full text-white">
+      <div className="p-2 flex flex-col h-full text-white">
         {/* Logo */}
-        <div className="flex justify-center mb-2 h-10">
+        <div className="flex justify-center mb-1 h-8">
           {logoSrc && <img src={logoSrc} alt={gameType} className="h-full object-contain" />}
         </div>
         
         {/* Jackpot Pending or Main Info */}
-        <div className="text-center mb-2">
-          <div className="text-base font-bold">JACKPOT PENDING</div>
+        <div className="text-center mb-1">
+          <div className="text-sm font-bold">JACKPOT PENDING</div>
         </div>
         
-        {/* Current Draw */}
-        <div className="border-t border-white/20 pt-2">
-          <div className="font-semibold text-base">{formattedCurrentDate.dayName}</div>
-          <div className="text-xs text-white/70 mb-2">{formattedCurrentDate.shortDate}</div>
-          
-          {/* Numbers for current draw */}
-          <div className="flex flex-wrap gap-1.5 justify-start mb-3">
-            {limitedCurrentNumbers.map((number, index) => (
-              <div 
-                key={index}
-                className="w-7 h-7 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-xs text-white"
-              >
-                {number}
-              </div>
-            ))}
-            {limitedCurrentNumbers.length > 0 && (
-              <div className="text-xs self-center font-light">
-                ×{limitedCurrentNumbers.length > 5 ? "5" : "2"}
-              </div>
-            )}
-          </div>
-        </div>
-        
-        {/* Previous Draw */}
-        {previousDraw && (
-          <div className="border-t border-white/20 pt-2">
-            <div className="font-semibold text-base">{formattedPreviousDate?.dayName}</div>
-            <div className="text-xs text-white/70 mb-2">{formattedPreviousDate?.shortDate}</div>
+        {/* Game History */}
+        {allHistory.map((item, historyIndex) => (
+          <div key={historyIndex} className={`${historyIndex > 0 ? 'border-t border-white/20' : ''} pt-1.5 pb-1`}>
+            <div className="font-semibold text-sm">{getFormattedWeekday(item.date)}</div>
+            <div className="text-xs text-white/80 mb-1">{formatDateAsDayMonthYear(item.date)}</div>
             
-            {/* Numbers for previous draw (if available) */}
-            <div className="flex flex-wrap gap-1.5 justify-start mb-3">
-              {limitedPreviousNumbers.length > 0 ? (
-                <>
-                  {limitedPreviousNumbers.map((number, index) => (
-                    <div 
-                      key={index}
-                      className="w-7 h-7 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-xs text-white"
-                    >
-                      {number}
-                    </div>
-                  ))}
-                  <div className="text-xs self-center font-light">
-                    ×{limitedPreviousNumbers.length > 5 ? "5" : "2"}
-                  </div>
-                </>
-              ) : (
-                <div className="text-xs text-white/70">No numbers available</div>
+            {/* Numbers for this draw */}
+            <div className="flex flex-wrap gap-1 justify-start mb-1.5">
+              {getLimitedNumbers(gameType, item.numbers).map((number, index) => (
+                <div 
+                  key={index}
+                  className="w-6 h-6 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-xs text-white"
+                >
+                  {number}
+                </div>
+              ))}
+              {item.numbers.length > 0 && (
+                <div className="text-xs self-center font-light">
+                  ×{item.numbers.length > 5 ? "5" : "2"}
+                </div>
               )}
             </div>
           </div>
-        )}
+        ))}
         
         {/* Buttons */}
-        <div className="mt-auto flex gap-2 border-t border-white/20 pt-2">
+        <div className="mt-auto flex gap-2 border-t border-white/20 pt-1.5">
           <Button 
             asChild
             className="flex-1 bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white text-xs px-2 py-1 h-auto"
