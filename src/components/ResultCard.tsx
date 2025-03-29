@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -121,12 +122,12 @@ const ResultCard: React.FC<ResultCardProps> = ({
             <div className="font-semibold text-sm">{getFormattedWeekday(item.date)}</div>
             <div className="text-xs text-white/80 mb-1">{formatDateAsDayMonthYear(item.date)}</div>
             
-            {/* Numbers for this draw */}
+            {/* Numbers for this draw - Increased size of balls and text */}
             <div className="flex flex-wrap gap-1 justify-start mb-1.5">
               {getLimitedNumbers(gameType, item.numbers).map((number, index) => (
                 <div 
                   key={index}
-                  className="w-6 h-6 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-xs text-white"
+                  className="w-7 h-7 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-sm text-white"
                 >
                   {number}
                 </div>
