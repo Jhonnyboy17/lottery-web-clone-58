@@ -34,7 +34,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
         // Display a template line with question marks
         <div className="mb-2">
           <div 
-            className="rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 bg-white dark:bg-gray-900"
+            className="rounded-md p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 bg-white dark:bg-gray-900"
             onClick={onStartNewLine}
           >
             <div className="flex items-center">
@@ -57,7 +57,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
           {savedLines.map((line, index) => (
             <div key={index} className="mb-2">
               <div 
-                className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
+                className={`rounded-md p-3 flex items-center justify-between cursor-pointer transition-colors ${
                   editingIndex === index 
                     ? 'bg-blue-50 dark:bg-gray-800 dark:border dark:border-purple-400' 
                     : 'bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800'
@@ -100,7 +100,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       {editingIndex === null && (
         <div className="mb-2">
           <div 
-            className="rounded p-3 flex items-center justify-between cursor-pointer bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800"
+            className="rounded-md p-3 flex items-center justify-between cursor-pointer bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800"
             onClick={onStartNewLine}
           >
             <div className="flex items-center">

@@ -31,7 +31,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
         <div key={index} className={`dark:bg-gray-900 rounded-md p-3 mb-2 shadow-sm ${
           editingIndex === index 
             ? 'border-2 border-amber-500 dark:border-purple-400 bg-blue-50 dark:bg-gray-800' 
-            : 'border border-gray-100 dark:border-gray-700 bg-white'
+            : 'border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-900'
         }`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -81,7 +81,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
       ))}
       
       {/* Always show the current line template - guaranteed to display */}
-      <div className="rounded p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-100 dark:border-gray-700 mb-2 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800">
+      <div className="rounded-md p-3 flex items-center justify-between cursor-pointer transition-colors border border-gray-100 dark:border-gray-700 mb-2 bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800">
         <div className="flex items-center">
           <span className="text-gray-500 dark:text-gray-400 font-medium w-6 mr-2">
             {String(savedLines.length + 1).padStart(2, '0')}
