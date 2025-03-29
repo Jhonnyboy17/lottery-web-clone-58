@@ -11,7 +11,7 @@ const ResultsHub: React.FC = () => {
   const [gameType, setGameType] = useState("all");
   const [timeframe, setTimeframe] = useState("recent");
 
-  // Example results data with previous draw dates and numbers
+  // Example results data with correct number of balls per game type
   const resultsData = [
     {
       id: 1,
@@ -34,16 +34,16 @@ const ResultsHub: React.FC = () => {
       date: "13/05/2023",
       previousDraw: "10/05/2023",
       gameType: "Lotofácil",
-      numbers: [1, 2, 5, 8, 9, 10, 13, 14, 15, 17, 19, 20, 21, 22, 25],
-      previousNumbers: [3, 4, 6, 7, 11, 12, 16, 18, 23, 24]
+      numbers: [1, 2, 5, 8, 9, 10],
+      previousNumbers: [3, 4, 6, 7, 11, 12]
     },
     {
       id: 4,
       date: "12/05/2023",
       previousDraw: "09/05/2023",
       gameType: "Lotomania",
-      numbers: [3, 7, 11, 18, 22, 29, 34, 41, 50, 52],
-      previousNumbers: [59, 63, 67, 70, 75, 78, 83, 88, 94, 99]
+      numbers: [3, 7, 11, 18, 22, 29],
+      previousNumbers: [59, 63, 67, 70, 75, 78]
     },
     {
       id: 5,

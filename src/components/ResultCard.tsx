@@ -43,6 +43,21 @@ const gameLogos: Record<string, string> = {
   "Pick 3": "/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png" // Pick 3 logo (using same as Pick 4 for now)
 };
 
+// Function to limit the number of balls based on game type
+const getLimitedNumbers = (gameType: string, numbers: number[]) => {
+  const limits: Record<string, number> = {
+    "Mega-Sena": 6,
+    "Quina": 5,
+    "Lotofácil": 6,
+    "Lotomania": 6,
+    "Pick 4": 4,
+    "Pick 3": 3
+  };
+  
+  const limit = limits[gameType] || numbers.length;
+  return numbers.slice(0, limit);
+};
+
 const getFormattedDate = (dateString: string) => {
   const days = ["DOMINGO", "SEGUNDA", "TERÇA", "QUARTA", "QUINTA", "SEXTA", "SÁBADO"];
   const months = ["JAN", "FEV", "MAR", "ABR", "MAI", "JUN", "JUL", "AGO", "SET", "OUT", "NOV", "DEZ"];
@@ -97,37 +112,41 @@ const ResultCard: React.FC<ResultCardProps> = ({
   const formattedPreviousDate = previousDraw ? getFormattedDate(previousDraw) : null;
   const gamePath = getGamePath(gameType);
   
+  // Limit the number of balls based on game type
+  const limitedCurrentNumbers = getLimitedNumbers(gameType, numbers);
+  const limitedPreviousNumbers = previousNumbers ? getLimitedNumbers(gameType, previousNumbers) : [];
+  
   return (
     <Card className={`overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
-      <div className="p-5 flex flex-col h-full text-white">
+      <div className="p-3 flex flex-col h-full text-white">
         {/* Logo */}
-        <div className="flex justify-center mb-4 h-12">
+        <div className="flex justify-center mb-2 h-10">
           {logoSrc && <img src={logoSrc} alt={gameType} className="h-full object-contain" />}
         </div>
         
         {/* Jackpot Pending or Main Info */}
-        <div className="text-center mb-4">
-          <div className="text-xl font-bold">JACKPOT PENDING</div>
+        <div className="text-center mb-2">
+          <div className="text-base font-bold">JACKPOT PENDING</div>
         </div>
         
         {/* Current Draw */}
-        <div className="border-t border-white/20 pt-4">
-          <div className="font-semibold text-lg">{formattedCurrentDate.dayName}</div>
-          <div className="text-sm text-white/70 mb-3">{formattedCurrentDate.shortDate}</div>
+        <div className="border-t border-white/20 pt-2">
+          <div className="font-semibold text-base">{formattedCurrentDate.dayName}</div>
+          <div className="text-xs text-white/70 mb-2">{formattedCurrentDate.shortDate}</div>
           
           {/* Numbers for current draw */}
-          <div className="flex flex-wrap gap-2 justify-start mb-5">
-            {numbers.map((number, index) => (
+          <div className="flex flex-wrap gap-1.5 justify-start mb-3">
+            {limitedCurrentNumbers.map((number, index) => (
               <div 
                 key={index}
-                className="w-9 h-9 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-sm text-white"
+                className="w-7 h-7 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-xs text-white"
               >
                 {number}
               </div>
             ))}
-            {numbers.length > 0 && (
-              <div className="text-sm self-center font-light">
-                ×{numbers.length > 5 ? "5" : "2"}
+            {limitedCurrentNumbers.length > 0 && (
+              <div className="text-xs self-center font-light">
+                ×{limitedCurrentNumbers.length > 5 ? "5" : "2"}
               </div>
             )}
           </div>
@@ -135,38 +154,38 @@ const ResultCard: React.FC<ResultCardProps> = ({
         
         {/* Previous Draw */}
         {previousDraw && (
-          <div className="border-t border-white/20 pt-4">
-            <div className="font-semibold text-lg">{formattedPreviousDate?.dayName}</div>
-            <div className="text-sm text-white/70 mb-3">{formattedPreviousDate?.shortDate}</div>
+          <div className="border-t border-white/20 pt-2">
+            <div className="font-semibold text-base">{formattedPreviousDate?.dayName}</div>
+            <div className="text-xs text-white/70 mb-2">{formattedPreviousDate?.shortDate}</div>
             
             {/* Numbers for previous draw (if available) */}
-            <div className="flex flex-wrap gap-2 justify-start mb-5">
-              {previousNumbers.length > 0 ? (
+            <div className="flex flex-wrap gap-1.5 justify-start mb-3">
+              {limitedPreviousNumbers.length > 0 ? (
                 <>
-                  {previousNumbers.map((number, index) => (
+                  {limitedPreviousNumbers.map((number, index) => (
                     <div 
                       key={index}
-                      className="w-9 h-9 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-sm text-white"
+                      className="w-7 h-7 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-xs text-white"
                     >
                       {number}
                     </div>
                   ))}
-                  <div className="text-sm self-center font-light">
-                    ×{previousNumbers.length > 5 ? "5" : "2"}
+                  <div className="text-xs self-center font-light">
+                    ×{limitedPreviousNumbers.length > 5 ? "5" : "2"}
                   </div>
                 </>
               ) : (
-                <div className="text-sm text-white/70">No numbers available</div>
+                <div className="text-xs text-white/70">No numbers available</div>
               )}
             </div>
           </div>
         )}
         
         {/* Buttons */}
-        <div className="mt-auto flex gap-3 border-t border-white/20 pt-4">
+        <div className="mt-auto flex gap-2 border-t border-white/20 pt-2">
           <Button 
             asChild
-            className="flex-1 bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white"
+            className="flex-1 bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white text-xs px-2 py-1 h-auto"
           >
             <Link to={gamePath}>
               View all results
@@ -175,7 +194,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
           
           <Button 
             asChild
-            className="flex-1 bg-white bg-opacity-20 hover:bg-opacity-30 text-white border border-white/20"
+            className="flex-1 bg-white bg-opacity-20 hover:bg-opacity-30 text-white border border-white/20 text-xs px-2 py-1 h-auto"
           >
             <Link to={gamePath}>
               Check your numbers
