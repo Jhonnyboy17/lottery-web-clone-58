@@ -44,16 +44,16 @@ const ResultsHub: React.FC = () => {
     {
       id: 5,
       date: "11/05/2023",
-      gameType: "Mega-Sena",
-      numbers: [7, 15, 22, 36, 48, 55],
-      jackpot: "R$ 40.000.000,00"
+      gameType: "Pick 4",
+      numbers: [7, 15, 22, 36],
+      jackpot: "R$ 5.000,00"
     },
     {
       id: 6,
       date: "10/05/2023",
-      gameType: "Quina",
-      numbers: [8, 17, 30, 45, 52],
-      jackpot: "R$ 10.800.000,00"
+      gameType: "Pick 3",
+      numbers: [8, 17, 30],
+      jackpot: "R$ 500,00"
     }
   ];
 

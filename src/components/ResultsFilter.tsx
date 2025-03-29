@@ -33,10 +33,12 @@ const ResultsFilter: React.FC<ResultsFilterProps> = ({
           </SelectTrigger>
           <SelectContent className="bg-purple-800 border-purple-700 text-white">
             <SelectItem value="all">Todos os Jogos</SelectItem>
-            <SelectItem value="mega-sena">Mega-Sena</SelectItem>
+            <SelectItem value="megasena">Mega-Sena</SelectItem>
             <SelectItem value="quina">Quina</SelectItem>
             <SelectItem value="lotofacil">Lotofácil</SelectItem>
             <SelectItem value="lotomania">Lotomania</SelectItem>
+            <SelectItem value="pick4">Pick 4</SelectItem>
+            <SelectItem value="pick3">Pick 3</SelectItem>
           </SelectContent>
         </Select>
       </div>
