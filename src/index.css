@@ -41,40 +41,40 @@
   }
 
   .dark {
-    --background: 0 0% 0%;  /* Changed to black background */
-    --foreground: 210 40% 98%;  /* Light text */
+    --background: 263 54% 13%;  /* Roxo escuro para o fundo principal (como no navbar) */
+    --foreground: 210 40% 98%;  /* Texto claro */
 
-    --card: 263 45% 13%;  /* Slightly lighter purple for cards */
+    --card: 263 45% 20%;  /* Roxo um pouco mais claro para cards */
     --card-foreground: 210 40% 98%;
 
-    --popover: 263 45% 13%;
+    --popover: 263 45% 20%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 336 79% 47%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 263 40% 16%;  /* Purple-tinted secondary */
+    --secondary: 263 40% 22%;  /* Roxo secundário ajustado */
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 263 40% 16%;
-    --muted-foreground: 215 20.2% 75%;  /* Lighter muted text for better contrast */
+    --muted: 263 40% 22%;
+    --muted-foreground: 215 20.2% 75%;
 
-    --accent: 263 40% 16%;
+    --accent: 263 40% 22%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 263 40% 20%;  /* Purple-tinted borders */
-    --input: 263 40% 20%;
+    --border: 263 40% 25%;  /* Bordas com roxo mais claro */
+    --input: 263 40% 25%;
     --ring: 336 79% 47%;
     
-    /* New variables for dark purple gradients */
-    --purple-gradient-from: 263 50% 18%;
-    --purple-gradient-via: 263 50% 15%;
-    --purple-gradient-to: 263 50% 12%;
+    /* Gradientes roxos ajustados */
+    --purple-gradient-from: 263 50% 20%;
+    --purple-gradient-via: 263 50% 17%;
+    --purple-gradient-to: 263 50% 15%;
     
-    /* Navbar dark purple background remains the same */
+    /* Navbar permanece com roxo escuro */
     --navbar-bg: 263 54% 13%;
   }
 }
@@ -216,12 +216,12 @@
 }
 
 .dark .bg-white-element {
-  background-color: #000000;
+  background-color: hsl(var(--background));
   color: white;
 }
 
 .dark .bg-white {
-  background-color: #000000;
+  background-color: hsl(var(--background));
   color: white;
 }
 

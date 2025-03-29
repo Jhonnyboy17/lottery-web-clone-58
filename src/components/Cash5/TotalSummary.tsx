@@ -18,8 +18,8 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
     ticketPrice : `R$ ${ticketPrice}`;
 
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden w-full max-w-full">
-      <div className="flex justify-between items-center p-3 border-t">
+    <div className="bg-white dark:bg-card rounded-lg shadow-md overflow-hidden w-full max-w-full">
+      <div className="flex justify-between items-center p-3 border-t dark:border-purple-900/30">
         <div>
           <p className="text-sm font-medium">Total</p>
           <p className="text-xl font-bold">{formattedPrice}</p>

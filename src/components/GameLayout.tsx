@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "./Navbar";
 import TotalSummary from "./Cash5/TotalSummary";
@@ -22,7 +23,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({
   hasLines,
   children
 }) => {
-  return <div className="min-h-screen bg-white dark:bg-black pb-20">
+  return <div className="min-h-screen bg-white dark:bg-background pb-20">
       <Navbar />
       
       {/* Game Banner with Background Color - directly below navbar with proper spacing for logo */}
@@ -84,7 +85,7 @@ const GameLayout: React.FC<GameLayoutProps> = ({
       </div>
 
       {/* Sticky Bottom Bar with Total Summary */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-black shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_6px_-1px_rgba(255,255,255,0.05)] z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-background shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)] dark:shadow-[0_-4px_6px_-1px_rgba(255,255,255,0.05)] z-50">
         <div className="mx-auto max-w-7xl px-3">
           <TotalSummary ticketPrice={ticketPrice} colorValue={colorValue} hasLines={hasLines} />
         </div>
