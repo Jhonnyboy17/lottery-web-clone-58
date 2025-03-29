@@ -110,8 +110,8 @@ const ResultCard: React.FC<ResultCardProps> = ({
         
         {allHistory.map((item, historyIndex) => (
           <div key={historyIndex} className={`${historyIndex > 0 ? 'border-t border-white/20' : ''} pt-2 pb-2`}>
-            <div className="font-semibold text-sm">{getFormattedWeekday(item.date)}</div>
-            <div className="text-xs text-white/80 mb-2">{formatDateAsDayMonthYear(item.date)}</div>
+            <div className="font-semibold text-base">{getFormattedWeekday(item.date)}</div>
+            <div className="text-sm text-white/80 mb-2">{formatDateAsDayMonthYear(item.date)}</div>
             
             <div className="flex flex-wrap gap-2 justify-start mb-2">
               {getLimitedNumbers(gameType, item.numbers).map((number, index) => (
