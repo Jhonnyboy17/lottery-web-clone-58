@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,16 @@ const gameColors: Record<string, string> = {
   "Lotomania": "bg-orange-500",   // Orange for Lotomania
   "Pick 4": "bg-amber-500",       // Amber for Pick 4
   "Pick 3": "bg-red-500"          // Red for Pick 3
+};
+
+// Define text colors for the number balls based on game type
+const numberTextColors: Record<string, string> = {
+  "Mega-Sena": "text-green-600",
+  "Quina": "text-purple-600",
+  "Lotofácil": "text-lime-500",
+  "Lotomania": "text-orange-500",
+  "Pick 4": "text-amber-500",
+  "Pick 3": "text-red-500"
 };
 
 const gameLogos: Record<string, string> = {
@@ -70,12 +81,10 @@ const ResultCard: React.FC<ResultCardProps> = ({
 }) => {
   // Get the background color for the current game type
   const bgColor = gameColors[gameType] || "bg-purple-600"; // Default to purple if gameType not found
+  const textColor = numberTextColors[gameType] || "text-purple-600"; // Default to purple text if gameType not found
   const logoSrc = gameLogos[gameType];
   const formattedDate = getFormattedDate(date);
   const gamePath = getGamePath(gameType);
-  
-  // Extract the color name without the 'bg-' prefix for text color
-  const colorName = bgColor.replace('bg-', '');
   
   return (
     <Card className={`overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
@@ -96,8 +105,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
           {numbers.map((number, index) => (
             <div 
               key={index}
-              className="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-sm"
-              style={{ color: `rgb(var(--${colorName.replace('-', '-')}))` }}
+              className={`w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-sm ${textColor}`}
             >
               {number}
             </div>
@@ -113,7 +121,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
         <div className="mt-auto space-y-2">
           <Button 
             asChild
-            className="w-full bg-white hover:bg-opacity-90 font-medium text-purple-600"
+            className={`w-full bg-white hover:bg-opacity-90 font-medium ${textColor}`}
           >
             <Link to={gamePath}>
               VER TODOS
