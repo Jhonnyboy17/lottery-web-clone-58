@@ -99,7 +99,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
   
   return (
     <Card className={`overflow-hidden border-0 shadow-lg max-w-xl w-full ${bgColor} ${className}`}>
-      <div className="p-4 flex flex-col h-full min-h-[350px] text-white">
+      <div className="p-4 flex flex-col h-full min-h-[500px] text-white">
         <div className="flex justify-center mb-3 h-12">
           {logoSrc && <img src={logoSrc} alt={gameType} className="h-full object-contain" />}
         </div>
