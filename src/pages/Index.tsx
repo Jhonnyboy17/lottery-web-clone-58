@@ -5,85 +5,15 @@ import Hero from "@/components/Hero";
 import LotteryCard from "@/components/LotteryCard";
 import NumbersDisplay from "@/components/NumbersDisplay";
 import Footer from "@/components/Footer";
-import { ChevronRight } from "lucide-react";
-
-const lotteryGames = [
-  {
-    id: 1,
-    logoSrc: "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
-    amount: "344,000,000",
-    unit: "",
-    cashOption: "161.5 MILLION",
-    nextDrawing: "SEXTA, MAR 25, 9:59 PM",
-    backgroundColor: "bg-blue-500",
-    showPlayButton: true,
-    route: "/play-mega-millions",
-    price: 15,
-  },
-  {
-    id: 2,
-    logoSrc: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
-    amount: "444,000,000",
-    unit: "",
-    cashOption: "207.2 MILLION",
-    nextDrawing: "SÁBADO, MAR 22, 9:59 PM",
-    backgroundColor: "bg-[#ff5247]",
-    showPlayButton: true,
-    route: "/play-powerball",
-    price: 15,
-  },
-  {
-    id: 3,
-    logoSrc: "/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png",
-    amount: "570,000",
-    unit: "",
-    cashOption: "320 THOUSAND",
-    nextDrawing: "SEGUNDA, MAR 24, 9:59 PM",
-    backgroundColor: "bg-[#8CD444]",
-    showPlayButton: true,
-    route: "/play-lucky-day",
-    price: 15,
-  },
-  {
-    id: 4,
-    logoSrc: "/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png",
-    amount: "100,000",
-    unit: "",
-    prefix: "",
-    nextDrawing: "SÁBADO, MAR 22, 12:40 PM",
-    backgroundColor: "bg-[#00ccc6]",
-    showPlayButton: true,
-    route: "/play-pick4",
-    price: 10,
-  },
-  {
-    id: 5,
-    logoSrc: "/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png",
-    amount: "5,000",
-    unit: "",
-    prefix: "WIN UP TO",
-    nextDrawing: "TODOS OS DIAS 12:40 PM & 9:22 PM",
-    backgroundColor: "bg-[#ffa039]",
-    showPlayButton: true,
-    route: "/play-cash5",
-    price: 8,
-  },
-  {
-    id: 6,
-    logoSrc: "/lovable-uploads/a02651ec-8efc-429a-8231-5ae52f5c4af5.png",
-    amount: "500",
-    unit: "",
-    prefix: "WIN UP TO",
-    nextDrawing: "TODOS OS DIAS 12:40 PM & 9:22 PM",
-    backgroundColor: "bg-[#ffa039]",
-    showPlayButton: true,
-    route: "/play-fast-play",
-    price: 8,
-  },
-];
+import { ChevronRight, RefreshCw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useLotteryData } from "@/hooks/useLotteryData";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const { data: lotteryGames, loading, lastUpdated, refreshData } = useLotteryData();
+  const { toast } = useToast();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -118,6 +48,26 @@ const Index = () => {
     });
   };
 
+  const handleRefresh = () => {
+    refreshData();
+    toast({
+      title: "Atualizando dados",
+      description: "Buscando os valores mais recentes das loterias...",
+    });
+  };
+
+  const formatLastUpdated = () => {
+    if (!lastUpdated) return "Nunca atualizado";
+    
+    return new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    }).format(lastUpdated);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-lottery-dark-bg transition-colors duration-300">
       <Navbar />
@@ -128,7 +78,25 @@ const Index = () => {
         </section>
 
         <section id="lottery-games" className="container mx-auto px-4 py-12">
-          <h2 className="text-3xl font-bold text-center text-lottery-navy dark:text-white mb-8">Loterias</h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-lottery-navy dark:text-white">Loterias</h2>
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                Última atualização: {formatLastUpdated()}
+              </span>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="flex items-center gap-2"
+                onClick={handleRefresh}
+                disabled={loading}
+              >
+                <RefreshCw size={16} className={loading ? "animate-spin" : ""} />
+                Atualizar
+              </Button>
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {lotteryGames.map((game) => (
               <LotteryCard
@@ -142,6 +110,7 @@ const Index = () => {
                 backgroundColor={game.backgroundColor}
                 showPlayButton={game.showPlayButton}
                 route={game.route}
+                isLoading={loading}
               />
             ))}
           </div>

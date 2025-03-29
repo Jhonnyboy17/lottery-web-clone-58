@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 
 interface LotteryCardProps {
@@ -13,6 +13,7 @@ interface LotteryCardProps {
   backgroundColor?: string;
   showPlayButton?: boolean;
   route?: string;
+  isLoading?: boolean;
 }
 
 const LotteryCard = ({
@@ -25,6 +26,7 @@ const LotteryCard = ({
   backgroundColor = "bg-white",
   showPlayButton = false,
   route = "/play-powerball",
+  isLoading = false,
 }: LotteryCardProps) => {
   // Calculate the approximate value in Brazilian Real (BRL)
   // Using an approximate exchange rate of 1 USD = 5.5 BRL
@@ -37,7 +39,12 @@ const LotteryCard = ({
   const brlValue = getAmountInBRL(amount);
 
   return (
-    <div className={`lottery-card ${backgroundColor} rounded-xl shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full`}>
+    <div className={`lottery-card ${backgroundColor} rounded-xl shadow-md overflow-hidden transition-all duration-300 flex flex-col h-full relative`}>
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-full h-full bg-black/10 flex items-center justify-center z-10">
+          <RefreshCw className="animate-spin text-white" />
+        </div>
+      )}
       <div className="p-6 flex-grow">
         <img
           src={logoSrc}
