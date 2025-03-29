@@ -1,6 +1,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface LotteryGame {
   id: number;
@@ -16,20 +17,104 @@ export interface LotteryGame {
   price: number;
 }
 
-// Simula uma API que retorna dados da loteria como se estivesse consultando o ChatGPT
-const fetchLotteryDataFromAPI = async (): Promise<LotteryGame[]> => {
-  // Simulando uma chamada de API com dados atualizados
-  console.log("Fetching lottery data from API...");
+// Map game backgrounds to game names
+const gameBackgrounds: Record<string, string> = {
+  "Mega Millions": "bg-blue-500",
+  "Powerball": "bg-[#ff5247]",
+  "Lucky Day Lotto": "bg-[#8CD444]",
+  "Pick 4": "bg-[#00ccc6]",
+  "Cash 5": "bg-[#ffa039]",
+  "Fast Play": "bg-[#ffa039]"
+};
+
+// Map game routes to game names
+const gameRoutes: Record<string, string> = {
+  "Mega Millions": "/play-mega-millions",
+  "Powerball": "/play-powerball",
+  "Lucky Day Lotto": "/play-lucky-day",
+  "Pick 4": "/play-pick4",
+  "Cash 5": "/play-cash5",
+  "Fast Play": "/play-fast-play"
+};
+
+// Map prices to game names
+const gamePrices: Record<string, number> = {
+  "Mega Millions": 15,
+  "Powerball": 15,
+  "Lucky Day Lotto": 15,
+  "Pick 4": 10,
+  "Cash 5": 8,
+  "Fast Play": 8
+};
+
+// Fetch lottery data from Supabase
+const fetchLotteryDataFromSupabase = async (): Promise<LotteryGame[]> => {
+  try {
+    console.log("Fetching lottery data from Supabase...");
+    
+    const { data, error } = await supabase
+      .from('lottery_data')
+      .select('*');
+    
+    if (error) {
+      throw error;
+    }
+    
+    if (!data || data.length === 0) {
+      console.log("No data found in Supabase, using default data");
+      return fetchDefaultLotteryData();
+    }
+    
+    console.log("Supabase data:", data);
+    
+    // Map Supabase data to LotteryGame interface
+    return data.map((game, index) => ({
+      id: index + 1,
+      logoSrc: game.logo_src || "",
+      amount: game.jackpot_amount || "0",
+      unit: "",
+      prefix: game.game_name === "Cash 5" || game.game_name === "Fast Play" ? "WIN UP TO" : "",
+      cashOption: game.cash_option || "",
+      nextDrawing: game.next_drawing || "",
+      backgroundColor: gameBackgrounds[game.game_name] || "bg-blue-500",
+      showPlayButton: true,
+      route: gameRoutes[game.game_name] || "/",
+      price: gamePrices[game.game_name] || 10
+    }));
+  } catch (error) {
+    console.error("Error fetching from Supabase:", error);
+    return fetchDefaultLotteryData();
+  }
+};
+
+// Trigger update of lottery data through edge function
+const triggerLotteryDataUpdate = async () => {
+  try {
+    console.log("Triggering lottery data update via edge function...");
+    
+    const response = await supabase.functions.invoke('update-lottery-data');
+    
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+    
+    console.log("Lottery data update triggered successfully:", response.data);
+    return true;
+  } catch (error) {
+    console.error("Error triggering lottery data update:", error);
+    return false;
+  }
+};
+
+// Fallback function to provide default data if Supabase fetch fails
+const fetchDefaultLotteryData = (): LotteryGame[] => {
+  console.log("Using default lottery data");
   
-  // Simulando um pequeno atraso para imitar uma chamada de rede
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  // Retorna dados simulados como se fosse uma resposta de API
   return [
     {
       id: 1,
       logoSrc: "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
-      amount: "29,000,000",  // Valor atualizado da Mega Millions
+      amount: "29,000,000",
       unit: "",
       cashOption: "13.8 MILLION",
       nextDrawing: "TERÇA, ABR 09, 9:59 PM", 
@@ -111,7 +196,11 @@ export function useLotteryData() {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const fetchedData = await fetchLotteryDataFromAPI();
+      // First, try to trigger an update of the data
+      await triggerLotteryDataUpdate();
+      
+      // Then, fetch the updated data from Supabase
+      const fetchedData = await fetchLotteryDataFromSupabase();
       setData(fetchedData);
       setLastUpdated(new Date());
       setError(null);

@@ -1,9 +1,9 @@
-
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { formatDateAsDayMonthYear, getFormattedWeekday } from "@/utils/dateUtils";
+import { supabase } from "@/integrations/supabase/client";
 
 interface ResultCardProps {
   date: string;
@@ -91,11 +91,22 @@ const ResultCard: React.FC<ResultCardProps> = ({
   
   const limitedCurrentNumbers = getLimitedNumbers(gameType, numbers);
   
-  // Limit history to the last 3 games (including current)
   const allHistory = [
     { date, numbers: limitedCurrentNumbers },
-    ...(history || []).slice(0, 2) // Only take 2 previous games to make 3 total
+    ...(history || []).slice(0, 2)
   ];
+  
+  React.useEffect(() => {
+    const checkResults = async () => {
+      try {
+        console.log(`Checking for latest results for ${gameType}`);
+      } catch (error) {
+        console.error(`Error checking results for ${gameType}:`, error);
+      }
+    };
+    
+    checkResults();
+  }, [gameType]);
   
   return (
     <Card className={`overflow-hidden border-0 shadow-lg w-full ${bgColor} ${className}`}>
