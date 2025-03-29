@@ -9,7 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      lottery_data: {
+        Row: {
+          cash_option: string | null
+          exchange_rate: number | null
+          game_name: string
+          id: string
+          jackpot_amount: string
+          last_updated: string | null
+          logo_src: string | null
+          next_drawing: string
+        }
+        Insert: {
+          cash_option?: string | null
+          exchange_rate?: number | null
+          game_name: string
+          id?: string
+          jackpot_amount: string
+          last_updated?: string | null
+          logo_src?: string | null
+          next_drawing: string
+        }
+        Update: {
+          cash_option?: string | null
+          exchange_rate?: number | null
+          game_name?: string
+          id?: string
+          jackpot_amount?: string
+          last_updated?: string | null
+          logo_src?: string | null
+          next_drawing?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

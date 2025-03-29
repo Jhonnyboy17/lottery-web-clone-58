@@ -13,6 +13,7 @@ interface LotteryCardProps {
   backgroundColor?: string;
   showPlayButton?: boolean;
   route?: string;
+  exchangeRate?: number;
 }
 
 const LotteryCard = ({
@@ -25,12 +26,12 @@ const LotteryCard = ({
   backgroundColor = "bg-white",
   showPlayButton = false,
   route = "/play-powerball",
+  exchangeRate = 5.5,
 }: LotteryCardProps) => {
   // Calculate the approximate value in Brazilian Real (BRL)
-  // Using an approximate exchange rate of 1 USD = 5.5 BRL
   const getAmountInBRL = (amountStr: string) => {
     const numericAmount = parseFloat(amountStr.replace(/,/g, ''));
-    const brlAmount = (numericAmount * 5.5).toLocaleString('pt-BR');
+    const brlAmount = (numericAmount * exchangeRate).toLocaleString('pt-BR');
     return brlAmount;
   };
 
