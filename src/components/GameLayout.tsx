@@ -42,8 +42,8 @@ const GameLayout: React.FC<GameLayoutProps> = ({
 
             {/* Right side - Jackpot Info */}
             <div className="text-right">
-              <p className="text-sm font-bold text-white">JACKPOT ESTÁ VALIDO</p>
-              <h2 className="text-3xl font-bold text-black">R$ {jackpotAmount}</h2>
+              <p className="text-sm font-bold text-white font-akhand">JACKPOT ESTÁ VALIDO</p>
+              <h2 className="text-4xl font-bold text-black font-akhand">R$ {jackpotAmount}</h2>
             </div>
           </div>
         </div>

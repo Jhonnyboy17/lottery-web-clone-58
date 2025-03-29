@@ -81,6 +81,7 @@ export default {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         heading: ['Montserrat', 'sans-serif'],
+        akhand: ['Akhand Black', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
