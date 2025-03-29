@@ -13,12 +13,12 @@ interface ResultCardProps {
 }
 
 const gameColors: Record<string, string> = {
-  "Mega-Sena": "bg-blue-600",
+  "Mega-Sena": "bg-green-600",
   "Quina": "bg-purple-600",
-  "Lotofácil": "bg-green-500",
-  "Lotomania": "bg-teal-400",
+  "Lotofácil": "bg-pink-500",
+  "Lotomania": "bg-orange-500",
   "Pick 4": "bg-amber-500",
-  "Pick 3": "bg-orange-400"
+  "Pick 3": "bg-red-500"
 };
 
 const gameLogos: Record<string, string> = {
@@ -75,24 +75,25 @@ const ResultCard: React.FC<ResultCardProps> = ({
   
   return (
     <Card className={`results-card overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
-      <div className="p-6 flex flex-col h-full text-white">
+      <div className="p-5 flex flex-col h-full text-white">
         {/* Logo */}
-        <div className="flex justify-center mb-4 h-16">
+        <div className="flex justify-center mb-3 h-12">
           {logoSrc && <img src={logoSrc} alt={gameType} className="h-full object-contain" />}
         </div>
         
         {/* Jackpot */}
-        <div className="text-center mb-4">
-          <div className="text-3xl font-bold">{jackpot}</div>
+        <div className="text-center mb-3">
+          <div className="text-2xl font-bold">{jackpot}</div>
           <div className="text-xs opacity-75">(Prêmio Estimado)</div>
         </div>
         
         {/* Numbers */}
-        <div className="flex flex-wrap gap-2 justify-center mb-8">
+        <div className="flex flex-wrap gap-1.5 justify-center mb-6">
           {numbers.map((number, index) => (
             <div 
               key={index}
-              className="w-10 h-10 rounded-full bg-white flex items-center justify-center font-bold text-purple-900"
+              className="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-sm"
+              style={{ color: bgColor.replace('bg-', 'text-') }}
             >
               {number}
             </div>
@@ -100,18 +101,27 @@ const ResultCard: React.FC<ResultCardProps> = ({
         </div>
         
         {/* Date */}
-        <div className="text-center text-sm mb-6">
+        <div className="text-center text-sm mb-4">
           {formattedDate}
         </div>
         
-        {/* Play Button */}
-        <div className="mt-auto">
+        {/* Buttons */}
+        <div className="mt-auto flex gap-2">
           <Button 
             asChild
-            className="w-full bg-opacity-20 hover:bg-opacity-30 bg-white text-white border border-white/20"
+            className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white border border-white/20"
           >
             <Link to={gamePath}>
-              JOGAR
+              VER DETALHES
+            </Link>
+          </Button>
+          
+          <Button 
+            asChild
+            className="w-full bg-white text-emerald-700 hover:bg-opacity-90 font-medium"
+          >
+            <Link to={gamePath}>
+              CONFERIR NÚMEROS
             </Link>
           </Button>
         </div>
