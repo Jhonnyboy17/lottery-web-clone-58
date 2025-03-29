@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { toast } from "@/components/ui/use-toast";
 
 export interface LotteryGame {
@@ -16,20 +16,20 @@ export interface LotteryGame {
   price: number;
 }
 
-// Esta função simula a obtenção de dados do site LotteryPost
-// Em produção, você precisaria implementar um backend para fazer o web scraping
-const fetchLotteryData = async (): Promise<LotteryGame[]> => {
-  // Simulando uma chamada de API com dados baseados no site LotteryPost
-  // Em produção, substitua por uma chamada real para um endpoint que faz web scraping
+// Simula uma API que retorna dados da loteria como se estivesse consultando o ChatGPT
+const fetchLotteryDataFromAPI = async (): Promise<LotteryGame[]> => {
+  // Simulando uma chamada de API com dados atualizados
+  console.log("Fetching lottery data from API...");
   
   // Simulando um pequeno atraso para imitar uma chamada de rede
   await new Promise(resolve => setTimeout(resolve, 1000));
   
+  // Retorna dados simulados como se fosse uma resposta de API
   return [
     {
       id: 1,
       logoSrc: "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
-      amount: "29,000,000",  // Valor atualizado da Mega Millions conforme link https://www.lotterypost.com/results/il/megamillions
+      amount: "29,000,000",  // Valor atualizado da Mega Millions
       unit: "",
       cashOption: "13.8 MILLION",
       nextDrawing: "TERÇA, ABR 09, 9:59 PM", 
@@ -44,7 +44,7 @@ const fetchLotteryData = async (): Promise<LotteryGame[]> => {
       amount: "209,000,000", 
       unit: "",
       cashOption: "99.6 MILLION",
-      nextDrawing: "SÁBADO, ABR 13, 9:59 PM", // Data atualizada do próximo sorteio Powerball
+      nextDrawing: "SÁBADO, ABR 13, 9:59 PM",
       backgroundColor: "bg-[#ff5247]",
       showPlayButton: true,
       route: "/play-powerball",
@@ -106,16 +106,19 @@ export function useLotteryData() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const intervalRef = useRef<number | null>(null);
   
   const fetchData = async () => {
     setLoading(true);
     try {
-      const fetchedData = await fetchLotteryData();
+      const fetchedData = await fetchLotteryDataFromAPI();
       setData(fetchedData);
       setLastUpdated(new Date());
       setError(null);
+      console.log("Lottery data updated successfully:", new Date().toLocaleString());
     } catch (err) {
       setError("Falha ao atualizar os dados das loterias");
+      console.error("Error updating lottery data:", err);
       toast({
         title: "Erro ao atualizar",
         description: "Não foi possível obter os dados atualizados das loterias",
@@ -127,13 +130,30 @@ export function useLotteryData() {
   };
   
   useEffect(() => {
+    // Fetch data immediately when component mounts
     fetchData();
     
-    // Não vamos usar mais o intervalo, pois os dados serão atualizados apenas quando a página for carregada
-    // Porém, se quiser manter uma atualização periódica em segundo plano, pode manter o código abaixo
-    // const interval = setInterval(fetchData, 60 * 60 * 1000);
-    // return () => clearInterval(interval);
+    // Set up interval to fetch data every hour (3600000 ms)
+    const intervalId = window.setInterval(() => {
+      console.log("Running scheduled lottery data update");
+      fetchData();
+    }, 3600000);
+    
+    intervalRef.current = intervalId;
+    
+    // Clean up interval on component unmount
+    return () => {
+      if (intervalRef.current !== null) {
+        window.clearInterval(intervalRef.current);
+      }
+    };
   }, []);
   
-  return { data, loading, error, lastUpdated, refreshData: fetchData };
+  return { 
+    data, 
+    loading, 
+    error, 
+    lastUpdated,
+    refreshData: fetchData // Exposed function to manually refresh data
+  };
 }
