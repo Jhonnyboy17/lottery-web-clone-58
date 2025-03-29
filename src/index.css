@@ -178,7 +178,6 @@
   transform: scale(1.2);
 }
 
-/* Add animation for fade-in effect */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -192,7 +191,6 @@
   animation: fadeIn 0.3s ease forwards;
 }
 
-/* Custom purple gradient backgrounds */
 .bg-purple-gradient {
   background: linear-gradient(to right, hsl(var(--purple-gradient-from)), hsl(var(--purple-gradient-via)), hsl(var(--purple-gradient-from)));
 }
@@ -201,18 +199,20 @@
   background: linear-gradient(to bottom, hsl(var(--purple-gradient-from)), hsl(var(--purple-gradient-via)));
 }
 
-/* Add a navbar specific background color class */
 .bg-navbar {
   background-color: #1a0f36;
 }
 
-/* Dark mode enhanced styles */
 .dark .card {
-  @apply bg-card border-purple-900/30 shadow-lg shadow-purple-900/10;
+  background-color: hsl(var(--card));
+  border-color: rgba(88, 28, 135, 0.3);
+  box-shadow: 0 10px 15px -3px rgba(88, 28, 135, 0.1);
 }
 
 .dark .number-ball {
-  @apply bg-white text-[#1a0f36] border-purple-300;
+  background-color: white;
+  color: #1a0f36;
+  border-color: rgb(216, 180, 254);
 }
 
 .dark .bg-white-element {
@@ -226,5 +226,6 @@
 }
 
 .dark ::selection {
-  @apply bg-purple-800 text-white;
+  background-color: rgb(107, 33, 168);
+  color: white;
 }
