@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -14,26 +13,27 @@ interface ResultCardProps {
   previousNumbers?: number[]; // Add previous draw numbers
 }
 
-// Define game colors explicitly using Tailwind classes
+// Define game colors explicitly using Tailwind classes - Updated colors to match index page
 const gameColors: Record<string, string> = {
-  "Mega-Sena": "bg-green-600",    // Green for Mega-Sena
-  "Quina": "bg-purple-600",       // Purple for Quina
-  "Lotofácil": "bg-lime-500",     // Bright Green for Lotofácil
-  "Lotomania": "bg-orange-500",   // Orange for Lotomania
-  "Pick 4": "bg-amber-500",       // Amber for Pick 4
-  "Pick 3": "bg-red-500"          // Red for Pick 3
+  "Mega-Sena": "bg-blue-500",      // Blue for Mega-Sena (formerly green-600)
+  "Quina": "bg-[#ff5247]",         // Red for Quina (formerly purple-600)
+  "Lotofácil": "bg-[#8CD444]",     // Darker green for Lotofácil (formerly lime-500)
+  "Lotomania": "bg-[#00ccc6]",     // Cyan/Blue for Lotomania (formerly orange-500)
+  "Pick 4": "bg-[#ffa039]",        // Amber/Yellow for Pick 4 (formerly amber-500)
+  "Pick 3": "bg-[#ffa039]"         // Amber/Yellow for Pick 3 (formerly red-500)
 };
 
 // Define text colors for the number balls based on game type
 const numberTextColors: Record<string, string> = {
-  "Mega-Sena": "text-green-600",
-  "Quina": "text-purple-600",
-  "Lotofácil": "text-lime-500",
-  "Lotomania": "text-orange-500",
-  "Pick 4": "text-amber-500",
-  "Pick 3": "text-red-500"
+  "Mega-Sena": "text-blue-500",
+  "Quina": "text-[#ff5247]",
+  "Lotofácil": "text-[#8CD444]",
+  "Lotomania": "text-[#00ccc6]",
+  "Pick 4": "text-[#ffa039]",
+  "Pick 3": "text-[#ffa039]"
 };
 
+// Define game logos explicitly using Tailwind classes
 const gameLogos: Record<string, string> = {
   "Mega-Sena": "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png", // Updated Mega Millions logo
   "Quina": "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png", // Powerball logo
@@ -105,8 +105,8 @@ const ResultCard: React.FC<ResultCardProps> = ({
   className = "" 
 }) => {
   // Get the background color for the current game type
-  const bgColor = gameColors[gameType] || "bg-purple-600"; // Default to purple if gameType not found
-  const textColor = numberTextColors[gameType] || "text-purple-600"; // Default to purple text if gameType not found
+  const bgColor = gameColors[gameType] || "bg-blue-500"; // Default to blue if gameType not found
+  const textColor = numberTextColors[gameType] || "text-blue-500"; // Default to blue text if gameType not found
   const logoSrc = gameLogos[gameType];
   const formattedCurrentDate = getFormattedDate(date);
   const formattedPreviousDate = previousDraw ? getFormattedDate(previousDraw) : null;
