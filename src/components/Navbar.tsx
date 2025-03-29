@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, ShoppingCart, Search } from "lucide-react";
@@ -109,7 +110,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-6">
             <ThemeToggle />
             <div className="relative">
-              <div className="flex items-center w-64 bg-white rounded-full overflow-hidden dark:bg-gray-800">
+              <div className="flex items-center w-64 bg-white dark:bg-gray-800 rounded-full overflow-hidden">
                 <Search className="absolute left-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
                 <Input 
                   type="text" 

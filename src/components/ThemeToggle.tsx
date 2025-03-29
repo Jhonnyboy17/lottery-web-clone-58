@@ -33,13 +33,13 @@ export const ThemeToggle = () => {
 
   return (
     <div className="flex items-center gap-2">
-      <Sun className="h-4 w-4 text-yellow-400" />
+      <Sun className={`h-4 w-4 ${isDarkMode ? 'text-gray-400' : 'text-yellow-400'}`} />
       <Switch 
         checked={isDarkMode} 
         onCheckedChange={toggleTheme} 
         className={`${isDarkMode ? 'bg-purple-600' : 'bg-gray-200'}`}
       />
-      <Moon className="h-4 w-4 text-gray-400" />
+      <Moon className={`h-4 w-4 ${isDarkMode ? 'text-white' : 'text-gray-400'}`} />
     </div>
   );
 };

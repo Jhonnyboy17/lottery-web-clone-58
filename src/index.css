@@ -42,38 +42,38 @@
   }
 
   .dark {
-    --background: 240 10% 9%;
-    --foreground: 210 40% 98%;
+    --background: 263 50% 10%;  /* Dark purple background */
+    --foreground: 210 40% 98%;  /* Light text */
 
-    --card: 240 10% 13%;
+    --card: 263 45% 13%;  /* Slightly lighter purple for cards */
     --card-foreground: 210 40% 98%;
 
-    --popover: 240 10% 13%;
+    --popover: 263 45% 13%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 336 79% 47%;
     --primary-foreground: 222.2 47.4% 11.2%;
 
-    --secondary: 240 9% 17%;
+    --secondary: 263 40% 16%;  /* Purple-tinted secondary */
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 240 9% 17%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 263 40% 16%;
+    --muted-foreground: 215 20.2% 75%;  /* Lighter muted text for better contrast */
 
-    --accent: 240 9% 17%;
+    --accent: 263 40% 16%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 240 9% 20%;
-    --input: 240 9% 20%;
+    --border: 263 40% 20%;  /* Purple-tinted borders */
+    --input: 263 40% 20%;
     --ring: 336 79% 47%;
     
-    /* New variables for dark purple gradients - using darker shades */
-    --purple-gradient-from: 270 50% 15%;
-    --purple-gradient-via: 270 50% 12%;
-    --purple-gradient-to: 270 50% 10%;
+    /* New variables for dark purple gradients */
+    --purple-gradient-from: 263 50% 18%;
+    --purple-gradient-via: 263 50% 15%;
+    --purple-gradient-to: 263 50% 12%;
   }
 }
 
@@ -190,16 +190,33 @@
   animation: fadeIn 0.3s ease forwards;
 }
 
-/* Custom purple gradient backgrounds - updated with darker shades */
+/* Custom purple gradient backgrounds */
 .bg-purple-gradient {
-  background: linear-gradient(to right, #1a1433, #241b35, #1a1433);
+  background: linear-gradient(to right, hsl(var(--purple-gradient-from)), hsl(var(--purple-gradient-via)), hsl(var(--purple-gradient-from)));
 }
 
 .bg-purple-gradient-vertical {
-  background: linear-gradient(to bottom, #1a1433, #241b35);
+  background: linear-gradient(to bottom, hsl(var(--purple-gradient-from)), hsl(var(--purple-gradient-via)));
 }
 
 /* Add a navbar specific background color class */
 .bg-navbar {
   background-color: #1a0f36;
+}
+
+/* Dark mode enhanced styles */
+.dark .card {
+  @apply bg-card border-purple-900/30 shadow-lg shadow-purple-900/10;
+}
+
+.dark .number-ball {
+  @apply bg-white text-[#1a0f36] border-purple-300;
+}
+
+.dark .bg-white {
+  @apply bg-[#1a0f36] text-white;
+}
+
+.dark ::selection {
+  @apply bg-purple-800 text-white;
 }
