@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -104,7 +103,7 @@ const ResultsHub: React.FC = () => {
               onTimeframeChange={setTimeframe}
             />
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               {filteredResults.map((result) => (
                 <ResultCard
                   key={result.id}
@@ -126,13 +125,13 @@ const ResultsHub: React.FC = () => {
               <Button 
                 className="bg-white text-purple-800 hover:bg-gray-100 font-medium text-sm"
               >
-                CHEQUE SEUS NÚMEROS
+                VERIFICAR SEUS NÚMEROS
               </Button>
               
               <Button 
                 className="bg-purple-600 hover:bg-purple-700 text-white border-0 font-medium text-sm"
               >
-                VER TODOS OS RESULTADOS
+                VER TODOS RESULTADOS
               </Button>
             </div>
           </div>
