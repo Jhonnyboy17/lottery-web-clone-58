@@ -34,7 +34,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
         // Display a template line with question marks
         <div className="mb-2">
           <div 
-            className="bg-white dark:bg-gray-800 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
+            className="bg-white dark:bg-gray-900 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
             onClick={onStartNewLine}
           >
             <div className="flex items-center">
@@ -44,7 +44,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
               {Array(3).fill(null).map((_, i) => (
                 <span 
                   key={i} 
-                  className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                  className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                 >
                   ?
                 </span>
@@ -59,8 +59,8 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
               <div 
                 className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
                   editingIndex === index 
-                    ? 'bg-blue-100 dark:bg-gray-800 dark:border dark:border-purple-400' 
-                    : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'
+                    ? 'bg-blue-100 dark:bg-gray-900 dark:border dark:border-purple-400' 
+                    : 'bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800'
                 }`}
                 onClick={() => onEditLine(index)}
               >
@@ -72,7 +72,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                     <span 
                       key={i} 
                       className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                        digit === null ? 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold' : 
+                        digit === null ? 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold' : 
                         digit === -1 ? 'bg-red-500 text-white' : 
                         'bg-blue-500 text-white'
                       }`}
@@ -100,7 +100,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       {editingIndex === null && (
         <div className="mb-2">
           <div 
-            className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded p-3 flex items-center justify-between cursor-pointer"
+            className="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800 rounded p-3 flex items-center justify-between cursor-pointer"
             onClick={onStartNewLine}
           >
             <div className="flex items-center">
@@ -110,7 +110,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
               {Array(3).fill(null).map((_, i) => (
                 <span 
                   key={i} 
-                  className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                  className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                 >
                   {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
                     <span 

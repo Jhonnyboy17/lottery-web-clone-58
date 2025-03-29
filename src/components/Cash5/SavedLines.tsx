@@ -28,9 +28,9 @@ const SavedLines: React.FC<SavedLinesProps> = ({
       )}
 
       {savedLines.map((line, index) => (
-        <div key={index} className={`bg-white dark:bg-gray-800 rounded-md p-3 mb-2 shadow-sm ${
+        <div key={index} className={`bg-white dark:bg-gray-900 rounded-md p-3 mb-2 shadow-sm ${
           editingIndex === index 
-            ? 'border-2 border-amber-500 dark:border-purple-400 dark:bg-gray-800' 
+            ? 'border-2 border-amber-500 dark:border-purple-400' 
             : 'border border-gray-100 dark:border-gray-700'
         }`}>
           <div className="flex items-center justify-between">
@@ -46,7 +46,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
                   <span 
                     key={i} 
                     className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                      digit === null ? 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold' : 
+                      digit === null ? 'bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold' : 
                       digit === -1 ? 'bg-red-500 text-white' : 
                       'bg-blue-500 text-white'
                     }`}
@@ -81,7 +81,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
       ))}
       
       {/* Always show the current line template - guaranteed to display */}
-      <div className="bg-white dark:bg-gray-800 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors border border-gray-100 dark:border-gray-700 mb-2">
+      <div className="bg-white dark:bg-gray-900 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border border-gray-100 dark:border-gray-700 mb-2">
         <div className="flex items-center">
           <span className="text-gray-500 dark:text-gray-400 font-medium w-6 mr-2">
             {String(savedLines.length + 1).padStart(2, '0')}
@@ -89,7 +89,7 @@ const SavedLines: React.FC<SavedLinesProps> = ({
           {Array(currentLine?.digits.length || 5).fill(null).map((_, i) => (
             <span 
               key={i} 
-              className="rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold"
+              className="rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold"
             >
               {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
                 <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center">
