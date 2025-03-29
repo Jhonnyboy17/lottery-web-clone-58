@@ -4,6 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import ResultCard from "@/components/ResultCard";
 import ResultsFilter from "@/components/ResultsFilter";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 const ResultsHub: React.FC = () => {
   const [gameType, setGameType] = useState("all");
@@ -61,48 +63,52 @@ const ResultsHub: React.FC = () => {
     : resultsData.filter(result => result.gameType.toLowerCase().replace("-", "") === gameType);
 
   return (
-    <div className="results-page min-h-screen pb-12">
-      <Container className="pt-8 px-4">
-        <div className="max-w-6xl mx-auto">
-          <h1 className="text-3xl font-bold mb-2">Resultados de Loterias</h1>
-          <p className="text-gray-300 mb-8">
-            Confira os resultados dos últimos sorteios das loterias
-          </p>
-          
-          <ResultsFilter 
-            gameType={gameType}
-            onGameTypeChange={setGameType}
-            timeframe={timeframe}
-            onTimeframeChange={setTimeframe}
-          />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredResults.map((result) => (
-              <ResultCard
-                key={result.id}
-                date={result.date}
-                gameType={result.gameType}
-                numbers={result.numbers}
-                jackpot={result.jackpot}
-              />
-            ))}
-          </div>
-          
-          {filteredResults.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-400">Nenhum resultado encontrado para os filtros selecionados.</p>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <div className="results-page flex-grow pb-12 pt-24">
+        <Container className="px-4">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-3xl font-bold mb-2">Resultados de Loterias</h1>
+            <p className="text-gray-300 mb-8">
+              Confira os resultados dos últimos sorteios das loterias
+            </p>
+            
+            <ResultsFilter 
+              gameType={gameType}
+              onGameTypeChange={setGameType}
+              timeframe={timeframe}
+              onTimeframeChange={setTimeframe}
+            />
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredResults.map((result) => (
+                <ResultCard
+                  key={result.id}
+                  date={result.date}
+                  gameType={result.gameType}
+                  numbers={result.numbers}
+                  jackpot={result.jackpot}
+                />
+              ))}
             </div>
-          )}
-          
-          <div className="flex justify-center mt-8">
-            <Button 
-              className="bg-purple-600 hover:bg-purple-700 text-white border-0"
-            >
-              Carregar Mais Resultados
-            </Button>
+            
+            {filteredResults.length === 0 && (
+              <div className="text-center py-12">
+                <p className="text-gray-400">Nenhum resultado encontrado para os filtros selecionados.</p>
+              </div>
+            )}
+            
+            <div className="flex justify-center mt-8">
+              <Button 
+                className="bg-purple-600 hover:bg-purple-700 text-white border-0"
+              >
+                Carregar Mais Resultados
+              </Button>
+            </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </div>
+      <Footer />
     </div>
   );
 };
