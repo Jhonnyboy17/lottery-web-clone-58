@@ -85,6 +85,13 @@
     
     /* Navbar permanece com roxo escuro */
     --navbar-bg: 263 54% 13%;
+    
+    /* Results page specific purple shades */
+    --results-bg: 263 54% 20%;  /* Background for results page */
+    --results-card: 263 45% 30%;  /* Card background */
+    --results-card-hover: 263 45% 35%;  /* Card hover state */
+    --results-text: 0 0% 100%;  /* Text color on results page */
+    --results-text-secondary: 270 40% 90%;  /* Secondary text color */
   }
 }
 

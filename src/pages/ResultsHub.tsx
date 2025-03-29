@@ -839,32 +839,32 @@ const ResultsHub = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-purple-900">
       <Navbar />
       
-      <main className="container mx-auto px-4 py-12 pt-28">
+      <main className="container mx-auto px-4 py-12 pt-28 text-white">
         <div className="flex items-center mb-6">
-          <Button variant="ghost" className="text-gray-500 flex items-center mr-2">
+          <Button variant="ghost" className="text-purple-200 hover:text-white flex items-center mr-2">
             <ArrowLeft className="mr-1 h-4 w-4" />
             Back
           </Button>
-          <h1 className="text-4xl font-bold text-lottery-navy">Results Hub</h1>
+          <h1 className="text-4xl font-bold text-white">Results Hub</h1>
         </div>
         
-        <Card className="mb-10">
+        <Card className="mb-10 bg-purple-800 border-purple-700">
           <CardContent className="p-6">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div className="relative w-full lg:w-1/3">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-purple-300" />
                 <input
                   type="text"
                   placeholder="Search games..."
-                  className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lottery-pink"
+                  className="pl-10 pr-4 py-2 w-full bg-purple-700 border border-purple-600 text-white placeholder-purple-300 rounded-md focus:outline-none focus:ring-2 focus:ring-lottery-pink"
                 />
               </div>
               
               <div className="flex flex-col sm:flex-row gap-3">
-                <Button variant="outline" className="flex items-center justify-center">
+                <Button variant="outline" className="flex items-center justify-center bg-purple-700 border-purple-600 text-white hover:bg-purple-600">
                   <CalendarDays className="mr-2 h-4 w-4" />
                   Date Range
                 </Button>
@@ -877,40 +877,40 @@ const ResultsHub = () => {
         </Card>
         
         <Tabs defaultValue="all-games" value={activeTab} onValueChange={setActiveTab} className="mb-10">
-          <TabsList className="grid grid-cols-3 md:grid-cols-6 lg:w-3/4 bg-gray-100 p-1">
-            <TabsTrigger value="all-games" className="data-[state=active]:bg-white data-[state=active]:text-lottery-navy">
+          <TabsList className="grid grid-cols-3 md:grid-cols-6 lg:w-3/4 bg-purple-800 p-1">
+            <TabsTrigger value="all-games" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
               All Games
             </TabsTrigger>
-            <TabsTrigger value="mega-millions" className="data-[state=active]:bg-white data-[state=active]:text-lottery-navy">
+            <TabsTrigger value="mega-millions" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
               Mega Millions
             </TabsTrigger>
-            <TabsTrigger value="powerball" className="data-[state=active]:bg-white data-[state=active]:text-lottery-navy">
+            <TabsTrigger value="powerball" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
               Powerball
             </TabsTrigger>
-            <TabsTrigger value="lucky-day" className="data-[state=active]:bg-white data-[state=active]:text-lottery-navy">
+            <TabsTrigger value="lucky-day" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
               Lucky Day
             </TabsTrigger>
-            <TabsTrigger value="pick4" className="data-[state=active]:bg-white data-[state=active]:text-lottery-navy">
+            <TabsTrigger value="pick4" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
               Pick 4
             </TabsTrigger>
-            <TabsTrigger value="cash5" className="data-[state=active]:bg-white data-[state=active]:text-lottery-navy">
+            <TabsTrigger value="cash5" className="data-[state=active]:bg-purple-600 data-[state=active]:text-white">
               Cash 5
             </TabsTrigger>
           </TabsList>
           
           <TabsContent value="all-games" className="mt-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+            <div className="bg-purple-800 p-6 rounded-lg shadow-sm mb-6 border border-purple-700">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-lottery-navy">
+                  <h3 className="text-2xl font-bold text-white">
                     Draw Results - All Games
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-purple-300">
                     Results for all lottery games
                   </p>
                 </div>
                 <div className="mt-4 md:mt-0 flex items-center">
-                  <Button variant="outline" className="flex items-center">
+                  <Button variant="outline" className="flex items-center bg-purple-700 border-purple-600 text-white hover:bg-purple-600">
                     <FileText className="mr-2 h-4 w-4" />
                     Download PDF
                   </Button>
@@ -919,16 +919,16 @@ const ResultsHub = () => {
               
               <div className="space-y-4">
                 {currentGames.map((game, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                  <div key={index} className="border border-purple-600 bg-purple-700 rounded-lg p-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
                       <div className="flex items-center">
                         <img src={game.logo} alt={game.name} className="h-10 w-auto mr-3" />
                         <div>
-                          <h4 className="text-lg font-bold text-lottery-navy">{game.name}</h4>
-                          <p className="text-gray-600 text-sm">{game.date}</p>
+                          <h4 className="text-lg font-bold text-white">{game.name}</h4>
+                          <p className="text-purple-300 text-sm">{game.date}</p>
                         </div>
                       </div>
-                      <Button variant="ghost" className="text-blue-600 p-0 h-auto hover:bg-transparent hover:text-blue-800 mt-2 md:mt-0">
+                      <Button variant="ghost" className="text-purple-300 p-0 h-auto hover:bg-transparent hover:text-white mt-2 md:mt-0">
                         <ChevronRight className="h-5 w-5" />
                       </Button>
                     </div>
@@ -951,7 +951,7 @@ const ResultsHub = () => {
                         </span>
                       ))}
                       {game.multiplier && (
-                        <span className="ml-2 text-sm font-medium">
+                        <span className="ml-2 text-sm font-medium text-purple-300">
                           {game.multiplier}
                         </span>
                       )}
@@ -969,6 +969,7 @@ const ResultsHub = () => {
                         e.preventDefault();
                         if (currentPage > 1) paginate(currentPage - 1);
                       }}
+                      className="bg-purple-700 border-purple-600 text-white hover:bg-purple-600"
                     />
                   </PaginationItem>
                   {Array.from({ length: Math.ceil(gamesData.length / gamesPerPage) }).map((_, index) => (
@@ -980,6 +981,9 @@ const ResultsHub = () => {
                           e.preventDefault();
                           paginate(index + 1);
                         }}
+                        className={currentPage === index + 1 
+                          ? "bg-purple-600 text-white" 
+                          : "bg-purple-700 border-purple-600 text-white hover:bg-purple-600"}
                       >
                         {index + 1}
                       </PaginationLink>
@@ -994,26 +998,27 @@ const ResultsHub = () => {
                           paginate(currentPage + 1);
                         }
                       }}
+                      className="bg-purple-700 border-purple-600 text-white hover:bg-purple-600"
                     />
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
               
-              <div className="text-center mt-8 text-sm text-gray-500">
-                <p>Fonte: <a href="https://www.illinoislottery.com/results" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
+              <div className="text-center mt-8 text-sm text-purple-300">
+                <p>Fonte: <a href="https://www.illinoislottery.com/results" className="text-lottery-pink hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
                 <p className="mt-1">Última atualização: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
               </div>
             </div>
           </TabsContent>
           
           <TabsContent value="mega-millions" className="mt-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+            <div className="bg-purple-800 p-6 rounded-lg shadow-sm mb-6 border border-purple-700">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-lottery-navy">
+                  <h3 className="text-2xl font-bold text-white">
                     Draw Results Mega Millions
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-purple-300">
                     Click for more details on the prize payouts
                   </p>
                 </div>
@@ -1023,7 +1028,7 @@ const ResultsHub = () => {
                     alt="Mega Millions Logo" 
                     className="h-12 w-auto mr-4"
                   />
-                  <Button variant="outline" className="flex items-center">
+                  <Button variant="outline" className="flex items-center bg-purple-700 border-purple-600 text-white hover:bg-purple-600">
                     <FileText className="mr-2 h-4 w-4" />
                     Download PDF
                   </Button>
@@ -1032,13 +1037,13 @@ const ResultsHub = () => {
               
               <div className="space-y-4">
                 {currentMegaMillionsResults.map((result, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                  <div key={index} className="border border-purple-600 bg-purple-700 rounded-lg p-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
                       <div>
-                        <h4 className="text-lg font-bold text-lottery-navy">{result.dayOfWeek}</h4>
-                        <p className="text-gray-600 text-sm">{result.displayDate}</p>
+                        <h4 className="text-lg font-bold text-white">{result.dayOfWeek}</h4>
+                        <p className="text-purple-300 text-sm">{result.displayDate}</p>
                       </div>
-                      <Button variant="ghost" className="text-blue-600 p-0 h-auto hover:bg-transparent hover:text-blue-800">
+                      <Button variant="ghost" className="text-purple-300 p-0 h-auto hover:bg-transparent hover:text-white">
                         <ChevronRight className="h-5 w-5" />
                       </Button>
                     </div>
@@ -1055,7 +1060,7 @@ const ResultsHub = () => {
                       <span className="bg-amber-400 w-9 h-9 rounded-full flex items-center justify-center text-black font-bold text-sm">
                         {result.megaBall}
                       </span>
-                      <span className="ml-2 text-sm">
+                      <span className="ml-2 text-sm text-purple-300">
                         {result.multiplier}
                       </span>
                     </div>
@@ -1072,6 +1077,7 @@ const ResultsHub = () => {
                         e.preventDefault();
                         if (megaMillionsPage > 1) paginateMegaMillions(megaMillionsPage - 1);
                       }}
+                      className="bg-purple-700 border-purple-600 text-white hover:bg-purple-600"
                     />
                   </PaginationItem>
                   {Array.from({ length: Math.ceil(megaMillionsHistory.length / megaMillionsResultsPerPage) }).map((_, index) => (
@@ -1083,6 +1089,9 @@ const ResultsHub = () => {
                           e.preventDefault();
                           paginateMegaMillions(index + 1);
                         }}
+                        className={megaMillionsPage === index + 1 
+                          ? "bg-purple-600 text-white" 
+                          : "bg-purple-700 border-purple-600 text-white hover:bg-purple-600"}
                       >
                         {index + 1}
                       </PaginationLink>
@@ -1097,24 +1106,25 @@ const ResultsHub = () => {
                           paginateMegaMillions(megaMillionsPage + 1);
                         }
                       }}
+                      className="bg-purple-700 border-purple-600 text-white hover:bg-purple-600"
                     />
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
               
-              <div className="text-center mt-8 text-sm text-gray-500">
-                <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/megamillions" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
+              <div className="text-center mt-8 text-sm text-purple-300">
+                <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/megamillions" className="text-lottery-pink hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
                 <p className="mt-1">Última atualização: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
               </div>
             </div>
             
-            <Card className="bg-gray-50 border border-gray-200">
+            <Card className="bg-purple-700 border-purple-600">
               <CardContent className="p-6">
-                <h4 className="text-lg font-bold text-lottery-navy mb-3">Como Jogar na Mega Millions</h4>
-                <p className="text-gray-700 mb-4">
+                <h4 className="text-lg font-bold text-white mb-3">Como Jogar na Mega Millions</h4>
+                <p className="text-purple-200 mb-4">
                   O sorteio da Mega Millions ocorre todas as terças e sextas-feiras. Para jogar:
                 </p>
-                <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+                <ol className="list-decimal pl-5 space-y-2 text-purple-200">
                   <li>Escolha 5 números de 1 a 70</li>
                   <li>Escolha 1 número Mega Ball de 1 a 25</li>
                   <li>Opcionalmente, adicione o Megaplier para multiplicar seus prêmios (exceto o jackpot)</li>
@@ -1130,13 +1140,13 @@ const ResultsHub = () => {
           </TabsContent>
           
           <TabsContent value="powerball" className="mt-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+            <div className="bg-purple-800 p-6 rounded-lg shadow-sm mb-6 border border-purple-700">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-lottery-navy">
+                  <h3 className="text-2xl font-bold text-white">
                     Draw Results Powerball
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-purple-300">
                     Click for more details on the prize payouts
                   </p>
                 </div>
@@ -1146,7 +1156,7 @@ const ResultsHub = () => {
                     alt="Powerball Logo" 
                     className="h-12 w-auto mr-4"
                   />
-                  <Button variant="outline" className="flex items-center">
+                  <Button variant="outline" className="flex items-center bg-purple-700 border-purple-600 text-white hover:bg-purple-600">
                     <FileText className="mr-2 h-4 w-4" />
                     Download PDF
                   </Button>
@@ -1155,13 +1165,13 @@ const ResultsHub = () => {
               
               <div className="space-y-4">
                 {currentPowerballResults.map((result, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                  <div key={index} className="border border-purple-600 bg-purple-700 rounded-lg p-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
                       <div>
-                        <h4 className="text-lg font-bold text-lottery-navy">{result.dayOfWeek}</h4>
-                        <p className="text-gray-600 text-sm">{result.displayDate}</p>
+                        <h4 className="text-lg font-bold text-white">{result.dayOfWeek}</h4>
+                        <p className="text-purple-300 text-sm">{result.displayDate}</p>
                       </div>
-                      <Button variant="ghost" className="text-blue-600 p-0 h-auto hover:bg-transparent hover:text-blue-800">
+                      <Button variant="ghost" className="text-purple-300 p-0 h-auto hover:bg-transparent hover:text-white">
                         <ChevronRight className="h-5 w-5" />
                       </Button>
                     </div>
@@ -1178,7 +1188,7 @@ const ResultsHub = () => {
                       <span className="bg-amber-400 w-9 h-9 rounded-full flex items-center justify-center text-black font-bold text-sm">
                         {result.powerball}
                       </span>
-                      <span className="ml-2 text-sm">
+                      <span className="ml-2 text-sm text-purple-300">
                         {result.multiplier}
                       </span>
                     </div>
@@ -1195,6 +1205,7 @@ const ResultsHub = () => {
                         e.preventDefault();
                         if (powerballPage > 1) paginatePowerball(powerballPage - 1);
                       }}
+                      className="bg-purple-700 border-purple-600 text-white hover:bg-purple-600"
                     />
                   </PaginationItem>
                   {Array.from({ length: Math.ceil(powerballHistory.length / powerballResultsPerPage) }).map((_, index) => (
@@ -1206,6 +1217,9 @@ const ResultsHub = () => {
                           e.preventDefault();
                           paginatePowerball(index + 1);
                         }}
+                        className={powerballPage === index + 1 
+                          ? "bg-purple-600 text-white" 
+                          : "bg-purple-700 border-purple-600 text-white hover:bg-purple-600"}
                       >
                         {index + 1}
                       </PaginationLink>
@@ -1220,24 +1234,25 @@ const ResultsHub = () => {
                           paginatePowerball(powerballPage + 1);
                         }
                       }}
+                      className="bg-purple-700 border-purple-600 text-white hover:bg-purple-600"
                     />
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
               
-              <div className="text-center mt-8 text-sm text-gray-500">
-                <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/powerball" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
+              <div className="text-center mt-8 text-sm text-purple-300">
+                <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/powerball" className="text-lottery-pink hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
                 <p className="mt-1">Última atualização: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
               </div>
             </div>
             
-            <Card className="bg-gray-50 border border-gray-200">
+            <Card className="bg-purple-700 border-purple-600">
               <CardContent className="p-6">
-                <h4 className="text-lg font-bold text-lottery-navy mb-3">Como Jogar na Powerball</h4>
-                <p className="text-gray-700 mb-4">
+                <h4 className="text-lg font-bold text-white mb-3">Como Jogar na Powerball</h4>
+                <p className="text-purple-200 mb-4">
                   O sorteio da Powerball ocorre segundas, quartas e sábados. Para jogar:
                 </p>
-                <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+                <ol className="list-decimal pl-5 space-y-2 text-purple-200">
                   <li>Escolha 5 números de 1 a 69</li>
                   <li>Escolha 1 número Powerball de 1 a 26</li>
                   <li>Opcionalmente, adicione o Power Play para multiplicar seus prêmios (exceto o jackpot)</li>
@@ -1253,13 +1268,13 @@ const ResultsHub = () => {
           </TabsContent>
           
           <TabsContent value="lucky-day" className="mt-6">
-            <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
+            <div className="bg-purple-800 p-6 rounded-lg shadow-sm mb-6 border border-purple-700">
               <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
                 <div>
-                  <h3 className="text-2xl font-bold text-lottery-navy">
+                  <h3 className="text-2xl font-bold text-white">
                     Draw Results Lucky Day Lotto
                   </h3>
-                  <p className="text-gray-600">
+                  <p className="text-purple-300">
                     Click for more details on the prize payouts
                   </p>
                 </div>
@@ -1269,7 +1284,7 @@ const ResultsHub = () => {
                     alt="Lucky Day Logo" 
                     className="h-12 w-auto mr-4"
                   />
-                  <Button variant="outline" className="flex items-center">
+                  <Button variant="outline" className="flex items-center bg-purple-700 border-purple-600 text-white hover:bg-purple-600">
                     <FileText className="mr-2 h-4 w-4" />
                     Download PDF
                   </Button>
@@ -1278,13 +1293,13 @@ const ResultsHub = () => {
               
               <div className="space-y-4">
                 {currentLuckyDayResults.map((result, index) => (
-                  <div key={index} className="border border-gray-200 rounded-lg p-4">
+                  <div key={index} className="border border-purple-600 bg-purple-700 rounded-lg p-4">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-3">
                       <div>
-                        <h4 className="text-lg font-bold text-lottery-navy">{result.dayOfWeek}</h4>
-                        <p className="text-gray-600 text-sm">{result.displayDate}</p>
+                        <h4 className="text-lg font-bold text-white">{result.dayOfWeek}</h4>
+                        <p className="text-purple-300 text-sm">{result.displayDate}</p>
                       </div>
-                      <Button variant="ghost" className="text-blue-600 p-0 h-auto hover:bg-transparent hover:text-blue-800">
+                      <Button variant="ghost" className="text-purple-300 p-0 h-auto hover:bg-transparent hover:text-white">
                         <ChevronRight className="h-5 w-5" />
                       </Button>
                     </div>
@@ -1303,9 +1318,9 @@ const ResultsHub = () => {
                       </span>
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-3 rounded-lg">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 bg-purple-600 p-3 rounded-lg">
                       <div>
-                        <p className="text-sm font-medium text-gray-700 mb-2">LOTTO MILLION 1</p>
+                        <p className="text-sm font-medium text-white mb-2">LOTTO MILLION 1</p>
                         <div className="flex flex-wrap gap-2">
                           {result.lottoMillion1.map((val, idx) => (
                             <div
@@ -1318,7 +1333,7 @@ const ResultsHub = () => {
                         </div>
                       </div>
                       <div>
-                        <p className="text-sm font-medium text-gray-700 mb-2">LOTTO MILLION 2</p>
+                        <p className="text-sm font-medium text-white mb-2">LOTTO MILLION 2</p>
                         <div className="flex flex-wrap gap-2">
                           {result.lottoMillion2.map((val, idx) => (
                             <div
@@ -1344,6 +1359,7 @@ const ResultsHub = () => {
                         e.preventDefault();
                         if (luckyDayPage > 1) paginateLuckyDay(luckyDayPage - 1);
                       }}
+                      className="bg-purple-700 border-purple-600 text-white hover:bg-purple-600"
                     />
                   </PaginationItem>
                   {Array.from({ length: Math.ceil(luckyDayHistory.length / luckyDayResultsPerPage) }).map((_, index) => (
@@ -1355,6 +1371,9 @@ const ResultsHub = () => {
                           e.preventDefault();
                           paginateLuckyDay(index + 1);
                         }}
+                        className={luckyDayPage === index + 1 
+                          ? "bg-purple-600 text-white" 
+                          : "bg-purple-700 border-purple-600 text-white hover:bg-purple-600"}
                       >
                         {index + 1}
                       </PaginationLink>
@@ -1369,24 +1388,25 @@ const ResultsHub = () => {
                           paginateLuckyDay(luckyDayPage + 1);
                         }
                       }}
+                      className="bg-purple-700 border-purple-600 text-white hover:bg-purple-600"
                     />
                   </PaginationItem>
                 </PaginationContent>
               </Pagination>
               
-              <div className="text-center mt-8 text-sm text-gray-500">
-                <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/luckydaylotto" className="text-blue-500 hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
+              <div className="text-center mt-8 text-sm text-purple-300">
+                <p>Fonte: <a href="https://www.illinoislottery.com/dbg/results/luckydaylotto" className="text-lottery-pink hover:underline" target="_blank" rel="noopener noreferrer">Illinois Lottery</a></p>
                 <p className="mt-1">Última atualização: {new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' })}</p>
               </div>
             </div>
             
-            <Card className="bg-gray-50 border border-gray-200">
+            <Card className="bg-purple-700 border-purple-600">
               <CardContent className="p-6">
-                <h4 className="text-lg font-bold text-lottery-navy mb-3">Como Jogar no Lucky Day Lotto</h4>
-                <p className="text-gray-700 mb-4">
+                <h4 className="text-lg font-bold text-white mb-3">Como Jogar no Lucky Day Lotto</h4>
+                <p className="text-purple-200 mb-4">
                   O sorteio do Lucky Day Lotto ocorre duas vezes por dia. Para jogar:
                 </p>
-                <ol className="list-decimal pl-5 space-y-2 text-gray-700">
+                <ol className="list-decimal pl-5 space-y-2 text-purple-200">
                   <li>Escolha 5 números de 1 a 45</li>
                   <li>Opcionalmente, adicione o Lucky Boost para aumentar seus prêmios</li>
                   <li>Cada jogo custa R$ 15</li>
@@ -1402,11 +1422,11 @@ const ResultsHub = () => {
           
           {["pick4", "cash5"].map((tab) => (
             <TabsContent key={tab} value={tab} className="mt-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="text-xl font-bold text-center text-lottery-navy mb-4">
+              <div className="bg-purple-800 p-6 rounded-lg shadow-sm border border-purple-700">
+                <h3 className="text-xl font-bold text-center text-white mb-4">
                   {tab.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")} Results
                 </h3>
-                <p className="text-center text-gray-500">
+                <p className="text-center text-purple-300">
                   Showing filtered results for {tab.split("-").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
                 </p>
               </div>
