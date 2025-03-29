@@ -11,49 +11,55 @@ const ResultsHub: React.FC = () => {
   const [gameType, setGameType] = useState("all");
   const [timeframe, setTimeframe] = useState("recent");
 
-  // Example results data with previous draw dates
+  // Example results data with previous draw dates and numbers
   const resultsData = [
     {
       id: 1,
       date: "15/05/2023",
       previousDraw: "12/05/2023",
       gameType: "Mega-Sena",
-      numbers: [5, 12, 28, 34, 47, 58]
+      numbers: [2, 9, 31, 60, 63, 23],
+      previousNumbers: [1, 5, 17, 39, 62, 8]
     },
     {
       id: 2,
       date: "14/05/2023",
       previousDraw: "11/05/2023",
       gameType: "Quina",
-      numbers: [10, 25, 38, 42, 60]
+      numbers: [10, 25, 38, 42, 60],
+      previousNumbers: [5, 18, 27, 36, 48]
     },
     {
       id: 3,
       date: "13/05/2023",
       previousDraw: "10/05/2023",
       gameType: "Lotofácil",
-      numbers: [1, 2, 5, 8, 9, 10, 13, 14, 15, 17, 19, 20, 21, 22, 25]
+      numbers: [1, 2, 5, 8, 9, 10, 13, 14, 15, 17, 19, 20, 21, 22, 25],
+      previousNumbers: [3, 4, 6, 7, 11, 12, 16, 18, 23, 24]
     },
     {
       id: 4,
       date: "12/05/2023",
       previousDraw: "09/05/2023",
       gameType: "Lotomania",
-      numbers: [3, 7, 11, 18, 22, 29, 34, 41, 50, 52, 59, 63, 67, 70, 75, 78, 83, 88, 94, 99]
+      numbers: [3, 7, 11, 18, 22, 29, 34, 41, 50, 52],
+      previousNumbers: [59, 63, 67, 70, 75, 78, 83, 88, 94, 99]
     },
     {
       id: 5,
       date: "11/05/2023",
       previousDraw: "08/05/2023",
       gameType: "Pick 4",
-      numbers: [7, 15, 22, 36]
+      numbers: [7, 15, 22, 36],
+      previousNumbers: [4, 12, 19, 33]
     },
     {
       id: 6,
       date: "10/05/2023",
       previousDraw: "07/05/2023",
       gameType: "Pick 3",
-      numbers: [8, 17, 30]
+      numbers: [8, 17, 30],
+      previousNumbers: [6, 14, 27]
     }
   ];
 
@@ -88,6 +94,7 @@ const ResultsHub: React.FC = () => {
                   previousDraw={result.previousDraw}
                   gameType={result.gameType}
                   numbers={result.numbers}
+                  previousNumbers={result.previousNumbers}
                 />
               ))}
             </div>

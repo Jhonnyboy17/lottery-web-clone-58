@@ -10,7 +10,8 @@ interface ResultCardProps {
   numbers: number[];
   jackpot?: string;
   className?: string;
-  previousDraw?: string; // Add a prop for the previous draw date
+  previousDraw?: string; // Previous draw date
+  previousNumbers?: number[]; // Add previous draw numbers
 }
 
 // Define game colors explicitly using Tailwind classes
@@ -53,11 +54,18 @@ const getFormattedDate = (dateString: string) => {
     parseInt(dateParts[0]) // day
   );
   
+  // Get day name (e.g., "Friday")
   const dayName = days[date.getDay()];
+  
+  // Format as "Mar 28 2025"
   const monthName = months[date.getMonth()];
   const day = date.getDate();
+  const year = date.getFullYear();
   
-  return `${dayName}, ${monthName} ${day}, 9:59 PM`;
+  return {
+    dayName: dayName,
+    shortDate: `${monthName} ${day} ${year}`
+  };
 };
 
 const getGamePath = (gameType: string) => {
@@ -77,63 +85,100 @@ const ResultCard: React.FC<ResultCardProps> = ({
   date, 
   gameType, 
   numbers, 
-  previousDraw, 
+  previousDraw,
+  previousNumbers = [],
   className = "" 
 }) => {
   // Get the background color for the current game type
   const bgColor = gameColors[gameType] || "bg-purple-600"; // Default to purple if gameType not found
   const textColor = numberTextColors[gameType] || "text-purple-600"; // Default to purple text if gameType not found
   const logoSrc = gameLogos[gameType];
-  const formattedDate = getFormattedDate(date);
-  const formattedPreviousDraw = previousDraw ? getFormattedDate(previousDraw) : null;
+  const formattedCurrentDate = getFormattedDate(date);
+  const formattedPreviousDate = previousDraw ? getFormattedDate(previousDraw) : null;
   const gamePath = getGamePath(gameType);
   
   return (
     <Card className={`overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
       <div className="p-5 flex flex-col h-full text-white">
         {/* Logo */}
-        <div className="flex justify-center mb-3 h-12">
+        <div className="flex justify-center mb-4 h-12">
           {logoSrc && <img src={logoSrc} alt={gameType} className="h-full object-contain" />}
         </div>
         
-        {/* Last 2 Draws */}
-        <div className="text-center mb-3">
-          <div className="text-sm font-medium">ÚLTIMOS SORTEIOS</div>
-          <div className="text-lg font-bold">{formattedDate}</div>
-          {formattedPreviousDraw && (
-            <div className="text-sm opacity-75">{formattedPreviousDraw}</div>
-          )}
+        {/* Jackpot Pending or Main Info */}
+        <div className="text-center mb-4">
+          <div className="text-xl font-bold">JACKPOT PENDING</div>
         </div>
         
-        {/* Numbers */}
-        <div className="flex flex-wrap gap-1.5 justify-center mb-6">
-          {numbers.map((number, index) => (
-            <div 
-              key={index}
-              className="w-8 h-8 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-sm text-white"
-            >
-              {number}
-            </div>
-          ))}
+        {/* Current Draw */}
+        <div className="border-t border-white/20 pt-4">
+          <div className="font-semibold text-lg">{formattedCurrentDate.dayName}</div>
+          <div className="text-sm text-white/70 mb-3">{formattedCurrentDate.shortDate}</div>
+          
+          {/* Numbers for current draw */}
+          <div className="flex flex-wrap gap-2 justify-start mb-5">
+            {numbers.map((number, index) => (
+              <div 
+                key={index}
+                className="w-9 h-9 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-sm text-white"
+              >
+                {number}
+              </div>
+            ))}
+            {numbers.length > 0 && (
+              <div className="text-sm self-center font-light">
+                ×{numbers.length > 5 ? "5" : "2"}
+              </div>
+            )}
+          </div>
         </div>
+        
+        {/* Previous Draw */}
+        {previousDraw && (
+          <div className="border-t border-white/20 pt-4">
+            <div className="font-semibold text-lg">{formattedPreviousDate?.dayName}</div>
+            <div className="text-sm text-white/70 mb-3">{formattedPreviousDate?.shortDate}</div>
+            
+            {/* Numbers for previous draw (if available) */}
+            <div className="flex flex-wrap gap-2 justify-start mb-5">
+              {previousNumbers.length > 0 ? (
+                <>
+                  {previousNumbers.map((number, index) => (
+                    <div 
+                      key={index}
+                      className="w-9 h-9 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-sm text-white"
+                    >
+                      {number}
+                    </div>
+                  ))}
+                  <div className="text-sm self-center font-light">
+                    ×{previousNumbers.length > 5 ? "5" : "2"}
+                  </div>
+                </>
+              ) : (
+                <div className="text-sm text-white/70">No numbers available</div>
+              )}
+            </div>
+          </div>
+        )}
         
         {/* Buttons */}
-        <div className="mt-auto space-y-2">
+        <div className="mt-auto flex gap-3 border-t border-white/20 pt-4">
           <Button 
             asChild
-            className="w-full bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white"
+            className="flex-1 bg-[#1a0f36] hover:bg-[#2a1b4e] font-medium text-white"
           >
             <Link to={gamePath}>
-              VER TODOS
+              View all results
             </Link>
           </Button>
           
           <Button 
             asChild
-            className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white border border-white/20"
+            className="flex-1 bg-white bg-opacity-20 hover:bg-opacity-30 text-white border border-white/20"
           >
             <Link to={gamePath}>
-              CHEQUE SEUS NÚMEROS
+              Check your numbers
             </Link>
           </Button>
         </div>
