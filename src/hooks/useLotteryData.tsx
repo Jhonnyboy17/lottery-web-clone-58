@@ -29,10 +29,10 @@ const fetchLotteryData = async (): Promise<LotteryGame[]> => {
     {
       id: 1,
       logoSrc: "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
-      amount: "1,080,000,000",  // Valor atualizado com base no LotteryPost
+      amount: "29,000,000",  // Valor atualizado da Mega Millions conforme link https://www.lotterypost.com/results/il/megamillions
       unit: "",
-      cashOption: "513.4 MILLION",
-      nextDrawing: "TERÇA, ABR 09, 9:59 PM", // Data atualizada
+      cashOption: "13.8 MILLION",
+      nextDrawing: "TERÇA, ABR 09, 9:59 PM", 
       backgroundColor: "bg-blue-500",
       showPlayButton: true,
       route: "/play-mega-millions",
@@ -41,10 +41,10 @@ const fetchLotteryData = async (): Promise<LotteryGame[]> => {
     {
       id: 2,
       logoSrc: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
-      amount: "135,000,000", // Valor atualizado com base no LotteryPost
+      amount: "135,000,000", // Valor do Powerball
       unit: "",
       cashOption: "64.9 MILLION",
-      nextDrawing: "SEGUNDA, ABR 08, 9:59 PM", // Data atualizada
+      nextDrawing: "SEGUNDA, ABR 08, 9:59 PM", 
       backgroundColor: "bg-[#ff5247]",
       showPlayButton: true,
       route: "/play-powerball",
@@ -53,10 +53,10 @@ const fetchLotteryData = async (): Promise<LotteryGame[]> => {
     {
       id: 3,
       logoSrc: "/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png",
-      amount: "500,000", // Valor atualizado com base no LotteryPost
+      amount: "500,000", 
       unit: "",
       cashOption: "375 THOUSAND",
-      nextDrawing: "SEGUNDA, ABR 08, 9:22 PM", // Data atualizada
+      nextDrawing: "SEGUNDA, ABR 08, 9:22 PM", 
       backgroundColor: "bg-[#8CD444]",
       showPlayButton: true,
       route: "/play-lucky-day",
@@ -65,10 +65,10 @@ const fetchLotteryData = async (): Promise<LotteryGame[]> => {
     {
       id: 4,
       logoSrc: "/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png",
-      amount: "10,000", // Valor atualizado com base no LotteryPost
+      amount: "10,000", 
       unit: "",
       prefix: "",
-      nextDrawing: "DIARIAMENTE, 12:40 PM & 9:22 PM", // Data atualizada
+      nextDrawing: "DIARIAMENTE, 12:40 PM & 9:22 PM", 
       backgroundColor: "bg-[#00ccc6]",
       showPlayButton: true,
       route: "/play-pick4",
@@ -77,7 +77,7 @@ const fetchLotteryData = async (): Promise<LotteryGame[]> => {
     {
       id: 5,
       logoSrc: "/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png",
-      amount: "100,000", // Valor atualizado com base no LotteryPost
+      amount: "100,000", 
       unit: "",
       prefix: "WIN UP TO",
       nextDrawing: "DIARIAMENTE 12:40 PM & 9:22 PM",
@@ -89,7 +89,7 @@ const fetchLotteryData = async (): Promise<LotteryGame[]> => {
     {
       id: 6,
       logoSrc: "/lovable-uploads/a02651ec-8efc-429a-8231-5ae52f5c4af5.png",
-      amount: "50,000", // Valor atualizado com base no LotteryPost
+      amount: "50,000", 
       unit: "",
       prefix: "WIN UP TO",
       nextDrawing: "DIARIAMENTE 12:40 PM & 9:22 PM",
