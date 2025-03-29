@@ -117,6 +117,6 @@ const ResultsHub: React.FC = () => {
       <Footer />
     </div>
   );
-};
+}
 
 export default ResultsHub;

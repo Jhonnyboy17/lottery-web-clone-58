@@ -73,6 +73,9 @@ const ResultCard: React.FC<ResultCardProps> = ({
   const formattedDate = getFormattedDate(date);
   const gamePath = getGamePath(gameType);
   
+  // Create a text color based on the background color
+  const textColor = `text-${bgColor.replace('bg-', '')}`;
+  
   return (
     <Card className={`results-card overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
       <div className="p-5 flex flex-col h-full text-white">
@@ -93,7 +96,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
             <div 
               key={index}
               className="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-sm"
-              style={{ color: bgColor.replace('bg-', 'text-') }}
+              style={{ color: bgColor.slice(3) }} // Pass just the color name without 'bg-'
             >
               {number}
             </div>
