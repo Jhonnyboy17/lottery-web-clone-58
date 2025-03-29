@@ -36,6 +36,9 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: 336 79% 47%;
+    
+    --selected-item: 213.8 100% 96.9%;
+    --selected-item-border: 215 100% 60%;
 
     --radius: 0.5rem;
     
@@ -71,6 +74,9 @@
     --border: 263 40% 25%;  /* Bordas com roxo mais claro */
     --input: 263 40% 25%;
     --ring: 336 79% 47%;
+    
+    --selected-item: 265 54% 37%;  /* Roxo mais claro para itens selecionados */
+    --selected-item-border: 262 62% 60%;  /* Borda para itens selecionados */
     
     /* Gradientes roxos ajustados */
     --purple-gradient-from: 263 50% 20%;
@@ -231,4 +237,10 @@
 .dark ::selection {
   background-color: rgb(107, 33, 168);
   color: white;
+}
+
+/* New selected item styles in dark mode */
+.dark .selected-item {
+  background-color: hsl(var(--selected-item));
+  border-color: hsl(var(--selected-item-border));
 }

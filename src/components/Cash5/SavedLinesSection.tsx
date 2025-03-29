@@ -27,24 +27,24 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
   currentLine
 }) => {
   return (
-    <div className="bg-gray-50 p-4">
-      <h3 className="font-semibold mb-3">Minhas Linhas</h3>
+    <div className="bg-gray-50 dark:bg-gray-900 p-4">
+      <h3 className="font-semibold mb-3 dark:text-white">Minhas Linhas</h3>
       
       {savedLines.length === 0 ? (
         // Display a template line with question marks
         <div className="mb-2">
           <div 
-            className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
+            className="bg-white dark:bg-gray-800 rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700"
             onClick={onStartNewLine}
           >
             <div className="flex items-center">
-              <span className="text-gray-500 font-medium w-6 mr-2">
+              <span className="text-gray-500 dark:text-gray-400 font-medium w-6 mr-2">
                 01
               </span>
               {Array(3).fill(null).map((_, i) => (
                 <span 
                   key={i} 
-                  className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                  className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                 >
                   ?
                 </span>
@@ -58,19 +58,21 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
             <div key={index} className="mb-2">
               <div 
                 className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
-                  editingIndex === index ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
+                  editingIndex === index 
+                    ? 'bg-blue-100 dark:bg-purple-900/60 dark:border dark:border-purple-400' 
+                    : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'
                 }`}
                 onClick={() => onEditLine(index)}
               >
                 <div className="flex items-center">
-                  <span className="text-gray-500 font-medium w-6 mr-2">
+                  <span className="text-gray-500 dark:text-gray-400 font-medium w-6 mr-2">
                     {String(index + 1).padStart(2, '0')}
                   </span>
                   {line.digits.map((digit, i) => (
                     <span 
                       key={i} 
                       className={`rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5 ${
-                        digit === null ? 'bg-white border border-gray-200 text-gray-700 font-bold' : 
+                        digit === null ? 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold' : 
                         digit === -1 ? 'bg-red-500 text-white' : 
                         'bg-blue-500 text-white'
                       }`}
@@ -84,7 +86,7 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
                     e.stopPropagation();
                     onRemoveLine(index);
                   }}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 >
                   <X size={16} />
                 </button>
@@ -98,17 +100,17 @@ const SavedLinesSection: React.FC<SavedLinesSectionProps> = ({
       {editingIndex === null && (
         <div className="mb-2">
           <div 
-            className="bg-white hover:bg-gray-50 rounded p-3 flex items-center justify-between cursor-pointer"
+            className="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 rounded p-3 flex items-center justify-between cursor-pointer"
             onClick={onStartNewLine}
           >
             <div className="flex items-center">
-              <span className="text-gray-500 font-medium w-6 mr-2">
+              <span className="text-gray-500 dark:text-gray-400 font-medium w-6 mr-2">
                 {String(savedLines.length + 1).padStart(2, '0')}
               </span>
               {Array(3).fill(null).map((_, i) => (
                 <span 
                   key={i} 
-                  className="bg-white border border-gray-200 text-gray-700 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                  className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                 >
                   {currentLine && i < currentLine.digits.length && currentLine.digits[i] !== null ? (
                     <span 
