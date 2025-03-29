@@ -39,7 +39,7 @@ const GameHeader: React.FC<GameHeaderProps> = ({
             </div>
           ) : (
             <>
-              <p className="text-2xl font-bold text-black font-bebas">JACKPOT ESTA VALIDO</p>
+              <p className="text-2xl font-bold text-black font-boldonse">JACKPOT ESTA VALIDO</p>
               <h2 className="text-6xl font-bold font-bebas" style={{ color: colorValue }}>$ {jackpotAmount}</h2>
             </>
           )}

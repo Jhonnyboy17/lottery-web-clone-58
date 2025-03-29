@@ -84,6 +84,7 @@ export default {
         akhand: ['Akhand Black', 'sans-serif'],
         nunito: ['Nunito', 'sans-serif'],
         bebas: ['Bebas Neue', 'sans-serif'],
+        boldonse: ['Boldonse', 'sans-serif'],
       },
       borderRadius: {
         lg: 'var(--radius)',
