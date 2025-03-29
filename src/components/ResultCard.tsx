@@ -117,7 +117,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
               {getLimitedNumbers(gameType, item.numbers).map((number, index) => (
                 <div 
                   key={index}
-                  className="w-8 h-8 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-sm text-white"
+                  className="w-10 h-10 rounded-full bg-[#1a0f36] flex items-center justify-center font-bold text-base text-white"
                 >
                   {number}
                 </div>
@@ -143,7 +143,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
           
           <Button 
             asChild
-            className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white border border-white/20 text-sm py-1.5 h-auto"
+            className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white border-white/20 text-sm py-1.5 h-auto"
           >
             <Link to={gamePath}>
               Jogar
