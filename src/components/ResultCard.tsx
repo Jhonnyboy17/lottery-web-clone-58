@@ -12,10 +12,11 @@ interface ResultCardProps {
   className?: string;
 }
 
+// Define game colors explicitly using Tailwind classes
 const gameColors: Record<string, string> = {
   "Mega-Sena": "bg-green-600",    // Green for Mega-Sena
   "Quina": "bg-purple-600",       // Purple for Quina
-  "Lotofácil": "bg-lime-500",     // Bright Green for Lotofácil (updated)
+  "Lotofácil": "bg-lime-500",     // Bright Green for Lotofácil
   "Lotomania": "bg-orange-500",   // Orange for Lotomania
   "Pick 4": "bg-amber-500",       // Amber for Pick 4
   "Pick 3": "bg-red-500"          // Red for Pick 3
@@ -68,16 +69,17 @@ const ResultCard: React.FC<ResultCardProps> = ({
   jackpot, 
   className = "" 
 }) => {
+  // Get the background color for the current game type
   const bgColor = gameColors[gameType] || "bg-purple-800";
   const logoSrc = gameLogos[gameType];
   const formattedDate = getFormattedDate(date);
   const gamePath = getGamePath(gameType);
   
-  // Create a text color based on the background color
-  const textColor = `text-${bgColor.replace('bg-', '')}`;
+  // Extract the color name without the 'bg-' prefix for text color
+  const colorName = bgColor.replace('bg-', '');
   
   return (
-    <Card className={`results-card overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
+    <Card className={`overflow-hidden border-0 shadow-lg ${bgColor} ${className}`}>
       <div className="p-5 flex flex-col h-full text-white">
         {/* Logo */}
         <div className="flex justify-center mb-3 h-12">
@@ -96,7 +98,7 @@ const ResultCard: React.FC<ResultCardProps> = ({
             <div 
               key={index}
               className="w-8 h-8 rounded-full bg-white flex items-center justify-center font-bold text-sm"
-              style={{ color: bgColor.slice(3) }} // Pass just the color name without 'bg-'
+              style={{ color: `var(--${colorName.replace('-', '-')})` }}
             >
               {number}
             </div>
@@ -112,7 +114,8 @@ const ResultCard: React.FC<ResultCardProps> = ({
         <div className="mt-auto space-y-2">
           <Button 
             asChild
-            className="w-full bg-white text-emerald-700 hover:bg-opacity-90 font-medium"
+            className="w-full bg-white hover:bg-opacity-90 font-medium"
+            style={{ color: `var(--${colorName.replace('-', '-')})` }}
           >
             <Link to={gamePath}>
               VER TODOS
