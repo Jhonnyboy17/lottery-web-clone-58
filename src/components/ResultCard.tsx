@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -13,12 +12,12 @@ interface ResultCardProps {
 }
 
 const gameColors: Record<string, string> = {
-  "Mega-Sena": "bg-green-600",
-  "Quina": "bg-purple-600",
-  "Lotofácil": "bg-pink-500",
-  "Lotomania": "bg-orange-500",
-  "Pick 4": "bg-amber-500",
-  "Pick 3": "bg-red-500"
+  "Mega-Sena": "bg-green-600",    // Green for Mega-Sena
+  "Quina": "bg-purple-600",       // Purple for Quina
+  "Lotofácil": "bg-pink-500",     // Pink for Lotofácil
+  "Lotomania": "bg-orange-500",   // Orange for Lotomania
+  "Pick 4": "bg-amber-500",       // Amber for Pick 4
+  "Pick 3": "bg-red-500"          // Red for Pick 3
 };
 
 const gameLogos: Record<string, string> = {
@@ -106,22 +105,22 @@ const ResultCard: React.FC<ResultCardProps> = ({
         </div>
         
         {/* Buttons */}
-        <div className="mt-auto flex gap-2">
-          <Button 
-            asChild
-            className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white border border-white/20"
-          >
-            <Link to={gamePath}>
-              VER DETALHES
-            </Link>
-          </Button>
-          
+        <div className="mt-auto space-y-2">
           <Button 
             asChild
             className="w-full bg-white text-emerald-700 hover:bg-opacity-90 font-medium"
           >
             <Link to={gamePath}>
-              CONFERIR NÚMEROS
+              VER TODOS
+            </Link>
+          </Button>
+          
+          <Button 
+            asChild
+            className="w-full bg-white bg-opacity-20 hover:bg-opacity-30 text-white border border-white/20"
+          >
+            <Link to={gamePath}>
+              CHEQUE SEUS NÚMEROS
             </Link>
           </Button>
         </div>
