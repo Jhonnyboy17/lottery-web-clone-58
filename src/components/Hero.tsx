@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -13,23 +12,6 @@ const slides: Slide[] = [
   {
     id: 1,
     bgImage: "/lovable-uploads/e669d7b8-590c-495c-b8ca-8e28fd60329b.png",
-    content: (
-      <div className="flex flex-col md:flex-row items-center justify-between h-full px-8 py-12 md:px-16">
-        <div className="flex-1">
-          {/* Left content is in the image */}
-        </div>
-        <div className="flex-1 flex flex-col items-center md:items-start text-white z-10 mt-4 md:mt-0">
-          <div className="border-2 border-white rounded-full px-6 py-2 mb-8 text-xl font-bold">
-            10% off na primeira compra!
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-center md:text-left">Jogue em Real</h2>
-          <h2 className="text-4xl md:text-5xl font-bold mb-8 text-center md:text-left">Ganhe em Dolar</h2>
-          <Link to="/play-mega-millions" className="border-2 border-white rounded-full px-10 py-3 text-xl font-bold hover:bg-white hover:bg-opacity-20 transition-all">
-            JOGAR AGORA!
-          </Link>
-        </div>
-      </div>
-    )
   },
   {
     id: 2,
@@ -71,17 +53,14 @@ const Hero = () => {
   }, [isAutoPlay]);
 
   const handleSlideClick = () => {
-    // Move to the next slide when the current slide is clicked
     setCurrentSlide((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
     
-    // Reset autoplay timer
     setIsAutoPlay(false);
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
     }
     
-    // Restart autoplay after manual navigation
     setIsAutoPlay(true);
   };
 
@@ -107,7 +86,6 @@ const Hero = () => {
         </div>
       ))}
       
-      {/* Slide dots navigation */}
       <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-2">
         {slides.map((_, index) => (
           <button
