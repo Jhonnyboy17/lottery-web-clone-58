@@ -13,6 +13,7 @@ interface LotteryCardProps {
   backgroundColor?: string;
   showPlayButton?: boolean;
   route?: string;
+  price?: number;
 }
 
 const LotteryCard = ({
@@ -25,6 +26,7 @@ const LotteryCard = ({
   backgroundColor = "bg-white",
   showPlayButton = false,
   route = "/play-powerball",
+  price = 15,
 }: LotteryCardProps) => {
   // Calculate the approximate value in Brazilian Real (BRL)
   // Using an approximate exchange rate of 1 USD = 5.5 BRL
@@ -76,8 +78,9 @@ const LotteryCard = ({
       
       {showPlayButton ? (
         <div className="px-6 pb-6 mt-auto">
-          <div className="text-center mb-4 text-black">
+          <div className="text-center mb-2 text-black">
             <p className="font-bold">{nextDrawing}</p>
+            <p className="text-sm mt-1">R$ {price.toFixed(2)} por jogo</p>
           </div>
           <Link to={route}>
             <Button 

@@ -1,10 +1,12 @@
+
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
-import { Menu, X, ShoppingCart, Search } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import ThemeToggle from "./ThemeToggle";
+import CartDrawer from "./Cart/CartDrawer";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -118,11 +120,12 @@ const Navbar = () => {
                 />
               </div>
             </div>
-            <ShoppingCart className="h-6 w-6 text-white cursor-pointer" />
+            <CartDrawer />
           </div>
 
           <div className="md:hidden flex items-center space-x-4">
             <ThemeToggle />
+            <CartDrawer />
             <button
               className="text-white p-2"
               onClick={() => setIsOpen(!isOpen)}
@@ -177,13 +180,6 @@ const Navbar = () => {
             >
               <Search className="h-4 w-4 mr-2" />
               Buscar
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/95"
-            >
-              <ShoppingCart className="h-4 w-4 mr-2" />
-              Carrinho
             </Button>
           </div>
         </div>

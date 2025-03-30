@@ -1,21 +1,57 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
+import { useLocation } from "react-router-dom";
 
 interface TotalSummaryProps {
   ticketPrice: string;
   colorValue: string;
   hasLines: boolean;
+  logoSrc?: string;
+  gameName?: string;
+  lineCount?: number;
 }
 
 const TotalSummary: React.FC<TotalSummaryProps> = ({
   ticketPrice,
   colorValue,
-  hasLines
+  hasLines,
+  logoSrc = "",
+  gameName = "",
+  lineCount = 0
 }) => {
+  const { addToCart } = useCart();
+  const location = useLocation();
+  
   // Clean up the price format to avoid duplicate R$ symbols
   const formattedPrice = ticketPrice.startsWith("R$") ? 
     ticketPrice : `R$ ${ticketPrice}`;
+  
+  // Extract numeric price value
+  const numericPrice = parseFloat(ticketPrice.replace("R$", "").replace(/\./g, "").replace(",", ".").trim());
+  
+  const handleAddToCart = () => {
+    if (!hasLines || lineCount === 0) {
+      toast.error("Adicione pelo menos uma linha para continuar");
+      return;
+    }
+    
+    const gameId = location.pathname.split('/play-')[1];
+    
+    addToCart({
+      id: `${gameId}-${Date.now()}`,
+      gameName: gameName,
+      logoSrc: logoSrc,
+      price: numericPrice,
+      lineCount: lineCount,
+      color: colorValue,
+      drawDate: "Próximo sorteio"
+    });
+    
+    toast.success(`${gameName} adicionado ao carrinho!`);
+  };
 
   return (
     <div className="bg-white dark:bg-card rounded-lg shadow-md overflow-hidden w-full max-w-full">
@@ -28,6 +64,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
           className="hover:bg-opacity-90 px-12"
           style={{ backgroundColor: colorValue }}
           disabled={!hasLines}
+          onClick={handleAddToCart}
         >
           ADICIONAR AO CARRINHO
         </Button>

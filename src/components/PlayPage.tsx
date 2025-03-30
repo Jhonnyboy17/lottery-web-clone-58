@@ -512,289 +512,297 @@ const PlayPage = ({
     setIsEditingNumber(false);
   };
 
-  return <GameLayout logoSrc={logoSrc} jackpotAmount={jackpotAmount} colorValue={colorValue} gameName={gameName} ticketPrice={getTicketPrice()} hasLines={savedLines.length > 0}>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="border-0 shadow-md overflow-hidden h-full">
-          <div className="p-4">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="font-semibold">Linha {String(getLineCount()).padStart(2, '0')}</h3>
-              <Button 
-                onClick={handleQuickPick} 
-                disabled={isRandomizing} 
-                className="text-xs h-8 px-6 bg-white hover:bg-opacity-10 rounded-full"
-                style={{
-                  color: colorValue,
-                  border: `1px solid ${colorValue}`,
-                  backgroundColor: "white",
-                  transition: "background-color 0.3s",
-                }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.backgroundColor = lightColorValue;
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.backgroundColor = "white";
-                }}
-              >
-                JOGADA ALEATÓRIA
-              </Button>
-            </div>
-
-            <div className="flex justify-between items-center mb-2">
-              <p className="text-sm font-medium">Escolha {maxRegularNumbers} Números</p>
-              <span className="text-xs font-medium">{selectedNumbers.length} de {maxRegularNumbers}</span>
-            </div>
-            <div className="mb-3">
-              <Progress value={progressValue} className="h-2" style={{
-                backgroundColor: "#e5e7eb"
-              }} />
-            </div>
-            
-            <div className="grid grid-cols-9 gap-1 mb-4">
-              {regularNumbers.map(number => {
-                const isSelected = selectedNumbers.includes(number);
-                const opacity = getNumberOpacity(isSelected);
-                
-                return (
-                  <button 
-                    key={`regular-${number}`} 
-                    onClick={() => handleNumberSelect(number)} 
-                    disabled={isRandomizing} 
-                    style={{
-                      alignItems: 'center',
-                      backgroundColor: isSelected ? colorValue : '#f0f0f0',
-                      borderRadius: '50%',
-                      color: isSelected ? 'white' : '#333333',
-                      cursor: 'pointer',
-                      display: 'flex',
-                      fontWeight: 700,
-                      height: '3em',
-                      justifyContent: 'center',
-                      lineHeight: '1',
-                      margin: '0.3em',
-                      textAlign: 'center',
-                      width: '3em',
-                      zIndex: 2,
-                      opacity: opacity,
-                      position: 'relative',
-                      overflow: 'hidden'
-                    }}
-                  >
-                    <span style={{
-                      position: 'absolute',
-                      borderRadius: '50%',
-                      content: '""',
-                      height: '100%',
-                      left: 0,
-                      top: 0,
-                      transform: isSelected ? 'scale(1)' : 'scale(0)',
-                      transformOrigin: 'center',
-                      transition: 'transform 2s ease-in-out',
-                      width: '100%',
-                      zIndex: -1,
-                      backgroundColor: isSelected ? colorValue : 'transparent'
-                    }}></span>
-                    <span style={{ 
-                      fontSize: '1.10em', 
-                      fontWeight: 700, 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center', 
-                      width: '100%', 
-                      height: '100%' 
-                    }}>{number}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {hasPowerball && <>
-                <div className="flex justify-between items-center mb-2">
-                  <p className="text-sm font-medium">Escolha {maxPowerballNumbers} Powerball</p>
-                  <span className="text-xs font-medium">{selectedPowerball ? 1 : 0} de {maxPowerballNumbers}</span>
-                </div>
-                <div className="mb-3">
-                  <Progress value={calculatePowerballProgress()} className="h-2" style={{
-                    backgroundColor: "#e5e7eb"
-                  }} />
-                </div>
-                <div className="grid grid-cols-9 gap-1 mb-4">
-                  {powerballNumbers.map(number => {
-                    const isSelected = selectedPowerball === number;
-                    const opacity = getNumberOpacity(isSelected);
-                    
-                    return (
-                      <button 
-                        key={`powerball-${number}`} 
-                        onClick={() => handlePowerballSelect(number)} 
-                        disabled={isRandomizing}
-                        style={{
-                          alignItems: 'center',
-                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f0f0f0',
-                          borderRadius: '50%',
-                          color: isSelected ? 'white' : '#333333',
-                          cursor: 'pointer',
-                          display: 'flex',
-                          fontWeight: 700,
-                          height: '3em',
-                          justifyContent: 'center',
-                          lineHeight: '1',
-                          margin: '0.3em',
-                          textAlign: 'center',
-                          width: '3em',
-                          zIndex: 2,
-                          opacity: opacity,
-                          position: 'relative',
-                          overflow: 'hidden'
-                        }}
-                      >
-                        <span style={{
-                          position: 'absolute',
-                          borderRadius: '50%',
-                          content: '""',
-                          height: '100%',
-                          left: 0,
-                          top: 0,
-                          transform: isSelected ? 'scale(1)' : 'scale(0)',
-                          transformOrigin: 'center',
-                          transition: 'transform 2s ease-in-out',
-                          width: '100%',
-                          zIndex: -1,
-                          backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
-                        }}></span>
-                        <span style={{ 
-                          fontSize: '1.10em', 
-                          fontWeight: 700, 
-                          display: 'flex', 
-                          alignItems: 'center', 
-                          justifyContent: 'center', 
-                          width: '100%', 
-                          height: '100%' 
-                        }}>{number}</span>
-                      </button>
-                    );
-                  })}
-                </div>
-              </>}
+  return <GameLayout 
+    logoSrc={logoSrc} 
+    jackpotAmount={jackpotAmount} 
+    colorValue={colorValue} 
+    gameName={gameName} 
+    ticketPrice={getTicketPrice()} 
+    hasLines={savedLines.length > 0}
+    lineCount={savedLines.length}
+  >
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <Card className="border-0 shadow-md overflow-hidden h-full">
+        <div className="p-4">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-semibold">Linha {String(getLineCount()).padStart(2, '0')}</h3>
+            <Button 
+              onClick={handleQuickPick} 
+              disabled={isRandomizing} 
+              className="text-xs h-8 px-6 bg-white hover:bg-opacity-10 rounded-full"
+              style={{
+                color: colorValue,
+                border: `1px solid ${colorValue}`,
+                backgroundColor: "white",
+                transition: "background-color 0.3s",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.backgroundColor = lightColorValue;
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.backgroundColor = "white";
+              }}
+            >
+              JOGADA ALEATÓRIA
+            </Button>
           </div>
-        </Card>
 
-        <Card className="border-0 shadow-md overflow-hidden h-full">
-          <div className="p-4">
-            <h3 className="font-semibold mb-3">Minhas Linhas</h3>
+          <div className="flex justify-between items-center mb-2">
+            <p className="text-sm font-medium">Escolha {maxRegularNumbers} Números</p>
+            <span className="text-xs font-medium">{selectedNumbers.length} de {maxRegularNumbers}</span>
+          </div>
+          <div className="mb-3">
+            <Progress value={progressValue} className="h-2" style={{
+              backgroundColor: "#e5e7eb"
+            }} />
+          </div>
+          
+          <div className="grid grid-cols-9 gap-1 mb-4">
+            {regularNumbers.map(number => {
+              const isSelected = selectedNumbers.includes(number);
+              const opacity = getNumberOpacity(isSelected);
               
-            {savedLines.length === 0 && !selectedNumbers.length ? (
+              return (
+                <button 
+                  key={`regular-${number}`} 
+                  onClick={() => handleNumberSelect(number)} 
+                  disabled={isRandomizing} 
+                  style={{
+                    alignItems: 'center',
+                    backgroundColor: isSelected ? colorValue : '#f0f0f0',
+                    borderRadius: '50%',
+                    color: isSelected ? 'white' : '#333333',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    fontWeight: 700,
+                    height: '3em',
+                    justifyContent: 'center',
+                    lineHeight: '1',
+                    margin: '0.3em',
+                    textAlign: 'center',
+                    width: '3em',
+                    zIndex: 2,
+                    opacity: opacity,
+                    position: 'relative',
+                    overflow: 'hidden'
+                  }}
+                >
+                  <span style={{
+                    position: 'absolute',
+                    borderRadius: '50%',
+                    content: '""',
+                    height: '100%',
+                    left: 0,
+                    top: 0,
+                    transform: isSelected ? 'scale(1)' : 'scale(0)',
+                    transformOrigin: 'center',
+                    transition: 'transform 2s ease-in-out',
+                    width: '100%',
+                    zIndex: -1,
+                    backgroundColor: isSelected ? colorValue : 'transparent'
+                  }}></span>
+                  <span style={{ 
+                    fontSize: '1.10em', 
+                    fontWeight: 700, 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center', 
+                    width: '100%', 
+                    height: '100%' 
+                  }}>{number}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {hasPowerball && <>
+              <div className="flex justify-between items-center mb-2">
+                <p className="text-sm font-medium">Escolha {maxPowerballNumbers} Powerball</p>
+                <span className="text-xs font-medium">{selectedPowerball ? 1 : 0} de {maxPowerballNumbers}</span>
+              </div>
+              <div className="mb-3">
+                <Progress value={calculatePowerballProgress()} className="h-2" style={{
+                  backgroundColor: "#e5e7eb"
+                }} />
+              </div>
+              <div className="grid grid-cols-9 gap-1 mb-4">
+                {powerballNumbers.map(number => {
+                  const isSelected = selectedPowerball === number;
+                  const opacity = getNumberOpacity(isSelected);
+                  
+                  return (
+                    <button 
+                      key={`powerball-${number}`} 
+                      onClick={() => handlePowerballSelect(number)} 
+                      disabled={isRandomizing}
+                      style={{
+                        alignItems: 'center',
+                        backgroundColor: isSelected ? 'rgb(245, 158, 11)' : '#f0f0f0',
+                        borderRadius: '50%',
+                        color: isSelected ? 'white' : '#333333',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        fontWeight: 700,
+                        height: '3em',
+                        justifyContent: 'center',
+                        lineHeight: '1',
+                        margin: '0.3em',
+                        textAlign: 'center',
+                        width: '3em',
+                        zIndex: 2,
+                        opacity: opacity,
+                        position: 'relative',
+                        overflow: 'hidden'
+                      }}
+                    >
+                      <span style={{
+                        position: 'absolute',
+                        borderRadius: '50%',
+                        content: '""',
+                        height: '100%',
+                        left: 0,
+                        top: 0,
+                        transform: isSelected ? 'scale(1)' : 'scale(0)',
+                        transformOrigin: 'center',
+                        transition: 'transform 2s ease-in-out',
+                        width: '100%',
+                        zIndex: -1,
+                        backgroundColor: isSelected ? 'rgb(245, 158, 11)' : 'transparent'
+                      }}></span>
+                      <span style={{ 
+                        fontSize: '1.10em', 
+                        fontWeight: 700, 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        width: '100%', 
+                        height: '100%' 
+                      }}>{number}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </>}
+        </div>
+      </Card>
+
+      <Card className="border-0 shadow-md overflow-hidden h-full">
+        <div className="p-4">
+          <h3 className="font-semibold mb-3">Minhas Linhas</h3>
+            
+          {savedLines.length === 0 && !selectedNumbers.length ? (
+            <div className="mb-2">
+              <div 
+                className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
+                onClick={handleStartNewLine}
+              >
+                <div className="flex items-center">
+                  <span className="text-gray-500 font-medium w-6 mr-2">
+                    01
+                  </span>
+                  {Array(maxRegularNumbers).fill(null).map((_, i) => (
+                    <span 
+                      key={i} 
+                      className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
+                    >
+                      ?
+                    </span>
+                  ))}
+                  {hasPowerball && (
+                    <span 
+                      className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
+                    >
+                      ?
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {savedLines.map((line, index) => (
+                <div key={index} className="mb-2">
+                  <div className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
+                    editingLineIndex === index ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
+                  }`}
+                  onClick={() => handleEditLine(index)}>
+                    <div className="flex items-center">
+                      <span className="text-gray-500 font-medium w-6 mr-2">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      {line.numbers.map((num, i) => (
+                        <span 
+                          key={i} 
+                          className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5" 
+                          style={{ backgroundColor: colorValue }}
+                        >
+                          {num}
+                        </span>
+                      ))}
+                      {hasPowerball && line.powerball && (
+                        <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
+                          {line.powerball}
+                        </span>
+                      )}
+                    </div>
+                    <button 
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleRemoveLine(index);
+                      }} 
+                      className="text-gray-400 hover:text-gray-600" 
+                      disabled={isRandomizing}
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+              
               <div className="mb-2">
                 <div 
-                  className="bg-white rounded p-3 flex items-center justify-between cursor-pointer hover:bg-gray-50"
+                  className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
+                    editingLineIndex === null ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
+                  }`}
                   onClick={handleStartNewLine}
                 >
                   <div className="flex items-center">
                     <span className="text-gray-500 font-medium w-6 mr-2">
-                      01
+                      {String(savedLines.length + 1).padStart(2, '0')}
                     </span>
                     {Array(maxRegularNumbers).fill(null).map((_, i) => (
                       <span 
                         key={i} 
                         className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
                       >
-                        ?
+                        {editingLineIndex === null && selectedNumbers[i] !== undefined ? (
+                          <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center" style={{ backgroundColor: colorValue }}>
+                            {selectedNumbers[i]}
+                          </span>
+                        ) : '?'}
                       </span>
                     ))}
                     {hasPowerball && (
                       <span 
                         className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
                       >
-                        ?
+                        {editingLineIndex === null && selectedPowerball !== null ? (
+                          <span className="bg-amber-500 text-white w-full h-full rounded-full flex items-center justify-center">
+                            {selectedPowerball}
+                          </span>
+                        ) : '?'}
                       </span>
                     )}
                   </div>
+                  <div className="w-4"></div>
                 </div>
               </div>
-            ) : (
-              <div className="space-y-2">
-                {savedLines.map((line, index) => (
-                  <div key={index} className="mb-2">
-                    <div className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
-                      editingLineIndex === index ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
-                    }`}
-                    onClick={() => handleEditLine(index)}>
-                      <div className="flex items-center">
-                        <span className="text-gray-500 font-medium w-6 mr-2">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                        {line.numbers.map((num, i) => (
-                          <span 
-                            key={i} 
-                            className="text-white rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5" 
-                            style={{ backgroundColor: colorValue }}
-                          >
-                            {num}
-                          </span>
-                        ))}
-                        {hasPowerball && line.powerball && (
-                          <span className="bg-amber-500 text-white rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1">
-                            {line.powerball}
-                          </span>
-                        )}
-                      </div>
-                      <button 
-                        onClick={e => {
-                          e.stopPropagation();
-                          handleRemoveLine(index);
-                        }} 
-                        className="text-gray-400 hover:text-gray-600" 
-                        disabled={isRandomizing}
-                      >
-                        <X size={16} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-                
-                <div className="mb-2">
-                  <div 
-                    className={`rounded p-3 flex items-center justify-between cursor-pointer transition-colors ${
-                      editingLineIndex === null ? 'bg-blue-100' : 'bg-white hover:bg-gray-50'
-                    }`}
-                    onClick={handleStartNewLine}
-                  >
-                    <div className="flex items-center">
-                      <span className="text-gray-500 font-medium w-6 mr-2">
-                        {String(savedLines.length + 1).padStart(2, '0')}
-                      </span>
-                      {Array(maxRegularNumbers).fill(null).map((_, i) => (
-                        <span 
-                          key={i} 
-                          className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm mx-0.5"
-                        >
-                          {editingLineIndex === null && selectedNumbers[i] !== undefined ? (
-                            <span className="bg-blue-500 text-white w-full h-full rounded-full flex items-center justify-center" style={{ backgroundColor: colorValue }}>
-                              {selectedNumbers[i]}
-                            </span>
-                          ) : '?'}
-                        </span>
-                      ))}
-                      {hasPowerball && (
-                        <span 
-                          className="bg-white border border-gray-200 text-gray-600 font-bold rounded-full w-10 h-10 flex items-center justify-center text-sm ml-1"
-                        >
-                          {editingLineIndex === null && selectedPowerball !== null ? (
-                            <span className="bg-amber-500 text-white w-full h-full rounded-full flex items-center justify-center">
-                              {selectedPowerball}
-                            </span>
-                          ) : '?'}
-                        </span>
-                      )}
-                    </div>
-                    <div className="w-4"></div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </Card>
-      </div>
-    </GameLayout>;
+            </div>
+          )}
+        </div>
+      </Card>
+    </div>
+  </GameLayout>;
 };
 
 export default PlayPage;
