@@ -84,11 +84,12 @@ const Navbar = () => {
     navigate('/');
   };
 
-  const navbarClasses = "fixed top-0 left-0 right-0 z-50 bg-[#1a0f36]/95 py-3";
+  const navbarClasses = "fixed top-0 left-0 right-0 z-50 bg-[#1a0f36]/95 flex flex-col";
 
   return (
     <header className={navbarClasses}>
-      <div className="container mx-auto px-4">
+      {/* Main Navbar */}
+      <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
           <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
             <img
@@ -162,15 +163,7 @@ const Navbar = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : (
-              <Button 
-                onClick={navigateToAuth}
-                variant="ghost" 
-                className="text-white hover:bg-white/10"
-              >
-                Entrar
-              </Button>
-            )}
+            ) : null}
             
             <CartDrawer />
           </div>
@@ -195,16 +188,7 @@ const Navbar = () => {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : (
-              <Button 
-                onClick={navigateToAuth}
-                variant="ghost" 
-                size="sm"
-                className="text-white hover:bg-white/10"
-              >
-                Entrar
-              </Button>
-            )}
+            ) : null}
             <CartDrawer />
             <button
               className="text-white p-2"
@@ -214,6 +198,36 @@ const Navbar = () => {
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Auth Banner */}
+      <div className="w-full bg-[#2a1c4b] py-2">
+        <div className="container mx-auto px-4 flex justify-end">
+          {!user ? (
+            <div className="space-x-4">
+              <Button 
+                onClick={navigateToAuth} 
+                variant="ghost" 
+                size="sm" 
+                className="text-white hover:text-white/80 hover:bg-purple-800/30"
+              >
+                Entrar
+              </Button>
+              <Button 
+                onClick={navigateToAuth} 
+                variant="outline"
+                size="sm"
+                className="text-white border-white/30 hover:bg-purple-800/30 hover:text-white"
+              >
+                Registrar
+              </Button>
+            </div>
+          ) : (
+            <div className="text-white/80 text-sm py-1">
+              Bem-vindo, {user.email}
+            </div>
+          )}
         </div>
       </div>
 
