@@ -1,6 +1,5 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import TotalSummary from "./Cash5/TotalSummary";
 import Navbar from "./Navbar";
@@ -49,19 +48,13 @@ const GameLayout: React.FC<GameLayoutProps> = ({
                   </p>
                 </div>
               </div>
-              <div className="flex space-x-3">
-                <Button 
-                  variant="outline"
-                  className="text-sm"
-                >
-                  Como jogar
-                </Button>
-                <Button 
-                  variant="outline"
-                  className="text-sm"
-                >
-                  Regras do jogo
-                </Button>
+              <div className="flex flex-col items-center">
+                <h2 className="text-4xl font-bold" style={{ color: colorValue }}>
+                  ${jackpotAmount}
+                </h2>
+                <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mt-1">
+                  JACKPOT ESTÁ ATIVO
+                </p>
               </div>
             </div>
           </div>
