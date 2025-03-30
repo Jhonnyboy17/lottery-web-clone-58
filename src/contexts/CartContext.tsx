@@ -1,6 +1,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
+export type CartLineType = {
+  numbers: number[];
+  powerball?: number | null;
+  includeExtraPlay?: boolean;
+  drawCount?: string;
+};
+
 export type CartItemType = {
   id: string;
   gameName: string;
@@ -9,6 +16,8 @@ export type CartItemType = {
   lineCount: number;
   color: string;
   drawDate?: string;
+  lines?: CartLineType[];
+  expanded?: boolean;
 };
 
 type CartContextType = {
@@ -18,12 +27,16 @@ type CartContextType = {
   clearCart: () => void;
   getCartTotal: () => number;
   getItemCount: () => number;
+  toggleItemExpanded: (id: string) => void;
+  isCartOpen: boolean;
+  setIsCartOpen: (open: boolean) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   // Load cart from localStorage on initial render
   useEffect(() => {
@@ -53,13 +66,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         ...updatedItems[existingItemIndex],
         lineCount: updatedItems[existingItemIndex].lineCount + item.lineCount,
         price: (updatedItems[existingItemIndex].price / updatedItems[existingItemIndex].lineCount) * 
-               (updatedItems[existingItemIndex].lineCount + item.lineCount)
+               (updatedItems[existingItemIndex].lineCount + item.lineCount),
+        lines: [...(updatedItems[existingItemIndex].lines || []), ...(item.lines || [])]
       };
       setCartItems(updatedItems);
     } else {
       // If item doesn't exist, add it
-      setCartItems((prev) => [...prev, item]);
+      setCartItems((prev) => [...prev, {...item, expanded: false}]);
     }
+    
+    // Open the cart drawer
+    setIsCartOpen(true);
   };
 
   const removeFromCart = (id: string) => {
@@ -77,6 +94,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const getItemCount = () => {
     return cartItems.reduce((count, item) => count + item.lineCount, 0);
   };
+  
+  const toggleItemExpanded = (id: string) => {
+    setCartItems(prevItems => 
+      prevItems.map(item => 
+        item.id === id 
+          ? { ...item, expanded: !item.expanded } 
+          : item
+      )
+    );
+  };
 
   return (
     <CartContext.Provider
@@ -87,6 +114,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         clearCart,
         getCartTotal,
         getItemCount,
+        toggleItemExpanded,
+        isCartOpen,
+        setIsCartOpen
       }}
     >
       {children}

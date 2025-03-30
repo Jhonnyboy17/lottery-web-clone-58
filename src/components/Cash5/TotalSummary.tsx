@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 import { useLocation } from "react-router-dom";
+import { SavedLineType } from "./types";
 
 interface TotalSummaryProps {
   ticketPrice: string;
@@ -12,6 +13,8 @@ interface TotalSummaryProps {
   logoSrc?: string;
   gameName?: string;
   lineCount?: number;
+  savedLines?: SavedLineType[];
+  onClearLines?: () => void;
 }
 
 const TotalSummary: React.FC<TotalSummaryProps> = ({
@@ -20,9 +23,11 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   hasLines,
   logoSrc = "",
   gameName = "",
-  lineCount = 0
+  lineCount = 0,
+  savedLines = [],
+  onClearLines
 }) => {
-  const { addToCart } = useCart();
+  const { addToCart, setIsCartOpen } = useCart();
   const location = useLocation();
   
   // Clean up the price format to avoid duplicate R$ symbols
@@ -40,6 +45,14 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
     
     const gameId = location.pathname.split('/play-')[1];
     
+    // Convert saved lines to cart line type
+    const cartLines = savedLines.map(line => ({
+      numbers: line.numbers,
+      powerball: line.powerball,
+      includeExtraPlay: line.includeExtraPlay,
+      drawCount: line.drawCount
+    }));
+    
     addToCart({
       id: `${gameId}-${Date.now()}`,
       gameName: gameName,
@@ -47,10 +60,16 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
       price: numericPrice,
       lineCount: lineCount,
       color: colorValue,
-      drawDate: "Próximo sorteio"
+      drawDate: "Próximo sorteio",
+      lines: cartLines
     });
     
     toast.success(`${gameName} adicionado ao carrinho!`);
+    
+    // Clear lines after adding to cart
+    if (onClearLines) {
+      onClearLines();
+    }
   };
 
   return (

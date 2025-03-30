@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import TotalSummary from "./Cash5/TotalSummary";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import { SavedLineType } from "./Cash5/types";
 
 interface GameLayoutProps {
   children: React.ReactNode;
@@ -15,6 +16,8 @@ interface GameLayoutProps {
   ticketPrice: string;
   hasLines: boolean;
   lineCount?: number;
+  savedLines?: SavedLineType[];
+  onClearLines?: () => void;
 }
 
 const GameLayout: React.FC<GameLayoutProps> = ({
@@ -26,6 +29,8 @@ const GameLayout: React.FC<GameLayoutProps> = ({
   ticketPrice,
   hasLines,
   lineCount = 0,
+  savedLines = [],
+  onClearLines,
 }) => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -72,6 +77,8 @@ const GameLayout: React.FC<GameLayoutProps> = ({
             logoSrc={logoSrc}
             gameName={gameName}
             lineCount={lineCount}
+            savedLines={savedLines}
+            onClearLines={onClearLines}
           />
         </div>
       </div>

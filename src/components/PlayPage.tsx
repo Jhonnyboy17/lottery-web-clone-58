@@ -66,6 +66,17 @@ const PlayPage = ({
     return savedLines.length + 1;
   };
 
+  const handleClearAllLines = () => {
+    setSavedLines([]);
+    setSelectedNumbers([]);
+    setSelectedPowerball(null);
+    setProgressValue(0);
+    setIsAnimating(false);
+    setEditingLineIndex(null);
+    setEditMode(false);
+    setIsEditingNumber(false);
+  };
+
   useEffect(() => {
     // This empty effect ensures that the component re-renders after mount
   }, []);
@@ -520,6 +531,8 @@ const PlayPage = ({
     ticketPrice={getTicketPrice()} 
     hasLines={savedLines.length > 0}
     lineCount={savedLines.length}
+    savedLines={savedLines}
+    onClearLines={handleClearAllLines}
   >
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <Card className="border-0 shadow-md overflow-hidden h-full">

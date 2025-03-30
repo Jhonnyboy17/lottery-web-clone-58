@@ -1,6 +1,6 @@
 
 import React from "react";
-import { X, ShoppingCart, Trash2 } from "lucide-react";
+import { X, ShoppingCart, Trash2, ChevronDown, ChevronUp } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -8,7 +8,16 @@ import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 
 const CartDrawer = () => {
-  const { cartItems, removeFromCart, clearCart, getCartTotal, getItemCount } = useCart();
+  const { 
+    cartItems, 
+    removeFromCart, 
+    clearCart, 
+    getCartTotal, 
+    getItemCount, 
+    toggleItemExpanded,
+    isCartOpen,
+    setIsCartOpen
+  } = useCart();
   
   const handleCheckout = () => {
     toast.success("Iniciando processo de pagamento...");
@@ -18,7 +27,7 @@ const CartDrawer = () => {
   const hasItems = cartItems.length > 0;
 
   return (
-    <Sheet>
+    <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
       <SheetTrigger asChild>
         <button className="relative">
           <ShoppingCart className="h-6 w-6 text-white cursor-pointer" />
@@ -76,6 +85,50 @@ const CartDrawer = () => {
                         </button>
                       </div>
                     </div>
+                    
+                    {item.lines && item.lines.length > 0 && (
+                      <div className="mt-2">
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          onClick={() => toggleItemExpanded(item.id)}
+                          className="w-full flex justify-between items-center text-sm p-1 h-8"
+                        >
+                          <span>Ver números</span>
+                          {item.expanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                        </Button>
+                        
+                        {item.expanded && (
+                          <div className="mt-2 bg-gray-50 p-2 rounded">
+                            {item.lines.map((line, lineIndex) => (
+                              <div key={lineIndex} className="flex items-center mb-1 py-1 border-b border-gray-100 last:border-0">
+                                <span className="text-gray-500 font-medium text-xs mr-2">
+                                  {String(lineIndex + 1).padStart(2, '0')}
+                                </span>
+                                <div className="flex flex-wrap gap-1">
+                                  {line.numbers.map((num, numIndex) => (
+                                    <span 
+                                      key={numIndex} 
+                                      className="text-white text-xs rounded-full w-6 h-6 flex items-center justify-center" 
+                                      style={{ backgroundColor: item.color }}
+                                    >
+                                      {num}
+                                    </span>
+                                  ))}
+                                  {line.powerball !== null && line.powerball !== undefined && (
+                                    <span 
+                                      className="bg-amber-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center"
+                                    >
+                                      {line.powerball}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
