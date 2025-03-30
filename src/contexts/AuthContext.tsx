@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -69,7 +70,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .maybeSingle();
       
       if (error) throw error;
-      setProfile(data);
+      
+      if (data) {
+        setProfile(data as ProfileType);
+      }
     } catch (error) {
       console.error("Error fetching user profile:", error);
     }

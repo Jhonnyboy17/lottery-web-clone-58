@@ -22,7 +22,7 @@ const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, signOut } = useAuth();
+  const { user, profile, signOut } = useAuth();
 
   const isPlayPage = location.pathname.includes('/play-');
 
@@ -93,6 +93,8 @@ const Navbar = () => {
 
   const navbarClasses = "fixed top-0 left-0 right-0 z-50 bg-[#1a0f36]/95 flex flex-col";
 
+  const displayName = profile?.first_name || user?.email?.split('@')[0] || 'Usuário';
+
   return (
     <header className={navbarClasses}>
       {/* Main Navbar */}
@@ -153,48 +155,53 @@ const Navbar = () => {
             </div>
             
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 bg-purple-600/20 text-white">
-                    <User size={18} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem className="font-medium">
-                    {user.email}
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigateToProfile("profile")}>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Meu Perfil</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigateToProfile("notifications")}>
-                    <Bell className="mr-2 h-4 w-4" />
-                    <span>Notificações</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigateToProfile("games")}>
-                    <GamepadIcon className="mr-2 h-4 w-4" />
-                    <span>Meus Jogos</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigateToProfile("subscription")}>
-                    <ClipboardCheck className="mr-2 h-4 w-4" />
-                    <span>Inscrição</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigateToProfile("wallet")}>
-                    <Wallet className="mr-2 h-4 w-4" />
-                    <span>Carteira</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => navigateToProfile("settings")}>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Configurações da Conta</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Sair</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <>
+                <div className="text-white/80 text-sm py-1 hidden md:block">
+                  Bem-vindo, {displayName}
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 bg-purple-600/20 text-white">
+                      <User size={18} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem className="font-medium">
+                      {user.email}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigateToProfile("profile")}>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Meu Perfil</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigateToProfile("notifications")}>
+                      <Bell className="mr-2 h-4 w-4" />
+                      <span>Notificações</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigateToProfile("games")}>
+                      <GamepadIcon className="mr-2 h-4 w-4" />
+                      <span>Meus Jogos</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigateToProfile("subscription")}>
+                      <ClipboardCheck className="mr-2 h-4 w-4" />
+                      <span>Inscrição</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigateToProfile("wallet")}>
+                      <Wallet className="mr-2 h-4 w-4" />
+                      <span>Carteira</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigateToProfile("settings")}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Configurações da Conta</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Sair</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : null}
             
             <CartDrawer />
@@ -203,28 +210,30 @@ const Navbar = () => {
           <div className="md:hidden flex items-center space-x-4">
             <ThemeToggle />
             {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 bg-purple-600/20 text-white">
-                    <User size={16} />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem className="font-medium">
-                    {user.email}
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => navigateToProfile()}>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Meu Perfil</span>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={handleSignOut}>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    <span>Sair</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 bg-purple-600/20 text-white">
+                      <User size={16} />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem className="font-medium">
+                      {user.email}
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigateToProfile()}>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Meu Perfil</span>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Sair</span>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
             ) : null}
             <CartDrawer />
             <button
@@ -238,14 +247,14 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Auth Banner */}
-      <div className="w-full bg-[#2a1c4b] py-2">
-        <div className="container mx-auto px-4 flex justify-between items-center">
-          <div className="text-white/90 text-sm font-medium">
-            Quer 10% off no seu primeiro pedido?
-          </div>
-          
-          {!user ? (
+      {/* Auth Banner - Only show if user is not logged in */}
+      {!user && (
+        <div className="w-full bg-[#2a1c4b] py-2">
+          <div className="container mx-auto px-4 flex justify-between items-center">
+            <div className="text-white/90 text-sm font-medium">
+              Quer 10% off no seu primeiro pedido?
+            </div>
+            
             <div className="space-x-4">
               <Button 
                 onClick={navigateToAuth} 
@@ -264,18 +273,19 @@ const Navbar = () => {
                 Registrar
               </Button>
             </div>
-          ) : (
-            <div className="text-white/80 text-sm py-1">
-              Bem-vindo, {user.email}
-            </div>
-          )}
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-[#1a0f36]/95 animate-fade-in">
           <div className="px-4 py-2 space-y-1">
+            {user && (
+              <div className="text-white/80 text-sm py-2 px-2 border-b border-white/10 mb-2">
+                Bem-vindo, {displayName}
+              </div>
+            )}
             <Button
               variant="ghost"
               className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/95"
