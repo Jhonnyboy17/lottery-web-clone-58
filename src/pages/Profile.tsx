@@ -10,13 +10,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
-import { User, UserImage, Settings, Bell, GamepadIcon, CreditCard, Pencil } from "lucide-react";
+import { User, Settings, Bell, GamepadIcon, CreditCard, Pencil } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Table, TableHeader, TableRow, TableHead, TableCell, TableBody } from "@/components/ui/table";
 
 const profileFormSchema = z.object({
   firstName: z.string().min(2, "First name must be at least 2 characters."),
@@ -36,10 +37,48 @@ const passwordFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 type PasswordFormValues = z.infer<typeof passwordFormSchema>;
 
+// Mock data for purchased games
+const purchasedGames = [
+  {
+    id: 1,
+    game: "Mega Millions",
+    logo: "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
+    numbers: [5, 12, 35, 47, 63],
+    powerball: [22],
+    purchaseDate: "2023-10-15",
+    drawDate: "2023-10-18",
+  },
+  {
+    id: 2,
+    game: "Powerball",
+    logo: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
+    numbers: [7, 14, 27, 41, 59],
+    powerball: [15],
+    purchaseDate: "2023-10-12",
+    drawDate: "2023-10-16",
+  }
+];
+
+// Mock data for transaction history
+const transactionHistory = [
+  { id: 1, type: "Deposit", amount: 100, date: "2023-10-01", status: "Completed" },
+  { id: 2, type: "Purchase", amount: -15, date: "2023-10-05", status: "Completed" },
+  { id: 3, type: "Purchase", amount: -15, date: "2023-10-08", status: "Completed" },
+  { id: 4, type: "Withdrawal", amount: -50, date: "2023-10-12", status: "Processing" }
+];
+
 const Profile = () => {
   const { user, profile, loading } = useAuth();
   const [avatar, setAvatar] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [walletBalance, setWalletBalance] = useState(120); // Mock wallet balance
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+  const [depositAmount, setDepositAmount] = useState("");
+  const [walletTab, setWalletTab] = useState("deposit");
+  const [dateRange, setDateRange] = useState({
+    startDate: "2023-10-01",
+    endDate: "2023-10-31"
+  });
 
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileFormSchema),
@@ -145,6 +184,33 @@ const Profile = () => {
     }
   };
 
+  const handleDeposit = () => {
+    if (!depositAmount || parseFloat(depositAmount) <= 0) {
+      toast.error("Please enter a valid amount");
+      return;
+    }
+    
+    setWalletBalance(prev => prev + parseFloat(depositAmount));
+    toast.success(`Successfully deposited R$${depositAmount}`);
+    setDepositAmount("");
+  };
+
+  const handleWithdraw = () => {
+    if (!withdrawAmount || parseFloat(withdrawAmount) <= 0) {
+      toast.error("Please enter a valid amount");
+      return;
+    }
+    
+    if (parseFloat(withdrawAmount) > walletBalance) {
+      toast.error("Insufficient funds");
+      return;
+    }
+    
+    setWalletBalance(prev => prev - parseFloat(withdrawAmount));
+    toast.success(`Withdrawal of R$${withdrawAmount} initiated`);
+    setWithdrawAmount("");
+  };
+
   const sidebarItems = [
     { id: "profile", icon: User, label: "Meu Perfil" },
     { id: "notifications", icon: Bell, label: "Notificações" },
@@ -248,6 +314,7 @@ const Profile = () => {
                       key={item.id}
                       variant={item.id === "profile" ? "default" : "ghost"}
                       className="w-full justify-start"
+                      onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' })}
                     >
                       <item.icon className="mr-2 h-5 w-5" />
                       {item.label}
@@ -259,8 +326,9 @@ const Profile = () => {
           </div>
           
           {/* Main Content */}
-          <div className="md:col-span-9">
-            <Card>
+          <div className="md:col-span-9 space-y-6">
+            {/* Profile Section */}
+            <Card id="profile">
               <CardHeader>
                 <CardTitle>Meu Perfil</CardTitle>
                 <CardDescription>
@@ -378,6 +446,310 @@ const Profile = () => {
                         </Button>
                       </form>
                     </Form>
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
+
+            {/* My Games Section */}
+            <Card id="games">
+              <CardHeader>
+                <CardTitle>Meus Jogos</CardTitle>
+                <CardDescription>
+                  Visualize seus bilhetes de jogos comprados
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {purchasedGames.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {purchasedGames.map((game) => (
+                      <Card key={game.id} className="overflow-hidden">
+                        <div className="p-4 border-b flex items-center gap-3">
+                          <img 
+                            src={game.logo} 
+                            alt={game.game} 
+                            className="h-8 w-auto" 
+                          />
+                          <h3 className="font-medium">{game.game}</h3>
+                        </div>
+                        <CardContent className="p-4">
+                          <div className="mb-3">
+                            <p className="text-sm text-muted-foreground">Números:</p>
+                            <div className="flex flex-wrap gap-2 mt-1">
+                              {game.numbers.map((num, i) => (
+                                <span 
+                                  key={i} 
+                                  className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-primary/10 text-primary font-medium text-sm"
+                                >
+                                  {num}
+                                </span>
+                              ))}
+                              
+                              {game.powerball && game.powerball.length > 0 && (
+                                <>
+                                  <span className="inline-flex items-center justify-center h-8 px-2 rounded-full bg-gray-100 text-gray-500 font-medium text-sm">
+                                    +
+                                  </span>
+                                  {game.powerball.map((num, i) => (
+                                    <span 
+                                      key={i} 
+                                      className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-red-100 text-red-600 font-medium text-sm"
+                                    >
+                                      {num}
+                                    </span>
+                                  ))}
+                                </>
+                              )}
+                            </div>
+                          </div>
+                          
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                              <p className="text-muted-foreground">Data da compra:</p>
+                              <p>{game.purchaseDate}</p>
+                            </div>
+                            <div>
+                              <p className="text-muted-foreground">Data do sorteio:</p>
+                              <p>{game.drawDate}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center py-8">
+                    <p className="text-muted-foreground">Você ainda não comprou nenhum jogo.</p>
+                    <Button className="mt-4" variant="outline">Comprar jogos</Button>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Subscription Section */}
+            <Card id="subscription">
+              <CardHeader>
+                <CardTitle>Inscrição</CardTitle>
+                <CardDescription>
+                  Gerencie sua assinatura premium
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Card className="bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/20 dark:to-blue-900/20 border-0">
+                  <CardContent className="p-6">
+                    <div className="text-center space-y-4">
+                      <h3 className="text-xl font-bold">Assinatura Premium</h3>
+                      <p>Assine e tenha 100% de desconto em todas as taxas de serviço nas suas compras!</p>
+                      <Button className="bg-gradient-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600">
+                        Assinar Agora
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CardContent>
+            </Card>
+
+            {/* Wallet Section */}
+            <Card id="wallet">
+              <CardHeader>
+                <CardTitle>Carteira</CardTitle>
+                <CardDescription>
+                  Gerencie seus fundos e visualize o histórico de transações
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="bg-gradient-to-r from-green-100 to-teal-100 dark:from-green-900/20 dark:to-teal-900/20 rounded-lg p-4 mb-6">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-muted-foreground">Saldo atual</p>
+                      <p className="text-2xl font-bold">R$ {walletBalance.toFixed(2)}</p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button size="sm" variant="outline" className="font-medium" onClick={() => setWalletTab("deposit")}>
+                        Depositar
+                      </Button>
+                      <Button size="sm" variant="outline" className="font-medium" onClick={() => setWalletTab("withdraw")}>
+                        Retirar
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                <Tabs defaultValue={walletTab} onValueChange={setWalletTab}>
+                  <TabsList className="grid grid-cols-4 mb-6">
+                    <TabsTrigger value="deposit">Depositar</TabsTrigger>
+                    <TabsTrigger value="withdraw">Retirar</TabsTrigger>
+                    <TabsTrigger value="history">Histórico</TabsTrigger>
+                    <TabsTrigger value="analytics">Estatísticas</TabsTrigger>
+                  </TabsList>
+
+                  <TabsContent value="deposit" className="space-y-4">
+                    <Card>
+                      <CardContent className="pt-6">
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="deposit-amount">Valor para depositar (R$)</Label>
+                            <Input
+                              id="deposit-amount"
+                              type="number"
+                              placeholder="0.00"
+                              value={depositAmount}
+                              onChange={(e) => setDepositAmount(e.target.value)}
+                            />
+                          </div>
+                          <div className="grid grid-cols-4 gap-2">
+                            {[50, 100, 200, 500].map((amount) => (
+                              <Button
+                                key={amount}
+                                variant="outline"
+                                onClick={() => setDepositAmount(amount.toString())}
+                              >
+                                R$ {amount}
+                              </Button>
+                            ))}
+                          </div>
+                          <Button className="w-full" onClick={handleDeposit}>
+                            Depositar Fundos
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="withdraw" className="space-y-4">
+                    <Card>
+                      <CardContent className="pt-6">
+                        <div className="space-y-4">
+                          <div>
+                            <Label htmlFor="withdraw-amount">Valor para retirar (R$)</Label>
+                            <Input
+                              id="withdraw-amount"
+                              type="number"
+                              placeholder="0.00"
+                              max={walletBalance}
+                              value={withdrawAmount}
+                              onChange={(e) => setWithdrawAmount(e.target.value)}
+                            />
+                          </div>
+                          <div className="grid grid-cols-3 gap-2">
+                            {[25, 50, 100].map((amount) => (
+                              <Button
+                                key={amount}
+                                variant="outline"
+                                disabled={amount > walletBalance}
+                                onClick={() => setWithdrawAmount(amount.toString())}
+                              >
+                                R$ {amount}
+                              </Button>
+                            ))}
+                          </div>
+                          <Button className="w-full" onClick={handleWithdraw}>
+                            Retirar Fundos
+                          </Button>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="history">
+                    <Card>
+                      <CardContent className="pt-6">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Data</TableHead>
+                              <TableHead>Tipo</TableHead>
+                              <TableHead>Valor</TableHead>
+                              <TableHead>Status</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {transactionHistory.length > 0 ? (
+                              transactionHistory.map((transaction) => (
+                                <TableRow key={transaction.id}>
+                                  <TableCell>{transaction.date}</TableCell>
+                                  <TableCell>{transaction.type}</TableCell>
+                                  <TableCell className={transaction.amount > 0 ? "text-green-600" : "text-red-600"}>
+                                    {transaction.amount > 0 ? `+R$ ${transaction.amount}` : `-R$ ${Math.abs(transaction.amount)}`}
+                                  </TableCell>
+                                  <TableCell>
+                                    <span className={`px-2 py-1 rounded-full text-xs ${
+                                      transaction.status === "Completed" 
+                                        ? "bg-green-100 text-green-800" 
+                                        : "bg-yellow-100 text-yellow-800"
+                                    }`}>
+                                      {transaction.status}
+                                    </span>
+                                  </TableCell>
+                                </TableRow>
+                              ))
+                            ) : (
+                              <TableRow>
+                                <TableCell colSpan={4} className="text-center">Nenhuma transação encontrada</TableCell>
+                              </TableRow>
+                            )}
+                          </TableBody>
+                        </Table>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+
+                  <TabsContent value="analytics">
+                    <Card>
+                      <CardContent className="pt-6">
+                        <div className="space-y-4">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="start-date">Data inicial</Label>
+                              <Input
+                                id="start-date"
+                                type="date"
+                                value={dateRange.startDate}
+                                onChange={(e) => setDateRange({...dateRange, startDate: e.target.value})}
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="end-date">Data final</Label>
+                              <Input
+                                id="end-date"
+                                type="date"
+                                value={dateRange.endDate}
+                                onChange={(e) => setDateRange({...dateRange, endDate: e.target.value})}
+                              />
+                            </div>
+                          </div>
+                          
+                          <Button className="w-full">Gerar Relatório</Button>
+                          
+                          <div className="mt-6 pt-6 border-t grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <Card>
+                              <CardContent className="pt-6">
+                                <div className="text-center">
+                                  <p className="text-sm text-muted-foreground">Total de depósitos</p>
+                                  <p className="text-2xl font-bold text-green-600">R$ 100,00</p>
+                                </div>
+                              </CardContent>
+                            </Card>
+                            <Card>
+                              <CardContent className="pt-6">
+                                <div className="text-center">
+                                  <p className="text-sm text-muted-foreground">Total de compras</p>
+                                  <p className="text-2xl font-bold text-red-600">R$ 30,00</p>
+                                </div>
+                              </CardContent>
+                            </Card>
+                            <Card>
+                              <CardContent className="pt-6">
+                                <div className="text-center">
+                                  <p className="text-sm text-muted-foreground">Saldo líquido</p>
+                                  <p className="text-2xl font-bold">R$ 70,00</p>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
                   </TabsContent>
                 </Tabs>
               </CardContent>
