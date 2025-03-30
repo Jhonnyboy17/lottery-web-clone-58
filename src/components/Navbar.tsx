@@ -203,7 +203,11 @@ const Navbar = () => {
 
       {/* Auth Banner */}
       <div className="w-full bg-[#2a1c4b] py-2">
-        <div className="container mx-auto px-4 flex justify-end">
+        <div className="container mx-auto px-4 flex justify-between items-center">
+          <div className="text-white/90 text-sm font-medium">
+            Quer 10% off no seu primeiro pedido?
+          </div>
+          
           {!user ? (
             <div className="space-x-4">
               <Button 
