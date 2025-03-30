@@ -1,18 +1,28 @@
 
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
-import { Menu, X, Search } from "lucide-react";
+import { Menu, X, Search, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
+import { 
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import ThemeToggle from "./ThemeToggle";
 import CartDrawer from "./Cart/CartDrawer";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   const isPlayPage = location.pathname.includes('/play-');
 
@@ -59,6 +69,19 @@ const Navbar = () => {
   const navigateToHome = () => {
     navigate('/');
     window.scrollTo(0, 0);
+  };
+
+  const navigateToAuth = () => {
+    if (isOpen) setIsOpen(false);
+    
+    navigate('/auth');
+    window.scrollTo(0, 0);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast.success("Logout realizado com sucesso!");
+    navigate('/');
   };
 
   const navbarClasses = "fixed top-0 left-0 right-0 z-50 bg-[#1a0f36]/95 py-3";
@@ -120,11 +143,68 @@ const Navbar = () => {
                 />
               </div>
             </div>
+            
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 bg-purple-600/20 text-white">
+                    <User size={18} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem className="font-medium">
+                    {user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Sair</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button 
+                onClick={navigateToAuth}
+                variant="ghost" 
+                className="text-white hover:bg-white/10"
+              >
+                Entrar
+              </Button>
+            )}
+            
             <CartDrawer />
           </div>
 
           <div className="md:hidden flex items-center space-x-4">
             <ThemeToggle />
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full h-9 w-9 bg-purple-600/20 text-white">
+                    <User size={16} />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem className="font-medium">
+                    {user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Sair</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <Button 
+                onClick={navigateToAuth}
+                variant="ghost" 
+                size="sm"
+                className="text-white hover:bg-white/10"
+              >
+                Entrar
+              </Button>
+            )}
             <CartDrawer />
             <button
               className="text-white p-2"
