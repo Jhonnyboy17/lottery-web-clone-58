@@ -1,125 +1,191 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Sun, Moon, PlayCircle, HelpCircle, Search } from "lucide-react";
+import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
+import { Menu, X, ShoppingCart, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import ThemeToggle from "./ThemeToggle";
 
 const Navbar = () => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const navigate = useNavigate();
   const location = useLocation();
-  const pathname = location.pathname;
+
+  const isPlayPage = location.pathname.includes('/play-');
 
   useEffect(() => {
-    // Close mobile menu when route changes
-    setMobileMenuOpen(false);
-  }, [location]);
+    const handleScroll = () => {
+      if (window.scrollY > 10) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToGames = () => {
+    if (isOpen) setIsOpen(false);
+    
+    if (window.location.pathname === '/') {
+      const gamesSection = document.getElementById('lottery-games');
+      if (gamesSection) {
+        gamesSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.location.href = '/#lottery-games';
+    }
+  };
+
+  const navigateToResultsHub = () => {
+    if (isOpen) setIsOpen(false);
+    
+    navigate('/results-hub');
+    window.scrollTo(0, 0);
+  };
+
+  const navigateToDuvidas = () => {
+    if (isOpen) setIsOpen(false);
+    
+    navigate('/duvidas');
+    window.scrollTo(0, 0);
+  };
+
+  const navigateToHome = () => {
+    navigate('/');
+    window.scrollTo(0, 0);
+  };
+
+  const navbarClasses = "fixed top-0 left-0 right-0 z-50 bg-[#1a0f36]/95 py-3";
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-lottery-dark-card shadow-sm">
+    <header className={navbarClasses}>
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center">
-            <PlayCircle className="w-8 h-8 mr-2 text-lottery-pink" />
-            <span className="font-bold text-xl text-lottery-navy dark:text-white">
-              Lovable Lottery
-            </span>
+        <div className="flex items-center justify-between">
+          <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
+            <img
+              src="/lovable-uploads/49af7c32-e87d-4f46-a005-b535bbdf18ed.png"
+              alt="LotoEasy Logo"
+              className="h-16 w-auto"
+            />
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            <Link
-              to="/"
-              className={`px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                pathname === "/" ? "font-medium text-lottery-pink" : ""
-              }`}
-            >
-              Home
-            </Link>
-            <Link
-              to="/results-hub"
-              className={`px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                pathname === "/results-hub" ? "font-medium text-lottery-pink" : ""
-              }`}
-            >
-              Resultados
-            </Link>
-            <Link
-              to="/duvidas"
-              className={`px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                pathname === "/duvidas" ? "font-medium text-lottery-pink" : ""
-              }`}
-            >
-              Dúvidas
-            </Link>
-            <Link
-              to="/rapidapi-example"
-              className={`px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                pathname === "/rapidapi-example" ? "font-medium text-lottery-pink" : ""
-              }`}
-            >
-              RapidAPI
-            </Link>
+          <nav className="hidden md:flex justify-center flex-grow ml-2 mr-8">
+            <div className="flex items-center space-x-8">
+              <button 
+                onClick={scrollToGames}
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Loterias
+              </button>
+              <button 
+                onClick={navigateToResultsHub}
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Resultados
+              </button>
+              <button 
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Ganhadores
+              </button>
+              <button 
+                onClick={navigateToDuvidas}
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Duvidas
+              </button>
+              <button 
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Assistência
+              </button>
+            </div>
           </nav>
 
-          {/* Actions */}
-          <div className="flex items-center">
+          <div className="hidden md:flex items-center space-x-6">
+            <ThemeToggle />
+            <div className="relative">
+              <div className="flex items-center w-64 bg-white-element dark:bg-gray-800 rounded-full overflow-hidden">
+                <Search className="absolute left-3 h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <Input 
+                  type="text" 
+                  placeholder="Search" 
+                  className="border-none pl-10 h-9 focus-visible:ring-0 bg-white-element w-full rounded-full dark:bg-gray-800 dark:text-white"
+                />
+              </div>
+            </div>
+            <ShoppingCart className="h-6 w-6 text-white cursor-pointer" />
+          </div>
+
+          <div className="md:hidden flex items-center space-x-4">
             <ThemeToggle />
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden text-gray-600 dark:text-gray-300 focus:outline-none ml-4"
-              aria-label={mobileMenuOpen ? "Close Menu" : "Open Menu"}
+              className="text-white p-2"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label="toggle menu"
             >
-              {mobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden bg-white dark:bg-lottery-dark-card p-4 shadow-md">
-          <nav className="flex flex-col space-y-3">
-            <Link
-              to="/"
-              className={`px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                pathname === "/" ? "font-medium text-lottery-pink" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
+      {isOpen && (
+        <div className="md:hidden bg-[#1a0f36]/95 animate-fade-in">
+          <div className="px-4 py-2 space-y-1">
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/95"
+              onClick={scrollToGames}
             >
-              Home
-            </Link>
-            <Link
-              to="/results-hub"
-              className={`px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                pathname === "/results-hub" ? "font-medium text-lottery-pink" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
+              Loterias
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/95"
+              onClick={navigateToResultsHub}
             >
               Resultados
-            </Link>
-            <Link
-              to="/duvidas"
-              className={`px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                pathname === "/duvidas" ? "font-medium text-lottery-pink" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/95"
             >
-              Dúvidas
-            </Link>
-            <Link
-              to="/rapidapi-example"
-              className={`px-3 py-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 ${
-                pathname === "/rapidapi-example" ? "font-medium text-lottery-pink" : ""
-              }`}
-              onClick={() => setMobileMenuOpen(false)}
+              Ganhadores
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/95"
+              onClick={navigateToDuvidas}
             >
-              RapidAPI
-            </Link>
-          </nav>
+              Duvidas
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/95"
+            >
+              Assistência
+            </Button>
+            <Separator className="my-2 bg-white/20" />
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/95"
+            >
+              <Search className="h-4 w-4 mr-2" />
+              Buscar
+            </Button>
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-white hover:text-white/80 hover:bg-[#2d1d4d]/95"
+            >
+              <ShoppingCart className="h-4 w-4 mr-2" />
+              Carrinho
+            </Button>
+          </div>
         </div>
       )}
     </header>
