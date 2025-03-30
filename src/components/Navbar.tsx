@@ -78,6 +78,13 @@ const Navbar = () => {
     window.scrollTo(0, 0);
   };
 
+  const navigateToProfile = (section = "") => {
+    if (isOpen) setIsOpen(false);
+    
+    navigate('/profile' + (section ? `#${section}` : ''));
+    window.scrollTo(0, 0);
+  };
+
   const handleSignOut = async () => {
     await signOut();
     toast.success("Logout realizado com sucesso!");
@@ -157,27 +164,27 @@ const Navbar = () => {
                     {user.email}
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateToProfile("profile")}>
                     <User className="mr-2 h-4 w-4" />
                     <span>Meu Perfil</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateToProfile("notifications")}>
                     <Bell className="mr-2 h-4 w-4" />
                     <span>Notificações</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateToProfile("games")}>
                     <GamepadIcon className="mr-2 h-4 w-4" />
                     <span>Meus Jogos</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateToProfile("subscription")}>
                     <ClipboardCheck className="mr-2 h-4 w-4" />
                     <span>Inscrição</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateToProfile("wallet")}>
                     <Wallet className="mr-2 h-4 w-4" />
                     <span>Carteira</span>
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => navigateToProfile("settings")}>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Configurações da Conta</span>
                   </DropdownMenuItem>
@@ -205,6 +212,11 @@ const Navbar = () => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem className="font-medium">
                     {user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigateToProfile()}>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Meu Perfil</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
@@ -260,6 +272,7 @@ const Navbar = () => {
         </div>
       </div>
 
+      {/* Mobile Menu */}
       {isOpen && (
         <div className="md:hidden bg-[#1a0f36]/95 animate-fade-in">
           <div className="px-4 py-2 space-y-1">
