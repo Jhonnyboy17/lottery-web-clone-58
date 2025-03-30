@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from "react";
 import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
-import { Menu, X, Search, User, LogOut } from "lucide-react";
+import { Menu, X, Search, User, LogOut, Bell, GamepadIcon, ClipboardCheck, Wallet, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
@@ -155,6 +155,31 @@ const Navbar = () => {
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem className="font-medium">
                     {user.email}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Meu Perfil</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Bell className="mr-2 h-4 w-4" />
+                    <span>Notificações</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <GamepadIcon className="mr-2 h-4 w-4" />
+                    <span>Meus Jogos</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <ClipboardCheck className="mr-2 h-4 w-4" />
+                    <span>Inscrição</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Wallet className="mr-2 h-4 w-4" />
+                    <span>Carteira</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Configurações da Conta</span>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={handleSignOut}>
