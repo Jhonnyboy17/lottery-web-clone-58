@@ -1,5 +1,6 @@
 
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface DrawTimeEntry {
   logo: string;
@@ -47,7 +48,7 @@ const lotteryDrawTimes: DrawTimeEntry[] = [
     logo: "/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png",
     logoAlt: "Lucky Day Lotto Logo",
     drawTimes: {
-      daily: ""
+      daily: "DAILY"
     }
   },
   {
@@ -61,63 +62,82 @@ const lotteryDrawTimes: DrawTimeEntry[] = [
     logo: "/lovable-uploads/a02651ec-8efc-429a-8231-5ae52f5c4af5.png",
     logoAlt: "Pick 4 Logo",
     drawTimes: {
-      daily: ""
+      daily: "DAILY"
     }
   }
 ];
 
 const DrawTimes = () => {
   return (
-    <div className="bg-white dark:bg-lottery-dark-card rounded-xl shadow-md p-8">
-      <h2 className="text-2xl md:text-3xl font-bold text-lottery-navy dark:text-white mb-6">
-        Draw Times
-      </h2>
-      
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]"></TableHead>
-              <TableHead className="text-center">MON</TableHead>
-              <TableHead className="text-center">TUE</TableHead>
-              <TableHead className="text-center">WED</TableHead>
-              <TableHead className="text-center">THU</TableHead>
-              <TableHead className="text-center">FRI</TableHead>
-              <TableHead className="text-center">SAT</TableHead>
-              <TableHead className="text-center">SUN</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {lotteryDrawTimes.map((lottery, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium p-4">
-                  <img 
-                    src={lottery.logo} 
-                    alt={lottery.logoAlt} 
-                    className="h-10 object-contain"
-                  />
-                </TableCell>
-                <TableCell className="text-center">{lottery.drawTimes.mon || ""}</TableCell>
-                <TableCell className="text-center">{lottery.drawTimes.tue || ""}</TableCell>
-                <TableCell className="text-center">{lottery.drawTimes.wed || ""}</TableCell>
-                <TableCell className="text-center">{lottery.drawTimes.thu || ""}</TableCell>
-                <TableCell className="text-center">{lottery.drawTimes.fri || ""}</TableCell>
-                <TableCell className="text-center">{lottery.drawTimes.sat || ""}</TableCell>
-                <TableCell className="text-center">{lottery.drawTimes.sun || ""}</TableCell>
-                {lottery.drawTimes.daily && (
-                  <TableCell 
-                    className="text-center whitespace-pre-line" 
-                    colSpan={7}
-                  >
-                    {lottery.drawTimes.daily}
-                  </TableCell>
-                )}
+    <Card className="bg-white dark:bg-lottery-dark-card rounded-xl shadow-md">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-2xl md:text-3xl font-bold text-lottery-navy dark:text-white">
+          Draw Times
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]"></TableHead>
+                <TableHead className="text-center">MON</TableHead>
+                <TableHead className="text-center">TUE</TableHead>
+                <TableHead className="text-center">WED</TableHead>
+                <TableHead className="text-center">THU</TableHead>
+                <TableHead className="text-center">FRI</TableHead>
+                <TableHead className="text-center">SAT</TableHead>
+                <TableHead className="text-center">SUN</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
-    </div>
+            </TableHeader>
+            <TableBody>
+              {lotteryDrawTimes.map((lottery, index) => {
+                // Handle daily draw times differently
+                if (lottery.drawTimes.daily) {
+                  return (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium p-4">
+                        <img 
+                          src={lottery.logo} 
+                          alt={lottery.logoAlt} 
+                          className="h-10 object-contain"
+                        />
+                      </TableCell>
+                      <TableCell 
+                        className="text-center whitespace-pre-line" 
+                        colSpan={7}
+                      >
+                        {lottery.drawTimes.daily}
+                      </TableCell>
+                    </TableRow>
+                  );
+                }
+                
+                // Handle regular weekly draw times
+                return (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium p-4">
+                      <img 
+                        src={lottery.logo} 
+                        alt={lottery.logoAlt} 
+                        className="h-10 object-contain"
+                      />
+                    </TableCell>
+                    <TableCell className="text-center">{lottery.drawTimes.mon || ""}</TableCell>
+                    <TableCell className="text-center">{lottery.drawTimes.tue || ""}</TableCell>
+                    <TableCell className="text-center">{lottery.drawTimes.wed || ""}</TableCell>
+                    <TableCell className="text-center">{lottery.drawTimes.thu || ""}</TableCell>
+                    <TableCell className="text-center">{lottery.drawTimes.fri || ""}</TableCell>
+                    <TableCell className="text-center">{lottery.drawTimes.sat || ""}</TableCell>
+                    <TableCell className="text-center">{lottery.drawTimes.sun || ""}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </div>
+      </CardContent>
+    </Card>
   );
 };
 
