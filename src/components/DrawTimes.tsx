@@ -72,22 +72,22 @@ const DrawTimes = () => {
     <Card className="bg-white dark:bg-lottery-dark-card rounded-xl shadow-md">
       <CardHeader className="pb-2">
         <CardTitle className="text-2xl md:text-3xl font-bold text-lottery-navy dark:text-white">
-          Draw Times
+          Horários Dos Sorteios
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px]"></TableHead>
-                <TableHead className="text-center">MON</TableHead>
-                <TableHead className="text-center">TUE</TableHead>
-                <TableHead className="text-center">WED</TableHead>
-                <TableHead className="text-center">THU</TableHead>
-                <TableHead className="text-center">FRI</TableHead>
-                <TableHead className="text-center">SAT</TableHead>
-                <TableHead className="text-center">SUN</TableHead>
+              <TableRow className="border-b border-gray-200 dark:border-gray-700">
+                <TableHead className="w-[100px] bg-gray-50 dark:bg-gray-800"></TableHead>
+                <TableHead className="text-center bg-gray-50 dark:bg-gray-800 font-medium">SEG</TableHead>
+                <TableHead className="text-center bg-gray-50 dark:bg-gray-800 font-medium">TER</TableHead>
+                <TableHead className="text-center bg-gray-50 dark:bg-gray-800 font-medium">QUA</TableHead>
+                <TableHead className="text-center bg-gray-50 dark:bg-gray-800 font-medium">QUI</TableHead>
+                <TableHead className="text-center bg-gray-50 dark:bg-gray-800 font-medium">SEX</TableHead>
+                <TableHead className="text-center bg-gray-50 dark:bg-gray-800 font-medium">SÁB</TableHead>
+                <TableHead className="text-center bg-gray-50 dark:bg-gray-800 font-medium">DOM</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -95,8 +95,8 @@ const DrawTimes = () => {
                 // Handle daily draw times differently
                 if (lottery.drawTimes.daily) {
                   return (
-                    <TableRow key={index}>
-                      <TableCell className="font-medium p-4">
+                    <TableRow key={index} className={index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800"}>
+                      <TableCell className="font-medium p-4 border-r border-gray-200 dark:border-gray-700">
                         <img 
                           src={lottery.logo} 
                           alt={lottery.logoAlt} 
@@ -104,7 +104,7 @@ const DrawTimes = () => {
                         />
                       </TableCell>
                       <TableCell 
-                        className="text-center whitespace-pre-line" 
+                        className="text-center whitespace-pre-line border-r border-gray-200 dark:border-gray-700" 
                         colSpan={7}
                       >
                         {lottery.drawTimes.daily}
@@ -115,20 +115,20 @@ const DrawTimes = () => {
                 
                 // Handle regular weekly draw times
                 return (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium p-4">
+                  <TableRow key={index} className={index % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50 dark:bg-gray-800"}>
+                    <TableCell className="font-medium p-4 border-r border-gray-200 dark:border-gray-700">
                       <img 
                         src={lottery.logo} 
                         alt={lottery.logoAlt} 
                         className="h-10 object-contain"
                       />
                     </TableCell>
-                    <TableCell className="text-center">{lottery.drawTimes.mon || ""}</TableCell>
-                    <TableCell className="text-center">{lottery.drawTimes.tue || ""}</TableCell>
-                    <TableCell className="text-center">{lottery.drawTimes.wed || ""}</TableCell>
-                    <TableCell className="text-center">{lottery.drawTimes.thu || ""}</TableCell>
-                    <TableCell className="text-center">{lottery.drawTimes.fri || ""}</TableCell>
-                    <TableCell className="text-center">{lottery.drawTimes.sat || ""}</TableCell>
+                    <TableCell className="text-center border-r border-gray-200 dark:border-gray-700">{lottery.drawTimes.mon || ""}</TableCell>
+                    <TableCell className="text-center border-r border-gray-200 dark:border-gray-700">{lottery.drawTimes.tue || ""}</TableCell>
+                    <TableCell className="text-center border-r border-gray-200 dark:border-gray-700">{lottery.drawTimes.wed || ""}</TableCell>
+                    <TableCell className="text-center border-r border-gray-200 dark:border-gray-700">{lottery.drawTimes.thu || ""}</TableCell>
+                    <TableCell className="text-center border-r border-gray-200 dark:border-gray-700">{lottery.drawTimes.fri || ""}</TableCell>
+                    <TableCell className="text-center border-r border-gray-200 dark:border-gray-700">{lottery.drawTimes.sat || ""}</TableCell>
                     <TableCell className="text-center">{lottery.drawTimes.sun || ""}</TableCell>
                   </TableRow>
                 );

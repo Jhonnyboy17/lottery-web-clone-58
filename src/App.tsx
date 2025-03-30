@@ -13,6 +13,7 @@ import Cash5Page from "./components/Cash5";
 import FastPlayPage from "./components/FastPlay";
 import ResultsHub from "./pages/ResultsHub";
 import Auth from "./pages/Auth";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
               <Route path="/duvidas" element={<Duvidas />} />
               <Route path="/results-hub" element={<ResultsHub />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
               
               {/* Mega Millions - R$15 */}
               <Route 
