@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Json } from "@/integrations/supabase/types";
 
 export type CartLineType = {
   numbers: number[];
@@ -147,18 +148,22 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       if (data) {
-        const formattedHistory: OrderHistoryItem[] = data.map(item => ({
-          id: item.id,
-          gameName: item.game_name,
-          logoSrc: item.logo_src || "",
-          price: Number(item.price),
-          lineCount: item.line_count,
-          color: item.color || "",
-          drawDate: item.draw_date,
-          purchaseDate: item.purchase_date,
-          orderNumber: item.order_number,
-          lines: item.game_data?.lines || []
-        }));
+        const formattedHistory: OrderHistoryItem[] = data.map(item => {
+          const gameData = item.game_data as { lines?: CartLineType[] } | null;
+          
+          return {
+            id: item.id,
+            gameName: item.game_name,
+            logoSrc: item.logo_src || "",
+            price: Number(item.price),
+            lineCount: item.line_count,
+            color: item.color || "",
+            drawDate: item.draw_date,
+            purchaseDate: item.purchase_date,
+            orderNumber: item.order_number,
+            lines: gameData?.lines || []
+          };
+        });
         
         setOrderHistory(formattedHistory);
       }
