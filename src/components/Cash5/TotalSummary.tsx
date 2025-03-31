@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SavedLineType } from "./types";
 
 interface TotalSummaryProps {
@@ -29,6 +29,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
 }) => {
   const { addToCart, setIsCartOpen } = useCart();
   const location = useLocation();
+  const navigate = useNavigate();
   
   // Clean up the price format to avoid duplicate R$ symbols
   const formattedPrice = ticketPrice.startsWith("R$") ? 

@@ -11,10 +11,12 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileSidebar from "@/components/ProfileSidebar";
-import { Pencil } from "lucide-react";
+import { Pencil, Package } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 const Profile = () => {
   const { user, profile, loading } = useAuth();
+  const { orderHistory } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
   const [firstName, setFirstName] = useState("");
@@ -67,7 +69,7 @@ const Profile = () => {
       <div className="flex-1 flex flex-col">
         <Navbar />
         
-        <main className="flex-1 p-8">
+        <main className="flex-1 p-8 mt-32">
           {activeTab === "profile" && (
             <div className="max-w-4xl mx-auto">
               <div className="bg-[#1a0f36] rounded-lg shadow-lg p-6">
@@ -180,7 +182,59 @@ const Profile = () => {
           {activeTab === "games" && (
             <div className="bg-[#1a0f36] rounded-lg shadow-lg p-6">
               <h1 className="text-2xl font-bold text-white mb-6">Meus Jogos</h1>
-              <p className="text-gray-300">Você ainda não possui jogos.</p>
+              
+              {orderHistory && orderHistory.length > 0 ? (
+                <div className="space-y-4">
+                  {orderHistory.map((order, index) => (
+                    <div key={index} className="bg-[#2a1b4e] rounded-lg p-4 border border-purple-900/30">
+                      <div className="flex justify-between items-center mb-3">
+                        <div className="flex items-center gap-3">
+                          <Package className="text-purple-400" />
+                          <h3 className="text-lg font-semibold text-white">Pedido #{index + 1000}</h3>
+                        </div>
+                        <span className="text-sm text-purple-300">
+                          {new Date().toLocaleDateString('pt-BR')}
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        {order.items.map((item, itemIndex) => (
+                          <div key={itemIndex} className="flex items-center gap-3 p-2 bg-[#1a0f36]/50 rounded-md">
+                            {item.logoSrc && (
+                              <img src={item.logoSrc} alt={item.gameName} className="h-8 w-8" />
+                            )}
+                            <div>
+                              <p className="text-white font-medium">{item.gameName}</p>
+                              <p className="text-sm text-gray-300">{item.lineCount} {item.lineCount > 1 ? 'jogos' : 'jogo'}</p>
+                            </div>
+                            <div className="ml-auto">
+                              <p className="text-white">R$ {item.price.toFixed(2).replace('.', ',')}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className="mt-4 pt-3 border-t border-purple-900/30 flex justify-between">
+                        <span className="text-gray-300">Total</span>
+                        <span className="text-lg font-semibold text-white">
+                          R$ {order.items.reduce((sum, item) => sum + item.price, 0).toFixed(2).replace('.', ',')}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-10">
+                  <Package className="mx-auto h-12 w-12 text-purple-400 mb-4" />
+                  <p className="text-gray-300 mb-4">Você ainda não possui jogos.</p>
+                  <Button 
+                    onClick={() => navigate('/')} 
+                    className="bg-purple-600 hover:bg-purple-700"
+                  >
+                    Jogar agora
+                  </Button>
+                </div>
+              )}
             </div>
           )}
           

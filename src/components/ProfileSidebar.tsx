@@ -51,15 +51,7 @@ const ProfileSidebar = () => {
 
   return (
     <div className="w-60 bg-[#1a0f36]/80 min-h-screen p-4">
-      <div className="flex justify-center mb-8">
-        <img
-          src="/lovable-uploads/49af7c32-e87d-4f46-a005-b535bbdf18ed.png"
-          alt="LotoEasy Logo"
-          className="h-14 w-auto"
-        />
-      </div>
-      
-      <nav className="space-y-1">
+      <nav className="space-y-1 mt-4">
         {menuItems.map((item) => (
           <button
             key={item.id}
