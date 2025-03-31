@@ -5,6 +5,7 @@ import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SavedLineType } from "./types";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface TotalSummaryProps {
   ticketPrice: string;
@@ -27,7 +28,8 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   savedLines = [],
   onClearLines
 }) => {
-  const { addToCart, setIsCartOpen, addToOrderHistory } = useCart();
+  const { addToCart, setIsCartOpen } = useCart();
+  const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   

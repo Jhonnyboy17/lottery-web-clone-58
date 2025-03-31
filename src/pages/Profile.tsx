@@ -16,12 +16,13 @@ import { useCart } from "@/contexts/CartContext";
 
 const Profile = () => {
   const { user, profile, loading } = useAuth();
-  const { orderHistory } = useCart();
+  const { orderHistory, fetchOrderHistory } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [activeTab, setActiveTab] = useState("profile");
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -38,6 +39,12 @@ const Profile = () => {
     const hash = location.hash.substring(1);
     if (hash) {
       setActiveTab(hash);
+    }
+    
+    // Fetch order history when tab is games
+    if (hash === "games" || !hash) {
+      setIsLoading(true);
+      fetchOrderHistory().finally(() => setIsLoading(false));
     }
   }, [user, profile, loading, navigate, location.hash]);
 
@@ -182,40 +189,82 @@ const Profile = () => {
           {activeTab === "games" && (
             <div className="bg-[#1a0f36] rounded-lg shadow-lg p-6">
               <h1 className="text-2xl font-bold text-white mb-6">Meus Jogos</h1>
-              {orderHistory && orderHistory.length > 0 ? (
+              
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-300">Carregando seus jogos...</p>
+                </div>
+              ) : orderHistory && orderHistory.length > 0 ? (
                 <div className="space-y-4">
                   {orderHistory.map((item, index) => (
-                    <div key={index} className="bg-[#2a1b4e] rounded-lg p-4 flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <div 
-                          className="w-12 h-12 rounded-lg flex items-center justify-center"
-                          style={{ backgroundColor: item.color }}
-                        >
-                          <img 
-                            src={item.logoSrc} 
-                            alt={item.gameName} 
-                            className="h-8 w-8 object-contain"
-                          />
+                    <div key={item.id || index} className="bg-[#2a1b4e] rounded-lg p-4">
+                      <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-4">
+                          <div 
+                            className="w-12 h-12 rounded-lg flex items-center justify-center"
+                            style={{ backgroundColor: item.color }}
+                          >
+                            <img 
+                              src={item.logoSrc} 
+                              alt={item.gameName} 
+                              className="h-8 w-8 object-contain"
+                            />
+                          </div>
+                          <div>
+                            <h3 className="font-semibold text-white">{item.gameName}</h3>
+                            <p className="text-gray-300 text-sm">
+                              {item.lineCount} {item.lineCount > 1 ? 'linhas' : 'linha'} • 
+                              Comprado em {new Date(item.purchaseDate).toLocaleDateString('pt-BR')}
+                            </p>
+                            <p className="text-gray-400 text-xs">Pedido: {item.orderNumber}</p>
+                          </div>
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-white">{item.gameName}</h3>
-                          <p className="text-gray-300 text-sm">
-                            {item.lineCount} {item.lineCount > 1 ? 'linhas' : 'linha'} • 
-                            Comprado em {new Date(item.purchaseDate).toLocaleDateString('pt-BR')}
+                        <div className="text-right">
+                          <p className="font-bold text-white">
+                            {typeof item.price === 'number' 
+                              ? item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) 
+                              : `R$ ${item.price}`}
                           </p>
-                          <p className="text-gray-400 text-xs">Pedido: {item.orderNumber}</p>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="font-bold text-white">
-                          {item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                        </p>
-                      </div>
+                      
+                      {item.lines && item.lines.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-purple-900/30">
+                          <p className="text-sm text-gray-300 mb-2">Números jogados:</p>
+                          <div className="space-y-2">
+                            {item.lines.map((line, lineIdx) => (
+                              <div key={lineIdx} className="flex flex-wrap gap-1.5">
+                                {line.numbers.map((num, numIdx) => (
+                                  <span 
+                                    key={numIdx} 
+                                    className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary/10 text-primary font-medium text-xs"
+                                  >
+                                    {num}
+                                  </span>
+                                ))}
+                                
+                                {line.powerball !== undefined && line.powerball !== null && (
+                                  <>
+                                    <span className="inline-flex items-center justify-center h-7 px-1 rounded-full bg-gray-100 text-gray-500 font-medium text-xs">
+                                      +
+                                    </span>
+                                    <span 
+                                      className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-red-100 text-red-600 font-medium text-xs"
+                                    >
+                                      {line.powerball}
+                                    </span>
+                                  </>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-gray-300">Você ainda não possui jogos.</p>
+                <p className="text-gray-300 text-center py-8">Você ainda não possui jogos. Faça sua primeira aposta!</p>
               )}
             </div>
           )}

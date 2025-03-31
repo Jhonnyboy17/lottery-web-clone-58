@@ -9,6 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      game_purchases: {
+        Row: {
+          color: string | null
+          draw_date: string | null
+          game_data: Json | null
+          game_name: string
+          id: string
+          line_count: number
+          logo_src: string | null
+          order_number: string
+          price: number
+          purchase_date: string | null
+          user_id: string
+        }
+        Insert: {
+          color?: string | null
+          draw_date?: string | null
+          game_data?: Json | null
+          game_name: string
+          id?: string
+          line_count: number
+          logo_src?: string | null
+          order_number: string
+          price: number
+          purchase_date?: string | null
+          user_id: string
+        }
+        Update: {
+          color?: string | null
+          draw_date?: string | null
+          game_data?: Json | null
+          game_name?: string
+          id?: string
+          line_count?: number
+          logo_src?: string | null
+          order_number?: string
+          price?: number
+          purchase_date?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string

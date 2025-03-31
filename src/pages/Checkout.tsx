@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
@@ -18,17 +17,11 @@ import {
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card";
-import { 
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger 
-} from "@/components/ui/accordion";
 import { toast } from "sonner";
 import { CreditCard, Wallet, Tag, ArrowRight, ChevronsUpDown } from "lucide-react";
 
 const Checkout = () => {
-  const { cartItems, getCartTotal, clearCart } = useCart();
+  const { cartItems, getCartTotal, clearCart, addToOrderHistory } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -37,6 +30,7 @@ const Checkout = () => {
   const [isApplyingCoupon, setIsApplyingCoupon] = useState<boolean>(false);
   const [discount, setDiscount] = useState<number>(0);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
 
   const subtotal = getCartTotal();
   const serviceFee = subtotal * 0.1;
@@ -65,11 +59,30 @@ const Checkout = () => {
     }, 1000);
   };
 
-  const handleCompleteOrder = () => {
-    // Simulate order processing
-    toast.success("Pedido realizado com sucesso!");
-    clearCart();
-    navigate("/");
+  const handleCompleteOrder = async () => {
+    if (!user) {
+      toast.error("Você precisa estar logado para finalizar a compra");
+      navigate("/auth");
+      return;
+    }
+    
+    setIsProcessing(true);
+    
+    try {
+      // Save order to Supabase
+      const success = await addToOrderHistory(cartItems);
+      
+      if (success) {
+        toast.success("Pedido realizado com sucesso!");
+        clearCart();
+        navigate("/profile#games");
+      }
+    } catch (error) {
+      console.error("Error completing order:", error);
+      toast.error("Erro ao processar pedido. Tente novamente.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (cartItems.length === 0) {
@@ -299,10 +312,10 @@ const Checkout = () => {
                   <Button 
                     onClick={handleCompleteOrder} 
                     className="w-full bg-green-600 hover:bg-green-700"
-                    disabled={paymentMethod === "wallet" && total > 120}
+                    disabled={paymentMethod === "wallet" && total > 120 || isProcessing}
                   >
-                    Finalizar Compra
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    {isProcessing ? "Processando..." : "Finalizar Compra"}
+                    {!isProcessing && <ArrowRight className="ml-2 h-4 w-4" />}
                   </Button>
                 </CardFooter>
               </Card>
