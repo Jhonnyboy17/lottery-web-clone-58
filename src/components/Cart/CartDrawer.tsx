@@ -17,14 +17,21 @@ const CartDrawer = () => {
     getItemCount, 
     toggleItemExpanded,
     isCartOpen,
-    setIsCartOpen
+    setIsCartOpen,
+    addToOrderHistory
   } = useCart();
   
   const navigate = useNavigate();
   
   const handleCheckout = () => {
-    setIsCartOpen(false);
-    navigate('/checkout');
+    if (cartItems.length > 0) {
+      // Add current cart items to order history before checkout
+      addToOrderHistory(cartItems);
+      setIsCartOpen(false);
+      navigate('/checkout');
+    } else {
+      toast.error("Seu carrinho está vazio");
+    }
   };
   
   const hasItems = cartItems.length > 0;

@@ -20,6 +20,11 @@ export type CartItemType = {
   expanded?: boolean;
 };
 
+export type OrderHistoryItem = CartItemType & {
+  purchaseDate: string;
+  orderNumber: string;
+};
+
 type CartContextType = {
   cartItems: CartItemType[];
   addToCart: (item: CartItemType) => void;
@@ -30,6 +35,8 @@ type CartContextType = {
   toggleItemExpanded: (id: string) => void;
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
+  orderHistory: OrderHistoryItem[];
+  addToOrderHistory: (items: CartItemType[]) => void;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -37,6 +44,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [orderHistory, setOrderHistory] = useState<OrderHistoryItem[]>([]);
 
   // Load cart from localStorage on initial render
   useEffect(() => {
@@ -48,12 +56,27 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error("Failed to parse cart from localStorage:", error);
       }
     }
+
+    // Load order history from localStorage
+    const savedOrderHistory = localStorage.getItem("orderHistory");
+    if (savedOrderHistory) {
+      try {
+        setOrderHistory(JSON.parse(savedOrderHistory));
+      } catch (error) {
+        console.error("Failed to parse order history from localStorage:", error);
+      }
+    }
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
+
+  // Save order history to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("orderHistory", JSON.stringify(orderHistory));
+  }, [orderHistory]);
 
   const addToCart = (item: CartItemType) => {
     // Check if item already exists (by id)
@@ -105,6 +128,21 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   };
 
+  const addToOrderHistory = (items: CartItemType[]) => {
+    if (items.length === 0) return;
+    
+    const timestamp = new Date().toISOString();
+    const orderNumber = `OD-${Date.now().toString().substring(7)}`;
+    
+    const newOrderItems = items.map(item => ({
+      ...item,
+      purchaseDate: timestamp,
+      orderNumber
+    }));
+    
+    setOrderHistory(prev => [...prev, ...newOrderItems]);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -116,7 +154,9 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         getItemCount,
         toggleItemExpanded,
         isCartOpen,
-        setIsCartOpen
+        setIsCartOpen,
+        orderHistory,
+        addToOrderHistory
       }}
     >
       {children}

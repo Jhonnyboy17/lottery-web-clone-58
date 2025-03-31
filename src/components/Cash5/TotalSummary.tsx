@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { SavedLineType } from "./types";
 
 interface TotalSummaryProps {
@@ -27,8 +27,9 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   savedLines = [],
   onClearLines
 }) => {
-  const { addToCart, setIsCartOpen } = useCart();
+  const { addToCart, setIsCartOpen, addToOrderHistory } = useCart();
   const location = useLocation();
+  const navigate = useNavigate();
   
   // Clean up the price format to avoid duplicate R$ symbols
   const formattedPrice = ticketPrice.startsWith("R$") ? 
@@ -53,7 +54,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
       drawCount: line.drawCount
     }));
     
-    addToCart({
+    const cartItem = {
       id: `${gameId}-${Date.now()}`,
       gameName: gameName,
       logoSrc: logoSrc,
@@ -62,7 +63,9 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
       color: colorValue,
       drawDate: "Próximo sorteio",
       lines: cartLines
-    });
+    };
+    
+    addToCart(cartItem);
     
     toast.success(`${gameName} adicionado ao carrinho!`);
     

@@ -12,9 +12,11 @@ import Footer from "@/components/Footer";
 import { useAuth } from "@/contexts/AuthContext";
 import ProfileSidebar from "@/components/ProfileSidebar";
 import { Pencil } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 const Profile = () => {
   const { user, profile, loading } = useAuth();
+  const { orderHistory } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
   const [firstName, setFirstName] = useState("");
@@ -180,7 +182,41 @@ const Profile = () => {
           {activeTab === "games" && (
             <div className="bg-[#1a0f36] rounded-lg shadow-lg p-6">
               <h1 className="text-2xl font-bold text-white mb-6">Meus Jogos</h1>
-              <p className="text-gray-300">Você ainda não possui jogos.</p>
+              {orderHistory && orderHistory.length > 0 ? (
+                <div className="space-y-4">
+                  {orderHistory.map((item, index) => (
+                    <div key={index} className="bg-[#2a1b4e] rounded-lg p-4 flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <div 
+                          className="w-12 h-12 rounded-lg flex items-center justify-center"
+                          style={{ backgroundColor: item.color }}
+                        >
+                          <img 
+                            src={item.logoSrc} 
+                            alt={item.gameName} 
+                            className="h-8 w-8 object-contain"
+                          />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-white">{item.gameName}</h3>
+                          <p className="text-gray-300 text-sm">
+                            {item.lineCount} {item.lineCount > 1 ? 'linhas' : 'linha'} • 
+                            Comprado em {new Date(item.purchaseDate).toLocaleDateString('pt-BR')}
+                          </p>
+                          <p className="text-gray-400 text-xs">Pedido: {item.orderNumber}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold text-white">
+                          {item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-gray-300">Você ainda não possui jogos.</p>
+              )}
             </div>
           )}
           
