@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const CartDrawer = () => {
   const { 
@@ -19,9 +20,11 @@ const CartDrawer = () => {
     setIsCartOpen
   } = useCart();
   
+  const navigate = useNavigate();
+  
   const handleCheckout = () => {
-    toast.success("Iniciando processo de pagamento...");
-    // Aqui você pode adicionar lógica para redirecionar para a página de checkout
+    setIsCartOpen(false);
+    navigate('/checkout');
   };
   
   const hasItems = cartItems.length > 0;
