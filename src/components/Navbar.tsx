@@ -100,17 +100,48 @@ const Navbar = () => {
       {/* Main Navbar */}
       <div className="container mx-auto px-4 py-3">
         <div className="flex items-center justify-between">
-          <div className="flex-shrink-0 flex items-center">
-            <Link to="/" onClick={navigateToHome}>
-              <img
-                src="/lovable-uploads/49af7c32-e87d-4f46-a005-b535bbdf18ed.png"
-                alt="LotoEasy Logo"
-                className="h-16 w-auto"
-              />
-            </Link>
-          </div>
+          <Link to="/" onClick={navigateToHome} className="flex-shrink-0">
+            <img
+              src="/lovable-uploads/49af7c32-e87d-4f46-a005-b535bbdf18ed.png"
+              alt="LotoEasy Logo"
+              className="h-16 w-auto"
+            />
+          </Link>
 
-          <div className="hidden md:flex items-center space-x-6 ml-auto">
+          <nav className="hidden md:flex justify-center flex-grow ml-2 mr-8">
+            <div className="flex items-center space-x-8">
+              <button 
+                onClick={scrollToGames}
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Loterias
+              </button>
+              <button 
+                onClick={navigateToResultsHub}
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Resultados
+              </button>
+              <button 
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Ganhadores
+              </button>
+              <button 
+                onClick={navigateToDuvidas}
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Duvidas
+              </button>
+              <button 
+                className="text-white hover:text-white/80 transition-colors font-medium"
+              >
+                Assistência
+              </button>
+            </div>
+          </nav>
+
+          <div className="hidden md:flex items-center space-x-6">
             <ThemeToggle />
             <div className="relative">
               <div className="flex items-center w-64 bg-white-element dark:bg-gray-800 rounded-full overflow-hidden">
@@ -245,44 +276,6 @@ const Navbar = () => {
           </div>
         </div>
       )}
-
-      {/* Navigation Menu Below Header */}
-      <div className="w-full bg-[#1a0f36] border-t border-purple-900/20 py-2">
-        <div className="container mx-auto px-4">
-          <nav className="hidden md:flex justify-center">
-            <div className="flex items-center space-x-8">
-              <button 
-                onClick={scrollToGames}
-                className="text-white hover:text-white/80 transition-colors font-medium"
-              >
-                Loterias
-              </button>
-              <button 
-                onClick={navigateToResultsHub}
-                className="text-white hover:text-white/80 transition-colors font-medium"
-              >
-                Resultados
-              </button>
-              <button 
-                className="text-white hover:text-white/80 transition-colors font-medium"
-              >
-                Ganhadores
-              </button>
-              <button 
-                onClick={navigateToDuvidas}
-                className="text-white hover:text-white/80 transition-colors font-medium"
-              >
-                Duvidas
-              </button>
-              <button 
-                className="text-white hover:text-white/80 transition-colors font-medium"
-              >
-                Assistência
-              </button>
-            </div>
-          </nav>
-        </div>
-      </div>
 
       {/* Mobile Menu */}
       {isOpen && (
