@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Navbar from "@/components/Navbar";
@@ -49,7 +48,6 @@ const passwordFormSchema = z.object({
 type ProfileFormValues = z.infer<typeof profileFormSchema>;
 type PasswordFormValues = z.infer<typeof passwordFormSchema>;
 
-// Mock data for purchased games
 const purchasedGames = [
   {
     id: 1,
@@ -71,7 +69,6 @@ const purchasedGames = [
   }
 ];
 
-// Mock data for transaction history
 const transactionHistory = [
   { id: 1, type: "Deposit", amount: 100, date: "2023-10-01", status: "Completed" },
   { id: 2, type: "Purchase", amount: -15, date: "2023-10-05", status: "Completed" },
@@ -83,7 +80,7 @@ const Profile = () => {
   const { user, profile, loading } = useAuth();
   const [avatar, setAvatar] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
-  const [walletBalance, setWalletBalance] = useState(120); // Mock wallet balance
+  const [walletBalance, setWalletBalance] = useState(120);
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [depositAmount, setDepositAmount] = useState("");
   const [dateRange, setDateRange] = useState({
@@ -166,19 +163,16 @@ const Profile = () => {
       
       setUploading(true);
       
-      // Upload file to Supabase Storage
       const { error: uploadError } = await supabase.storage
         .from('avatars')
         .upload(filePath, file, { upsert: true });
         
       if (uploadError) throw uploadError;
       
-      // Get the public URL
       const { data } = supabase.storage
         .from('avatars')
         .getPublicUrl(filePath);
         
-      // Update avatar URL in profiles table
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ avatar_url: data.publicUrl })
@@ -804,34 +798,43 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-lottery-dark-bg">
       <Navbar />
-      <div className="container mx-auto px-4 py-20">
-        <SidebarProvider>
-          <div className="flex min-h-[500px] w-full">
-            <Sidebar variant="floating" collapsible="icon">
-              <SidebarContent>
-                <SidebarMenu>
-                  {sidebarItems.map((item) => (
-                    <SidebarMenuItem key={item.id}>
-                      <SidebarMenuButton 
-                        tooltip={item.label}
-                        isActive={activeSection === item.id}
-                        onClick={() => setActiveSection(item.id)}
-                      >
-                        <item.icon className="h-5 w-5 mr-3" />
-                        <span>{item.label}</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  ))}
-                </SidebarMenu>
-              </SidebarContent>
-            </Sidebar>
-            <SidebarInset className="p-4">
-              <div className="w-full h-full">
-                {renderActiveSection()}
-              </div>
-            </SidebarInset>
+      <div className="pt-20">
+        <div className="w-full bg-[#2a1c4b] py-6">
+          <div className="container mx-auto px-4">
+            <h1 className="text-2xl font-bold text-white">Meu Perfil</h1>
+            <p className="text-white/80">Gerencie suas informações pessoais e senha</p>
           </div>
-        </SidebarProvider>
+        </div>
+        
+        <div className="container mx-auto px-4 py-6">
+          <SidebarProvider>
+            <div className="flex min-h-[500px] w-full">
+              <Sidebar variant="floating" collapsible="icon">
+                <SidebarContent>
+                  <SidebarMenu>
+                    {sidebarItems.map((item) => (
+                      <SidebarMenuItem key={item.id}>
+                        <SidebarMenuButton 
+                          tooltip={item.label}
+                          isActive={activeSection === item.id}
+                          onClick={() => setActiveSection(item.id)}
+                        >
+                          <item.icon className="h-5 w-5 mr-3" />
+                          <span>{item.label}</span>
+                        </SidebarMenuButton>
+                      </SidebarMenuItem>
+                    ))}
+                  </SidebarMenu>
+                </SidebarContent>
+              </Sidebar>
+              <SidebarInset className="p-4">
+                <div className="w-full h-full">
+                  {renderActiveSection()}
+                </div>
+              </SidebarInset>
+            </div>
+          </SidebarProvider>
+        </div>
       </div>
       <Footer />
     </div>
