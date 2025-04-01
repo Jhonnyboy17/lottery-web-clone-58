@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,20 +7,22 @@ import { PlusCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { WalletTransaction } from "@/contexts/CartContext";
+import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 
-interface WalletTabProps {
-  walletBalance: number;
-  walletTransactions: WalletTransaction[];
-  addFundsToWallet: (amount: number) => void;
-}
-
-const WalletTab: React.FC<WalletTabProps> = ({ 
-  walletBalance, 
-  walletTransactions, 
-  addFundsToWallet 
-}) => {
+const WalletTab: React.FC = () => {
+  const { walletBalance, walletTransactions, addFundsToWallet, fetchWalletData } = useCart();
+  const { user } = useAuth();
   const [depositAmount, setDepositAmount] = useState<string>("50");
   const [isDepositDialogOpen, setIsDepositDialogOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  useEffect(() => {
+    if (user) {
+      setIsLoading(true);
+      fetchWalletData().finally(() => setIsLoading(false));
+    }
+  }, [user]);
   
   const handleDeposit = () => {
     const amount = parseFloat(depositAmount);
@@ -117,7 +119,9 @@ const WalletTab: React.FC<WalletTabProps> = ({
         
         <h2 className="text-xl font-semibold text-white mb-4">Histórico de Transações</h2>
         
-        {walletTransactions.length > 0 ? (
+        {isLoading ? (
+          <p className="text-gray-300 text-center py-8">Carregando transações...</p>
+        ) : walletTransactions.length > 0 ? (
           <Table>
             <TableHeader>
               <TableRow className="border-purple-900/30">

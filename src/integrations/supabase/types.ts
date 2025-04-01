@@ -59,6 +59,7 @@ export type Database = {
           id: string
           last_name: string | null
           updated_at: string
+          wallet_balance: number
         }
         Insert: {
           created_at?: string
@@ -67,6 +68,7 @@ export type Database = {
           id: string
           last_name?: string | null
           updated_at?: string
+          wallet_balance?: number
         }
         Update: {
           created_at?: string
@@ -75,6 +77,34 @@ export type Database = {
           id?: string
           last_name?: string | null
           updated_at?: string
+          wallet_balance?: number
+        }
+        Relationships: []
+      }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          date: string
+          description: string
+          id: string
+          transaction_type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          date?: string
+          description: string
+          id?: string
+          transaction_type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          date?: string
+          description?: string
+          id?: string
+          transaction_type?: string
+          user_id?: string
         }
         Relationships: []
       }

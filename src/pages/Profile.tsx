@@ -16,10 +16,7 @@ const Profile = () => {
   const { user, profile, loading } = useAuth();
   const { 
     orderHistory, 
-    fetchOrderHistory, 
-    walletBalance, 
-    addFundsToWallet, 
-    walletTransactions
+    fetchOrderHistory
   } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
@@ -68,11 +65,7 @@ const Profile = () => {
       )}
       
       {activeTab === "wallet" && (
-        <WalletTab 
-          walletBalance={walletBalance}
-          walletTransactions={walletTransactions}
-          addFundsToWallet={addFundsToWallet}
-        />
+        <WalletTab />
       )}
       
       {activeTab === "settings" && (

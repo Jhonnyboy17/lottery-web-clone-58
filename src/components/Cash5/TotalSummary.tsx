@@ -28,7 +28,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   savedLines = [],
   onClearLines
 }) => {
-  const { addToCart, setIsCartOpen, walletBalance, deductFromWallet } = useCart();
+  const { addToCart, setIsCartOpen, walletBalance, deductFromWallet, addToOrderHistory } = useCart();
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -40,9 +40,15 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   // Extract numeric price value
   const numericPrice = parseFloat(ticketPrice.replace("R$", "").replace(/\./g, "").replace(",", ".").trim());
   
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!hasLines || lineCount === 0) {
       toast.error("Adicione pelo menos uma linha para continuar");
+      return;
+    }
+    
+    if (!user) {
+      toast.error("Você precisa estar logado para continuar");
+      navigate("/auth");
       return;
     }
     
@@ -74,14 +80,21 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
     };
     
     // Deduzir do saldo da carteira
-    const deducted = deductFromWallet(numericPrice);
+    const deducted = await deductFromWallet(numericPrice);
     if (!deducted) {
       return;
     }
     
+    // Adicionar ao carrinho
     addToCart(cartItem);
     
-    toast.success(`${gameName} adicionado ao carrinho!`);
+    // Adicionar diretamente ao histórico de compras
+    const added = await addToOrderHistory([cartItem]);
+    if (added) {
+      toast.success(`${gameName} comprado com sucesso!`);
+    } else {
+      toast.error(`Erro ao processar compra. Tente novamente.`);
+    }
     
     // Clear lines after adding to cart
     if (onClearLines) {
@@ -105,7 +118,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
           disabled={!hasLines || numericPrice > walletBalance}
           onClick={handleAddToCart}
         >
-          ADICIONAR AO CARRINHO
+          COMPRAR AGORA
         </Button>
       </div>
     </div>

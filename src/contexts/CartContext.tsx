@@ -1,8 +1,8 @@
-
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Json } from "@/integrations/supabase/types";
+import { useAuth } from "./AuthContext";
 
 export type CartLineType = {
   numbers: number[];
@@ -61,6 +61,7 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { user, profile, loading } = useAuth();
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [orderHistory, setOrderHistory] = useState<OrderHistoryItem[]>([]);
@@ -78,16 +79,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
     
-    const savedWalletBalance = localStorage.getItem("walletBalance");
-    if (savedWalletBalance) {
-      try {
-        setWalletBalance(parseFloat(savedWalletBalance));
-      } catch (error) {
-        console.error("Failed to parse wallet balance from localStorage:", error);
-      }
-    }
-    
-    // Fetch order history from Supabase if user is logged in
+    // Fetch order history and wallet data from Supabase if user is logged in
     const fetchUserData = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
@@ -99,15 +91,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchUserData();
   }, []);
 
+  // Update wallet balance when profile changes
+  useEffect(() => {
+    if (profile && profile.wallet_balance !== undefined) {
+      setWalletBalance(profile.wallet_balance);
+    }
+  }, [profile]);
+
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
-
-  // Save wallet balance to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem("walletBalance", walletBalance.toString());
-  }, [walletBalance]);
 
   const addToCart = (item: CartItemType) => {
     // Check if item already exists (by id)
@@ -274,22 +268,79 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
   
-  const addFundsToWallet = (amount: number) => {
+  const addFundsToWallet = async (amount: number) => {
     if (amount <= 0) return;
     
-    setWalletBalance(prev => prev + amount);
-    addWalletTransaction(amount, 'deposit', 'Adição de fundos');
-    toast.success(`R$ ${amount.toFixed(2)} adicionado à sua carteira!`);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user) {
+        toast.error("Você precisa estar logado para adicionar fundos");
+        return;
+      }
+      
+      const userId = session.user.id;
+      const newBalance = walletBalance + amount;
+      
+      // Update profile wallet_balance
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ wallet_balance: newBalance })
+        .eq('id', userId);
+        
+      if (profileError) {
+        console.error("Error updating wallet balance:", profileError);
+        toast.error("Erro ao atualizar saldo. Tente novamente.");
+        return;
+      }
+      
+      // Add transaction record
+      await addWalletTransaction(amount, 'deposit', 'Adição de fundos');
+      
+      setWalletBalance(newBalance);
+      toast.success(`R$ ${amount.toFixed(2)} adicionado à sua carteira!`);
+    } catch (error) {
+      console.error("Failed to add funds to wallet:", error);
+      toast.error("Erro ao adicionar fundos. Tente novamente.");
+    }
   };
   
-  const deductFromWallet = (amount: number): boolean => {
+  const deductFromWallet = async (amount: number): Promise<boolean> => {
     if (walletBalance < amount) {
       toast.error("Saldo insuficiente na carteira");
       return false;
     }
     
-    setWalletBalance(prev => prev - amount);
-    return true;
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user) {
+        toast.error("Você precisa estar logado para realizar compras");
+        return false;
+      }
+      
+      const userId = session.user.id;
+      const newBalance = walletBalance - amount;
+      
+      // Update profile wallet_balance
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .update({ wallet_balance: newBalance })
+        .eq('id', userId);
+        
+      if (profileError) {
+        console.error("Error updating wallet balance:", profileError);
+        toast.error("Erro ao atualizar saldo. Tente novamente.");
+        return false;
+      }
+      
+      setWalletBalance(newBalance);
+      return true;
+    } catch (error) {
+      console.error("Failed to deduct from wallet:", error);
+      toast.error("Erro ao processar pagamento. Tente novamente.");
+      return false;
+    }
   };
   
   const addWalletTransaction = async (amount: number, type: 'deposit' | 'purchase', description: string) => {
@@ -301,26 +352,74 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       
-      // Aqui você poderia salvar transações no Supabase também
-      // Por enquanto vamos apenas gerenciar localmente
-      const newTransaction: WalletTransaction = {
-        id: Date.now().toString(),
+      const transaction = {
+        user_id: session.user.id,
         amount,
-        date: new Date().toISOString(),
-        type,
-        description
+        description,
+        transaction_type: type
       };
       
-      setWalletTransactions(prev => [newTransaction, ...prev]);
+      const { data, error } = await supabase
+        .from('wallet_transactions')
+        .insert(transaction)
+        .select();
+        
+      if (error) {
+        console.error("Error adding wallet transaction:", error);
+        return;
+      }
+      
+      if (data && data.length > 0) {
+        const newTransaction: WalletTransaction = {
+          id: data[0].id,
+          amount: data[0].amount,
+          date: data[0].date,
+          type: data[0].transaction_type as 'deposit' | 'purchase',
+          description: data[0].description
+        };
+        
+        setWalletTransactions(prev => [newTransaction, ...prev]);
+      }
     } catch (error) {
       console.error("Failed to add wallet transaction:", error);
     }
   };
   
   const fetchWalletData = async () => {
-    // Aqui poderia buscar dados da carteira do Supabase
-    // Por enquanto usamos apenas localStorage
-    console.log("Fetching wallet data");
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user) {
+        console.log("User not authenticated");
+        return;
+      }
+      
+      // Fetch wallet transactions
+      const { data, error } = await supabase
+        .from('wallet_transactions')
+        .select('*')
+        .eq('user_id', session.user.id)
+        .order('date', { ascending: false });
+        
+      if (error) {
+        console.error("Error fetching wallet transactions:", error);
+        return;
+      }
+      
+      if (data) {
+        const formattedTransactions: WalletTransaction[] = data.map(item => ({
+          id: item.id,
+          amount: Number(item.amount),
+          date: item.date,
+          type: item.transaction_type as 'deposit' | 'purchase',
+          description: item.description
+        }));
+        
+        setWalletTransactions(formattedTransactions);
+      }
+    } catch (error) {
+      console.error("Failed to fetch wallet data:", error);
+    }
   };
 
   return (
