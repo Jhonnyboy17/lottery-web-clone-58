@@ -40,7 +40,7 @@ const Profile = () => {
       setIsLoading(true);
       fetchOrderHistory().finally(() => setIsLoading(false));
     }
-  }, [user, profile, loading, navigate, location.hash]);
+  }, [user, profile, loading, navigate, location.hash, fetchOrderHistory]);
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;

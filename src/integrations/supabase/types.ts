@@ -57,6 +57,7 @@ export type Database = {
           email: string
           first_name: string | null
           id: string
+          is_admin: boolean | null
           last_name: string | null
           updated_at: string
           wallet_balance: number
@@ -66,6 +67,7 @@ export type Database = {
           email: string
           first_name?: string | null
           id: string
+          is_admin?: boolean | null
           last_name?: string | null
           updated_at?: string
           wallet_balance?: number
@@ -75,6 +77,7 @@ export type Database = {
           email?: string
           first_name?: string | null
           id?: string
+          is_admin?: boolean | null
           last_name?: string | null
           updated_at?: string
           wallet_balance?: number
