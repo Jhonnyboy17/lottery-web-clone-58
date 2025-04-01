@@ -26,6 +26,15 @@ export type CartItemType = {
 export type OrderHistoryItem = CartItemType & {
   purchaseDate: string;
   orderNumber: string;
+  completed?: boolean;  // Adicionado para identificar jogos já realizados
+};
+
+export type WalletTransaction = {
+  id: string;
+  amount: number;
+  date: string;
+  type: 'deposit' | 'purchase';
+  description: string;
 };
 
 type CartContextType = {
@@ -41,6 +50,12 @@ type CartContextType = {
   orderHistory: OrderHistoryItem[];
   addToOrderHistory: (items: CartItemType[]) => Promise<boolean>;
   fetchOrderHistory: () => Promise<void>;
+  walletBalance: number;
+  setWalletBalance: (amount: number) => void;
+  addFundsToWallet: (amount: number) => void;
+  deductFromWallet: (amount: number) => boolean;
+  walletTransactions: WalletTransaction[];
+  fetchWalletData: () => Promise<void>;
 };
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -49,6 +64,8 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [cartItems, setCartItems] = useState<CartItemType[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [orderHistory, setOrderHistory] = useState<OrderHistoryItem[]>([]);
+  const [walletBalance, setWalletBalance] = useState<number>(0);
+  const [walletTransactions, setWalletTransactions] = useState<WalletTransaction[]>([]);
 
   // Load cart from localStorage on initial render
   useEffect(() => {
@@ -61,21 +78,36 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
     
+    const savedWalletBalance = localStorage.getItem("walletBalance");
+    if (savedWalletBalance) {
+      try {
+        setWalletBalance(parseFloat(savedWalletBalance));
+      } catch (error) {
+        console.error("Failed to parse wallet balance from localStorage:", error);
+      }
+    }
+    
     // Fetch order history from Supabase if user is logged in
-    const fetchUserOrderHistory = async () => {
+    const fetchUserData = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
         fetchOrderHistory();
+        fetchWalletData();
       }
     };
     
-    fetchUserOrderHistory();
+    fetchUserData();
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
+
+  // Save wallet balance to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("walletBalance", walletBalance.toString());
+  }, [walletBalance]);
 
   const addToCart = (item: CartItemType) => {
     // Check if item already exists (by id)
@@ -148,8 +180,21 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       if (data) {
-        const formattedHistory: OrderHistoryItem[] = data.map(item => {
+        // Remover duplicações baseadas no orderNumber e gameData
+        const uniqueItems = new Map();
+        
+        data.forEach(item => {
+          const key = `${item.order_number}-${item.game_name}-${JSON.stringify(item.game_data)}`;
+          if (!uniqueItems.has(key)) {
+            uniqueItems.set(key, item);
+          }
+        });
+        
+        const formattedHistory: OrderHistoryItem[] = Array.from(uniqueItems.values()).map(item => {
           const gameData = item.game_data as { lines?: CartLineType[] } | null;
+          const drawDate = item.draw_date || "Próximo sorteio";
+          const drawDateObj = drawDate !== "Próximo sorteio" ? new Date(drawDate) : null;
+          const isCompleted = drawDateObj ? drawDateObj < new Date() : false;
           
           return {
             id: item.id,
@@ -158,10 +203,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
             price: Number(item.price),
             lineCount: item.line_count,
             color: item.color || "",
-            drawDate: item.draw_date,
+            drawDate: drawDate,
             purchaseDate: item.purchase_date,
             orderNumber: item.order_number,
-            lines: gameData?.lines || []
+            lines: gameData?.lines || [],
+            completed: isCompleted
           };
         });
         
@@ -209,6 +255,14 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return false;
       }
       
+      // Adicionar transação na carteira
+      const totalPrice = items.reduce((sum, item) => sum + item.price, 0);
+      await addWalletTransaction(
+        -totalPrice,
+        'purchase',
+        `Compra de ${items.length} jogos - ${orderNumber}`
+      );
+      
       // Refresh order history
       await fetchOrderHistory();
       
@@ -218,6 +272,55 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast.error("Erro ao finalizar a compra. Tente novamente.");
       return false;
     }
+  };
+  
+  const addFundsToWallet = (amount: number) => {
+    if (amount <= 0) return;
+    
+    setWalletBalance(prev => prev + amount);
+    addWalletTransaction(amount, 'deposit', 'Adição de fundos');
+    toast.success(`R$ ${amount.toFixed(2)} adicionado à sua carteira!`);
+  };
+  
+  const deductFromWallet = (amount: number): boolean => {
+    if (walletBalance < amount) {
+      toast.error("Saldo insuficiente na carteira");
+      return false;
+    }
+    
+    setWalletBalance(prev => prev - amount);
+    return true;
+  };
+  
+  const addWalletTransaction = async (amount: number, type: 'deposit' | 'purchase', description: string) => {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.user) {
+        console.log("User not authenticated");
+        return;
+      }
+      
+      // Aqui você poderia salvar transações no Supabase também
+      // Por enquanto vamos apenas gerenciar localmente
+      const newTransaction: WalletTransaction = {
+        id: Date.now().toString(),
+        amount,
+        date: new Date().toISOString(),
+        type,
+        description
+      };
+      
+      setWalletTransactions(prev => [newTransaction, ...prev]);
+    } catch (error) {
+      console.error("Failed to add wallet transaction:", error);
+    }
+  };
+  
+  const fetchWalletData = async () => {
+    // Aqui poderia buscar dados da carteira do Supabase
+    // Por enquanto usamos apenas localStorage
+    console.log("Fetching wallet data");
   };
 
   return (
@@ -234,7 +337,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setIsCartOpen,
         orderHistory,
         addToOrderHistory,
-        fetchOrderHistory
+        fetchOrderHistory,
+        walletBalance,
+        setWalletBalance,
+        addFundsToWallet,
+        deductFromWallet,
+        walletTransactions,
+        fetchWalletData
       }}
     >
       {children}

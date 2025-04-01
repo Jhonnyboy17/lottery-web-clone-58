@@ -28,7 +28,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   savedLines = [],
   onClearLines
 }) => {
-  const { addToCart, setIsCartOpen } = useCart();
+  const { addToCart, setIsCartOpen, walletBalance, deductFromWallet } = useCart();
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -43,6 +43,12 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   const handleAddToCart = () => {
     if (!hasLines || lineCount === 0) {
       toast.error("Adicione pelo menos uma linha para continuar");
+      return;
+    }
+    
+    // Verifica se tem saldo suficiente
+    if (numericPrice > walletBalance) {
+      toast.error("Saldo insuficiente na carteira. Adicione fundos para continuar.");
       return;
     }
     
@@ -67,6 +73,12 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
       lines: cartLines
     };
     
+    // Deduzir do saldo da carteira
+    const deducted = deductFromWallet(numericPrice);
+    if (!deducted) {
+      return;
+    }
+    
     addToCart(cartItem);
     
     toast.success(`${gameName} adicionado ao carrinho!`);
@@ -83,11 +95,14 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
         <div>
           <p className="text-sm font-medium">Total</p>
           <p className="text-xl font-bold">{formattedPrice}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Saldo na carteira: {walletBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+          </p>
         </div>
         <Button 
           className="hover:bg-opacity-90 px-12"
           style={{ backgroundColor: colorValue }}
-          disabled={!hasLines}
+          disabled={!hasLines || numericPrice > walletBalance}
           onClick={handleAddToCart}
         >
           ADICIONAR AO CARRINHO
