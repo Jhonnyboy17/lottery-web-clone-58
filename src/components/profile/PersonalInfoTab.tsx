@@ -7,11 +7,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Pencil } from "lucide-react";
 import { toast } from "sonner";
-import { UserProfile } from "@/contexts/AuthContext";
+import { User } from "@supabase/supabase-js";
+import { ProfileType } from "@/contexts/AuthContext";
 
 interface PersonalInfoTabProps {
-  user: any;
-  profile: UserProfile | null;
+  user: User | null;
+  profile: ProfileType | null;
 }
 
 const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({ user, profile }) => {
