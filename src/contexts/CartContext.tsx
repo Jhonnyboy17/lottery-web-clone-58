@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -53,7 +54,7 @@ type CartContextType = {
   walletBalance: number;
   setWalletBalance: (amount: number) => void;
   addFundsToWallet: (amount: number) => void;
-  deductFromWallet: (amount: number) => boolean;
+  deductFromWallet: (amount: number) => Promise<boolean>;
   walletTransactions: WalletTransaction[];
   fetchWalletData: () => Promise<void>;
 };
@@ -372,7 +373,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (data && data.length > 0) {
         const newTransaction: WalletTransaction = {
           id: data[0].id,
-          amount: data[0].amount,
+          amount: Number(data[0].amount),
           date: data[0].date,
           type: data[0].transaction_type as 'deposit' | 'purchase',
           description: data[0].description
