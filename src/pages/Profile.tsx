@@ -34,13 +34,17 @@ const Profile = () => {
     if (hash) {
       setActiveTab(hash);
     }
-    
-    // Fetch order history when tab is games
-    if (hash === "games" || !hash) {
+  }, [user, loading, navigate, location.hash]);
+  
+  // Separar o efeito que busca os jogos
+  useEffect(() => {
+    // Verificar se o usuário está autenticado antes de buscar os jogos
+    if (!loading && user) {
       setIsLoading(true);
+      // Sempre buscar os jogos quando a página de perfil é aberta, independente da aba
       fetchOrderHistory().finally(() => setIsLoading(false));
     }
-  }, [user, profile, loading, navigate, location.hash, fetchOrderHistory]);
+  }, [user, loading, fetchOrderHistory]);
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
