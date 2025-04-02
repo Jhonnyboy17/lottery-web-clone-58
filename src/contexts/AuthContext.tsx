@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,10 +8,11 @@ export type ProfileType = {
   first_name: string | null;
   last_name: string | null;
   email: string;
-  avatar_url: string | null;
+  avatar_url?: string | null; // Changed from required to optional with ?
   created_at: string;
   updated_at: string;
   wallet_balance: number;
+  is_admin?: boolean | null; // Adding is_admin as an optional field
 }
 
 type AuthContextType = {
