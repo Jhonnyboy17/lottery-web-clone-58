@@ -17,16 +17,13 @@ const CartDrawer = () => {
     getItemCount, 
     toggleItemExpanded,
     isCartOpen,
-    setIsCartOpen,
-    addToOrderHistory
+    setIsCartOpen
   } = useCart();
   
   const navigate = useNavigate();
   
   const handleCheckout = () => {
     if (cartItems.length > 0) {
-      // Add current cart items to order history before checkout
-      addToOrderHistory(cartItems);
       setIsCartOpen(false);
       navigate('/checkout');
     } else {

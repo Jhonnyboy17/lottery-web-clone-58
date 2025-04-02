@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Json } from "@/integrations/supabase/types";
@@ -154,7 +154,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
   };
 
-  const fetchOrderHistory = async () => {
+  const fetchOrderHistory = useCallback(async () => {
     try {
       const { data: { session } } = await supabase.auth.getSession();
       
@@ -175,11 +175,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       if (data) {
-        // Remover duplicações baseadas no orderNumber e gameData
+        // Group items by order_number and game_name to eliminate duplicates
         const uniqueItems = new Map();
         
         data.forEach(item => {
-          const key = `${item.order_number}-${item.game_name}-${JSON.stringify(item.game_data)}`;
+          const key = `${item.order_number}-${item.game_name}`;
           if (!uniqueItems.has(key)) {
             uniqueItems.set(key, item);
           }
@@ -211,7 +211,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     } catch (error) {
       console.error("Failed to fetch order history:", error);
     }
-  };
+  }, []);
 
   const addToOrderHistory = async (items: CartItemType[]): Promise<boolean> => {
     if (items.length === 0) return false;

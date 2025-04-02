@@ -48,8 +48,8 @@ const Profile = () => {
     };
     
     fetchGamesData();
-    // Only re-run when user or loading status changes, not on every render
-  }, [user, loading]);
+    // Only re-run when user or loading status changes
+  }, [user, loading, fetchOrderHistory]);
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;

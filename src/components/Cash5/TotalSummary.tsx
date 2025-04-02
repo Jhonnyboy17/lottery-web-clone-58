@@ -28,7 +28,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
   savedLines = [],
   onClearLines
 }) => {
-  const { addToCart, setIsCartOpen, walletBalance, deductFromWallet, addToOrderHistory } = useCart();
+  const { addToCart, setIsCartOpen, walletBalance } = useCart();
   const { user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -49,12 +49,6 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
     if (!user) {
       toast.error("Você precisa estar logado para continuar");
       navigate("/auth");
-      return;
-    }
-    
-    // Verifica se tem saldo suficiente
-    if (numericPrice > walletBalance) {
-      toast.error("Saldo insuficiente na carteira. Adicione fundos para continuar.");
       return;
     }
     
@@ -79,22 +73,10 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
       lines: cartLines
     };
     
-    // Deduzir do saldo da carteira
-    const deducted = await deductFromWallet(numericPrice);
-    if (!deducted) {
-      return;
-    }
-    
-    // Adicionar ao carrinho
+    // Add to cart and open cart drawer
     addToCart(cartItem);
-    
-    // Adicionar diretamente ao histórico de compras
-    const added = await addToOrderHistory([cartItem]);
-    if (added) {
-      toast.success(`${gameName} comprado com sucesso!`);
-    } else {
-      toast.error(`Erro ao processar compra. Tente novamente.`);
-    }
+    setIsCartOpen(true);
+    toast.success(`${gameName} adicionado ao carrinho!`);
     
     // Clear lines after adding to cart
     if (onClearLines) {
@@ -115,7 +97,7 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
         <Button 
           className="hover:bg-opacity-90 px-12"
           style={{ backgroundColor: colorValue }}
-          disabled={!hasLines || numericPrice > walletBalance}
+          disabled={!hasLines}
           onClick={handleAddToCart}
         >
           COMPRAR AGORA

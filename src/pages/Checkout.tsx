@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
@@ -18,10 +19,10 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import { toast } from "sonner";
-import { CreditCard, Wallet, Tag, ArrowRight, ChevronsUpDown } from "lucide-react";
+import { CreditCard, Wallet, Tag, ArrowRight, ChevronsUpDown, Bitcoin, Coins } from "lucide-react";
 
 const Checkout = () => {
-  const { cartItems, getCartTotal, clearCart, addToOrderHistory } = useCart();
+  const { cartItems, getCartTotal, clearCart, addToOrderHistory, walletBalance, deductFromWallet } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   
@@ -31,6 +32,7 @@ const Checkout = () => {
   const [discount, setDiscount] = useState<number>(0);
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [cryptoAddress, setCryptoAddress] = useState<string>("");
 
   const subtotal = getCartTotal();
   const serviceFee = subtotal * 0.1;
@@ -69,13 +71,50 @@ const Checkout = () => {
     setIsProcessing(true);
     
     try {
-      // Save order to Supabase
-      const success = await addToOrderHistory(cartItems);
+      let paymentSuccess = false;
       
-      if (success) {
-        toast.success("Pedido realizado com sucesso!");
-        clearCart();
-        navigate("/profile#games");
+      if (paymentMethod === "wallet") {
+        // Verify wallet balance
+        if (walletBalance < total) {
+          toast.error("Saldo insuficiente na carteira");
+          setIsProcessing(false);
+          return;
+        }
+        
+        // Process wallet payment
+        paymentSuccess = await deductFromWallet(total);
+      } 
+      else if (paymentMethod === "credit-card") {
+        // Simulate credit card processing
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        paymentSuccess = true;
+      }
+      else if (paymentMethod === "bitcoin" || paymentMethod === "litecoin") {
+        if (!cryptoAddress) {
+          toast.error(`Endereço de ${paymentMethod === "bitcoin" ? "Bitcoin" : "Litecoin"} é necessário`);
+          setIsProcessing(false);
+          return;
+        }
+        
+        // Simulate crypto payment verification
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        toast.success(`Pagamento em ${paymentMethod === "bitcoin" ? "Bitcoin" : "Litecoin"} verificado!`);
+        paymentSuccess = true;
+      }
+      
+      if (paymentSuccess) {
+        // Only add to order history if payment succeeded
+        const success = await addToOrderHistory(cartItems);
+        
+        if (success) {
+          toast.success("Pedido realizado com sucesso!");
+          clearCart();
+          navigate("/profile#games");
+        } else {
+          toast.error("Erro ao registrar pedido. Entre em contato com o suporte.");
+        }
+      } else {
+        toast.error("Erro ao processar o pagamento. Tente novamente.");
       }
     } catch (error) {
       console.error("Error completing order:", error);
@@ -215,6 +254,20 @@ const Checkout = () => {
                         Saldo na Carteira
                       </Label>
                     </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="bitcoin" id="bitcoin" />
+                      <Label htmlFor="bitcoin" className="flex items-center">
+                        <Bitcoin className="h-4 w-4 mr-2" />
+                        Bitcoin
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="litecoin" id="litecoin" />
+                      <Label htmlFor="litecoin" className="flex items-center">
+                        <Coins className="h-4 w-4 mr-2" />
+                        Litecoin
+                      </Label>
+                    </div>
                   </RadioGroup>
                   
                   {paymentMethod === "credit-card" && (
@@ -242,12 +295,42 @@ const Checkout = () => {
                   
                   {paymentMethod === "wallet" && (
                     <div className="mt-6 p-4 bg-gray-100 dark:bg-gray-800 rounded-md">
-                      <p className="text-center">Seu saldo atual: <span className="font-bold">R$ 120,00</span></p>
-                      {total > 120 && (
+                      <p className="text-center">Seu saldo atual: <span className="font-bold">{walletBalance.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</span></p>
+                      {total > walletBalance && (
                         <p className="text-center text-red-500 mt-2">
-                          Saldo insuficiente. Faltam R$ {(total - 120).toFixed(2)}
+                          Saldo insuficiente. Faltam R$ {(total - walletBalance).toFixed(2)}
                         </p>
                       )}
+                    </div>
+                  )}
+                  
+                  {(paymentMethod === "bitcoin" || paymentMethod === "litecoin") && (
+                    <div className="mt-6 space-y-4">
+                      <div>
+                        <Label htmlFor="crypto-address">Seu endereço de {paymentMethod === "bitcoin" ? "Bitcoin" : "Litecoin"}</Label>
+                        <Input 
+                          id="crypto-address" 
+                          placeholder={paymentMethod === "bitcoin" ? "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2" : "LTC..."}
+                          value={cryptoAddress}
+                          onChange={(e) => setCryptoAddress(e.target.value)}
+                        />
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Informe o endereço que será usado para verificar o pagamento
+                        </p>
+                      </div>
+                      <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-md">
+                        <p className="font-medium mb-2">Para finalizar o pagamento:</p>
+                        <ol className="list-decimal list-inside text-sm space-y-1">
+                          <li>Envie exatamente {total.toFixed(2)} BRL em {paymentMethod === "bitcoin" ? "Bitcoin" : "Litecoin"} para o endereço abaixo</li>
+                          <li>Confirme seu pedido após realizar a transferência</li>
+                        </ol>
+                        <div className="mt-3 p-3 bg-gray-200 dark:bg-gray-700 rounded text-center break-all font-mono text-sm">
+                          {paymentMethod === "bitcoin" 
+                            ? "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh" 
+                            : "ltc1qhw8w6q9j5zulc3rd892jgdpgvlkfqcs6q2m2aq"
+                          }
+                        </div>
+                      </div>
                     </div>
                   )}
                 </CardContent>
@@ -312,7 +395,11 @@ const Checkout = () => {
                   <Button 
                     onClick={handleCompleteOrder} 
                     className="w-full bg-green-600 hover:bg-green-700"
-                    disabled={paymentMethod === "wallet" && total > 120 || isProcessing}
+                    disabled={
+                      (paymentMethod === "wallet" && total > walletBalance) || 
+                      ((paymentMethod === "bitcoin" || paymentMethod === "litecoin") && !cryptoAddress) || 
+                      isProcessing
+                    }
                   >
                     {isProcessing ? "Processando..." : "Finalizar Compra"}
                     {!isProcessing && <ArrowRight className="ml-2 h-4 w-4" />}
