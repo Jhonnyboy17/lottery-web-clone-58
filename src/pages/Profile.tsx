@@ -23,6 +23,7 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("profile");
   const [isLoading, setIsLoading] = useState(false);
 
+  // Handle authentication check and tab setting
   useEffect(() => {
     if (!loading && !user) {
       navigate("/auth");
@@ -36,15 +37,19 @@ const Profile = () => {
     }
   }, [user, loading, navigate, location.hash]);
   
-  // Separar o efeito que busca os jogos
+  // Fetch games data once when authenticated
   useEffect(() => {
-    // Verificar se o usuário está autenticado antes de buscar os jogos
-    if (!loading && user) {
-      setIsLoading(true);
-      // Sempre buscar os jogos quando a página de perfil é aberta, independente da aba
-      fetchOrderHistory().finally(() => setIsLoading(false));
-    }
-  }, [user, loading, fetchOrderHistory]);
+    const fetchGamesData = async () => {
+      if (!loading && user && !isLoading) {
+        setIsLoading(true);
+        await fetchOrderHistory();
+        setIsLoading(false);
+      }
+    };
+    
+    fetchGamesData();
+    // Only re-run when user or loading status changes, not on every render
+  }, [user, loading]);
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
