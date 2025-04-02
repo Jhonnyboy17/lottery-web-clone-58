@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
@@ -42,14 +42,17 @@ const Profile = () => {
     const fetchGamesData = async () => {
       if (!loading && user && !isLoading) {
         setIsLoading(true);
-        await fetchOrderHistory();
-        setIsLoading(false);
+        try {
+          await fetchOrderHistory();
+        } finally {
+          setIsLoading(false);
+        }
       }
     };
     
     fetchGamesData();
     // Only re-run when user or loading status changes, not on every render
-  }, [user, loading]);
+  }, [user, loading, fetchOrderHistory]);
 
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Carregando...</div>;
