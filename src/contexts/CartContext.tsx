@@ -175,20 +175,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       if (data) {
-        // Create a Map to store unique purchases by order number and game
-        const uniquePurchases = new Map();
+        // Remover duplicações baseadas no orderNumber e gameData
+        const uniqueItems = new Map();
         
         data.forEach(item => {
-          // Create a composite key using order_number AND game_name
-          const key = `${item.order_number}_${item.game_name}`;
-          
-          // Only add this item if we haven't seen this exact order number + game combination before
-          if (!uniquePurchases.has(key)) {
-            uniquePurchases.set(key, item);
+          const key = `${item.order_number}-${item.game_name}-${JSON.stringify(item.game_data)}`;
+          if (!uniqueItems.has(key)) {
+            uniqueItems.set(key, item);
           }
         });
         
-        const formattedHistory: OrderHistoryItem[] = Array.from(uniquePurchases.values()).map(item => {
+        const formattedHistory: OrderHistoryItem[] = Array.from(uniqueItems.values()).map(item => {
           const gameData = item.game_data as { lines?: CartLineType[] } | null;
           const drawDate = item.draw_date || "Próximo sorteio";
           const drawDateObj = drawDate !== "Próximo sorteio" ? new Date(drawDate) : null;
