@@ -1,90 +1,91 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import ResultCard from "@/components/ResultCard";
 import ResultsFilter from "@/components/ResultsFilter";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { supabase } from "@/integrations/supabase/client";
 
 const ResultsHub: React.FC = () => {
   const [gameType, setGameType] = useState("all");
   const [timeframe, setTimeframe] = useState("recent");
+  const [resultsData, setResultsData] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Example results data with history for last 4 draws
-  const resultsData = [
-    {
-      id: 1,
-      date: "15/05/2023",
-      gameType: "Mega-Sena",
-      numbers: [2, 9, 31, 60, 63, 23],
-      history: [
-        { date: "12/05/2023", numbers: [1, 5, 17, 39, 62, 8] },
-        { date: "08/05/2023", numbers: [4, 13, 21, 26, 47, 58] },
-        { date: "04/05/2023", numbers: [11, 18, 23, 37, 52, 57] }
-      ]
-    },
-    {
-      id: 2,
-      date: "14/05/2023",
-      gameType: "Quina",
-      numbers: [10, 25, 38, 42, 60],
-      history: [
-        { date: "11/05/2023", numbers: [5, 18, 27, 36, 48] },
-        { date: "07/05/2023", numbers: [2, 15, 22, 34, 45] },
-        { date: "03/05/2023", numbers: [8, 19, 31, 44, 53] }
-      ]
-    },
-    {
-      id: 3,
-      date: "13/05/2023",
-      gameType: "Lotofácil",
-      numbers: [1, 2, 5, 8, 9, 10],
-      history: [
-        { date: "10/05/2023", numbers: [3, 4, 6, 7, 11, 12] },
-        { date: "06/05/2023", numbers: [6, 9, 13, 16, 19, 21] },
-        { date: "02/05/2023", numbers: [2, 8, 11, 15, 18, 22] }
-      ]
-    },
-    {
-      id: 4,
-      date: "12/05/2023",
-      gameType: "Lotomania",
-      numbers: [3, 7, 11, 18, 22, 29],
-      history: [
-        { date: "09/05/2023", numbers: [59, 63, 67, 70, 75, 78] },
-        { date: "05/05/2023", numbers: [2, 12, 25, 36, 48, 55] },
-        { date: "01/05/2023", numbers: [14, 27, 39, 51, 64, 72] }
-      ]
-    },
-    {
-      id: 5,
-      date: "11/05/2023",
-      gameType: "Pick 4",
-      numbers: [7, 15, 22, 36],
-      history: [
-        { date: "08/05/2023", numbers: [4, 12, 19, 33] },
-        { date: "04/05/2023", numbers: [2, 9, 16, 28] },
-        { date: "30/04/2023", numbers: [5, 13, 24, 31] }
-      ]
-    },
-    {
-      id: 6,
-      date: "10/05/2023",
-      gameType: "Pick 3",
-      numbers: [8, 17, 30],
-      history: [
-        { date: "07/05/2023", numbers: [6, 14, 27] },
-        { date: "03/05/2023", numbers: [3, 12, 24] },
-        { date: "29/04/2023", numbers: [5, 18, 29] }
-      ]
-    }
-  ];
-
-  // Filter results based on selected game type
-  const filteredResults = gameType === "all" 
-    ? resultsData 
-    : resultsData.filter(result => result.gameType.toLowerCase().replace("-", "").replace("á", "a") === gameType);
+  // Fetch results data from Supabase
+  useEffect(() => {
+    const fetchResults = async () => {
+      setIsLoading(true);
+      
+      let query = supabase
+        .from('lottery_results')
+        .select('*')
+        .order('draw_date', { ascending: false });
+        
+      // Filter by game type if not "all"
+      if (gameType !== "all") {
+        // Convert gameType to proper game_type format in the database
+        const gameTypeMap: Record<string, string> = {
+          "megasena": "Mega Millions",
+          "quina": "Powerball",
+          "lotofacil": "Lucky Day Lotto",
+          "lotomania": "Lotto",
+          "pick4": "Pick 4",
+          "pick3": "Pick 3"
+        };
+        
+        if (gameTypeMap[gameType]) {
+          query = query.eq('game_type', gameTypeMap[gameType]);
+        }
+      }
+      
+      // Apply timeframe filter
+      if (timeframe === "last-week") {
+        const lastWeek = new Date();
+        lastWeek.setDate(lastWeek.getDate() - 7);
+        query = query.gte('draw_date', lastWeek.toISOString());
+      } else if (timeframe === "last-month") {
+        const lastMonth = new Date();
+        lastMonth.setMonth(lastMonth.getMonth() - 1);
+        query = query.gte('draw_date', lastMonth.toISOString());
+      } else if (timeframe === "last-year") {
+        const lastYear = new Date();
+        lastYear.setFullYear(lastYear.getFullYear() - 1);
+        query = query.gte('draw_date', lastYear.toISOString());
+      }
+      
+      const { data, error } = await query.limit(10);
+      
+      if (error) {
+        console.error("Error fetching lottery results:", error);
+        setIsLoading(false);
+        return;
+      }
+      
+      // Format data for display
+      const formattedResults = data.map(result => {
+        // Format the results to match the expected format for ResultCard
+        return {
+          id: result.id,
+          date: new Date(result.draw_date).toLocaleDateString('pt-BR'),
+          gameType: result.game_type,
+          numbers: Array.isArray(result.numbers) ? result.numbers : [],
+          specialNumbers: Array.isArray(result.special_numbers) ? result.special_numbers : [],
+          jackpotAmount: result.jackpot_amount,
+          // Prepare history data, for simplicity we're not fetching it now
+          // In a real implementation, you might want to fetch previous draws for each game
+          history: []
+        };
+      });
+      
+      setResultsData(formattedResults);
+      setIsLoading(false);
+    };
+    
+    fetchResults();
+  }, [gameType, timeframe]);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -104,19 +105,25 @@ const ResultsHub: React.FC = () => {
               onTimeframeChange={setTimeframe}
             />
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-              {filteredResults.map((result) => (
-                <ResultCard
-                  key={result.id}
-                  date={result.date}
-                  gameType={result.gameType}
-                  numbers={result.numbers}
-                  history={result.history}
-                />
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="text-center py-16">
+                <p className="text-xl text-gray-400">Carregando resultados...</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                {resultsData.map((result) => (
+                  <ResultCard
+                    key={result.id}
+                    date={result.date}
+                    gameType={result.gameType}
+                    numbers={result.numbers}
+                    history={result.history}
+                  />
+                ))}
+              </div>
+            )}
             
-            {filteredResults.length === 0 && (
+            {!isLoading && resultsData.length === 0 && (
               <div className="text-center py-16">
                 <p className="text-xl text-gray-400">Nenhum resultado encontrado para os filtros selecionados.</p>
               </div>

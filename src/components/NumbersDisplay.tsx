@@ -3,9 +3,11 @@ import { ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
-interface NumbersGame {
-  id: number;
+interface NumberGame {
+  id: string;
   name: string;
   logo: string;
   date: string;
@@ -23,93 +25,26 @@ interface NumbersGame {
   }[];
 }
 
-const games: NumbersGame[] = [
-  {
-    id: 1,
-    name: "Mega Millions",
-    logo: "/lovable-uploads/bc3feaa6-86f8-46cb-b245-5467ab0e5fb4.png",
-    date: "Sexta-feira, 21 de março de 2025",
-    numbers: [
-      { value: "15", color: "bg-blue-500" },
-      { value: "22", color: "bg-blue-500" },
-      { value: "31", color: "bg-blue-500" },
-      { value: "52", color: "bg-blue-500" },
-      { value: "57", color: "bg-blue-500" },
-      { value: "2", color: "bg-amber-500", isSpecial: true },
-      { value: "x3", color: "bg-gray-200", multiplier: "x3" },
-    ],
-  },
-  {
-    id: 2,
-    name: "Powerball",
-    logo: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
-    date: "Segunda-feira, 24 de março de 2025",
-    numbers: [
-      { value: "6", color: "bg-red-500" },
-      { value: "23", color: "bg-red-500" },
-      { value: "35", color: "bg-red-500" },
-      { value: "36", color: "bg-red-500" },
-      { value: "47", color: "bg-red-500" },
-      { value: "12", color: "bg-amber-500", isSpecial: true },
-      { value: "x2", color: "bg-gray-200", isSpecial: true },
-    ],
-  },
-  {
-    id: 3,
-    name: "Pick 4",
-    logo: "https://via.placeholder.com/120x50/00A9E0/FFFFFF?text=PICK+4",
-    date: "Sexta-feira, 21 de março de 2025",
-    drawTime: "Evening Draw",
-    numbers: [
-      { value: "7", color: "bg-blue-500" },
-      { value: "0", color: "bg-blue-500" },
-      { value: "5", color: "bg-blue-500" },
-      { value: "3", color: "bg-blue-500" },
-      { value: "7", color: "bg-red-500" },
-    ],
-  },
-  {
-    id: 4,
-    name: "Lucky Day Lotto",
-    logo: "https://via.placeholder.com/120x50/00CCC6/FFFFFF?text=LUCKY+DAY",
-    date: "Sexta-feira, 21 de março de 2025",
-    drawTime: "Evening Draw",
-    numbers: [
-      { value: "3", color: "bg-blue-500" },
-      { value: "24", color: "bg-blue-500" },
-      { value: "27", color: "bg-blue-500" },
-      { value: "34", color: "bg-blue-500" },
-      { value: "38", color: "bg-blue-500" },
-    ],
-  },
-  {
-    id: 5,
-    name: "Lotto",
-    logo: "https://via.placeholder.com/120x50/8CC63F/FFFFFF?text=LOTTO",
-    date: "Quinta-feira, 20 de março de 2025",
-    numbers: [
-      { value: "6", color: "bg-blue-500" },
-      { value: "12", color: "bg-green-500" },
-      { value: "13", color: "bg-green-500" },
-      { value: "20", color: "bg-green-500" },
-      { value: "29", color: "bg-green-500" },
-      { value: "31", color: "bg-green-500" },
-      { value: "15", color: "bg-orange-500" },
-    ],
-    additionalInfo: [
-      {
-        label: "LOTTO MILLION 1",
-        value: ["9", "14", "21", "25", "38", "43"],
-      },
-      {
-        label: "LOTTO MILLION 2",
-        value: ["2", "12", "14", "17", "39", "44"],
-      },
-    ],
-  },
-];
+// Mapeamento de tipos de jogos para logos e cores
+const gameLogos: Record<string, string> = {
+  "Mega Millions": "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
+  "Powerball": "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
+  "Lucky Day Lotto": "/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png",
+  "Lotto": "/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png",
+  "Pick 4": "/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png",
+  "Pick 3": "/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png"
+};
 
-const LotteryGameResult = ({ game }: { game: NumbersGame }) => {
+const gameColors: Record<string, string> = {
+  "Mega Millions": "bg-blue-500",
+  "Powerball": "bg-red-500",
+  "Lucky Day Lotto": "bg-green-500",
+  "Lotto": "bg-blue-500",
+  "Pick 4": "bg-blue-500",
+  "Pick 3": "bg-amber-500"
+};
+
+const LotteryGameResult = ({ game }: { game: NumberGame }) => {
   return (
     <div className="bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg mb-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -121,7 +56,7 @@ const LotteryGameResult = ({ game }: { game: NumbersGame }) => {
           />
           <Separator orientation="vertical" className="h-10 hidden md:block" />
           <div className="flex flex-col justify-start items-start">
-            <div className="font-bold text-gray-800">LATEST RESULTS</div>
+            <div className="font-bold text-gray-800">ÚLTIMOS RESULTADOS</div>
             <div className="text-sm text-gray-600">{game.date}</div>
             {game.drawTime && (
               <div className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full mt-1">
@@ -136,7 +71,7 @@ const LotteryGameResult = ({ game }: { game: NumbersGame }) => {
             variant="ghost"
             className="text-lottery-pink hover:text-lottery-red font-medium flex items-center"
           >
-            View Results <ArrowRight className="ml-1 w-4 h-4" />
+            Ver Resultados <ArrowRight className="ml-1 w-4 h-4" />
           </Button>
         </div>
       </div>
@@ -182,6 +117,88 @@ const LotteryGameResult = ({ game }: { game: NumbersGame }) => {
 
 const NumbersDisplay = () => {
   const navigate = useNavigate();
+  const [games, setGames] = useState<NumberGame[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLotteryResults = async () => {
+      setIsLoading(true);
+      
+      // Get the latest results for each game type
+      const { data, error } = await supabase
+        .from('lottery_results')
+        .select('*')
+        .order('draw_date', { ascending: false });
+        
+      if (error) {
+        console.error("Error fetching lottery results:", error);
+        setIsLoading(false);
+        return;
+      }
+      
+      // Group results by game_type and take the latest for each
+      const latestByGameType = new Map();
+      
+      data.forEach(result => {
+        if (!latestByGameType.has(result.game_type) || 
+            new Date(result.draw_date) > new Date(latestByGameType.get(result.game_type).draw_date)) {
+          latestByGameType.set(result.game_type, result);
+        }
+      });
+      
+      // Convert to our display format
+      const gameResults: NumberGame[] = Array.from(latestByGameType.values()).map(result => {
+        // Format draw date
+        const drawDate = new Date(result.draw_date);
+        const formattedDate = drawDate.toLocaleDateString('pt-BR', {
+          weekday: 'long', 
+          day: 'numeric', 
+          month: 'long', 
+          year: 'numeric'
+        });
+        
+        // Format numbers
+        const numbers = Array.isArray(result.numbers) ? result.numbers : [];
+        const specialNumbers = Array.isArray(result.special_numbers) ? result.special_numbers : [];
+        
+        // Create formatted numbers for display
+        const formattedNumbers = [
+          ...numbers.map(n => ({
+            value: n.toString(),
+            color: gameColors[result.game_type]
+          })),
+          ...specialNumbers.map(n => ({
+            value: n.toString(),
+            isSpecial: true,
+            color: "bg-amber-500"
+          }))
+        ];
+        
+        // Add multiplier if available
+        if (result.multiplier) {
+          formattedNumbers.push({
+            value: result.multiplier,
+            color: "bg-gray-200",
+            multiplier: result.multiplier
+          });
+        }
+        
+        return {
+          id: result.id,
+          name: result.game_type,
+          logo: gameLogos[result.game_type] || "https://via.placeholder.com/120x50/00A9E0/FFFFFF?text=" + result.game_type,
+          date: formattedDate,
+          drawTime: result.draw_time || "",
+          numbers: formattedNumbers
+        };
+      });
+      
+      setGames(gameResults);
+      setIsLoading(false);
+    };
+    
+    fetchLotteryResults();
+  }, []);
 
   const navigateToResultsHub = () => {
     navigate('/results-hub');
@@ -197,11 +214,17 @@ const NumbersDisplay = () => {
         Confira aqui os resultados dos últimos sorteios das loterias dos EUA
       </div>
 
-      <div className="space-y-4">
-        {games.map((game) => (
-          <LotteryGameResult key={game.id} game={game} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="text-center py-10">
+          <p>Carregando resultados...</p>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {games.map((game) => (
+            <LotteryGameResult key={game.id} game={game} />
+          ))}
+        </div>
+      )}
       
       <div className="mt-8 text-center">
         <Button 

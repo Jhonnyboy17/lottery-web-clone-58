@@ -51,6 +51,54 @@ export type Database = {
         }
         Relationships: []
       }
+      lottery_results: {
+        Row: {
+          created_at: string | null
+          draw_date: string
+          draw_number: number | null
+          game_type: string
+          id: string
+          jackpot_amount: number | null
+          jackpot_winners: number | null
+          multiplier: string | null
+          next_draw_date: string | null
+          next_jackpot_amount: number | null
+          numbers: Json
+          special_numbers: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          draw_date: string
+          draw_number?: number | null
+          game_type: string
+          id?: string
+          jackpot_amount?: number | null
+          jackpot_winners?: number | null
+          multiplier?: string | null
+          next_draw_date?: string | null
+          next_jackpot_amount?: number | null
+          numbers: Json
+          special_numbers?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          draw_date?: string
+          draw_number?: number | null
+          game_type?: string
+          id?: string
+          jackpot_amount?: number | null
+          jackpot_winners?: number | null
+          multiplier?: string | null
+          next_draw_date?: string | null
+          next_jackpot_amount?: number | null
+          numbers?: Json
+          special_numbers?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
