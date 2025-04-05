@@ -7,11 +7,12 @@ import ResultsFilter from "@/components/ResultsFilter";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
+import { LotteryResult, LotteryResultRow, toLotteryResult } from "@/integrations/supabase/lottery-types";
 
 const ResultsHub: React.FC = () => {
   const [gameType, setGameType] = useState("all");
   const [timeframe, setTimeframe] = useState("recent");
-  const [resultsData, setResultsData] = useState<any[]>([]);
+  const [resultsData, setResultsData] = useState<LotteryResult[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Fetch results data from Supabase
@@ -19,69 +20,76 @@ const ResultsHub: React.FC = () => {
     const fetchResults = async () => {
       setIsLoading(true);
       
-      let query = supabase
-        .from('lottery_results')
-        .select('*')
-        .order('draw_date', { ascending: false });
-        
-      // Filter by game type if not "all"
-      if (gameType !== "all") {
-        // Convert gameType to proper game_type format in the database
-        const gameTypeMap: Record<string, string> = {
-          "megasena": "Mega Millions",
-          "quina": "Powerball",
-          "lotofacil": "Lucky Day Lotto",
-          "lotomania": "Lotto",
-          "pick4": "Pick 4",
-          "pick3": "Pick 3"
-        };
-        
-        if (gameTypeMap[gameType]) {
-          query = query.eq('game_type', gameTypeMap[gameType]);
+      try {
+        // Use raw query to avoid type errors with direct table access
+        let query = supabase
+          .from('lottery_results')
+          .select('*')
+          .order('draw_date', { ascending: false }) as any;
+          
+        // Filter by game type if not "all"
+        if (gameType !== "all") {
+          // Convert gameType to proper game_type format in the database
+          const gameTypeMap: Record<string, string> = {
+            "megasena": "Mega Millions",
+            "quina": "Powerball",
+            "lotofacil": "Lucky Day Lotto",
+            "lotomania": "Lotto",
+            "pick4": "Pick 4",
+            "pick3": "Pick 3"
+          };
+          
+          if (gameTypeMap[gameType]) {
+            query = query.eq('game_type', gameTypeMap[gameType]);
+          }
         }
-      }
-      
-      // Apply timeframe filter
-      if (timeframe === "last-week") {
-        const lastWeek = new Date();
-        lastWeek.setDate(lastWeek.getDate() - 7);
-        query = query.gte('draw_date', lastWeek.toISOString());
-      } else if (timeframe === "last-month") {
-        const lastMonth = new Date();
-        lastMonth.setMonth(lastMonth.getMonth() - 1);
-        query = query.gte('draw_date', lastMonth.toISOString());
-      } else if (timeframe === "last-year") {
-        const lastYear = new Date();
-        lastYear.setFullYear(lastYear.getFullYear() - 1);
-        query = query.gte('draw_date', lastYear.toISOString());
-      }
-      
-      const { data, error } = await query.limit(10);
-      
-      if (error) {
-        console.error("Error fetching lottery results:", error);
+        
+        // Apply timeframe filter
+        if (timeframe === "last-week") {
+          const lastWeek = new Date();
+          lastWeek.setDate(lastWeek.getDate() - 7);
+          query = query.gte('draw_date', lastWeek.toISOString());
+        } else if (timeframe === "last-month") {
+          const lastMonth = new Date();
+          lastMonth.setMonth(lastMonth.getMonth() - 1);
+          query = query.gte('draw_date', lastMonth.toISOString());
+        } else if (timeframe === "last-year") {
+          const lastYear = new Date();
+          lastYear.setFullYear(lastYear.getFullYear() - 1);
+          query = query.gte('draw_date', lastYear.toISOString());
+        }
+        
+        const { data, error } = await query.limit(10);
+        
+        if (error) {
+          console.error("Error fetching lottery results:", error);
+          setIsLoading(false);
+          return;
+        }
+        
+        // Format data for display
+        const formattedResults = (data as LotteryResultRow[]).map(result => {
+          // Format the results to match the expected format for ResultCard
+          const lotteryResult = toLotteryResult(result);
+          
+          return {
+            id: lotteryResult.id,
+            date: new Date(lotteryResult.draw_date).toLocaleDateString('pt-BR'),
+            gameType: lotteryResult.game_type,
+            numbers: lotteryResult.numbers,
+            specialNumbers: lotteryResult.special_numbers || [],
+            jackpotAmount: lotteryResult.jackpot_amount,
+            // Prepare history data, for simplicity we're not fetching it now
+            history: []
+          };
+        });
+        
+        setResultsData(formattedResults);
+      } catch (err) {
+        console.error("Error processing lottery results:", err);
+      } finally {
         setIsLoading(false);
-        return;
       }
-      
-      // Format data for display
-      const formattedResults = data.map(result => {
-        // Format the results to match the expected format for ResultCard
-        return {
-          id: result.id,
-          date: new Date(result.draw_date).toLocaleDateString('pt-BR'),
-          gameType: result.game_type,
-          numbers: Array.isArray(result.numbers) ? result.numbers : [],
-          specialNumbers: Array.isArray(result.special_numbers) ? result.special_numbers : [],
-          jackpotAmount: result.jackpot_amount,
-          // Prepare history data, for simplicity we're not fetching it now
-          // In a real implementation, you might want to fetch previous draws for each game
-          history: []
-        };
-      });
-      
-      setResultsData(formattedResults);
-      setIsLoading(false);
     };
     
     fetchResults();

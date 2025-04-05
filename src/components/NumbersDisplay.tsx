@@ -1,10 +1,10 @@
-
 import { ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { LotteryResultRow, toLotteryResult } from "@/integrations/supabase/lottery-types";
 
 interface NumberGame {
   id: string;
@@ -25,7 +25,6 @@ interface NumberGame {
   }[];
 }
 
-// Mapeamento de tipos de jogos para logos e cores
 const gameLogos: Record<string, string> = {
   "Mega Millions": "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
   "Powerball": "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
@@ -124,77 +123,80 @@ const NumbersDisplay = () => {
     const fetchLotteryResults = async () => {
       setIsLoading(true);
       
-      // Get the latest results for each game type
-      const { data, error } = await supabase
-        .from('lottery_results')
-        .select('*')
-        .order('draw_date', { ascending: false });
-        
-      if (error) {
-        console.error("Error fetching lottery results:", error);
-        setIsLoading(false);
-        return;
-      }
-      
-      // Group results by game_type and take the latest for each
-      const latestByGameType = new Map();
-      
-      data.forEach(result => {
-        if (!latestByGameType.has(result.game_type) || 
-            new Date(result.draw_date) > new Date(latestByGameType.get(result.game_type).draw_date)) {
-          latestByGameType.set(result.game_type, result);
+      try {
+        // Get the latest results for each game type
+        const { data, error } = await supabase
+          .from('lottery_results')
+          .select('*')
+          .order('draw_date', { ascending: false }) as any;
+          
+        if (error) {
+          console.error("Error fetching lottery results:", error);
+          setIsLoading(false);
+          return;
         }
-      });
-      
-      // Convert to our display format
-      const gameResults: NumberGame[] = Array.from(latestByGameType.values()).map(result => {
-        // Format draw date
-        const drawDate = new Date(result.draw_date);
-        const formattedDate = drawDate.toLocaleDateString('pt-BR', {
-          weekday: 'long', 
-          day: 'numeric', 
-          month: 'long', 
-          year: 'numeric'
+        
+        // Group results by game_type and take the latest for each
+        const latestByGameType = new Map();
+        
+        (data as LotteryResultRow[]).forEach(result => {
+          if (!latestByGameType.has(result.game_type) || 
+              new Date(result.draw_date) > new Date(latestByGameType.get(result.game_type).draw_date)) {
+            latestByGameType.set(result.game_type, result);
+          }
         });
         
-        // Format numbers
-        const numbers = Array.isArray(result.numbers) ? result.numbers : [];
-        const specialNumbers = Array.isArray(result.special_numbers) ? result.special_numbers : [];
-        
-        // Create formatted numbers for display
-        const formattedNumbers = [
-          ...numbers.map(n => ({
-            value: n.toString(),
-            color: gameColors[result.game_type]
-          })),
-          ...specialNumbers.map(n => ({
-            value: n.toString(),
-            isSpecial: true,
-            color: "bg-amber-500"
-          }))
-        ];
-        
-        // Add multiplier if available
-        if (result.multiplier) {
-          formattedNumbers.push({
-            value: result.multiplier,
-            color: "bg-gray-200",
-            multiplier: result.multiplier
+        // Convert to our display format
+        const gameResults: NumberGame[] = Array.from(latestByGameType.values()).map(result => {
+          const lotteryResult = toLotteryResult(result);
+          
+          // Format draw date
+          const drawDate = new Date(lotteryResult.draw_date);
+          const formattedDate = drawDate.toLocaleDateString('pt-BR', {
+            weekday: 'long', 
+            day: 'numeric', 
+            month: 'long', 
+            year: 'numeric'
           });
-        }
+          
+          // Create formatted numbers for display
+          const formattedNumbers = [
+            ...lotteryResult.numbers.map(n => ({
+              value: n.toString(),
+              color: gameColors[lotteryResult.game_type]
+            })),
+            ...(lotteryResult.special_numbers || []).map(n => ({
+              value: n.toString(),
+              isSpecial: true,
+              color: "bg-amber-500"
+            }))
+          ];
+          
+          // Add multiplier if available
+          if (lotteryResult.multiplier) {
+            formattedNumbers.push({
+              value: lotteryResult.multiplier,
+              color: "bg-gray-200",
+              multiplier: lotteryResult.multiplier
+            });
+          }
+          
+          return {
+            id: lotteryResult.id,
+            name: lotteryResult.game_type,
+            logo: gameLogos[lotteryResult.game_type] || `https://via.placeholder.com/120x50/00A9E0/FFFFFF?text=${lotteryResult.game_type}`,
+            date: formattedDate,
+            drawTime: "",
+            numbers: formattedNumbers
+          };
+        });
         
-        return {
-          id: result.id,
-          name: result.game_type,
-          logo: gameLogos[result.game_type] || "https://via.placeholder.com/120x50/00A9E0/FFFFFF?text=" + result.game_type,
-          date: formattedDate,
-          drawTime: result.draw_time || "",
-          numbers: formattedNumbers
-        };
-      });
-      
-      setGames(gameResults);
-      setIsLoading(false);
+        setGames(gameResults);
+      } catch (err) {
+        console.error("Error processing lottery results:", err);
+      } finally {
+        setIsLoading(false);
+      }
     };
     
     fetchLotteryResults();

@@ -1,10 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { formatDateAsDayMonthYear, getFormattedWeekday } from "@/utils/dateUtils";
 import { supabase } from "@/integrations/supabase/client";
+import { LotteryResultRow, toLotteryResult } from "@/integrations/supabase/lottery-types";
 
 interface ResultCardProps {
   date: string;
@@ -93,7 +93,6 @@ const ResultCard: React.FC<ResultCardProps> = ({
   const [gameHistory, setGameHistory] = useState<Array<{date: string, numbers: number[]}>>([]);
   const [isLoading, setIsLoading] = useState(false);
   
-  // Fetch previous results for this game type if history is empty
   useEffect(() => {
     const fetchGameHistory = async () => {
       if (history.length > 0) {
@@ -103,27 +102,34 @@ const ResultCard: React.FC<ResultCardProps> = ({
       
       setIsLoading(true);
       
-      // Get up to 3 most recent results for this game
-      const { data, error } = await supabase
-        .from('lottery_results')
-        .select('draw_date, numbers')
-        .eq('game_type', gameType)
-        .order('draw_date', { ascending: false })
-        .limit(3);
-      
-      if (error) {
-        console.error("Error fetching game history:", error);
+      try {
+        const { data, error } = await supabase
+          .from('lottery_results')
+          .select('*')
+          .eq('game_type', gameType)
+          .order('draw_date', { ascending: false })
+          .limit(3) as any;
+        
+        if (error) {
+          console.error("Error fetching game history:", error);
+          setIsLoading(false);
+          return;
+        }
+        
+        const historyData = (data as LotteryResultRow[]).map(item => {
+          const lotteryResult = toLotteryResult(item);
+          return {
+            date: lotteryResult.draw_date,
+            numbers: lotteryResult.numbers
+          };
+        });
+        
+        setGameHistory(historyData);
+      } catch (err) {
+        console.error("Error processing game history:", err);
+      } finally {
         setIsLoading(false);
-        return;
       }
-      
-      const historyData = data.map(item => ({
-        date: item.draw_date,
-        numbers: Array.isArray(item.numbers) ? item.numbers : []
-      }));
-      
-      setGameHistory(historyData);
-      setIsLoading(false);
     };
     
     fetchGameHistory();
@@ -131,12 +137,10 @@ const ResultCard: React.FC<ResultCardProps> = ({
   
   const limitedCurrentNumbers = getLimitedNumbers(gameType, numbers);
   
-  // Use fetched history or provided history
   const allHistory = gameHistory.length > 0 
     ? gameHistory 
     : [{ date, numbers: limitedCurrentNumbers }, ...(history || []).slice(0, 2)];
   
-  // Limit history to the last 3 games (including current)
   const displayHistory = allHistory.slice(0, 3);
   
   return (
