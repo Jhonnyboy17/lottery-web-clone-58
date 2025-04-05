@@ -1,3 +1,4 @@
+
 import { ArrowRight } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -178,7 +179,7 @@ const NumbersDisplay = () => {
               value: lotteryResult.multiplier,
               color: "bg-gray-200",
               multiplier: lotteryResult.multiplier
-            });
+            } as any);
           }
           
           return {

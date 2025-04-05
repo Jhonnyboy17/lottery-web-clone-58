@@ -9,10 +9,23 @@ import Footer from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { LotteryResult, LotteryResultRow, toLotteryResult } from "@/integrations/supabase/lottery-types";
 
+interface ResultsDisplayData {
+  id: string;
+  date: string;
+  gameType: string;
+  numbers: number[];
+  specialNumbers: number[];
+  jackpotAmount?: number | null;
+  history: Array<{
+    date: string;
+    numbers: number[];
+  }>;
+}
+
 const ResultsHub: React.FC = () => {
   const [gameType, setGameType] = useState("all");
   const [timeframe, setTimeframe] = useState("recent");
-  const [resultsData, setResultsData] = useState<LotteryResult[]>([]);
+  const [resultsData, setResultsData] = useState<ResultsDisplayData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Fetch results data from Supabase
@@ -68,7 +81,7 @@ const ResultsHub: React.FC = () => {
         }
         
         // Format data for display
-        const formattedResults = (data as LotteryResultRow[]).map(result => {
+        const formattedResults: ResultsDisplayData[] = (data as LotteryResultRow[]).map(result => {
           // Format the results to match the expected format for ResultCard
           const lotteryResult = toLotteryResult(result);
           

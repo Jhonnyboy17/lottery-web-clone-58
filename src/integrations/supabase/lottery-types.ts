@@ -16,6 +16,14 @@ export interface LotteryResult {
   next_draw_date?: string | null;
   created_at?: string | null;
   updated_at?: string | null;
+  
+  // Frontend display properties
+  date?: string;
+  gameType?: string;
+  history?: Array<{
+    date: string;
+    numbers: number[];
+  }>;
 }
 
 // Make it type safe when fetching from Supabase
@@ -39,7 +47,7 @@ export type LotteryResultRow = {
 export const toLotteryResult = (row: LotteryResultRow): LotteryResult => {
   return {
     ...row,
-    numbers: Array.isArray(row.numbers) ? row.numbers : [],
-    special_numbers: Array.isArray(row.special_numbers) ? row.special_numbers : []
+    numbers: Array.isArray(row.numbers) ? row.numbers.map(Number) : [],
+    special_numbers: Array.isArray(row.special_numbers) ? row.special_numbers.map(Number) : null
   };
 };
