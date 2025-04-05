@@ -1,7 +1,19 @@
 
-import React from "react";
-import { Calendar, CheckCircle, XCircle } from "lucide-react";
+import React, { useState } from "react";
+import { 
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { OrderHistoryItem } from "@/contexts/CartContext";
+import { formatCurrency } from "@/utils/formatUtils";
+import { Separator } from "@/components/ui/separator";
+import { ChevronsUpDown } from "lucide-react";
 
 interface GamesTabProps {
   isLoading: boolean;
@@ -9,189 +21,163 @@ interface GamesTabProps {
 }
 
 const GamesTab: React.FC<GamesTabProps> = ({ isLoading, orderHistory }) => {
-  // Separar jogos futuros e passados
-  const upcomingGames = orderHistory.filter(game => !game.completed);
-  const pastGames = orderHistory.filter(game => game.completed);
-
-  return (
-    <div className="space-y-8">
-      <div className="bg-[#1a0f36] rounded-lg shadow-lg p-6">
-        <h1 className="text-2xl font-bold text-white mb-6">Meus Jogos</h1>
-        
-        {isLoading ? (
-          <div className="text-center py-8">
-            <p className="text-gray-300">Carregando seus jogos...</p>
-          </div>
-        ) : (
-          <>
-            {upcomingGames.length > 0 && (
-              <div className="mb-8">
-                <h2 className="text-xl font-semibold text-white mb-4 flex items-center">
-                  <Calendar className="mr-2 h-5 w-5" />
-                  Jogos Futuros
-                </h2>
-                <div className="space-y-4">
-                  {upcomingGames.map((item, index) => (
-                    <div key={item.id || index} className="bg-[#2a1b4e] rounded-lg p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-4">
-                          <div 
-                            className="w-12 h-12 rounded-lg flex items-center justify-center"
-                            style={{ backgroundColor: item.color }}
-                          >
-                            <img 
-                              src={item.logoSrc} 
-                              alt={item.gameName} 
-                              className="h-8 w-8 object-contain"
-                            />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-white">{item.gameName}</h3>
-                            <p className="text-gray-300 text-sm">
-                              {item.lineCount} {item.lineCount > 1 ? 'linhas' : 'linha'} • 
-                              Comprado em {new Date(item.purchaseDate).toLocaleDateString('pt-BR')}
-                            </p>
-                            <p className="text-gray-400 text-xs">Pedido: {item.orderNumber}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-white">
-                            {typeof item.price === 'number' 
-                              ? item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) 
-                              : `R$ ${item.price}`}
-                          </p>
-                          <p className="text-green-400 text-sm flex items-center justify-end">
-                            <CheckCircle className="h-4 w-4 mr-1" />
-                            Ativo
-                          </p>
-                        </div>
-                      </div>
-                      
-                      {item.lines && item.lines.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-purple-900/30">
-                          <p className="text-sm text-gray-300 mb-2">Números jogados:</p>
-                          <div className="space-y-2">
-                            {item.lines.map((line, lineIdx) => (
-                              <div key={lineIdx} className="flex flex-wrap gap-1.5">
-                                {line.numbers.map((num, numIdx) => (
-                                  <span 
-                                    key={numIdx} 
-                                    className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary/10 text-primary font-medium text-xs"
-                                  >
-                                    {num}
-                                  </span>
-                                ))}
-                                
-                                {line.powerball !== undefined && line.powerball !== null && (
-                                  <>
-                                    <span className="inline-flex items-center justify-center h-7 px-1 rounded-full bg-gray-100 text-gray-500 font-medium text-xs">
-                                      +
-                                    </span>
-                                    <span 
-                                      className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-red-100 text-red-600 font-medium text-xs"
-                                    >
-                                      {line.powerball}
-                                    </span>
-                                  </>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {pastGames.length > 0 && (
+  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
+  
+  const toggleItemExpanded = (id: string) => {
+    setExpandedItems(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+  
+  const activeGames = orderHistory.filter(game => !game.completed);
+  const completedGames = orderHistory.filter(game => game.completed);
+  
+  const renderGameItem = (game: OrderHistoryItem) => {
+    // Extract jackpot amount from game data if it exists
+    const gameData = game.lines || [];
+    const jackpotAmount = game.jackpotAmount || 
+      (game.game_data && typeof game.game_data === 'object' && 'jackpotAmount' in game.game_data ? 
+        game.game_data.jackpotAmount : null);
+    
+    return (
+      <Card key={game.id} className="mb-4 overflow-hidden border-l-4" style={{ borderLeftColor: game.color || '#9333ea' }}>
+        <CardHeader className="p-4 cursor-pointer" onClick={() => toggleItemExpanded(game.id)}>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <img src={game.logoSrc} alt={game.gameName} className="h-10" />
               <div>
-                <h2 className="text-xl font-semibold text-white mb-4 flex items-center">
-                  <XCircle className="mr-2 h-5 w-5" />
-                  Jogos Encerrados
-                </h2>
-                <div className="space-y-4">
-                  {pastGames.map((item, index) => (
-                    <div key={item.id || index} className="bg-[#2a1b4e] rounded-lg p-4 opacity-70">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center gap-4">
-                          <div 
-                            className="w-12 h-12 rounded-lg flex items-center justify-center"
-                            style={{ backgroundColor: item.color }}
-                          >
-                            <img 
-                              src={item.logoSrc} 
-                              alt={item.gameName} 
-                              className="h-8 w-8 object-contain"
-                            />
-                          </div>
-                          <div>
-                            <h3 className="font-semibold text-white">{item.gameName}</h3>
-                            <p className="text-gray-300 text-sm">
-                              {item.lineCount} {item.lineCount > 1 ? 'linhas' : 'linha'} • 
-                              Comprado em {new Date(item.purchaseDate).toLocaleDateString('pt-BR')}
-                            </p>
-                            <p className="text-gray-400 text-xs">Pedido: {item.orderNumber}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <p className="font-bold text-white">
-                            {typeof item.price === 'number' 
-                              ? item.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) 
-                              : `R$ ${item.price}`}
-                          </p>
-                          <p className="text-gray-400 text-sm flex items-center justify-end">
-                            <XCircle className="h-4 w-4 mr-1" />
-                            Encerrado
-                          </p>
-                        </div>
-                      </div>
+                <CardTitle className="text-lg">{game.gameName}</CardTitle>
+                <CardDescription>
+                  {game.purchaseDate ? new Date(game.purchaseDate).toLocaleDateString('pt-BR') : 'Data indisponível'} - {game.lineCount} {game.lineCount === 1 ? 'linha' : 'linhas'}
+                </CardDescription>
+              </div>
+            </div>
+            <div className="flex items-center">
+              <div className="text-right mr-4">
+                <div className="font-medium">{formatCurrency(game.price)}</div>
+                {jackpotAmount && (
+                  <div className="text-sm text-green-600">
+                    Jackpot: {typeof jackpotAmount === 'number' ? 
+                      jackpotAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 
+                      jackpotAmount}
+                  </div>
+                )}
+              </div>
+              <ChevronsUpDown size={16} className="text-muted-foreground" />
+            </div>
+          </div>
+        </CardHeader>
+        
+        {expandedItems[game.id] && (
+          <CardContent className="p-4 pt-0 border-t">
+            {game.lines && game.lines.length > 0 ? (
+              <div>
+                <p className="text-sm font-medium mb-2">Seus números:</p>
+                {game.lines.map((line, idx) => (
+                  <div key={idx} className="mb-3 last:mb-0">
+                    <div className="text-xs text-muted-foreground mb-1">Bilhete {idx + 1}:</div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {line.numbers.map((num, i) => (
+                        <span 
+                          key={i} 
+                          className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary/10 text-primary font-medium text-sm"
+                        >
+                          {num}
+                        </span>
+                      ))}
                       
-                      {item.lines && item.lines.length > 0 && (
-                        <div className="mt-3 pt-3 border-t border-purple-900/30">
-                          <p className="text-sm text-gray-300 mb-2">Números jogados:</p>
-                          <div className="space-y-2">
-                            {item.lines.map((line, lineIdx) => (
-                              <div key={lineIdx} className="flex flex-wrap gap-1.5">
-                                {line.numbers.map((num, numIdx) => (
-                                  <span 
-                                    key={numIdx} 
-                                    className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-primary/10 text-primary font-medium text-xs"
-                                  >
-                                    {num}
-                                  </span>
-                                ))}
-                                
-                                {line.powerball !== undefined && line.powerball !== null && (
-                                  <>
-                                    <span className="inline-flex items-center justify-center h-7 px-1 rounded-full bg-gray-100 text-gray-500 font-medium text-xs">
-                                      +
-                                    </span>
-                                    <span 
-                                      className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-red-100 text-red-600 font-medium text-xs"
-                                    >
-                                      {line.powerball}
-                                    </span>
-                                  </>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                      {line.powerball && (
+                        <>
+                          <span className="inline-flex items-center justify-center h-7 px-1 rounded-full bg-gray-100 text-gray-500 font-medium text-sm">
+                            +
+                          </span>
+                          <span 
+                            className="inline-flex items-center justify-center h-7 w-7 rounded-full bg-red-100 text-red-600 font-medium text-sm"
+                          >
+                            {line.powerball}
+                          </span>
+                        </>
                       )}
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">Detalhes do jogo não disponíveis</p>
             )}
             
-            {upcomingGames.length === 0 && pastGames.length === 0 && (
-              <p className="text-gray-300 text-center py-8">Você ainda não possui jogos. Faça sua primeira aposta!</p>
-            )}
-          </>
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <p className="text-xs text-muted-foreground">Número do pedido</p>
+                  <p className="text-sm font-medium">{game.orderNumber}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">Data do sorteio</p>
+                  <p className="text-sm font-medium">{game.drawDate || "Próximo sorteio"}</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
         )}
+        
+        <CardFooter className="p-2 bg-muted/20 flex justify-end">
+          <Button variant="ghost" size="sm">Verificar Resultado</Button>
+        </CardFooter>
+      </Card>
+    );
+  };
+  
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center p-8">
+        <div className="text-center">
+          <p className="text-lg">Carregando jogos...</p>
+        </div>
       </div>
+    );
+  }
+  
+  return (
+    <div>
+      <h2 className="text-2xl font-bold mb-6">Meus Jogos</h2>
+      
+      <Tabs defaultValue="active">
+        <TabsList className="grid grid-cols-2 mb-6">
+          <TabsTrigger value="active">Jogos Ativos ({activeGames.length})</TabsTrigger>
+          <TabsTrigger value="completed">Jogos Concluídos ({completedGames.length})</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="active">
+          {activeGames.length > 0 ? (
+            <div>
+              {activeGames.map(renderGameItem)}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <p className="text-lg font-medium mb-4">Você ainda não possui jogos ativos</p>
+                <Button>Comprar jogos</Button>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+        
+        <TabsContent value="completed">
+          {completedGames.length > 0 ? (
+            <div>
+              {completedGames.map(renderGameItem)}
+            </div>
+          ) : (
+            <Card>
+              <CardContent className="p-8 text-center">
+                <p className="text-lg text-muted-foreground">Nenhum jogo concluído encontrado</p>
+              </CardContent>
+            </Card>
+          )}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

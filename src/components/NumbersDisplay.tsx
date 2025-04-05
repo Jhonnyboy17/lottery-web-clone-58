@@ -19,6 +19,7 @@ interface NumberGame {
     multiplier?: string;
     color?: string;
   }[];
+  jackpotAmount?: number | null;
   additionalInfo?: {
     label: string;
     value: string[];
@@ -45,6 +46,11 @@ const gameColors: Record<string, string> = {
 };
 
 const LotteryGameResult = ({ game }: { game: NumberGame }) => {
+  // Format jackpot for display
+  const formattedJackpot = game.jackpotAmount 
+    ? game.jackpotAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+    : null;
+    
   return (
     <div className="bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-lg mb-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -58,6 +64,11 @@ const LotteryGameResult = ({ game }: { game: NumberGame }) => {
           <div className="flex flex-col justify-start items-start">
             <div className="font-bold text-gray-800">ÚLTIMOS RESULTADOS</div>
             <div className="text-sm text-gray-600">{game.date}</div>
+            {formattedJackpot && (
+              <div className="text-sm font-bold text-green-600 mt-1">
+                {formattedJackpot}
+              </div>
+            )}
             {game.drawTime && (
               <div className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full mt-1">
                 {game.drawTime}
@@ -188,7 +199,8 @@ const NumbersDisplay = () => {
             logo: gameLogos[lotteryResult.game_type] || `https://via.placeholder.com/120x50/00A9E0/FFFFFF?text=${lotteryResult.game_type}`,
             date: formattedDate,
             drawTime: "",
-            numbers: formattedNumbers
+            numbers: formattedNumbers,
+            jackpotAmount: lotteryResult.jackpot_amount
           };
         });
         

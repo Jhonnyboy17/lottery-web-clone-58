@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -138,6 +137,7 @@ const ResultsHub: React.FC = () => {
                     date={result.date}
                     gameType={result.gameType}
                     numbers={result.numbers}
+                    jackpotAmount={result.jackpotAmount}
                     history={result.history}
                   />
                 ))}

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ interface ResultCardProps {
   date: string;
   gameType: string;
   numbers: number[];
-  jackpot?: string;
+  jackpotAmount?: number | null;
   className?: string;
   previousDraw?: string;
   previousNumbers?: number[];
@@ -77,7 +78,8 @@ const getGamePath = (gameType: string) => {
 const ResultCard: React.FC<ResultCardProps> = ({ 
   date, 
   gameType, 
-  numbers, 
+  numbers,
+  jackpotAmount,
   previousDraw,
   previousNumbers = [],
   history = [],
@@ -143,6 +145,11 @@ const ResultCard: React.FC<ResultCardProps> = ({
   
   const displayHistory = allHistory.slice(0, 3);
   
+  // Format jackpot amount for display
+  const formattedJackpot = jackpotAmount 
+    ? jackpotAmount.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })
+    : "JACKPOT PENDENTE";
+  
   return (
     <Card className={`overflow-hidden border-0 shadow-lg w-full ${bgColor} ${className}`}>
       <div className="p-5 flex flex-col h-full min-h-[300px] text-white">
@@ -151,7 +158,9 @@ const ResultCard: React.FC<ResultCardProps> = ({
         </div>
         
         <div className="text-center mb-4">
-          <div className="text-base font-bold">JACKPOT PENDENTE</div>
+          <div className="text-base font-bold">
+            {jackpotAmount ? formattedJackpot : "JACKPOT PENDENTE"}
+          </div>
         </div>
         
         {isLoading ? (

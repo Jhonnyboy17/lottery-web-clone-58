@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -22,6 +21,7 @@ export type CartItemType = {
   drawDate?: string;
   lines?: CartLineType[];
   expanded?: boolean;
+  jackpotAmount?: number | null;
 };
 
 export type OrderHistoryItem = CartItemType & {
@@ -30,7 +30,7 @@ export type OrderHistoryItem = CartItemType & {
   completed?: boolean;  // Adicionado para identificar jogos já realizados
 };
 
-export type WalletTransaction = {
+type WalletTransaction = {
   id: string;
   amount: number;
   date: string;
@@ -69,7 +69,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [walletBalance, setWalletBalance] = useState<number>(0);
   const [walletTransactions, setWalletTransactions] = useState<WalletTransaction[]>([]);
 
-  // Load cart from localStorage on initial render
   useEffect(() => {
     const savedCart = localStorage.getItem("cart");
     if (savedCart) {
@@ -80,7 +79,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     }
     
-    // Fetch order history and wallet data from Supabase if user is logged in
     const fetchUserData = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (session?.user) {
@@ -92,39 +90,34 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     fetchUserData();
   }, []);
 
-  // Update wallet balance when profile changes
   useEffect(() => {
     if (profile && profile.wallet_balance !== undefined) {
       setWalletBalance(profile.wallet_balance);
     }
   }, [profile]);
 
-  // Save cart to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
   const addToCart = (item: CartItemType) => {
-    // Check if item already exists (by id)
     const existingItemIndex = cartItems.findIndex((cartItem) => cartItem.id === item.id);
     
     if (existingItemIndex >= 0) {
-      // If item exists, update it
       const updatedItems = [...cartItems];
       updatedItems[existingItemIndex] = {
         ...updatedItems[existingItemIndex],
         lineCount: updatedItems[existingItemIndex].lineCount + item.lineCount,
         price: (updatedItems[existingItemIndex].price / updatedItems[existingItemIndex].lineCount) * 
                (updatedItems[existingItemIndex].lineCount + item.lineCount),
-        lines: [...(updatedItems[existingItemIndex].lines || []), ...(item.lines || [])]
+        lines: [...(updatedItems[existingItemIndex].lines || []), ...(item.lines || [])],
+        jackpotAmount: updatedItems[existingItemIndex].jackpotAmount || item.jackpotAmount
       };
       setCartItems(updatedItems);
     } else {
-      // If item doesn't exist, add it
       setCartItems((prev) => [...prev, {...item, expanded: false}]);
     }
     
-    // Open the cart drawer
     setIsCartOpen(true);
   };
 
@@ -175,7 +168,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       
       if (data) {
-        // Group items by order_number and game_name to eliminate duplicates
         const uniqueItems = new Map();
         
         data.forEach(item => {
@@ -237,7 +229,10 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         color: item.color,
         draw_date: item.drawDate || "Próximo sorteio",
         purchase_date: timestamp,
-        game_data: { lines: item.lines }
+        game_data: { 
+          lines: item.lines,
+          jackpotAmount: item.jackpotAmount
+        }
       }));
       
       const { error } = await supabase
@@ -250,7 +245,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return false;
       }
       
-      // Adicionar transação na carteira
       const totalPrice = items.reduce((sum, item) => sum + item.price, 0);
       await addWalletTransaction(
         -totalPrice,
@@ -258,7 +252,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         `Compra de ${items.length} jogos - ${orderNumber}`
       );
       
-      // Refresh order history
       await fetchOrderHistory();
       
       return true;
@@ -283,7 +276,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userId = session.user.id;
       const newBalance = walletBalance + amount;
       
-      // Update profile wallet_balance
       const { error: profileError } = await supabase
         .from('profiles')
         .update({ wallet_balance: newBalance })
@@ -295,7 +287,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       
-      // Add transaction record
       await addWalletTransaction(amount, 'deposit', 'Adição de fundos');
       
       setWalletBalance(newBalance);
@@ -323,7 +314,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userId = session.user.id;
       const newBalance = walletBalance - amount;
       
-      // Update profile wallet_balance
       const { error: profileError } = await supabase
         .from('profiles')
         .update({ wallet_balance: newBalance })
@@ -395,7 +385,6 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
       
-      // Fetch wallet transactions
       const { data, error } = await supabase
         .from('wallet_transactions')
         .select('*')

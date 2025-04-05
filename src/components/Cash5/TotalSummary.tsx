@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SavedLineType } from "./types";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 interface TotalSummaryProps {
   ticketPrice: string;
@@ -54,6 +55,36 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
     
     const gameId = location.pathname.split('/play-')[1];
     
+    // Map game ID to the game_type in the database
+    const gameTypeMap: Record<string, string> = {
+      "mega-millions": "Mega Millions",
+      "powerball": "Powerball",
+      "lucky-day": "Lucky Day Lotto",
+      "pick4": "Lotto",
+      "cash5": "Pick 4",
+      "fast-play": "Pick 3"
+    };
+    
+    const gameType = gameTypeMap[gameId] || gameName;
+    
+    // Fetch current jackpot amount for this game
+    let jackpotAmount = null;
+    
+    try {
+      const { data, error } = await supabase
+        .from('lottery_results')
+        .select('jackpot_amount')
+        .eq('game_type', gameType)
+        .order('draw_date', { ascending: false })
+        .limit(1) as any;
+      
+      if (data && data.length > 0) {
+        jackpotAmount = data[0].jackpot_amount;
+      }
+    } catch (err) {
+      console.error("Error fetching jackpot amount:", err);
+    }
+    
     // Convert saved lines to cart line type
     const cartLines = savedLines.map(line => ({
       numbers: line.numbers,
@@ -70,7 +101,8 @@ const TotalSummary: React.FC<TotalSummaryProps> = ({
       lineCount: lineCount,
       color: colorValue,
       drawDate: "Próximo sorteio",
-      lines: cartLines
+      lines: cartLines,
+      jackpotAmount: jackpotAmount // Include jackpot amount in the cart item
     };
     
     // Add to cart and open cart drawer

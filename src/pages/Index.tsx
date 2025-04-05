@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
@@ -6,84 +7,99 @@ import NumbersDisplay from "@/components/NumbersDisplay";
 import DrawTimes from "@/components/DrawTimes";
 import Footer from "@/components/Footer";
 import { ChevronRight } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { LotteryResultRow, toLotteryResult } from "@/integrations/supabase/lottery-types";
 
-const lotteryGames = [
-  {
-    id: 1,
-    logoSrc: "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
-    amount: "344,000,000",
-    unit: "",
-    cashOption: "161.5 MILLION",
-    nextDrawing: "SEXTA, MAR 25, 9:59 PM",
-    backgroundColor: "bg-blue-500",
-    showPlayButton: true,
-    route: "/play-mega-millions",
-    price: 15,
-  },
-  {
-    id: 2,
-    logoSrc: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
-    amount: "444,000,000",
-    unit: "",
-    cashOption: "207.2 MILLION",
-    nextDrawing: "SÁBADO, MAR 22, 9:59 PM",
-    backgroundColor: "bg-[#ff5247]",
-    showPlayButton: true,
-    route: "/play-powerball",
-    price: 15,
-  },
-  {
-    id: 3,
-    logoSrc: "/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png",
-    amount: "570,000",
-    unit: "",
-    cashOption: "320 THOUSAND",
-    nextDrawing: "SEGUNDA, MAR 24, 9:59 PM",
-    backgroundColor: "bg-[#8CD444]",
-    showPlayButton: true,
-    route: "/play-lucky-day",
-    price: 15,
-  },
-  {
-    id: 4,
-    logoSrc: "/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png",
-    amount: "100,000",
-    unit: "",
-    prefix: "",
-    nextDrawing: "SÁBADO, MAR 22, 12:40 PM",
-    backgroundColor: "bg-[#00ccc6]",
-    showPlayButton: true,
-    route: "/play-pick4",
-    price: 10,
-  },
-  {
-    id: 5,
-    logoSrc: "/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png",
-    amount: "5,000",
-    unit: "",
-    prefix: "WIN UP TO",
-    nextDrawing: "TODOS OS DIAS 12:40 PM & 9:22 PM",
-    backgroundColor: "bg-[#ffa039]",
-    showPlayButton: true,
-    route: "/play-cash5",
-    price: 8,
-  },
-  {
-    id: 6,
-    logoSrc: "/lovable-uploads/a02651ec-8efc-429a-8231-5ae52f5c4af5.png",
-    amount: "500",
-    unit: "",
-    prefix: "WIN UP TO",
-    nextDrawing: "TODOS OS DIAS 12:40 PM & 9:22 PM",
-    backgroundColor: "bg-[#ffa039]",
-    showPlayButton: true,
-    route: "/play-fast-play",
-    price: 8,
-  },
-];
+interface LotteryGame {
+  id: number;
+  logoSrc: string;
+  amount: string;
+  unit: string;
+  prefix?: string;
+  cashOption?: string;
+  nextDrawing: string;
+  backgroundColor: string;
+  showPlayButton: boolean;
+  route: string;
+  price: number;
+}
 
 const Index = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [lotteryGames, setLotteryGames] = useState<LotteryGame[]>([
+    {
+      id: 1,
+      logoSrc: "/lovable-uploads/fde6b5b0-9d2f-4c41-915b-6c87c6deb823.png",
+      amount: "344,000,000",
+      unit: "",
+      cashOption: "161.5 MILLION",
+      nextDrawing: "SEXTA, MAR 25, 9:59 PM",
+      backgroundColor: "bg-blue-500",
+      showPlayButton: true,
+      route: "/play-mega-millions",
+      price: 15,
+    },
+    {
+      id: 2,
+      logoSrc: "/lovable-uploads/96757871-5a04-478f-992a-0eca87ef37b8.png",
+      amount: "444,000,000",
+      unit: "",
+      cashOption: "207.2 MILLION",
+      nextDrawing: "SÁBADO, MAR 22, 9:59 PM",
+      backgroundColor: "bg-[#ff5247]",
+      showPlayButton: true,
+      route: "/play-powerball",
+      price: 15,
+    },
+    {
+      id: 3,
+      logoSrc: "/lovable-uploads/92e3bb3d-af5b-4911-9c43-7c3685a6eac3.png",
+      amount: "570,000",
+      unit: "",
+      cashOption: "320 THOUSAND",
+      nextDrawing: "SEGUNDA, MAR 24, 9:59 PM",
+      backgroundColor: "bg-[#8CD444]",
+      showPlayButton: true,
+      route: "/play-lucky-day",
+      price: 15,
+    },
+    {
+      id: 4,
+      logoSrc: "/lovable-uploads/005f7e6d-9f07-4838-a80c-4ce56aec2f58.png",
+      amount: "100,000",
+      unit: "",
+      prefix: "",
+      nextDrawing: "SÁBADO, MAR 22, 12:40 PM",
+      backgroundColor: "bg-[#00ccc6]",
+      showPlayButton: true,
+      route: "/play-pick4",
+      price: 10,
+    },
+    {
+      id: 5,
+      logoSrc: "/lovable-uploads/c0b5f378-154f-476e-a51e-e9777bba8645.png",
+      amount: "5,000",
+      unit: "",
+      prefix: "WIN UP TO",
+      nextDrawing: "TODOS OS DIAS 12:40 PM & 9:22 PM",
+      backgroundColor: "bg-[#ffa039]",
+      showPlayButton: true,
+      route: "/play-cash5",
+      price: 8,
+    },
+    {
+      id: 6,
+      logoSrc: "/lovable-uploads/a02651ec-8efc-429a-8231-5ae52f5c4af5.png",
+      amount: "500",
+      unit: "",
+      prefix: "WIN UP TO",
+      nextDrawing: "TODOS OS DIAS 12:40 PM & 9:22 PM",
+      backgroundColor: "bg-[#ffa039]",
+      showPlayButton: true,
+      route: "/play-fast-play",
+      price: 8,
+    },
+  ]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,6 +123,67 @@ const Index = () => {
         }, 100);
       }
     }
+  }, []);
+  
+  // New effect to fetch jackpot amounts
+  useEffect(() => {
+    const fetchJackpotAmounts = async () => {
+      try {
+        // Get latest lottery results to get current jackpot values
+        const { data, error } = await supabase
+          .from('lottery_results')
+          .select('*')
+          .order('draw_date', { ascending: false }) as any;
+          
+        if (error || !data) {
+          console.error("Error fetching lottery results:", error);
+          return;
+        }
+        
+        // Create a map of game types to their latest results
+        const latestByGameType = new Map();
+        
+        (data as LotteryResultRow[]).forEach(result => {
+          if (!latestByGameType.has(result.game_type) || 
+              new Date(result.draw_date) > new Date(latestByGameType.get(result.game_type).draw_date)) {
+            latestByGameType.set(result.game_type, result);
+          }
+        });
+        
+        // Update lottery games with jackpot amounts
+        const gameTypeMap: Record<number, string> = {
+          1: "Mega Millions",
+          2: "Powerball",
+          3: "Lucky Day Lotto",
+          4: "Lotto",
+          5: "Pick 4",
+          6: "Pick 3"
+        };
+        
+        setLotteryGames(prevGames => 
+          prevGames.map(game => {
+            const gameType = gameTypeMap[game.id];
+            const latestResult = latestByGameType.get(gameType);
+            
+            if (latestResult && latestResult.jackpot_amount) {
+              // Format jackpot amount
+              const formattedAmount = latestResult.jackpot_amount.toLocaleString('pt-BR');
+              
+              return {
+                ...game,
+                amount: formattedAmount
+              };
+            }
+            
+            return game;
+          })
+        );
+      } catch (err) {
+        console.error("Error processing jackpot amounts:", err);
+      }
+    };
+    
+    fetchJackpotAmounts();
   }, []);
 
   const scrollToTop = () => {
