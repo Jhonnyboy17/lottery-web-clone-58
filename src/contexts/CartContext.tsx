@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -27,10 +28,10 @@ export type CartItemType = {
 export type OrderHistoryItem = CartItemType & {
   purchaseDate: string;
   orderNumber: string;
-  completed?: boolean;  // Adicionado para identificar jogos já realizados
+  completed?: boolean;
 };
 
-type WalletTransaction = {
+export type WalletTransaction = {
   id: string;
   amount: number;
   date: string;

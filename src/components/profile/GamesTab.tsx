@@ -36,9 +36,7 @@ const GamesTab: React.FC<GamesTabProps> = ({ isLoading, orderHistory }) => {
   const renderGameItem = (game: OrderHistoryItem) => {
     // Extract jackpot amount from game data if it exists
     const gameData = game.lines || [];
-    const jackpotAmount = game.jackpotAmount || 
-      (game.game_data && typeof game.game_data === 'object' && 'jackpotAmount' in game.game_data ? 
-        game.game_data.jackpotAmount : null);
+    const jackpotAmount = game.jackpotAmount || null;
     
     return (
       <Card key={game.id} className="mb-4 overflow-hidden border-l-4" style={{ borderLeftColor: game.color || '#9333ea' }}>
