@@ -6,6 +6,7 @@ import LotteryCard from "@/components/LotteryCard";
 import NumbersDisplay from "@/components/NumbersDisplay";
 import DrawTimes from "@/components/DrawTimes";
 import Footer from "@/components/Footer";
+import NextDrawBanner from "@/components/NextDrawBanner";
 import { ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { LotteryResultRow, toLotteryResult } from "@/integrations/supabase/lottery-types";
@@ -26,6 +27,14 @@ interface LotteryGame {
 
 const Index = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [nextUpcomingGame, setNextUpcomingGame] = useState<{
+    gameName: string;
+    logoSrc: string;
+    jackpotAmount: string;
+    drawDate: string;
+    timeRemaining: string;
+    route: string;
+  } | null>(null);
   const [lotteryGames, setLotteryGames] = useState<LotteryGame[]>([
     {
       id: 1,
@@ -124,6 +133,103 @@ const Index = () => {
       }
     }
   }, []);
+
+  // New effect to determine the next upcoming game
+  useEffect(() => {
+    const findNextUpcomingGame = () => {
+      const now = new Date();
+      
+      // Example format: "SEXTA, MAR 25, 9:59 PM"
+      const getDateFromDrawingText = (text: string) => {
+        try {
+          const [dayOfWeek, monthDay, time] = text.split(', ');
+          const [month, day] = monthDay.split(' ');
+          const [hourMinute, period] = time.split(' ');
+          const [hour, minute] = hourMinute.split(':');
+          
+          const monthMap: Record<string, number> = {
+            JAN: 0, FEV: 1, MAR: 2, ABR: 3, MAI: 4, JUN: 5,
+            JUL: 6, AGO: 7, SET: 8, OUT: 9, NOV: 10, DEZ: 11
+          };
+          
+          const drawDate = new Date();
+          drawDate.setMonth(monthMap[month]);
+          drawDate.setDate(parseInt(day));
+          
+          let hourValue = parseInt(hour);
+          if (period === 'PM' && hourValue < 12) hourValue += 12;
+          if (period === 'AM' && hourValue === 12) hourValue = 0;
+          
+          drawDate.setHours(hourValue, parseInt(minute), 0);
+          
+          return drawDate;
+        } catch (e) {
+          console.error("Error parsing draw date:", e);
+          return new Date(now.getTime() + 86400000); // Default to tomorrow
+        }
+      };
+      
+      // Calculate time remaining
+      const getTimeRemaining = (drawDate: Date) => {
+        const diff = drawDate.getTime() - now.getTime();
+        
+        if (diff < 0) return "Sorteio em andamento";
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        
+        if (days > 0) {
+          return `${days}d ${hours}h restantes`;
+        } else if (hours > 0) {
+          return `${hours}h ${minutes}m restantes`;
+        } else {
+          return `${minutes} minutos restantes`;
+        }
+      };
+      
+      // Find the game with the nearest draw date
+      let closestGame = null;
+      let closestDate = null;
+      let smallestDiff = Infinity;
+      
+      for (const game of lotteryGames) {
+        // Skip games with special text like "TODOS OS DIAS"
+        if (game.nextDrawing.includes("TODOS OS DIAS")) continue;
+        
+        const drawDate = getDateFromDrawingText(game.nextDrawing);
+        const diff = drawDate.getTime() - now.getTime();
+        
+        // Only consider future draws
+        if (diff > 0 && diff < smallestDiff) {
+          smallestDiff = diff;
+          closestGame = game;
+          closestDate = drawDate;
+        }
+      }
+      
+      if (closestGame && closestDate) {
+        setNextUpcomingGame({
+          gameName: closestGame.id === 1 ? "Mega Millions" : 
+                   closestGame.id === 2 ? "Powerball" :
+                   closestGame.id === 3 ? "Lucky Day" :
+                   closestGame.id === 4 ? "Pick 4" : 
+                   closestGame.id === 5 ? "Cash 5" : "Fast Play",
+          logoSrc: closestGame.logoSrc,
+          jackpotAmount: closestGame.amount,
+          drawDate: closestGame.nextDrawing.split(', ').slice(0, 2).join(', '),
+          timeRemaining: getTimeRemaining(closestDate),
+          route: closestGame.route
+        });
+      }
+    };
+    
+    findNextUpcomingGame();
+    // Re-calculate every minute
+    const interval = setInterval(findNextUpcomingGame, 60000);
+    
+    return () => clearInterval(interval);
+  }, [lotteryGames]);
   
   // New effect to fetch jackpot amounts
   useEffect(() => {
@@ -201,6 +307,18 @@ const Index = () => {
         <section className="container mx-auto px-4 py-6">
           <Hero />
         </section>
+
+        {/* New section for next upcoming game */}
+        {nextUpcomingGame && (
+          <NextDrawBanner 
+            gameName={nextUpcomingGame.gameName}
+            logoSrc={nextUpcomingGame.logoSrc}
+            jackpotAmount={nextUpcomingGame.jackpotAmount}
+            drawDate={nextUpcomingGame.drawDate}
+            timeRemaining={nextUpcomingGame.timeRemaining}
+            route={nextUpcomingGame.route}
+          />
+        )}
 
         <section id="lottery-games" className="container mx-auto px-4 py-12">
           <h2 className="text-3xl font-bold text-center text-lottery-navy dark:text-white mb-8">Loterias</h2>
