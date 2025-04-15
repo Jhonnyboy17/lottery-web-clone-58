@@ -308,7 +308,7 @@ const Index = () => {
           <Hero />
         </section>
 
-        {/* New section for next upcoming game */}
+        {/* Next upcoming game banner */}
         {nextUpcomingGame && (
           <NextDrawBanner 
             gameName={nextUpcomingGame.gameName}
