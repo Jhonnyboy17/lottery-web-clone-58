@@ -1,10 +1,11 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from 'lucide-react';
 
 const Hero = () => {
   return (
-    <div className="relative w-full max-w-full px-0 overflow-hidden">
+    <div className="relative w-full overflow-hidden">
       <div
         className="absolute inset-0"
         style={{
